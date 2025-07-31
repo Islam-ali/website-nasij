@@ -1,0 +1,108 @@
+// Main SCSS file that imports all styles
+// This file should be imported in your angular.json styles array
+
+// Import variables and mixins
+@import 'variables';
+
+// Reset and base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: $text-color;
+  background-color: $background-color;
+  line-height: 1.5;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: $spacing-md;
+  font-weight: $font-weight-medium;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+// Links
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-speed $transition-easing;
+
+  &:hover {
+    color: $primary-dark;
+    text-decoration: underline;
+  }
+}
+
+// Buttons
+.btn {
+  display: inline-block;
+  font-weight: $font-weight-medium;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: $btn-padding-y $btn-padding-x;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  border-radius: $btn-border-radius;
+  transition: all $transition-speed $transition-easing;
+  cursor: pointer;
+
+  &-primary {
+    color: white;
+    background-color: $primary-color;
+    border-color: $primary-color;
+
+    &:hover {
+      background-color: darken($primary-color, 7.5%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+
+  &-outline {
+    background-color: transparent;
+    border: 1px solid $primary-color;
+    color: $primary-color;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.1);
+    }
+  }
+}
+
+// Utility classes
+.container {
+  width: 100%;
+  padding-right: $spacing-md;
+  padding-left: $spacing-md;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: $container-max-width;
+}
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: $spacing-sm; }
+.mt-2 { margin-top: $spacing-md; }
+.mt-3 { margin-top: $spacing-lg; }
+.mt-4 { margin-top: $spacing-xl; }
+
+.mb-1 { margin-bottom: $spacing-sm; }
+.mb-2 { margin-bottom: $spacing-md; }
+.mb-3 { margin-bottom: $spacing-lg; }
+.mb-4 { margin-bottom: $spacing-xl; }

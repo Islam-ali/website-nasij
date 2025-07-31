@@ -1,0 +1,84 @@
+<div class="product-card" [routerLink]="['/products', product._id]">
+  <!-- Product Image -->
+  <div class="product-image">
+    <img 
+      [src]="getProductImage(product)" 
+      [alt]="product.name"
+      class="product-image"
+      (error)="handleImageError($event)" />
+    
+    <!-- Sale Badge -->
+    <div *ngIf="isOnSale" class="sale-badge">
+      {{ discountPercentage }}% OFF
+    </div>
+    
+    <!-- Wishlist Button -->
+    <button 
+      *ngIf="showWishlist"
+      pButton 
+      pRipple 
+      type="button" 
+      [icon]="isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
+      class="wishlist-button"
+      [ngClass]="{ 'in-wishlist': isInWishlist }"
+      pTooltip="{{ isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}"
+      tooltipPosition="top"
+      (click)="$event.stopPropagation(); toggleWishlist($event)"
+      [loading]="loading">
+    </button>
+  </div>
+  
+  <!-- Product Info -->
+  <div class="product-info">
+    <h3 class="product-name">{{ product.name }}</h3>
+    
+    <div class="product-price">
+      <span class="current-price">{{ price | currency }}</span>
+      <span *ngIf="isOnSale" class="original-price">
+        {{ product.price | currency }}
+      </span>
+    </div>
+    
+    <!-- Rating -->
+    <div *ngIf="product.averageRating" class="product-rating">
+      <p-rating 
+        [ngModel]="product.averageRating" 
+        [readonly]="true" 
+        [style]="{'font-size': '14px'}"
+        styleClass="mr-2"
+        (onRate)="onRate($event)">
+      </p-rating>
+      <span class="rating-count">({{ product.reviewCount || 0 }})</span>
+    </div>
+    
+    <!-- Actions -->
+    <div *ngIf="showActions" class="product-actions">
+      <button 
+        *ngIf="showAddToCart"
+        pButton 
+        pRipple 
+        type="button" 
+        label="Add to Cart" 
+        icon="pi pi-shopping-cart"
+        class="add-to-cart-button"
+        (click)="$event.stopPropagation(); addToCart($event)"
+        [loading]="loading">
+      </button>
+      
+      <button 
+        *ngIf="showViewDetails"
+        pButton 
+        pRipple 
+        type="button" 
+        label="View Details" 
+        class="p-button-outlined view-details-button"
+        (click)="$event.stopPropagation(); navigateToProduct(product)">
+      </button>
+    </div>
+  </div>
+  
+  <!-- Loading Overlay -->
+  <div *ngIf="loading" class="loading-overlay">
+    <i class="pi pi-spin pi-spinner"></i>
+  </div>
+</div>

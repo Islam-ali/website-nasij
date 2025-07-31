@@ -1,0 +1,166 @@
+// Cart Container
+.cart-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+// Empty Cart State
+.empty-cart {
+  text-align: center;
+  padding: 3rem 1rem;
+  
+  h2 {
+    margin: 1rem 0 0.5rem;
+    color: var(--text-color);
+  }
+  
+  p {
+    color: var(--text-color-secondary);
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Cart Items
+.cart-items {
+  .product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--surface-200);
+  }
+  
+  .product-name {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--surface-300);
+    border-radius: 6px;
+    width: fit-content;
+    
+    .quantity {
+      min-width: 2.5rem;
+      text-align: center;
+      padding: 0.5rem;
+    }
+    
+    button {
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  
+  .price {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  
+  .cart-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+// Order Summary
+.summary-item {
+  margin-bottom: 1rem;
+  
+  p-divider {
+    margin: 1.25rem 0;
+  }
+}
+
+// Responsive Styles
+@media (max-width: 991px) {
+  .cart-container {
+    padding: 1rem;
+  }
+  
+  :host ::ng-deep {
+    .p-datatable {
+      .p-datatable-thead > tr > th,
+      .p-datatable-tbody > tr > td {
+        padding: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep {
+    .p-datatable {
+      .p-datatable-thead {
+        display: none;
+      }
+      
+      .p-datatable-tbody > tr {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid var(--surface-200);
+        padding: 1rem 0;
+        
+        & > td {
+          display: flex;
+          justify-content: space-between;
+          border: none;
+          padding: 0.5rem 0;
+          
+          &::before {
+            content: attr(data-label);
+            font-weight: 600;
+            margin-right: 1rem;
+          }
+          
+          .product-image {
+            margin: 0 auto;
+          }
+          
+          .quantity-selector {
+            margin-left: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animation for cart updates
+@keyframes highlightUpdate {
+  0% { background-color: rgba(147, 197, 253, 0); }
+  20% { background-color: rgba(147, 197, 253, 0.3); }
+  100% { background-color: rgba(147, 197, 253, 0); }
+}
+
+.highlight-update {
+  animation: highlightUpdate 1.5s ease-out;
+}
+
+// Custom scrollbar for cart items
+:host ::ng-deep {
+  .p-datatable-wrapper {
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--surface-100);
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 3px;
+    }
+  }
+}

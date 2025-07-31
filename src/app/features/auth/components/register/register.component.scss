@@ -1,0 +1,85 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+input, p-password, .p-password {
+  width: 100%;
+}
+
+.p-password {
+  display: block;
+  width: 100%;
+}
+
+.p-button {
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.2s;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-600 {
+  color: var(--text-color-secondary);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.field-checkbox {
+  display: flex;
+  align-items: center;
+  
+  label {
+    margin-bottom: 0;
+    font-weight: normal;
+  }
+  
+  .p-checkbox {
+    margin-right: 0.5rem;
+  }
+}
+
+.grid {
+  margin: 0 -0.5rem;
+  
+  > [class*="col-"] {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .register-container {
+    padding: 1rem;
+  }
+  
+  .p-card {
+    width: 100% !important;
+  }
+}

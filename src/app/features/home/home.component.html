@@ -1,0 +1,264 @@
+<section class="py-10 dark:bg-dark">
+  <div class="container mx-auto">
+    <div class="-mx-4 flex flex-wrap">
+      <div class="w-full px-4 lg:w-8/12">
+        <div class="relative mb-8">
+              <app-galleria></app-galleria>
+        </div>
+      </div>
+      <div class="w-full px-4 lg:w-4/12">
+        <div class="-mx-4 flex flex-wrap">
+          <div class="w-full px-4 md:w-1/2 lg:w-full">
+            <div class="relative mb-8 h-[223px]">
+              <img src="slider/img-4.avif" alt="product" class="h-full w-full object-cover object-center">
+
+              <div class="absolute left-0 top-0 flex h-full w-full items-end justify-end p-6 sm:p-9">
+                <div class="max-w-[180px] text-right">
+                  <h3>
+                    <a href="javascript:void(0)" class="mb-3 block text-xl font-bold text-dark hover:text-primary xl:text-2xl">
+                      Summer Travel Collection
+                    </a>
+                  </h3>
+                  <a href="javascript:void(0)" class="text-base font-medium text-dark hover:text-primary">
+                    Discover Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full px-4 md:w-1/2 lg:w-full">
+            <div class="relative mb-8 h-[223px]">
+              <img src="slider/img-5.avif" alt="product" class="h-full w-full object-fill object-center">
+
+              <div class="absolute left-0 top-0 flex h-full w-full items-end justify-end p-6 sm:p-9">
+                <div class="max-w-[180px] text-right">
+                  <h3>
+                    <a href="javascript:void(0)" class="mb-3 block text-xl font-bold text-dark hover:text-primary xl:text-2xl">
+                      Get 30% Off On iPhone
+                    </a>
+                  </h3>
+                  <a href="javascript:void(0)" class="text-base font-medium text-dark hover:text-primary">
+                    Shop Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <section class="bg-gray-100">
+    <div class="container mx-auto px-4 py-12">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Mega Sale Up To 50% Off For All</h1>
+          <p class="text-gray-600 mb-6">
+            Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
+            ipsum suspendisse ultrices gravida.
+          </p>
+          <button type="button"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition-colors">Shop
+            This Offer</button>
+        </div>
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=400&fit=crop&crop=center"
+            alt="Modern Chair" class="w-full h-auto rounded-lg">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Secondary Banner -->
+
+
+  <!-- You May Also Like -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">You may also like</h2>
+        <p class="text-gray-600">
+          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+          in some form.
+        </p>
+      </div>
+      <app-carousel [products]="featuredProducts"></app-carousel>
+    </div>
+  </section>
+
+  <!-- Featured Sections -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Clock Collection -->
+        <div class="bg-white rounded-lg p-8 flex items-center">
+          <div class="flex-1">
+            <div class="text-blue-600 font-medium mb-2">Start From $50</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">New Arrival From Creative Clock Collections</h3>
+            <p class="text-gray-600 mb-6">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua.
+            </p>
+            <button type="button"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors">View
+              All Stock</button>
+          </div>
+          <div class="ml-8">
+            <img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=150&h=150&fit=crop&crop=center"
+              alt="Clock" class="w-32 h-32 rounded-lg">
+          </div>
+        </div>
+
+        <!-- Summer Collection -->
+        <div class="bg-white rounded-lg p-8 flex items-center">
+          <div class="flex-1">
+            <div class="text-blue-600 font-medium mb-2">Start From $40</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">New Summer Collections For Man's Fashion.</h3>
+            <p class="text-gray-600 mb-6">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua.
+            </p>
+            <button type="button"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors">View
+              All Stock</button>
+          </div>
+          <div class="ml-8">
+            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=150&h=150&fit=crop&crop=center"
+              alt="Sunglasses" class="w-32 h-32 rounded-lg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop By Category -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Shop By Category</h2>
+        <p class="text-gray-600">
+          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+          in some form.
+        </p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=100&h=100&fit=crop&crop=center"
+              alt="Accessories" class="w-20 h-20 mx-auto object-cover rounded-lg">
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Accessories</h3>
+          <p class="text-sm text-gray-600">8 Products Available</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&h=100&fit=crop&crop=center"
+              alt="Bags" class="w-20 h-20 mx-auto object-cover rounded-lg">
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Bags</h3>
+          <p class="text-sm text-gray-600">4 Products Available</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop&crop=center"
+              alt="Electronics" class="w-20 h-20 mx-auto object-cover rounded-lg">
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Electronics</h3>
+          <p class="text-sm text-gray-600">7 Products Available</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 text-center cursor-pointer">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=100&h=100&fit=crop&crop=center"
+              alt="Shoes" class="w-20 h-20 mx-auto object-cover rounded-lg">
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Shoes</h3>
+          <p class="text-sm text-gray-600">12 Products Available</p>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <button type="button"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-medium transition-colors">Browse All
+          Category</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent News -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Recent News</h2>
+        <p class="text-gray-600">
+          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+          in some form.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=200&fit=crop&crop=center"
+              alt="Meeting" class="w-full h-48 object-cover rounded-t-lg">
+          </div>
+          <div class="p-6">
+            <h3 class="font-semibold text-gray-900 mb-3">Meet AutoManage, the best AI management tools</h3>
+            <p class="text-gray-600 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            </p>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=200&fit=crop&crop=center"
+              alt="Coaching" class="w-full h-48 object-cover rounded-t-lg">
+          </div>
+          <div class="p-6">
+            <h3 class="font-semibold text-gray-900 mb-3">How to earn more money as a wellness coach</h3>
+            <p class="text-gray-600 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            </p>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop&crop=center"
+              alt="Business" class="w-full h-48 object-cover rounded-t-lg">
+          </div>
+          <div class="p-6">
+            <h3 class="font-semibold text-gray-900 mb-3">The no-fuss guide to upselling and cross selling</h3>
+            <p class="text-gray-600 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-2">Free delivery</h3>
+          <p class="text-gray-600 text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-2">Online Payment</h3>
+          <p class="text-gray-600 text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-2">Easy Return</h3>
+          <p class="text-gray-600 text-sm">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</section>

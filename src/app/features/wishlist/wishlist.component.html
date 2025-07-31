@@ -1,0 +1,117 @@
+<div class="wishlist-container">
+  <div class="wishlist-header">
+    <h1>My Wishlist</h1>
+    <p *ngIf="(wishlistState$ | async) as wishlist" class="item-count">
+      {{ wishlist.count }} {{ wishlist.count === 1 ? 'item' : 'items' }}
+    </p>
+  </div>
+
+  <div class="wishlist-content">
+    <ng-container *ngIf="(wishlistState$ | async) as wishlist">
+      <!-- Empty State -->
+      <div *ngIf="wishlist.count === 0" class="empty-wishlist">
+        <i class="pi pi-heart" style="font-size: 4rem; color: var(--surface-300)"></i>
+        <h2>Your wishlist is empty</h2>
+        <p>You haven't added any items to your wishlist yet.</p>
+        <button 
+          pButton 
+          pRipple 
+          label="Browse Products" 
+          icon="pi pi-arrow-right" 
+          iconPos="right"
+          class="p-button-outlined"
+          (click)="continueShopping()">
+        </button>
+      </div>
+
+      <!-- Wishlist Items -->
+      <div *ngIf="wishlist.count > 0">
+        <div class="wishlist-actions mb-4">
+          <button 
+            pButton 
+            pRipple 
+            label="Clear Wishlist" 
+            icon="pi pi-trash"
+            class="p-button-text p-button-danger"
+            (click)="clearWishlist()"
+            [disabled]="loading">
+          </button>
+        </div>
+
+        <div class="wishlist-items">
+          <div *ngFor="let item of wishlist.items; trackBy: trackByItem" class="wishlist-item">
+            <div class="item-image" (click)="viewProduct(item)">
+              <img 
+                [src]="item.product?.thumbnail || 'assets/images/placeholder.png'" 
+                [alt]="item.product?.name || 'Product'"
+                class="product-image" />
+            </div>
+            
+            <div class="item-details" (click)="viewProduct(item)">
+              <h3 class="product-name">{{ item.product?.name || 'Product' }}</h3>
+              <p class="product-price">
+                {{ item.product?.price | currency || 'Price not available' }}
+              </p>
+              <p *ngIf="item.product?.stock !== undefined" 
+                 class="stock-status" 
+                 [class.in-stock]="item.product.stock > 0"
+                 [class.out-of-stock]="item.product.stock <= 0">
+                {{ item.product.stock > 0 ? 'In Stock' : 'Out of Stock' }}
+              </p>
+            </div>
+            
+            <div class="item-actions">
+              <button 
+                pButton 
+                pRipple 
+                icon="pi pi-times" 
+                class="p-button-text p-button-danger remove-button"
+                pTooltip="Remove"
+                tooltipPosition="top"
+                (click)="$event.stopPropagation(); removeFromWishlist(item)"
+                [disabled]="loading">
+              </button>
+              
+              <button 
+                pButton 
+                pRipple 
+                label="Add to Cart" 
+                icon="pi pi-shopping-cart"
+                class="add-to-cart-button"
+                (click)="$event.stopPropagation(); moveToCart(item)"
+                [disabled]="loading || (item.product?.stock !== undefined && item.product.stock <= 0)">
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="wishlist-footer mt-5">
+          <button 
+            pButton 
+            pRipple 
+            label="Continue Shopping" 
+            icon="pi pi-arrow-left"
+            class="p-button-text"
+            (click)="continueShopping()">
+          </button>
+          
+          <button 
+            pButton 
+            pRipple 
+            label="View Cart" 
+            icon="pi pi-shopping-cart"
+            iconPos="right"
+            class="view-cart-button"
+            [disabled]="loading"
+            routerLink="/cart">
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    
+    <!-- Loading Overlay -->
+    <div *ngIf="loading" class="loading-overlay">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  </div>
+</div>

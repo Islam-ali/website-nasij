@@ -1,0 +1,275 @@
+<div class="checkout-container p-4">
+  <div class="grid">
+    <!-- Left Column - Checkout Form -->
+    <div class="col-12 lg:col-8">
+      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="checkout-form">
+        <!-- Contact Information -->
+        <p-card header="Contact Information" class="mb-4">
+          <div class="grid">
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="email">Email Address *</label>
+                <input id="email" type="email" pInputText formControlName="email" [ngClass]="{'ng-invalid ng-dirty': f['email'].errors && (f['email'].dirty || f['email'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['email'].errors?.['required'] && (f['email'].dirty || f['email'].touched || submitted)">Email is required</small>
+                <small class="p-error" *ngIf="f['email'].errors?.['email'] && (f['email'].dirty || f['email'].touched)">Please enter a valid email</small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="phone">Phone Number *</label>
+                <input id="phone" type="tel" pInputText formControlName="phone" [ngClass]="{'ng-invalid ng-dirty': f['phone'].errors && (f['phone'].dirty || f['phone'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['phone'].errors?.['required'] && (f['phone'].dirty || f['phone'].touched || submitted)">Phone number is required</small>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Shipping Address -->
+        <p-card header="Shipping Address" class="mb-4">
+          <div class="grid">
+            <div class="col-12">
+              <div class="field">
+                <label for="shippingName">Full Name *</label>
+                <input id="shippingName" type="text" pInputText formControlName="shippingName" [ngClass]="{'ng-invalid ng-dirty': f['shippingName'].errors && (f['shippingName'].dirty || f['shippingName'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['shippingName'].errors?.['required'] && (f['shippingName'].dirty || f['shippingName'].touched || submitted)">Name is required</small>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="field">
+                <label for="shippingAddress">Address *</label>
+                <input id="shippingAddress" type="text" pInputText formControlName="shippingAddress" [ngClass]="{'ng-invalid ng-dirty': f['shippingAddress'].errors && (f['shippingAddress'].dirty || f['shippingAddress'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['shippingAddress'].errors?.['required'] && (f['shippingAddress'].dirty || f['shippingAddress'].touched || submitted)">Address is required</small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="shippingCity">City *</label>
+                <input id="shippingCity" type="text" pInputText formControlName="shippingCity" [ngClass]="{'ng-invalid ng-dirty': f['shippingCity'].errors && (f['shippingCity'].dirty || f['shippingCity'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['shippingCity'].errors?.['required'] && (f['shippingCity'].dirty || f['shippingCity'].touched || submitted)">City is required</small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="shippingState">State/Province *</label>
+                <input id="shippingState" type="text" pInputText formControlName="shippingState" [ngClass]="{'ng-invalid ng-dirty': f['shippingState'].errors && (f['shippingState'].dirty || f['shippingState'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['shippingState'].errors?.['required'] && (f['shippingState'].dirty || f['shippingState'].touched || submitted)">State/Province is required</small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="shippingZip">ZIP/Postal Code *</label>
+                <input id="shippingZip" type="text" pInputText formControlName="shippingZip" [ngClass]="{'ng-invalid ng-dirty': f['shippingZip'].errors && (f['shippingZip'].dirty || f['shippingZip'].touched || submitted)}" />
+                <small class="p-error" *ngIf="f['shippingZip'].errors?.['required'] && (f['shippingZip'].dirty || f['shippingZip'].touched || submitted)">ZIP/Postal Code is required</small>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="field">
+                <label for="shippingCountry">Country *</label>
+                <p-select id="shippingCountry" [options]="countries" formControlName="shippingCountry" optionLabel="name" placeholder="Select a country"
+                  [ngClass]="{'ng-invalid ng-dirty': f['shippingCountry'].errors && (f['shippingCountry'].dirty || f['shippingCountry'].touched || submitted)}">
+                </p-select>
+                <small class="p-error" *ngIf="f['shippingCountry'].errors?.['required'] && (f['shippingCountry'].dirty || f['shippingCountry'].touched || submitted)">Country is required</small>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Billing Address -->
+        <p-card header="Billing Address" class="mb-4">
+          <div class="field-checkbox mb-4">
+            <p-checkbox id="sameAsBilling" formControlName="sameAsBilling" binary="true" inputId="sameAsBilling"></p-checkbox>
+            <label for="sameAsBilling" class="ml-2">Same as shipping address</label>
+          </div>
+
+          <div [hidden]="checkoutForm.get('sameAsBilling')?.value">
+            <div class="grid">
+              <div class="col-12">
+                <div class="field">
+                  <label for="billingName">Full Name</label>
+                  <input id="billingName" type="text" pInputText formControlName="billingName" />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="field">
+                  <label for="billingAddress">Address</label>
+                  <input id="billingAddress" type="text" pInputText formControlName="billingAddress" />
+                </div>
+              </div>
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="billingCity">City</label>
+                  <input id="billingCity" type="text" pInputText formControlName="billingCity" />
+                </div>
+              </div>
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="billingState">State/Province</label>
+                  <input id="billingState" type="text" pInputText formControlName="billingState" />
+                </div>
+              </div>
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="billingZip">ZIP/Postal Code</label>
+                  <input id="billingZip" type="text" pInputText formControlName="billingZip" />
+                </div>
+              </div>
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="billingCountry">Country</label>
+                  <p-select id="billingCountry" [options]="countries" formControlName="billingCountry" optionLabel="name" placeholder="Select a country">
+                  </p-select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Payment Method -->
+        <p-card header="Payment Method" class="mb-4">
+          <div class="field">
+            <label>Payment Method *</label>
+            <div class="flex flex-column gap-3 mt-2">
+              <div *ngFor="let method of paymentMethods" class="flex align-items-center">
+                <p-radioButton [inputId]="method.value" [value]="method.value" formControlName="paymentMethod"></p-radioButton>
+                <label [for]="method.value" class="ml-2">{{method.label}}</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Credit Card Fields (shown when credit card is selected) -->
+          <div *ngIf="f['paymentMethod'].value === 'credit_card'" class="mt-4">
+            <div class="grid">
+              <div class="col-12">
+                <div class="field">
+                  <label for="cardNumber">Card Number *</label>
+                  <input id="cardNumber" type="text" pInputText formControlName="cardNumber" 
+                    placeholder="1234 5678 9012 3456" 
+                    (input)="formatCardNumber($event)"
+                    maxlength="19"
+                    [ngClass]="{'ng-invalid ng-dirty': f['cardNumber'].errors && (f['cardNumber'].dirty || f['cardNumber'].touched || submitted)}" />
+                  <small *ngIf="f['cardNumber'].errors?.['required'] && (f['cardNumber'].dirty || f['cardNumber'].touched || submitted)" 
+                    class="p-error">Card number is required</small>
+                  <small *ngIf="f['cardNumber'].errors?.['invalidCardNumber']" class="p-error">Please enter a valid card number</small>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="field">
+                  <label for="cardName">Name on Card *</label>
+                  <input id="cardName" type="text" pInputText formControlName="cardName" 
+                    [ngClass]="{'ng-invalid ng-dirty': f['cardName'].errors && (f['cardName'].dirty || f['cardName'].touched || submitted)}" />
+                  <small *ngIf="f['cardName'].errors?.['required'] && (f['cardName'].dirty || f['cardName'].touched || submitted)" 
+                    class="p-error">Cardholder name is required</small>
+                </div>
+              </div>
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="cardExpiry">Expiry Date *</label>
+                  <input id="cardExpiry" type="text" pInputText formControlName="cardExpiry" 
+                    placeholder="MM/YY" 
+                    (input)="formatExpiry($event)"
+                    maxlength="5"
+                    [ngClass]="{'ng-invalid ng-dirty': f['cardExpiry'].errors && (f['cardExpiry'].dirty || f['cardExpiry'].touched || submitted)}" />
+                  <small *ngIf="f['cardExpiry'].errors?.['required'] && (f['cardExpiry'].dirty || f['cardExpiry'].touched || submitted)" 
+                    class="p-error">Expiry date is required</small>
+                  <small *ngIf="f['cardExpiry'].errors?.['invalidExpiry']" class="p-error">Invalid expiry format (MM/YY)</small>
+                  <small *ngIf="f['cardExpiry'].errors?.['invalidMonth']" class="p-error">Invalid month (01-12)</small>
+                  <small *ngIf="f['cardExpiry'].errors?.['cardExpired']" class="p-error">This card has expired</small>
+                </div>
+              </div>
+              <div class="col-12 md:col-6">
+                <div class="field">
+                  <label for="cardCvv">CVV *</label>
+                  <input id="cardCvv" type="password" pInputText formControlName="cardCvv" 
+                    placeholder="123" 
+                    maxlength="4"
+                    [ngClass]="{'ng-invalid ng-dirty': f['cardCvv'].errors && (f['cardCvv'].dirty || f['cardCvv'].touched || submitted)}" />
+                  <small *ngIf="f['cardCvv'].errors?.['required'] && (f['cardCvv'].dirty || f['cardCvv'].touched || submitted)" 
+                    class="p-error">CVV is required</small>
+                  <small *ngIf="f['cardCvv'].errors?.['minlength'] || f['cardCvv'].errors?.['maxlength']" 
+                    class="p-error">CVV must be 3-4 digits</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- Order Notes -->
+        <p-card header="Order Notes" class="mb-4">
+          <textarea pInputTextarea formControlName="notes" rows="3" placeholder="Notes about your order, e.g. special delivery instructions"></textarea>
+        </p-card>
+
+        <!-- Terms & Conditions -->
+        <div class="field-checkbox mb-4">
+          <p-checkbox id="terms" formControlName="terms" binary="true" inputId="terms"></p-checkbox>
+          <label for="terms" class="ml-2">I have read and agree to the website <a href="/terms" target="_blank" class="text-primary">terms and conditions</a> *</label>
+          <small class="p-error d-block" *ngIf="f['terms'].errors?.['required'] && (f['terms'].dirty || f['terms'].touched || submitted)">You must accept the terms and conditions</small>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-content-between align-items-center">
+          <a routerLink="/cart" class="text-primary no-underline hover:underline">
+            <i class="pi pi-arrow-left mr-2"></i> Return to Cart
+          </a>
+          <button pButton type="submit" label="Place Order" [disabled]="loading" [loading]="loading" class="p-button-primary">
+            <span *ngIf="!loading">Place Order</span>
+          </button>
+        </div>
+
+        <!-- Confirmation Dialog -->
+        <p-toast key="confirmOrder" position="center" styleClass="confirm-dialog">
+          <ng-template let-message pTemplate="message">
+            <div class="flex flex-column" style="flex: 1">
+              <div class="text-center">
+                <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+                <h4>{{message.summary}}</h4>
+                <p>{{message.detail}}</p>
+              </div>
+              <div class="grid p-fluid">
+                <div class="col-6">
+                  <button type="button" pButton (click)="onConfirmOrder()" label="Yes" class="p-button-success"></button>
+                </div>
+                <div class="col-6">
+                  <button type="button" pButton (click)="onRejectOrder()" label="No" class="p-button-secondary"></button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-toast>
+      </form>
+    </div>
+
+    <!-- Right Column - Order Summary -->
+    <div class="col-12 lg:col-4">
+      <p-card header="Order Summary" class="order-summary">
+        <div *ngIf="cart" class="order-items">
+          <div *ngFor="let item of cart.items" class="order-item flex justify-content-between align-items-center mb-3">
+            <div class="flex align-items-center">
+              <img [src]="item.product?.images?.[0] || 'assets/images/placeholder.png'" [alt]="item.product?.name" class="product-image" />
+              <div class="ml-3">
+                <div class="font-medium">{{item.product?.name}}</div>
+                <div class="text-500 text-sm">Qty: {{item.quantity}}</div>
+                <div *ngIf="item.product?.variants" class="text-500 text-sm">{{item.product?.variants?.[0]?.value}}: {{item.product?.variants?.[0]?.value}}</div>
+              </div>
+            </div>
+            <div class="font-medium">{{item.quantity * (item.product?.price || 0) | currency}}</div>
+          </div>
+        </div>
+
+        <div class="order-totals mt-4">
+          <div class="flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <span>{{cart?.subtotal | currency}}</span>
+          </div>
+          <div class="flex justify-content-between mb-2">
+            <span>Shipping</span>
+            <span>{{cart?.shipping | currency}}</span>
+          </div>
+          <div class="flex justify-content-between font-bold text-xl mt-3 pt-3 border-top-1 border-300">
+            <span>Total</span>
+            <span>{{cart?.total | currency}}</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

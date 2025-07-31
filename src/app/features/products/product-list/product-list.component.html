@@ -1,0 +1,325 @@
+<div class="container mx-auto px-4 py-8">
+  <p-messages></p-messages>
+
+  <!-- Main Form Group -->
+  <form [formGroup]="filterForm">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold">Products</h1>
+        <p class="text-muted-foreground mt-1">
+          Showing {{ products.length }} of {{ totalRecords }} products
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Sort Dropdown -->
+        <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Sort by" styleClass="w-48"
+          (onChange)="onSortChange()"></p-select>
+
+        <!-- Filter Drawer Trigger -->
+        <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" (click)="isDrawerOpen = true"
+          class="relative">
+          <span *ngIf="activeFiltersCount > 0"
+            class="ml-2 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">{{
+            activeFiltersCount }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter Sidebar -->
+    <p-sidebar [(visible)]="isDrawerOpen" position="right" styleClass="w-full sm:w-96" [modal]="false"
+      [dismissible]="false" [showCloseIcon]="true">
+      <div class="p-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold">Filters</h2>
+          <button *ngIf="activeFiltersCount > 0" pButton type="button" label="Clear All" class="p-button-text"
+            (click)="clearAllFilters()"></button>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Search -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium">Search</label>
+            <span class="p-input-icon-left w-full">
+              <input pInputText type="text" icon="pi pi-search" placeholder="Search products..."
+                formControlName="searchQuery" class="w-full" />
+            </span>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Price Range -->
+          <div class="space-y-3">
+            <label class="text-sm font-medium">Price Range</label>
+            <div class="px-2">
+              <div class="grid grid-cols-2 gap-2">
+                <p-inputNumber formControlName="minPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
+                  [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+                <p-inputNumber formControlName="maxPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
+                  [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+              </div>
+              <div class="flex justify-between text-sm text-muted-foreground mt-2">
+                <span>{{ filterForm.get('minPrice')?.value | currency }}</span>
+                <span>{{ filterForm.get('maxPrice')?.value | currency }}</span>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Rating -->
+          <div class="space-y-3">
+            <label class="text-sm font-medium">Minimum Rating</label>
+            <div class="space-y-2">
+              <div *ngFor="let rating of [4, 3, 2, 1]" class="flex items-center space-x-2">
+                <p-radioButton [value]="rating" formControlName="minRating"
+                  [inputId]="'rating-' + rating"></p-radioButton>
+                <label [for]="'rating-' + rating" class="flex items-center">
+                  <div class="flex mr-2">
+                    <i *ngFor="let i of [0,1,2,3,4]" class="pi pi-star-fill h-4 w-4"
+                      [ngClass]="i < rating ? 'text-yellow-400' : 'text-gray-300'"></i>
+                  </div>
+                  <span class="text-sm">& up</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Categories -->
+          <div class="space-y-3">
+            <label class="text-sm font-medium">Category</label>
+            <div class="space-y-2">
+              <div *ngFor="let category of categories" class="flex items-center space-x-2">
+                <p-checkbox [value]="category._id" formControlName="selectedCategories"
+                  [inputId]="'category-' + category._id"></p-checkbox>
+                <label [for]="'category-' + category._id" class="text-sm">{{ category.name }}</label>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Brands -->
+          <div class="space-y-3">
+            <label class="text-sm font-medium">Brand</label>
+            <div class="space-y-2">
+              <div *ngFor="let brand of brands" class="flex items-center space-x-2">
+                <p-checkbox [value]="brand._id" formControlName="selectedBrands"
+                  [inputId]="'brand-' + brand._id"></p-checkbox>
+                <label [for]="'brand-' + brand._id" class="text-sm">{{ brand.name }}</label>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Sizes -->
+          <div class="space-y-3">
+            <label class="text-sm font-medium">Size</label>
+            <div class="grid grid-cols-3 gap-2">
+              <div *ngFor="let size of sizes" class="flex items-center space-x-2">
+                <p-checkbox [value]="size" formControlName="selectedSizes" [inputId]="'size-' + size"></p-checkbox>
+                <label [for]="'size-' + size" class="text-sm">{{ size }}</label>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Colors -->
+          <div class="space-y-3">
+            <label class="text-sm font-medium">Color</label>
+            <div class="space-y-2">
+              <div *ngFor="let color of colors" class="flex items-center space-x-2">
+                <p-checkbox [value]="color" formControlName="selectedColors" [inputId]="'color-' + color"></p-checkbox>
+                <div class="flex items-center space-x-2">
+                  <div class="w-4 h-4 rounded-full border border-gray-300"
+                    [ngStyle]="{ 'background-color': getColorStyle(color) }"></div>
+                  <label [for]="'color-' + color" class="text-sm">{{ color }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p-divider></p-divider>
+
+          <!-- Sale Items -->
+          <div class="flex items-center space-x-2">
+            <p-checkbox formControlName="showOnSale" binary="true" inputId="on-sale"></p-checkbox>
+            <label for="on-sale" class="text-sm">On Sale Only</label>
+          </div>
+        </div>
+      </div>
+    </p-sidebar>
+
+    <!-- Active Filters -->
+    <div class="flex flex-wrap gap-2 mb-6" *ngIf="activeFiltersCount > 0">
+      <p-chip *ngFor="let categoryId of filterForm.get('selectedCategories')?.value || []" removable
+        (onRemove)="removeCategoryFilter(categoryId)">
+        {{ getCategoryName(categoryId) }}
+      </p-chip>
+      <p-chip *ngFor="let brandId of filterForm.get('selectedBrands')?.value || []" removable
+        (onRemove)="removeBrandFilter(brandId)">
+        {{ getBrandName(brandId) }}
+      </p-chip>
+      <p-chip *ngFor="let size of filterForm.get('selectedSizes')?.value || []" removable
+        (onRemove)="removeSizeFilter(size)">
+        Size {{ size }}
+      </p-chip>
+      <p-chip *ngFor="let color of filterForm.get('selectedColors')?.value || []"
+        [style]="{'background-color': color, 'color': getContrastColor(color)}" removable
+        (onRemove)="removeColorFilter(color)">
+        {{ color }}
+      </p-chip>
+      <p-chip *ngIf="filterForm.get('showOnSale')?.value" removable
+        (onRemove)="filterForm.get('showOnSale')?.setValue(false)">
+        On Sale
+      </p-chip>
+    </div>
+
+    <!-- Loading Spinner -->
+    <p-progressSpinner *ngIf="loading" styleClass="w-12 h-12 mx-auto my-16"></p-progressSpinner>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" *ngIf="!loading">
+      <p-card *ngFor="let product of products; trackBy: trackByProductId"
+        [styleClass]="'group overflow-hidden hover:shadow-lg transition-all duration-300'"
+        (click)="navigateToProduct(product)">
+        <div class="relative">
+          <img [src]="getProductImage(product)" [alt]="product.name"
+            class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
+          <!-- <p-chip *ngIf="getDiscountPercentage(product)"
+            styleClass="absolute top-3 left-3 bg-red-500 text-white">Sale</p-chip> -->
+
+        </div>
+
+        <div class="p-4">
+          <div class="space-y-3">
+            <div (click)="navigateToProduct(product)">
+              <h3 class="font-semibold text-lg line-clamp-2 mb-1">{{ product.name }}</h3>
+              <!-- <p class="text-sm text-muted-foreground">{{ product.brand.name }}</p> -->
+            </div>
+            <!-- Rating -->
+            <div class="flex items-center gap-2">
+              <p-rating [ngModel]="product.averageRating" [readonly]="true" [stars]="5"
+                [ngModelOptions]="{ standalone: true }"></p-rating>
+              <span class="text-sm text-muted-foreground">({{ product.reviewCount || 0 }})</span>
+            </div>
+
+            <!-- Price -->
+            <div class="flex items-center gap-2">
+              <span class="text-xl font-bold">{{ product.discountPrice || product.price | currency }}</span>
+              <span *ngIf="product.discountPrice" class="text-sm text-muted-foreground line-through">{{ product.price |
+                currency }}</span>
+            </div>
+
+            <!-- Colors -->
+            <div class="flex gap-1">
+              <div *ngFor="let color of (product.colors || []).slice(0, 4)"
+                class="w-5 h-5 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-400"
+                [ngStyle]="{ 'background-color': getColorStyle(color) }" [pTooltip]="color" tooltipPosition="top"></div>
+              <span *ngIf="(product.colors || []).length > 4" class="text-xs text-muted-foreground self-center ml-1">+{{
+                (product.colors || []).length - 4 }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <!-- Add to Cart Button -->
+              <button pButton pRipple type="button" icon="pi pi-shopping-cart" label="Add to Cart" class="w-full"
+                (click)="addToCart(product, $event)"></button>
+              <!-- Add to Wishlist Button -->
+              <button pButton pRipple type="button" [icon]="product.isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
+              class="p-button-outlined wishlist-button" [ngClass]="{ 'in-wishlist': product.isInWishlist }"
+              [pTooltip]="product.isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" tooltipPosition="top"
+              (click)="toggleWishlist(product, $event)" [loading]="wishlistLoading">
+            </button>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- No Results -->
+    <div class="text-center py-16" *ngIf="!loading && products.length === 0">
+      <div class="max-w-md mx-auto">
+        <h3 class="text-lg font-semibold mb-2">No products found</h3>
+        <p class="text-muted-foreground mb-4">
+          Try adjusting your filters or search terms to find what you're looking for.
+        </p>
+      </div>
+
+      <!-- Loading Spinner -->
+      <p-progressSpinner *ngIf="loading" styleClass="w-12 h-12 mx-auto my-16"></p-progressSpinner>
+
+      <!-- Product Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" *ngIf="!loading">
+        <p-card *ngFor="let product of products; trackBy: trackByProductId"
+          [styleClass]="'group overflow-hidden hover:shadow-lg transition-all duration-300'"
+          (click)="navigateToProduct(product)">
+          <div class="relative">
+            <img [src]="getProductImage(product)" [alt]="product.name"
+              class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
+            <p-chip *ngIf="getDiscountPercentage(product)"
+              styleClass="absolute top-3 left-3 bg-red-500 text-white">Sale</p-chip>
+            <button pButton type="button" icon="pi pi-heart"
+              class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white"
+              (click)="toggleWishlist(product, $event)" pTooltip="Add to Wishlist" tooltipPosition="top"></button>
+          </div>
+
+          <div class="p-4">
+            <div class="space-y-3">
+              <div>
+                <h3 class="font-semibold text-lg line-clamp-2 mb-1">{{ product.name }}</h3>
+                <p class="text-sm text-muted-foreground">{{ product.brand.name }}</p>
+              </div>
+
+              <!-- Rating -->
+              <div class="flex items-center gap-2">
+                <p-rating [ngModel]="product.averageRating" [readonly]="true" [stars]="5"
+                  [ngModelOptions]="{ standalone: true }"></p-rating>
+                <span class="text-sm text-muted-foreground">({{ product.reviewCount || 0 }})</span>
+              </div>
+
+              <!-- Price -->
+              <div class="flex items-center gap-2">
+                <span class="text-xl font-bold">{{ product.discountPrice || product.price | currency }}</span>
+                <span *ngIf="product.discountPrice" class="text-sm text-muted-foreground line-through">{{ product.price
+                  | currency }}</span>
+              </div>
+
+              <!-- Colors -->
+              <div class="flex gap-1">
+                <div *ngFor="let color of (product.colors || []).slice(0, 4)"
+                  class="w-5 h-5 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-400"
+                  [ngStyle]="{ 'background-color': getColorStyle(color) }" [pTooltip]="color" tooltipPosition="top">
+                </div>
+                <span *ngIf="(product.colors || []).length > 4"
+                  class="text-xs text-muted-foreground self-center ml-1">+{{ (product.colors || []).length - 4 }}</span>
+              </div>
+
+              <!-- Add to Cart Button -->
+              <button pButton pRipple type="button" icon="pi pi-shopping-cart" label="Add to Cart" class="w-full"
+                (click)="addToCart(product, $event)"></button>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- No Results -->
+      <div class="text-center py-16" *ngIf="!loading && products.length === 0">
+        <div class="max-w-md mx-auto">
+          <h3 class="text-lg font-semibold mb-2">No products found</h3>
+          <p class="text-muted-foreground mb-4">
+            Try adjusting your filters or search terms to find what you're looking for.
+          </p>
+          <button pButton pRipple type="button" label="Clear All Filters" (click)="clearAllFilters()"></button>
+        </div>
+      </div>
+
+      <!-- Paginator -->
+    </div>
+  </form>
+  <p-paginator *ngIf="!loading && products.length > 0" [first]="first" [rows]="rows" [totalRecords]="totalRecords"
+    (onPageChange)="onPageChange($event)" [rowsPerPageOptions]="[12, 24, 48, 96]"></p-paginator>
+</div>

@@ -1,0 +1,52 @@
+/* You can add custom styles here if needed, but Tailwind handles most of it */
+
+/* Adjust Galleria thumbnail spacing if needed */
+.product-gallery ::ng-deep .p-galleria-thumbnail-container {
+  padding: 0.5rem; /* Adjust as needed */
+}
+
+.product-gallery ::ng-deep .p-galleria-thumbnail-item {
+  margin: 0 0.25rem; /* Adjust spacing between thumbnails */
+}
+
+/* Custom styling for radio buttons to mimic shadcn/ui look */
+label.border {
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+label.border:has(input:checked) {
+  border-color: var(--primary-color); /* Use PrimeNG's primary color variable or a Tailwind color */
+  background-color: var(--surface-100); /* A light background for selected state */
+}
+
+/* Ensure PrimeNG icons are visible */
+.pi {
+  font-size: 1.25rem; /* Adjust icon size */
+}
+
+/* Style for the stock status text */
+.text-green-600 { color: #22c55e; }
+.text-orange-500 { color: #f97316; }
+.text-red-600 { color: #ef4444; }
+
+/* Override PrimeNG InputNumber button styling for better Tailwind integration */
+.p-inputnumber-buttons-horizontal ::ng-deep .p-inputnumber-button {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+}
+
+.p-inputnumber-buttons-horizontal ::ng-deep .p-inputnumber-button.p-button-secondary {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+}
+
+.p-inputnumber-buttons-horizontal ::ng-deep .p-inputnumber-input {
+  @apply text-center;
+}
+
+/* Ensure p-card content padding is consistent */
+p-card ::ng-deep .p-card-body {
+  @apply p-0; /* Remove default padding to control it with p-card-content */
+}
+
+.p-card-content {
+  @apply p-4; /* Apply padding to the custom content div */
+}

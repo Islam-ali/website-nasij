@@ -1,0 +1,115 @@
+// Colors
+$primary-color: #2196F3;
+$primary-dark: #1976D2;
+$primary-light: #BBDEFB;
+$accent-color: #FF4081;
+$text-color: #212121;
+$text-secondary: #757575;
+$divider-color: #BDBDBD;
+$background-color: #FAFAFA;
+$surface-color: #FFFFFF;
+$error-color: #F44336;
+$success-color: #4CAF50;
+$warning-color: #FFC107;
+
+// Typography
+$font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+$font-size-base: 1rem;
+$font-size-lg: 1.25rem;
+$font-size-sm: 0.875rem;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// Spacing
+$spacing-unit: 1rem;
+$spacing-xs: $spacing-unit * 0.25;  // 4px
+$spacing-sm: $spacing-unit * 0.5;   // 8px
+$spacing-md: $spacing-unit;         // 16px
+$spacing-lg: $spacing-unit * 1.5;   // 24px
+$spacing-xl: $spacing-unit * 3;     // 48px
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 16px;
+$border-radius-circle: 50%;
+
+// Shadows
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+$shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+// Transitions
+$transition-speed: 0.3s;
+$transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+// Breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 600px;
+$breakpoint-md: 960px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+
+// Z-index
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// Layout
+$header-height: 64px;
+$footer-height: 72px;
+$container-max-width: 1200px;
+
+// Buttons
+$btn-padding-y: 0.5rem;
+$btn-padding-x: 1rem;
+$btn-border-radius: $border-radius-sm;
+$btn-font-weight: $font-weight-medium;
+
+// Cards
+$card-padding: $spacing-md;
+$card-border-radius: $border-radius-md;
+$card-shadow: $shadow-sm;
+
+// Forms
+$input-padding-y: 0.5rem;
+$input-padding-x: 0.75rem;
+$input-border-radius: $border-radius-sm;
+$input-border-color: $divider-color;
+$input-focus-border-color: $primary-color;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+
+// Grid
+$grid-gutter-width: $spacing-md;
+$grid-columns: 12;
+
+// Custom Variables
+$navbar-height: 64px;
+$sidebar-width: 250px;
+$sidebar-collapsed-width: 80px;
+
+// Responsive font sizes
+@mixin responsive-font($min-size, $max-size, $min-width: 320px, $max-width: 1200px) {
+  font-size: $min-size;
+  
+  @media (min-width: $min-width) {
+    font-size: calc(#{$min-size} + (#{strip-unit($max-size - $min-size)}) * ((100vw - #{$min-width}) / #{strip-unit($max-width - $min-width)}));
+  }
+  
+  @media (min-width: $max-width) {
+    font-size: $max-size;
+  }
+}
+
+// Strip unit helper function
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}

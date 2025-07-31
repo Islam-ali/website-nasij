@@ -1,0 +1,229 @@
+<p-toast></p-toast>
+
+<div class="product-details-container min-h-screen">
+  <!-- Loading Skeleton -->
+  <div *ngIf="loading" class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
+    <div class="col-span-1">
+      <p-skeleton width="100%" height="500px" styleClass="rounded-lg"></p-skeleton>
+      <div class="flex gap-3 mt-3">
+        <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
+        <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
+        <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
+        <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
+      </div>
+    </div>
+    <div class="col-span-1 grid gap-4">
+      <p-skeleton width="75%" height="2rem" styleClass="mb-3"></p-skeleton>
+      <p-skeleton width="60%" height="1.5rem" styleClass="mb-4"></p-skeleton>
+      <p-skeleton width="100%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+      <p-skeleton width="80%" height="1.5rem" styleClass="mb-4"></p-skeleton>
+      <p-skeleton width="40%" height="3rem" styleClass="mb-4"></p-skeleton>
+      <p-skeleton width="60%" height="2.5rem" styleClass="mb-4"></p-skeleton>
+      <p-skeleton width="100%" height="3rem" styleClass="mb-4"></p-skeleton>
+      <p-skeleton width="100%" height="3rem" styleClass="mb-4"></p-skeleton>
+      <p-skeleton width="100%" height="6rem" styleClass="mb-4"></p-skeleton>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="text-center py-16">
+    <h3 class="text-2xl font-semibold mb-2">Product Not Found</h3>
+    <p class="text-muted-foreground mb-4">
+      The product you are looking for might have been removed or doesn't exist.
+    </p>
+    <button pButton pRipple label="Continue Shopping" icon="pi pi-arrow-left" class="mt-4"
+      routerLink="/products"></button>
+  </div>
+
+  <!-- Product Details Content -->
+  <div *ngIf="product && !loading" class="p-4 md:p-8 max-w-6xl mx-auto">
+    <!-- Product Images -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="col-span-1 w-full bg-white rounded-lg shadow-lg overflow-hidden h-fit">
+        <p-galleria [value]="images" [autoPlay]="true" [circular]="true" [responsiveOptions]="responsiveOptions"
+          [numVisible]="5" [containerStyle]="{ 'max-width': '100%', 'border-radius': '0.5rem' }"
+          [showThumbnails]="images.length > 1" [showThumbnailNavigators]="images.length > 1"
+          [thumbnailsPosition]="'bottom'" [transitionInterval]="3000" class="product-gallery"
+          [(activeIndex)]="currentImageIndex">
+          <ng-template pTemplate="item" let-item>
+            <div class="relative w-full h-96 md:h-[500px] flex items-center justify-center">
+              <img [src]="item.itemImageSrc" [alt]="item.alt || product.name"
+                class="max-h-full max-w-full object-contain p-4 transition-opacity duration-300"
+                [ngClass]="{ 'opacity-100': imageLoaded, 'opacity-0': !imageLoaded }" (load)="onImageLoad()" />
+              <div *ngIf="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
+                <p-progressSpinner styleClass="w-12 h-12" strokeWidth="4" fill="var(--surface-ground)"
+                  animationDuration=".5s"></p-progressSpinner>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+            <div
+              class="h-20 w-20 flex items-center justify-center bg-white border rounded overflow-hidden hover:border-primary transition-colors"
+              [ngClass]="{ 'border-primary': images[currentImageIndex].itemImageSrc === item.itemImageSrc }">
+              <img [src]="item.thumbnailImageSrc" [alt]="item.alt || product.name + ' thumbnail'"
+                class="max-h-full max-w-full object-contain p-1" />
+            </div>
+          </ng-template>
+        </p-galleria>
+      </div>
+      <!-- Product Info -->
+      <div class="col-span-1 w-full">
+        <div class="product-header">
+          <h1 class="text-3xl lg:text-4xl font-bold mb-2">{{ product.name }}</h1>
+          <div class="flex items-center mb-3">
+            <p-rating [ngModel]="product.averageRating || 0" [readonly]="true" class="mr-2"></p-rating>
+            <span class="text-muted-foreground">({{ product.reviewCount || 0 }} reviews)</span>
+            <span class="mx-2 text-muted-foreground">|</span>
+            <span class="font-medium" [ngClass]="{
+                 'text-green-600': getStockStatus(product.stock).severity === 'success',
+                 'text-orange-500': getStockStatus(product.stock).severity === 'warning',
+                 'text-red-600': getStockStatus(product.stock).severity === 'danger'
+               }">
+              {{ getStockStatus(product.stock).text }}
+            </span>
+          </div>
+
+          <!-- Product Meta -->
+          <div class="product-meta text-sm text-muted-foreground mb-4">
+            <div class="flex items-center mb-1">
+              <span class="font-medium mr-2 text-foreground">SKU:</span>
+              <span>{{ product.sku || 'N/A' }}</span>
+            </div>
+            <div class="flex items-center mb-1">
+              <span class="font-medium mr-2 text-foreground">Category:</span>
+              <a [routerLink]="['/products']" [queryParams]="{ category: product.category.slug }"
+                class="text-primary hover:underline">
+                {{ product.category.name }}
+              </a>
+            </div>
+            <div *ngIf="product.brand" class="flex items-center mb-1">
+              <span class="font-medium mr-2 text-foreground">Brand:</span>
+              <a [routerLink]="['/products']" [queryParams]="{ brand: product.brand.name }"
+                class="text-primary hover:underline">
+                {{ product.brand.name }}
+              </a>
+            </div>
+          </div>
+
+          <div class="product-price mb-6 flex items-baseline">
+            <span class="text-3xl font-semibold mr-3">
+              {{ (product.discountPrice || product.price) | currency }}
+            </span>
+            <span *ngIf="product.discountPrice && product.discountPrice < product.price"
+              class="line-through text-muted-foreground text-xl mr-2">
+              {{ product.price | currency }}
+            </span>
+            <span *ngIf="getDiscountPercentage(product.discountPrice || product.price, product.price)"
+              class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+              {{ getDiscountPercentage(product.discountPrice || product.price, product.price) }}% OFF
+            </span>
+          </div>
+        </div>
+
+        <!-- Product Options -->
+        <form class="grid gap-6 mb-6">
+          <div *ngIf="product.colors && product.colors.length > 0" class="grid gap-2">
+            <label for="color" class="text-base font-medium">Color</label>
+            <div class="flex items-center gap-2">
+              <label *ngFor="let color of product.colors" [for]="'color-' + color"
+                class="border cursor-pointer rounded-md p-2 flex items-center gap-2"
+                [ngClass]="{ 'bg-muted': selectedColor === color }">
+                <input type="radio" [id]="'color-' + color" [value]="color" name="color" [(ngModel)]="selectedColor"
+                  class="sr-only" />
+                <span class="w-5 h-5 rounded-full border"
+                  [ngStyle]="{ 'background-color': color, 'border-color': color === 'white' ? '#ccc' : color }"></span>
+                {{ color | titlecase }}
+              </label>
+            </div>
+          </div>
+
+          <div *ngIf="product.size && product.size.length > 0" class="grid gap-2">
+            <label for="size" class="text-base font-medium">Size</label>
+            <div class="flex items-center gap-2">
+              <label *ngFor="let size of product.size" [for]="'size-' + size"
+                class="border cursor-pointer rounded-md p-2 flex items-center gap-2"
+                [ngClass]="{ 'bg-muted': selectedSize === size }">
+                <input type="radio" [id]="'size-' + size" [value]="size" name="size" [(ngModel)]="selectedSize"
+                  [ngModelOptions]="{standalone: true}" class="sr-only" />
+                {{ size | uppercase }}
+              </label>
+            </div>
+          </div>
+
+          <div class="grid gap-2">
+            <label for="quantity" class="text-base font-medium">Quantity</label>
+            <p-inputNumber inputId="quantity" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
+              [max]="product.stock > 10 ? 10 : product.stock" [showButtons]="true" buttonLayout="horizontal"
+              spinnerMode="horizontal" decrementButtonClass="p-button-secondary"
+              incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus" class="w-24"></p-inputNumber>
+          </div>
+
+          <div class="flex gap-4">
+            <button pButton pRipple type="button" label="Add to Cart" icon="pi pi-shopping-cart" class="flex-1"
+              [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart"
+              tooltipPosition="top"></button>
+
+            <button pButton pRipple type="button" [icon]="isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
+              [label]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" class="p-button-outlined flex-1"
+              [ngClass]="{ 'text-red-500 border-red-500': isInWishlist }" (click)="toggleWishlist()"
+              [pTooltip]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" tooltipPosition="top"></button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <div class="w-full">
+      <div class="grid gap-4 mt-8">
+        <h2 class="font-bold text-xl">More Information</h2>
+        <p-accordion [multiple]="true">
+          <p-accordionTab header="Description">
+            <p>{{ product?.description }}</p>
+          </p-accordionTab>
+
+          <p-accordionTab *ngIf="product?.details && product.details.length > 0" header="Product Details">
+            <ul class="list-disc pl-5 space-y-1">
+              <li *ngFor="let detail of product?.details">
+                <span class="font-medium">{{ detail.name }}:</span> {{ detail.value }}
+              </li>
+            </ul>
+          </p-accordionTab>
+
+          <p-accordionTab header="Customer Reviews ({{ product?.reviewCount }})">
+            <p class="text-muted-foreground">No reviews yet. Be the first to review this product!</p>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <div *ngIf="relatedProducts.length > 0" class="mt-12 p-4 md:p-8 max-w-6xl mx-auto">
+    <h2 class="text-2xl font-semibold mb-6">You May Also Like</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <p-card *ngFor="let relatedProduct of relatedProducts"
+        styleClass="h-full flex flex-col cursor-pointer hover:shadow-lg transition-shadow"
+        (click)="navigateToProduct(relatedProduct)">
+        <ng-template pTemplate="header">
+          <img [src]="getImageUrl(relatedProduct.images[0]?.filePath || '', 'original')" [alt]="relatedProduct.name"
+            class="w-full h-48 object-cover rounded-t-lg" />
+        </ng-template>
+        <div class="p-card-content p-4 flex-grow flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-medium mb-1 line-clamp-2 min-h-[3rem]">{{ relatedProduct.name }}</h3>
+            <div class="flex items-center gap-0.5 text-sm text-muted-foreground mb-2">
+              <i *ngFor="let star of [1, 2, 3, 4, 5]" class="pi pi-star-fill"
+                [ngClass]="{ 'text-yellow-400': (star == relatedProduct.averageRating) , 'text-muted-foreground': (star == relatedProduct.averageRating) }"></i>
+              ({{ relatedProduct.reviewCount }})
+            </div>
+          </div>
+          <div class="flex items-center justify-between mt-auto">
+            <span class="text-xl font-semibold text-foreground">{{ relatedProduct.price | currency }}</span>
+            <button pButton pRipple icon="pi pi-shopping-cart" class="p-button-rounded p-button-text"
+              (click)="$event.stopPropagation(); addToCart()" pTooltip="Add to Cart" tooltipPosition="top"></button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

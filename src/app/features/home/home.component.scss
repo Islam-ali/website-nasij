@@ -1,0 +1,26 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
+.hero-container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .hero-grid {
+      grid-template-columns: 3fr 2fr;
+  }
+}
+.promo-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
+  height: 100%;
+}
+.transition-all {
+  transition: all 0.3s ease;
+}

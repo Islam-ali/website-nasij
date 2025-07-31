@@ -1,0 +1,111 @@
+<div class="register-container">
+  <p-card header="Create an Account" [style]="{ width: '500px' }" styleClass="shadow-5">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-fluid">
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="firstName">First Name *</label>
+            <input 
+              id="firstName" 
+              type="text" 
+              pInputText 
+              formControlName="firstName" 
+              [ngClass]="{ 'p-invalid': (firstName?.invalid && (firstName?.dirty || firstName?.touched)) }"
+            >
+            <small *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)" class="p-error">
+              <span *ngIf="firstName?.errors?.['required']">First name is required</span>
+              <span *ngIf="firstName?.errors?.['minlength']">Minimum 2 characters required</span>
+            </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="lastName">Last Name *</label>
+            <input 
+              id="lastName" 
+              type="text" 
+              pInputText 
+              formControlName="lastName" 
+              [ngClass]="{ 'p-invalid': (lastName?.invalid && (lastName?.dirty || lastName?.touched)) }"
+            >
+            <small *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)" class="p-error">
+              <span *ngIf="lastName?.errors?.['required']">Last name is required</span>
+              <span *ngIf="lastName?.errors?.['minlength']">Minimum 2 characters required</span>
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email *</label>
+        <input 
+          id="email" 
+          type="email" 
+          pInputText 
+          formControlName="email" 
+          [ngClass]="{ 'p-invalid': (email?.invalid && (email?.dirty || email?.touched)) }"
+        >
+        <small *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="p-error">
+          <span *ngIf="email?.errors?.['required']">Email is required</span>
+          <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="password">Password *</label>
+        <p-password 
+          id="password" 
+          formControlName="password" 
+          [toggleMask]="true"
+          [feedback]="true"
+          [ngClass]="{ 'p-invalid': (password?.invalid && (password?.dirty || password?.touched)) }"
+        ></p-password>
+        <small *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="p-error">
+          <span *ngIf="password?.errors?.['required']">Password is required</span>
+          <span *ngIf="password?.errors?.['minlength']">Must be at least 6 characters</span>
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Confirm Password *</label>
+        <p-password 
+          id="confirmPassword" 
+          formControlName="confirmPassword" 
+          [toggleMask]="true"
+          [ngClass]="{ 'p-invalid': (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) || passwordMismatch }"
+        ></p-password>
+        <small *ngIf="(confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) || passwordMismatch" class="p-error">
+          <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
+          <span *ngIf="passwordMismatch">Passwords do not match</span>
+        </small>
+      </div>
+
+      <div class="field-checkbox mb-4">
+        <p-checkbox 
+          id="acceptTerms" 
+          formControlName="acceptTerms"
+          [binary]="true"
+          [ngClass]="{ 'p-error': acceptTerms?.invalid && (acceptTerms?.dirty || acceptTerms?.touched) }">
+        </p-checkbox>
+        <label for="acceptTerms" class="ml-2">I agree to the <a href="#" class="text-primary">Terms and Conditions</a> *</label>
+        <small *ngIf="acceptTerms?.invalid && (acceptTerms?.dirty || acceptTerms?.touched)" class="p-error d-block">
+          You must accept the terms and conditions
+        </small>
+      </div>
+
+      <button 
+        pButton 
+        type="submit" 
+        label="Create Account" 
+        class="w-full"
+        [loading]="loading"
+        [disabled]="registerForm.invalid || loading || passwordMismatch"
+      ></button>
+    </form>
+
+    <div class="mt-4 text-center">
+      <span class="text-600">Already have an account? </span>
+      <a routerLink="/auth/login" class="font-medium text-primary">Sign In</a>
+    </div>
+  </p-card>
+</div>

@@ -1,0 +1,57 @@
+<div class="login-container">
+  <p-card header="Welcome Back" [style]="{ width: '400px' }" styleClass="shadow-5">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-fluid">
+      <div class="field">
+        <label for="email">Email</label>
+        <input 
+          id="email" 
+          type="email" 
+          pInputText 
+          formControlName="email" 
+          [ngClass]="{ 'p-invalid': (email?.invalid && (email?.dirty || email?.touched)) }"
+        >
+        <small *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="p-error">
+          <span *ngIf="email?.errors?.['required']">Email is required</span>
+          <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <p-password 
+          id="password" 
+          formControlName="password" 
+          [toggleMask]="true"
+          [feedback]="false"
+          [ngClass]="{ 'p-invalid': (password?.invalid && (password?.dirty || password?.touched)) }"
+        ></p-password>
+        <small *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="p-error">
+          <span *ngIf="password?.errors?.['required']">Password is required</span>
+        </small>
+      </div>
+
+      <div class="flex justify-content-between align-items-center mb-4">
+        <p-checkbox 
+          formControlName="rememberMe" 
+          label="Remember me"
+          [binary]="true"
+        ></p-checkbox>
+        <a routerLink="/auth/forgot-password" class="text-primary">Forgot password?</a>
+      </div>
+
+      <button 
+        pButton 
+        type="submit" 
+        label="Login" 
+        class="w-full"
+        [loading]="loading"
+        [disabled]="loginForm.invalid || loading"
+      ></button>
+    </form>
+
+    <div class="mt-4 text-center">
+      <span class="text-600">Don't have an account? </span>
+      <a routerLink="/auth/register" class="font-medium text-primary">Create one</a>
+    </div>
+  </p-card>
+</div>
