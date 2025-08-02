@@ -178,7 +178,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   // Continue shopping
   continueShopping(): void {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/shop']);
   }
 
   // Get wishlist items with product details

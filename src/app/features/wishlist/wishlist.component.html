@@ -10,12 +10,11 @@
     <!-- Loading State -->
     <div *ngIf="loading" class="loading-overlay">
       <p-progressSpinner></p-progressSpinner>
-      <p>Loading your wishlist...</p>
     </div>
 
     <!-- Wishlist Content -->
     <ng-container *ngIf="!loading">
-      <ng-container *ngIf="wishlistItems.length > 0">
+      <ng-container>
         <!-- Empty State -->
         <div *ngIf="wishlistItems.length === 0; else wishlistItem" class="empty-wishlist">
           <i class="pi pi-heart" style="font-size: 4rem; color: var(--primary-color)"></i>

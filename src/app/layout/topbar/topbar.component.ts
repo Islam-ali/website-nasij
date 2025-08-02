@@ -6,7 +6,7 @@ import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
-import { Subscription } from 'rxjs';
+import { catchError, finalize, of, Subscription, takeUntil, tap } from 'rxjs';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { WishlistService } from '../../features/wishlist/services/wishlist.service';
 import { MessageService } from 'primeng/api';
@@ -17,13 +17,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CardModule } from 'primeng/card';
 import { CartService } from '../../features/cart/services/cart.service';
 import { IUser } from '../../features/auth/models/auth.interface';
-import { ICartItem } from '../../features/cart/models/cart.interface';
+import { IAddToCartRequest, ICartItem } from '../../features/cart/models/cart.interface';
 import { FormsModule } from '@angular/forms';
 import { LayoutService } from '../service/layout.service';
 import { ButtonModule } from 'primeng/button';
 import { environment } from '../../../environments/environment';
 import { DrawerModule } from 'primeng/drawer';
 import { IWishlistItem, IWishlistState } from '../../features/wishlist/models/wishlist.interface';
+import { ComponentBase } from '../../core/directives/component-base.directive';
 
 @Component({
   selector: 'app-topbar',
@@ -48,7 +49,7 @@ import { IWishlistItem, IWishlistState } from '../../features/wishlist/models/wi
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss'],
 })
-export class TopbarComponent implements OnInit, OnDestroy {
+export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy {
   domain = environment.domain;
   LayoutService = inject(LayoutService);
   @ViewChild('cartDialog') cartDialog: any;
@@ -97,7 +98,8 @@ export class TopbarComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private router: Router,
   ) {
-    this.loadCartFromLocalStorage();
+    super();
+    this.loadCart();
     this.loadWishlist();
   }
 
@@ -115,11 +117,8 @@ export class TopbarComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
 
-  loadCartFromLocalStorage(): void {
+  loadCart(): void {
     this.cartService.getCartItems().subscribe({
       next: (cartItems: ICartItem[]) => {
         this.cartItems.set(cartItems);
@@ -145,34 +144,66 @@ export class TopbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveCartToLocalStorage(): void {
-    localStorage.setItem('cartItems', JSON.stringify(this.cartItems()));
-  }
-
-  saveWishlistToLocalStorage(): void {
-    localStorage.setItem('wishlistItems', JSON.stringify(this.wishlistItems()));
-  }
-
   addToCart(item: any): void {
-    const existingItemIndex = this.cartItems().findIndex(cartItem => cartItem.productId === item.productId);
-    if (existingItemIndex > -1) {
-      const updatedCart = this.cartItems();
-      updatedCart[existingItemIndex].quantity!++;
-      this.cartItems.set(updatedCart);
-    } else {
-      this.cartItems.set([...this.cartItems(), { ...item, quantity: 1 }]);
-    }
-    this.cartItemCount.set(this.cartItems().reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
-    this.cartTotal.set(this.cartItems().reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
-    this.saveCartToLocalStorage();
+    const newItem: IAddToCartRequest = {
+      productId: item.productId,
+      price: item.price,
+      image: item.image,
+      quantity: item.quantity,
+      color: item.color,
+      size: item.size,
+      productName: item.productName,
+      discount: item.discount,
+    };
+    this.cartService.addToCart(newItem).pipe(
+          takeUntil(this.destroy$),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Added',
+              detail: 'Item added to cart',
+              life: 3000,
+            });
+          }),
+          catchError((error: any) => {
+            console.error('Error adding item:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to add item. Please try again.',
+              life: 5000,
+            });
+            return of(null);
+          }),
+          finalize(() => {
+          })
+        ).subscribe();
   }
 
   removeFromCart(item: ICartItem): void {
-    const updatedCart = this.cartItems().filter(cartItem => cartItem.productId !== item.productId);
-    this.cartItems.set(updatedCart);
-    this.cartItemCount.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
-    this.cartTotal.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
-    this.saveCartToLocalStorage();
+    this.cartService.removeItem(item.productId, item.color, item.size).pipe(
+          takeUntil(this.destroy$),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Removed',
+              detail: 'Item removed from cart',
+              life: 3000,
+            });
+          }),
+          catchError((error: any) => {
+            console.error('Error removing item:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to remove item. Please try again.',
+              life: 5000,
+            });
+            return of(null);
+          }),
+          finalize(() => {
+          })
+        ).subscribe();
   }
 
   updateQuantity(item: ICartItem, quantity: number): void {
@@ -183,7 +214,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.cartItems.set(updatedCart);
     this.cartItemCount.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
     this.cartTotal.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
-    this.saveCartToLocalStorage();
   }
 
   addToWishlist(item: any): void {
@@ -191,7 +221,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     if (existingItemIndex === -1) {
       this.wishlistItems.set([...this.wishlistItems(), item]);
       this.wishlistCount.set(this.wishlistItems().length);
-      this.saveWishlistToLocalStorage();
     }
   }
 
@@ -199,7 +228,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
     const updatedWishlist = this.wishlistItems().filter(wishlistItem => wishlistItem.productId !== item.productId);
     this.wishlistItems.set(updatedWishlist);
     this.wishlistCount.set(updatedWishlist.length);
-    this.saveWishlistToLocalStorage();
   }
 
   navigateToWishlist(event: Event): void {
