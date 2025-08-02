@@ -117,8 +117,15 @@ export class CartService implements OnDestroy {
   }
 
   // Get current cart state
-  getCart() {
+  getCart(): Observable<ICartState> {
     return this.cartState$;
+  }
+
+  // Get cart items
+  getCartItems(): Observable<ICartItem[]> {
+    return this.cartState$.pipe(
+      map(state => state.items)
+    );
   }
 
   // Get cart item count
@@ -218,9 +225,4 @@ export class CartService implements OnDestroy {
     };
   }
 
-  // Sync with server (to be implemented)
-  private syncWithServer(): Observable<ICartState> {
-    // TODO: Implement API call to sync cart with server
-    return of(this.cartState.value);
-  }
 }

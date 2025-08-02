@@ -5,12 +5,12 @@ import { GenericApiService } from '../../../core/services/generic-api.service';
 import { CommonService } from '../../../core/services/common.service';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
 import { ICategory } from '../models/category.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = 'https://nasig-backend-production.up.railway.app/api/v1/categories'; // Update with your API URL
 
   constructor(
     private _genericApiService: GenericApiService<any>,
@@ -18,31 +18,31 @@ export class CategoryService {
 
   // Get all categories
   getCategories(queryParams?: any): Observable<BaseResponse<{categories:ICategory[], pagination:pagination}>> {
-    return this._genericApiService.Get(this.apiUrl, queryParams);
+    return this._genericApiService.Get(environment.apiUrl + '/categories', queryParams);
   }
 
   // get list categories
   listCategories(): Observable<BaseResponse<ICategory[]>> {
-    return this._genericApiService.Get(`${this.apiUrl}/list`);
+    return this._genericApiService.Get(`${environment.apiUrl}/categories/list`);
   }
 
   // Create a new category
   createCategory(category: ICategory): Observable<BaseResponse<ICategory>> {
-    return this._genericApiService.Post(this.apiUrl, this.commonService.removeNullUndefinedEmptyStringKeys(category));
+    return this._genericApiService.Post(environment.apiUrl + '/categories', this.commonService.removeNullUndefinedEmptyStringKeys(category));
   }
 
   // Update a category
   updateCategory(id: string, category: ICategory): Observable<BaseResponse<ICategory>> {
-    return this._genericApiService.Patch(this.apiUrl, id, this.commonService.removeNullUndefinedEmptyStringKeys(category));
+    return this._genericApiService.Patch(environment.apiUrl + '/categories', id, this.commonService.removeNullUndefinedEmptyStringKeys(category));
   }
 
   // Delete a category
   deleteCategory(id: string): Observable<BaseResponse<any>> {
-    return this._genericApiService.Delete(this.apiUrl, id);
+    return this._genericApiService.Delete(environment.apiUrl + '/categories', id);
   }
 
   // Get category by ID
   getCategoryById(id: string, queryParams?: any): Observable<BaseResponse<ICategory>> {
-    return this._genericApiService.Get(`${this.apiUrl}/${id}`, queryParams);
+    return this._genericApiService.Get(`${environment.apiUrl}/categories/${id}`, queryParams);
   }
 }

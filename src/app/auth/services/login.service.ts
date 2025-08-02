@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../../interfaces/user.interface';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private apiUrl = 'https://nasig-backend-production.up.railway.app/api/v1/auth';
+  private apiUrl = environment.apiUrl + '/auth';
   private tokenKey = 'token_Nasig';
   user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
   constructor(private http: HttpClient) { 

@@ -17,15 +17,15 @@ export const routes: Routes = [
         data: { breadcrumb: 'Home' }
       },
       {
-        path: 'products',
+        path: 'shop',
         loadComponent: () => import('./features/products/product-list/product-list.component')
           .then(m => m.ProductListComponent)
           .catch(() => ErrorComponent),
-        title: 'Products',
-        data: { breadcrumb: 'Products' }
+        title: 'shop',
+        data: { breadcrumb: 'shop' }
       },
       {
-        path: 'products/:id/:slug',
+        path: 'shop/:id/:slug',
         loadComponent: () => import('./features/products/product-details/product-details.component')
           .then(m => m.ProductDetailsComponent)
           .catch(() => ErrorComponent),
@@ -39,6 +39,14 @@ export const routes: Routes = [
         title: 'Shopping Cart',
         data: { breadcrumb: 'Cart' }
       },
+      {
+        path: 'wishlist',
+        loadComponent: () => import('./features/wishlist/wishlist.component')
+          .then(m => m.WishlistComponent)
+          .catch(() => ErrorComponent),
+        title: 'Wishlist',
+        data: { breadcrumb: 'Wishlist' }
+      },
       
       // Protected routes
       {
@@ -46,7 +54,6 @@ export const routes: Routes = [
         loadComponent: () => import('./features/checkout/checkout.component')
           .then(m => m.CheckoutComponent)
           .catch(() => ErrorComponent),
-        canActivate: [authGuard],
         title: 'Checkout',
         data: { breadcrumb: 'Checkout' }
       },

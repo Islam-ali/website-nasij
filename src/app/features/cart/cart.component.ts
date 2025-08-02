@@ -19,16 +19,7 @@ import { MessageService } from 'primeng/api';
 // Services
 import { CartService } from './services/cart.service';
 import { ICartItem, ICartState, ICartSummary } from './models/cart.interface';
-
-// Interface for cart item display properties
-interface CartItemDisplay extends ICartItem {
-  imageUrl: string;
-  categoryName: string;
-  variantName: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -55,23 +46,23 @@ export class CartComponent implements OnInit, OnDestroy {
   voucherCode = '';
   showVoucherInput = false;
   private destroy$ = new Subject<void>();
-
+  domain = environment.domain;
   // Cart state and summary
   cartState$: Observable<ICartState>;
   cartSummary$: Observable<ICartSummary>;
-  cartItems$: Observable<CartItemDisplay[]>;
+  cartItems$: Observable<ICartItem[]>;
 
   // Helper methods for display properties
-  private getProductImageUrl(item: ICartItem): string {
-    // Use product image if available, otherwise use a placeholder
-    const firstImage = item.product?.images?.[0] as { filePath: string } | undefined;
-    return firstImage?.filePath || 'assets/images/placeholder-product.jpg';
-  }
+  // private getProductImageUrl(item: ICartItem): string {
+  //   // Use product image if available, otherwise use a placeholder
+  //   const firstImage = item.product?.images?.[0] as { filePath: string } | undefined;
+  //   return firstImage?.filePath || 'assets/images/placeholder-product.jpg';
+  // }
 
-  private getCategoryName(item: ICartItem): string {
-    // Get category name from product or use a default
-    return item.product?.category?.name || 'Uncategorized';
-  }
+  // private getCategoryName(item: ICartItem): string {
+  //   // Get category name from product or use a default
+  //   return item.product?.category?.name || 'Uncategorized';
+  // }
 
   private getVariantName(item: ICartItem): string {
     // Combine color and size if available
@@ -81,28 +72,28 @@ export class CartComponent implements OnInit, OnDestroy {
     return parts.join(' | ');
   }
   
-  private getProductName(item: ICartItem): string {
-    // Get product name or a default
-    return item.product?.name || 'Unnamed Product';
-  }
+  // private getProductName(item: ICartItem): string {
+  //   // Get product name or a default
+  //   return item.product?.name || 'Unnamed Product';
+  // }
 
   // Track items in ngFor for better performance
-  trackByFn(index: number, item: ICartItem | CartItemDisplay): string {
+  trackByFn(index: number, item: ICartItem): string {
     return `${item.productId}-${'color' in item ? item.color : ''}-${'size' in item ? item.size : ''}`;
   }
 
   // Helper to safely cast ICartItem to CartItemDisplay
-  private toCartItemDisplay(item: ICartItem): CartItemDisplay {
-    return {
-      ...item,
-      name: this.getProductName(item),
-      imageUrl: this.getProductImageUrl(item),
-      categoryName: this.getCategoryName(item),
-      variantName: this.getVariantName(item),
-      price: item.price || 0,
-      quantity: item.quantity || 1
-    } as CartItemDisplay;
-  }
+  // private toCartItemDisplay(item: ICartItem): CartItemDisplay {
+  //   return {
+  //     ...item,
+  //     name: this.getProductName(item),
+  //     imageUrl: this.getProductImageUrl(item),
+  //     categoryName: this.getCategoryName(item),
+  //     variantName: this.getVariantName(item),
+  //     price: item.price || 0,
+  //     quantity: item.quantity || 1
+  //   } as CartItemDisplay;
+  // }
 
 
 
@@ -124,10 +115,7 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
       // Map cart items to include display properties and initialize cart items
-    this.cartItems$ = this.cartState$.pipe(
-      map(state => (state.items || []).map(item => this.toCartItemDisplay(item)))
-    );
-    console.log(this.cartItems$);
+    this.cartItems$ = this.cartService.getCartItems();
     
   }
 
@@ -185,7 +173,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   // Update item quantity
-  updateQuantity(item: CartItemDisplay, newQuantity: number): void {
+  updateQuantity(item: ICartItem, newQuantity: number): void {
     if (newQuantity < 1) return;
     
     this.loading = true;
@@ -216,7 +204,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   // Remove item from cart
-  removeItem(item: CartItemDisplay): void {
+  removeItem(item: ICartItem): void {
     if (!confirm('Are you sure you want to remove this item from your cart?')) {
       return;
     }

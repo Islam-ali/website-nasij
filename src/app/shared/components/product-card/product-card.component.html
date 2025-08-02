@@ -1,84 +1,80 @@
-<div class="product-card" [routerLink]="['/products', product._id]">
-  <!-- Product Image -->
-  <div class="product-image">
-    <img 
-      [src]="getProductImage(product)" 
-      [alt]="product.name"
-      class="product-image"
-      (error)="handleImageError($event)" />
-    
-    <!-- Sale Badge -->
-    <div *ngIf="isOnSale" class="sale-badge">
-      {{ discountPercentage }}% OFF
+<div class="w-full max-w-sm rounded-2xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:scale-[1.03] group bg-white relative transform-gpu">
+  <div class="p-0 relative">
+    @if (isOnSale) {
+    <div class="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg z-10 shadow-lg animate-pulse-once">
+      {{ discountPercentage }}% Off
     </div>
-    
-    <!-- Wishlist Button -->
-    <button 
-      *ngIf="showWishlist"
-      pButton 
-      pRipple 
-      type="button" 
-      [icon]="isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
-      class="wishlist-button"
-      [ngClass]="{ 'in-wishlist': isInWishlist }"
-      pTooltip="{{ isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}"
-      tooltipPosition="top"
-      (click)="$event.stopPropagation(); toggleWishlist($event)"
-      [loading]="loading">
-    </button>
+    }
+    <div (click)="addToWishlist(product)" class="absolute top-4 right-4 flex flex-col gap-2 z-10 group-hover:opacity-100 opacity-0 transition-opacity duration-300 ease-in-out">
+      <div class="bg-white p-2 rounded-full shadow-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200 transform hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="w-5 h-5 text-gray-700">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </div>
+      <div  class="bg-white p-2 rounded-full shadow-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200 transform hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="w-5 h-5 text-gray-700">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      </div>
+    </div>
+    <img [src]="domain + product.images[0].filePath" (error)="handleImageError($event)" alt="{{ product.name }}" width="600"
+      height="800" class="w-full h-[280px] object-cover transition-transform duration-300 ease-out group-hover:scale-110" />
   </div>
-  
-  <!-- Product Info -->
-  <div class="product-info">
-    <h3 class="product-name">{{ product.name }}</h3>
-    
-    <div class="product-price">
-      <span class="current-price">{{ price | currency }}</span>
-      <span *ngIf="isOnSale" class="original-price">
-        {{ product.price | currency }}
-      </span>
+  <div class="p-6 grid gap-5 bg-gradient-to-b from-white to-gray-50">
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl mb-0 font-bold text-gray-900 leading-tight line-clamp-2 hover:text-blue-600 transition-colors duration-200">{{ product.name }}</h2>
+      <div class="text-right">
+        @if (isOnSale) {
+        <p class="text-lg font-extrabold text-red-600">{{ price | currency }}</p>
+        <p class="text-sm text-gray-500 line-through">{{ product.price | currency }}</p>
+        } @else {
+        <p class="text-lg font-extrabold text-gray-900">{{ price | currency }}</p>
+        }
+      </div>
     </div>
-    
-    <!-- Rating -->
-    <div *ngIf="product.averageRating" class="product-rating">
-      <p-rating 
-        [ngModel]="product.averageRating" 
-        [readonly]="true" 
-        [style]="{'font-size': '14px'}"
-        styleClass="mr-2"
-        (onRate)="onRate($event)">
-      </p-rating>
-      <span class="rating-count">({{ product.reviewCount || 0 }})</span>
-    </div>
-    
-    <!-- Actions -->
-    <div *ngIf="showActions" class="product-actions">
-      <button 
-        *ngIf="showAddToCart"
-        pButton 
-        pRipple 
-        type="button" 
-        label="Add to Cart" 
-        icon="pi pi-shopping-cart"
-        class="add-to-cart-button"
-        (click)="$event.stopPropagation(); addToCart($event)"
-        [loading]="loading">
+    <!-- <div class="flex gap-2 flex-wrap">
+      @if (product.size) {
+      @for (size of product.size; track $index) {
+      <button
+        class="px-2 py-1 text-sm border-2 border-gray-300 rounded-lg text-gray-900 bg-gray-100 hover:bg-gray-200 hover:border-gray-400 transition-all duration-200 transform hover:scale-105">
+        {{ size }}
       </button>
-      
-      <button 
-        *ngIf="showViewDetails"
-        pButton 
-        pRipple 
-        type="button" 
-        label="View Details" 
-        class="p-button-outlined view-details-button"
-        (click)="$event.stopPropagation(); navigateToProduct(product)">
-      </button>
+      }
+      } @else {
+      <p class="text-sm px-2 py-1 text-gray-500 font-medium">One size</p>
+      }
     </div>
+    <div class="flex gap-2 flex-wrap">
+      @if (product.colors) {
+      @for (color of product.colors; track $index) {
+        <div [ngStyle]="{ 'background-color': color }" class="w-6 h-6 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-500 hover:shadow-md transition-all duration-200 transform hover:scale-110"
+        ></div>      }
+      } @else {
+      <p class="text-sm px-2 py-1 text-gray-500 font-medium">One color</p>
+      }
+    </div> -->
+    <!-- <div class="flex items-center gap-3">
+      <p-rating [(ngModel)]="product.averageRating" (onRate)="onRate($event)" [disabled]="true" [stars]="5" [style]="{ 'color': '#facc15' }"></p-rating>
+      <span class="text-sm text-gray-600 font-medium">({{ product.averageRating || 0 }})</span>
+    </div> -->
   </div>
-  
-  <!-- Loading Overlay -->
-  <div *ngIf="loading" class="loading-overlay">
-    <i class="pi pi-spin pi-spinner"></i>
+  <div class="p-0 bg-gray-50 sticky bottom-0 border-t border-gray-200">
+    <!-- <div class="flex justify-between items-center gap-4">
+      <input type="number" [(ngModel)]="quantity" min="1" class="w-20 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+      <button pButton [label]="'Add to Cart' + (quantity > 1 ? ' (' + quantity + ')' : '')" [disabled]="loading"
+        class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-md"
+        (click)="navigateToProduct(product)">
+      </button>
+    </div> -->
+    @if (showViewDetails) {
+    <button pButton label="View Details" class="w-full bg-gray-200 text-gray-800 px-6 py-2.5 rounded-lg hover:bg-gray-300 hover:text-gray-900 transition-all duration-300 transform hover:scale-105"
+      (click)="navigateToProduct(product)"></button>
+    }
   </div>
 </div>

@@ -14,7 +14,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { Select } from 'primeng/select';
-import { SidebarModule } from 'primeng/sidebar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProductService } from '../services/product.service';
@@ -29,6 +28,8 @@ import { ChipModule } from "primeng/chip";
 import { MessagesModule } from 'primeng/messages';
 import { InputTextModule } from 'primeng/inputtext';
 import { environment } from '../../../../environments/environment.development';
+import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
+import { DrawerModule } from 'primeng/drawer';
 
 @Component({
   selector: 'app-product-list',
@@ -49,12 +50,13 @@ import { environment } from '../../../../environments/environment.development';
     TooltipModule,
     MessageModule,
     Select,
-    SidebarModule,
     CheckboxModule,
     RadioButtonModule,
     ChipModule,
     DividerModule,
-    MessagesModule
+    MessagesModule,
+    ProductCardComponent,
+    DrawerModule  
 ],
   providers: [MessageService, ProductService, CategoryService, BrandService],
   templateUrl: './product-list.component.html',
@@ -133,11 +135,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     const params: IProductQueryParams = {
       page: Math.floor(this.first / this.rows) + 1,
-      limit: this.rows,
+      limit: 12,
       category: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
       brand: selectedBrands.length > 0 ? selectedBrands.join(',') : undefined,
       minPrice,
-      maxPrice,
+      // maxPrice,
       sortBy: sortField,
       sortOrder: sortOrder as 'asc' | 'desc',
       search: searchQuery || undefined,

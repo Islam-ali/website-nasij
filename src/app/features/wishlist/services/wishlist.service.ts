@@ -38,7 +38,7 @@ export class WishlistService implements OnDestroy {
   // Add item to wishlist
   addToWishlist(item: IAddToWishlistRequest): Observable<IWishlistState> {
     const currentState = this.wishlistState.value;
-    const existingItemIndex = this.findWishlistItemIndex(currentState.items, item.productId, item.variantId);
+    const existingItemIndex = this.findWishlistItemIndex(currentState.items, item.productId);
     
     if (existingItemIndex > -1) {
       // Item already in wishlist
@@ -52,9 +52,14 @@ export class WishlistService implements OnDestroy {
     
     // Add new item
     const newItem: IWishlistItem = {
+      product: item.product,
       productId: item.productId,
-      variantId: item.variantId,
-      addedAt: new Date()
+      addedAt: new Date(),
+      price: item.product.price,
+      productName: item.product.name,
+      image: item.product.images[0].filePath,
+      color: item.color || '',
+      size: item.size || ''
     };
     
     const updatedItems = [...currentState.items, newItem];
@@ -71,10 +76,10 @@ export class WishlistService implements OnDestroy {
   }
 
   // Remove item from wishlist
-  removeFromWishlist(productId: string, variantId?: string): Observable<IWishlistState> {
+  removeFromWishlist(productId: string): Observable<IWishlistState> {
     const currentState = this.wishlistState.value;
     const updatedItems = currentState.items.filter(
-      item => !(item.productId === productId && item.variantId === variantId)
+      item => !(item.productId === productId)
     );
     
     return this.updateWishlistState(updatedItems).pipe(
@@ -92,7 +97,7 @@ export class WishlistService implements OnDestroy {
   moveToCart(item: IWishlistItem): Observable<{wishlist: IWishlistState}> {
     // In a real app, this would make an API call to move the item
     // For now, we'll just remove it from the wishlist and return the updated state
-    return this.removeFromWishlist(item.productId, item.variantId).pipe(
+    return this.removeFromWishlist(item.productId).pipe(
       map(wishlist => ({ wishlist }))
     );
   }
@@ -124,7 +129,9 @@ export class WishlistService implements OnDestroy {
   private updateWishlistState(items: IWishlistItem[]): Observable<IWishlistState> {
     const newState: IWishlistState = {
       items,
-      count: items.length
+      summary: {
+        itemsCount: items.length
+      }
     };
     
     // In a real app, you would make an API call here to sync with the server
@@ -156,7 +163,9 @@ export class WishlistService implements OnDestroy {
           
           this.wishlistState.next({
             items: itemsWithDates,
-            count: itemsWithDates.length
+            summary: {
+              itemsCount: itemsWithDates.length
+            }
           });
         }
       }
@@ -180,7 +189,9 @@ export class WishlistService implements OnDestroy {
   private getInitialWishlistState(): IWishlistState {
     return {
       items: [],
-      count: 0
+      summary: {
+        itemsCount: 0
+      }
     };
   }
 }

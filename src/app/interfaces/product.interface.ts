@@ -32,7 +32,7 @@ export interface IProduct {
   sku: string;
   tags: string[];
   weight?: number;
-  color?: string[];
+  colors?: string[];
   size?: string[];
   gender?: string;
   season?: string;
@@ -49,6 +49,7 @@ export interface IProduct {
   averageRating?: number;
   reviewCount?: number;
   soldCount?: number;
+  onSale?: boolean;
 }
 
 export interface IArchived {

@@ -71,16 +71,16 @@
         <div class="product-header">
           <h1 class="text-3xl lg:text-4xl font-bold mb-2">{{ product.name }}</h1>
           <div class="flex items-center mb-3">
-            <p-rating [ngModel]="product.averageRating || 0" [readonly]="true" class="mr-2"></p-rating>
+            <!-- <p-rating [ngModel]="product.averageRating || 0" [readonly]="true" class="mr-2"></p-rating>
             <span class="text-muted-foreground">({{ product.reviewCount || 0 }} reviews)</span>
-            <span class="mx-2 text-muted-foreground">|</span>
-            <span class="font-medium" [ngClass]="{
+            <span class="mx-2 text-muted-foreground">|</span> -->
+            <!-- <span class="font-medium" [ngClass]="{
                  'text-green-600': getStockStatus(product.stock).severity === 'success',
                  'text-orange-500': getStockStatus(product.stock).severity === 'warning',
                  'text-red-600': getStockStatus(product.stock).severity === 'danger'
                }">
               {{ getStockStatus(product.stock).text }}
-            </span>
+            </span> -->
           </div>
 
           <!-- Product Meta -->
@@ -113,7 +113,7 @@
               class="line-through text-muted-foreground text-xl mr-2">
               {{ product.price | currency }}
             </span>
-            <span *ngIf="getDiscountPercentage(product.discountPrice || product.price, product.price)"
+            <span *ngIf="product.discountPrice"
               class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
               {{ getDiscountPercentage(product.discountPrice || product.price, product.price) }}% OFF
             </span>
@@ -160,7 +160,7 @@
           </div>
 
           <div class="flex gap-4">
-            <button pButton pRipple type="button" label="Add to Cart" icon="pi pi-shopping-cart" class="flex-1"
+            <button pButton pRipple type="button" [disabled]="checkCart()" label="Add to Cart" icon="pi pi-shopping-cart" class="flex-1"
               [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart"
               tooltipPosition="top"></button>
 
@@ -201,29 +201,9 @@
   <div *ngIf="relatedProducts.length > 0" class="mt-12 p-4 md:p-8 max-w-6xl mx-auto">
     <h2 class="text-2xl font-semibold mb-6">You May Also Like</h2>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <p-card *ngFor="let relatedProduct of relatedProducts"
-        styleClass="h-full flex flex-col cursor-pointer hover:shadow-lg transition-shadow"
-        (click)="navigateToProduct(relatedProduct)">
-        <ng-template pTemplate="header">
-          <img [src]="getImageUrl(relatedProduct.images[0]?.filePath || '', 'original')" [alt]="relatedProduct.name"
-            class="w-full h-48 object-cover rounded-t-lg" />
-        </ng-template>
-        <div class="p-card-content p-4 flex-grow flex flex-col justify-between">
-          <div>
-            <h3 class="text-lg font-medium mb-1 line-clamp-2 min-h-[3rem]">{{ relatedProduct.name }}</h3>
-            <div class="flex items-center gap-0.5 text-sm text-muted-foreground mb-2">
-              <i *ngFor="let star of [1, 2, 3, 4, 5]" class="pi pi-star-fill"
-                [ngClass]="{ 'text-yellow-400': (star == relatedProduct.averageRating) , 'text-muted-foreground': (star == relatedProduct.averageRating) }"></i>
-              ({{ relatedProduct.reviewCount }})
-            </div>
-          </div>
-          <div class="flex items-center justify-between mt-auto">
-            <span class="text-xl font-semibold text-foreground">{{ relatedProduct.price | currency }}</span>
-            <button pButton pRipple icon="pi pi-shopping-cart" class="p-button-rounded p-button-text"
-              (click)="$event.stopPropagation(); addToCart()" pTooltip="Add to Cart" tooltipPosition="top"></button>
-          </div>
-        </div>
-      </p-card>
+      @for (relatedProduct of relatedProducts; track $index) {
+        <app-product-card [product]="relatedProduct"></app-product-card>
+      }
     </div>
   </div>
 </div>

@@ -31,6 +31,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { BaseComponent } from 'primeng/basecomponent';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
+import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 
 interface ProductImage {
   itemImageSrc: string;
@@ -61,7 +62,8 @@ interface ProductImage {
     TabsModule,
     Card,
     AccordionModule,
-  ],
+    ProductCardComponent
+],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })
@@ -249,15 +251,22 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     );
   }
 
-  addToCart(): void {
-    if (!this.product) return;
+  checkCart(): boolean {
+    return !this.product || !this.selectedColor || !this.selectedSize;
+  }
 
+  addToCart(): void {
+    if (this.checkCart()) return;
+    if (!this.product) return;
     const productToAdd:IAddToCartRequest = {
       productId: this.product.id,
       price: this.selectedVariant?.price || this.product.price,
       quantity: this.quantity,
       color: this.selectedColor || '',
       size: this.selectedSize || '',
+      image: this.product.images[0].filePath,
+      productName: this.product.name,
+      discount: this.product.discountPrice || 0,
     };
 
     this.cartService.addToCart(productToAdd);

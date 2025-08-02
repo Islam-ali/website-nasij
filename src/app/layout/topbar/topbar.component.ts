@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, computed, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { Menu, MenuModule } from 'primeng/menu';
+import { MenubarModule } from 'primeng/menubar';
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,11 +10,9 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { WishlistService } from '../../features/wishlist/services/wishlist.service';
 import { MessageService } from 'primeng/api';
-import { IWishlistState } from '../../features/wishlist/models/wishlist.interface';
 import { DialogModule } from 'primeng/dialog';
 import { MenuItem } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
-import { BadgeModule as PrimeBadgeModule } from 'primeng/badge';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CardModule } from 'primeng/card';
 import { CartService } from '../../features/cart/services/cart.service';
@@ -23,15 +20,10 @@ import { IUser } from '../../features/auth/models/auth.interface';
 import { ICartItem } from '../../features/cart/models/cart.interface';
 import { FormsModule } from '@angular/forms';
 import { LayoutService } from '../service/layout.service';
-import { signal } from '@angular/core';
-
-interface IVariant {
-  _id: string;
-  name: string;
-  value: string;
-  price: number;
-  [key: string]: any; // Allow for additional properties
-}
+import { ButtonModule } from 'primeng/button';
+import { environment } from '../../../environments/environment';
+import { DrawerModule } from 'primeng/drawer';
+import { IWishlistItem, IWishlistState } from '../../features/wishlist/models/wishlist.interface';
 
 @Component({
   selector: 'app-topbar',
@@ -39,47 +31,65 @@ interface IVariant {
   imports: [
     CommonModule,
     RouterModule,
-    ButtonModule,
-    MenuModule,
+    MenubarModule,
     BadgeModule,
     AvatarModule,
     InputTextModule,
     RippleModule,
     TooltipModule,
-    PrimeBadgeModule,
     DialogModule,
     InputNumberModule,
     CardModule,
-    FormsModule
+    FormsModule,
+    ButtonModule,
+    DrawerModule
   ],
   providers: [MessageService],
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent implements OnInit, OnDestroy {
+  domain = environment.domain;
   LayoutService = inject(LayoutService);
   @ViewChild('cartDialog') cartDialog: any;
-  displayCartDialog: boolean = false;
-  @ViewChild('userMenu') userMenu!: Menu;
   submenuOpen: boolean = false;
   wishlistOpen: boolean = false;
   cartOpen: boolean = false;
-  navbarOpen: boolean = false;
+  navbarOpen = signal(false);
   searchForm: boolean = false;
   categories: boolean = false;
   categoryOne: boolean = true;
   isDarkTheme = computed(() => this.LayoutService.layoutConfig().darkTheme);
   searchQuery = '';
-  cartItems: any[] = [];
-  cartItemCount = 0;
-  cartTotal = 0;
-  wishlistCount = 0;
+  cartItems = signal<ICartItem[]>([]);
+  wishlistItems = signal<IWishlistItem[]>([]);
+  cartItemCount = signal<number>(0);
+  cartTotal = signal<number>(0);
+  wishlistCount = signal<number>(0);
   currentUser: IUser | null = null;
-
+  menuItems: MenuItem[] = [
+    // { label: 'Home', icon: 'pi pi-home', routerLink: '/' },
+    { label: 'Shop', icon: 'pi pi-shopping-cart', routerLink: '/shop' },
+    {
+      label: 'Products',
+      icon: 'pi pi-box',
+      items: [
+        { label: 'Dresses', routerLink: '/shop' },
+        { label: 'Jackets', routerLink: '/shop' },
+        { label: 'Sweatshirts', routerLink: '/shop' },
+        { label: 'Tops & Tees', routerLink: '/shop' },
+        { label: 'Party Dresses', routerLink: '/shop' }
+      ]
+    },
+    // { label: 'Accessories', icon: 'pi pi-gift', routerLink: '/accessories' },
+    { label: 'Contact', icon: 'pi pi-envelope', routerLink: '/contact' }
+  ];
   private subscriptions = new Subscription();
 
   userMenuItems: MenuItem[] = [];
-
+  toggleNavbar(): void {
+    this.navbarOpen.set(!this.navbarOpen());
+  }
   constructor(
     private authService: AuthService,
     private cartService: CartService,
@@ -87,38 +97,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private router: Router,
   ) {
-    this.initializeUserMenu();
+    this.loadCartFromLocalStorage();
+    this.loadWishlist();
   }
 
   ngOnInit(): void {
-    // Subscribe to cart state changes
-    this.subscriptions.add(
-      this.cartService.cartState$.subscribe({
-        next: (cartState: { items: ICartItem[]; summary: { total: number } }) => {
-          this.cartItems = cartState.items;
-          this.cartItemCount = cartState.items.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0);
-          this.cartTotal = cartState.summary?.total || 0;
-        },
-        error: (error: Error) => {
-          console.error('Error in cart subscription:', error);
-        }
-      })
-    );
-
-    // Subscribe to wishlist state changes
-    this.subscriptions.add(
-      this.wishlistService.wishlistState$.subscribe({
-        next: (wishlistState: IWishlistState) => {
-          this.wishlistCount = wishlistState.count;
-        },
-        error: (error: Error) => {
-          console.error('Error in wishlist subscription:', error);
-        }
-      })
-    );
-    
-
-    // Subscribe to auth state changes
     this.subscriptions.add(
       this.authService.currentUser$.subscribe({
         next: (user: IUser | null) => {
@@ -136,75 +119,119 @@ export class TopbarComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  onCartButtonClick() {
-    this.displayCartDialog = true;
+  loadCartFromLocalStorage(): void {
+    this.cartService.getCartItems().subscribe({
+      next: (cartItems: ICartItem[]) => {
+        this.cartItems.set(cartItems);
+        this.cartItemCount.set(cartItems.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
+        this.cartTotal.set(cartItems.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
+      },
+      error: (error: Error) => {
+        console.error('Error loading cart items:', error);
+      }
+    });
+
   }
 
-  navigateToWishlist(event: Event) {
+  loadWishlist(): void {
+    this.wishlistService.wishlistState$.subscribe({
+      next: (state: IWishlistState) => {
+        this.wishlistItems.set(state.items);
+        this.wishlistCount.set(state.summary.itemsCount);
+      },
+      error: (error: Error) => {
+        console.error('Error loading wishlist items:', error);
+      }
+    });
+  }
+
+  saveCartToLocalStorage(): void {
+    localStorage.setItem('cartItems', JSON.stringify(this.cartItems()));
+  }
+
+  saveWishlistToLocalStorage(): void {
+    localStorage.setItem('wishlistItems', JSON.stringify(this.wishlistItems()));
+  }
+
+  addToCart(item: any): void {
+    const existingItemIndex = this.cartItems().findIndex(cartItem => cartItem.productId === item.productId);
+    if (existingItemIndex > -1) {
+      const updatedCart = this.cartItems();
+      updatedCart[existingItemIndex].quantity!++;
+      this.cartItems.set(updatedCart);
+    } else {
+      this.cartItems.set([...this.cartItems(), { ...item, quantity: 1 }]);
+    }
+    this.cartItemCount.set(this.cartItems().reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
+    this.cartTotal.set(this.cartItems().reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
+    this.saveCartToLocalStorage();
+  }
+
+  removeFromCart(item: ICartItem): void {
+    const updatedCart = this.cartItems().filter(cartItem => cartItem.productId !== item.productId);
+    this.cartItems.set(updatedCart);
+    this.cartItemCount.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
+    this.cartTotal.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
+    this.saveCartToLocalStorage();
+  }
+
+  updateQuantity(item: ICartItem, quantity: number): void {
+    const newQuantity = Math.max(1, Math.floor(quantity));
+    const updatedCart = this.cartItems().map(cartItem =>
+      cartItem.productId === item.productId ? { ...cartItem, quantity: newQuantity } : cartItem
+    );
+    this.cartItems.set(updatedCart);
+    this.cartItemCount.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
+    this.cartTotal.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
+    this.saveCartToLocalStorage();
+  }
+
+  addToWishlist(item: any): void {
+    const existingItemIndex = this.wishlistItems().findIndex(wishlistItem => wishlistItem.productId === item.productId);
+    if (existingItemIndex === -1) {
+      this.wishlistItems.set([...this.wishlistItems(), item]);
+      this.wishlistCount.set(this.wishlistItems().length);
+      this.saveWishlistToLocalStorage();
+    }
+  }
+
+  removeFromWishlist(item: any): void {
+    const updatedWishlist = this.wishlistItems().filter(wishlistItem => wishlistItem.productId !== item.productId);
+    this.wishlistItems.set(updatedWishlist);
+    this.wishlistCount.set(updatedWishlist.length);
+    this.saveWishlistToLocalStorage();
+  }
+
+  navigateToWishlist(event: Event): void {
     event.preventDefault();
     this.router.navigate(['/wishlist']);
+    this.wishlistOpen = false;
   }
 
-  removeFromCart(item: ICartItem) {
-    if (item && item.product && item.product._id) {
-      this.cartService.removeItem(item.product._id);
-    } else {
-      console.error('Cannot remove item: Invalid cart item or product ID');
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Cannot remove item: Invalid product'
-      });
-    }
-  }
-
-  updateQuantity(item: ICartItem, quantity: number) {
-    if (!item || !item.product || !item.product._id) {
-      console.error('Cannot update quantity: Invalid cart item or product ID');
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Cannot update quantity: Invalid product'
-      });
-      return;
-    }
-
-    const newQuantity = Math.max(1, Math.floor(quantity)); // Ensure quantity is at least 1 and an integer
-    
-    if (quantity < 1) {
-      this.removeFromCart(item);
-      return;
-    }
-
-    // Convert product._id to string if it's a number
-    const productId = item.product._id.toString();
-    this.cartService.updateQuantity(productId, quantity);
-  }
-
-  viewCart() {
-    this.displayCartDialog = false;
+  viewCart(): void {
+    this.cartOpen = false;
     this.router.navigate(['/cart']);
   }
 
-  checkout() {
-    this.displayCartDialog = false;
+  checkout(): void {
+    this.cartOpen = false;
     this.router.navigate(['/checkout']);
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     this.LayoutService.onMenuToggle();
   }
-  
-  toggleTheme() {
+
+  toggleTheme(): void {
     this.LayoutService.toggleTheme();
   }
 
-  search(event: Event) {
+  search(event: Event): void {
     event.preventDefault();
     const query = this.searchQuery.trim();
     if (query) {
@@ -213,73 +240,16 @@ export class TopbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Gets the display name for a variant
-   * @param item The cart item containing the variant
-   * @returns Formatted variant name or empty string if no variant
-   */
-  // getVariantName(item: ICartItem): string {
-  //   try {
-  //     if (!item?.product?.variants?.length) return '';
-      
-  //     const variant = item.product.variants.find((v: any) => v._id === item.variantId);
-  //     if (!variant) return '';
-      
-  //     return [variant.name, variant.value].filter(Boolean).join(': ');
-  //   } catch (error) {
-  //     console.error('Error getting variant name:', error);
-  //     return '';
-  //   }
-  // }
-
   private initializeUserMenu(): void {
     this.userMenuItems = [
-      {
-        label: 'Profile',
-        icon: 'pi pi-user',
-        routerLink: '/profile',
-        visible: !!this.currentUser
-      },
-      {
-        label: 'Orders',
-        icon: 'pi pi-shopping-bag',
-        routerLink: '/orders',
-        visible: !!this.currentUser
-      },
-      {
-        label: 'Wishlist',
-        icon: 'pi pi-heart',
-        routerLink: '/wishlist',
-        visible: !!this.currentUser
-      },
-      {
-        label: 'Settings',
-        icon: 'pi pi-cog',
-        routerLink: '/settings',
-        visible: !!this.currentUser
-      },
-      {
-        separator: true,
-        visible: !!this.currentUser
-      },
-      {
-        label: 'Logout',
-        icon: 'pi pi-sign-out',
-        command: () => this.logout(),
-        visible: !!this.currentUser
-      },
-      {
-        label: 'Login',
-        icon: 'pi pi-sign-in',
-        routerLink: '/auth/login',
-        visible: !this.currentUser
-      },
-      {
-        label: 'Register',
-        icon: 'pi pi-user-plus',
-        routerLink: '/auth/register',
-        visible: !this.currentUser
-      }
+      { label: 'Profile', icon: 'pi pi-user', routerLink: '/profile', visible: !!this.currentUser },
+      { label: 'Orders', icon: 'pi pi-shopping-bag', routerLink: '/orders', visible: !!this.currentUser },
+      { label: 'Wishlist', icon: 'pi pi-heart', routerLink: '/wishlist', visible: !!this.currentUser },
+      { label: 'Settings', icon: 'pi pi-cog', routerLink: '/settings', visible: !!this.currentUser },
+      { separator: true, visible: !!this.currentUser },
+      { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout(), visible: !!this.currentUser },
+      { label: 'Login', icon: 'pi pi-sign-in', routerLink: '/auth/login', visible: !this.currentUser },
+      { label: 'Register', icon: 'pi pi-user-plus', routerLink: '/auth/register', visible: !this.currentUser }
     ];
   }
 
@@ -288,34 +258,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     return (this.currentUser.firstName?.[0] || '') + (this.currentUser.lastName?.[0] || '');
   }
 
-
-
-  /**
-   * Gets the price for a cart item, considering variants if present
-   * @param item The cart item to get the price for
-   * @returns The price of the item or its variant
-   */
-  // getVariantPrice(item: ICartItem): number {
-  //   try {
-  //     if (!item?.product) return 0;
-      
-  //     // Return base product price if no variant ID is specified
-  //     // if (!item.variantId) return item.product.price || 0;
-      
-  //     // Find the variant and return its price, fallback to product price
-  //     const variant = item.product.variants?.find((v: any) => v._id === item.variantId);
-  //     return variant?.price ?? item.product.price ?? 0;
-  //   } catch (error) {
-  //     console.error('Error getting variant price:', error);
-  //     return 0;
-  //   }
-  // }
-
-
-
-  toggleRTL() {
-    // RTL functionality can be implemented here if needed
-    // For now, we'll just log it
+  toggleRTL(): void {
     console.log('RTL toggle requested');
   }
 }

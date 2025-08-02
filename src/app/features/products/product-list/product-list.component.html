@@ -28,7 +28,7 @@
     </div>
 
     <!-- Filter Sidebar -->
-    <p-sidebar [(visible)]="isDrawerOpen" position="right" styleClass="w-full sm:w-96" [modal]="false"
+    <p-drawer [(visible)]="isDrawerOpen" position="right" styleClass="w-full sm:w-96" [modal]="false"
       [dismissible]="false" [showCloseIcon]="true">
       <div class="p-4">
         <div class="flex items-center justify-between">
@@ -153,7 +153,7 @@
           </div>
         </div>
       </div>
-    </p-sidebar>
+    </p-drawer>
 
     <!-- Active Filters -->
     <div class="flex flex-wrap gap-2 mb-6" *ngIf="activeFiltersCount > 0">
@@ -184,15 +184,16 @@
     <p-progressSpinner *ngIf="loading" styleClass="w-12 h-12 mx-auto my-16"></p-progressSpinner>
 
     <!-- Product Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" *ngIf="!loading">
-      <p-card *ngFor="let product of products; trackBy: trackByProductId"
+    <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2" *ngIf="!loading">
+      @for (product of products; track trackByProductId) {
+        <app-product-card [product]="product"></app-product-card>
+      }
+      <!-- <p-card *ngFor="let product of products; trackBy: trackByProductId"
         [styleClass]="'group overflow-hidden hover:shadow-lg transition-all duration-300'"
         (click)="navigateToProduct(product)">
         <div class="relative">
           <img [src]="getProductImage(product)" [alt]="product.name"
             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
-          <!-- <p-chip *ngIf="getDiscountPercentage(product)"
-            styleClass="absolute top-3 left-3 bg-red-500 text-white">Sale</p-chip> -->
 
         </div>
 
@@ -200,23 +201,19 @@
           <div class="space-y-3">
             <div (click)="navigateToProduct(product)">
               <h3 class="font-semibold text-lg line-clamp-2 mb-1">{{ product.name }}</h3>
-              <!-- <p class="text-sm text-muted-foreground">{{ product.brand.name }}</p> -->
             </div>
-            <!-- Rating -->
             <div class="flex items-center gap-2">
               <p-rating [ngModel]="product.averageRating" [readonly]="true" [stars]="5"
                 [ngModelOptions]="{ standalone: true }"></p-rating>
               <span class="text-sm text-muted-foreground">({{ product.reviewCount || 0 }})</span>
             </div>
 
-            <!-- Price -->
             <div class="flex items-center gap-2">
               <span class="text-xl font-bold">{{ product.discountPrice || product.price | currency }}</span>
               <span *ngIf="product.discountPrice" class="text-sm text-muted-foreground line-through">{{ product.price |
                 currency }}</span>
             </div>
 
-            <!-- Colors -->
             <div class="flex gap-1">
               <div *ngFor="let color of (product.colors || []).slice(0, 4)"
                 class="w-5 h-5 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-400"
@@ -224,20 +221,10 @@
               <span *ngIf="(product.colors || []).length > 4" class="text-xs text-muted-foreground self-center ml-1">+{{
                 (product.colors || []).length - 4 }}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <!-- Add to Cart Button -->
-              <button pButton pRipple type="button" icon="pi pi-shopping-cart" label="Add to Cart" class="w-full"
-                (click)="addToCart(product, $event)"></button>
-              <!-- Add to Wishlist Button -->
-              <button pButton pRipple type="button" [icon]="product.isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
-              class="p-button-outlined wishlist-button" [ngClass]="{ 'in-wishlist': product.isInWishlist }"
-              [pTooltip]="product.isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" tooltipPosition="top"
-              (click)="toggleWishlist(product, $event)" [loading]="wishlistLoading">
-            </button>
-            </div>
+
           </div>
         </div>
-      </p-card>
+      </p-card> -->
     </div>
 
     <!-- No Results -->
@@ -249,62 +236,6 @@
         </p>
       </div>
 
-      <!-- Loading Spinner -->
-      <p-progressSpinner *ngIf="loading" styleClass="w-12 h-12 mx-auto my-16"></p-progressSpinner>
-
-      <!-- Product Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" *ngIf="!loading">
-        <p-card *ngFor="let product of products; trackBy: trackByProductId"
-          [styleClass]="'group overflow-hidden hover:shadow-lg transition-all duration-300'"
-          (click)="navigateToProduct(product)">
-          <div class="relative">
-            <img [src]="getProductImage(product)" [alt]="product.name"
-              class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
-            <p-chip *ngIf="getDiscountPercentage(product)"
-              styleClass="absolute top-3 left-3 bg-red-500 text-white">Sale</p-chip>
-            <button pButton type="button" icon="pi pi-heart"
-              class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white"
-              (click)="toggleWishlist(product, $event)" pTooltip="Add to Wishlist" tooltipPosition="top"></button>
-          </div>
-
-          <div class="p-4">
-            <div class="space-y-3">
-              <div>
-                <h3 class="font-semibold text-lg line-clamp-2 mb-1">{{ product.name }}</h3>
-                <p class="text-sm text-muted-foreground">{{ product.brand.name }}</p>
-              </div>
-
-              <!-- Rating -->
-              <div class="flex items-center gap-2">
-                <p-rating [ngModel]="product.averageRating" [readonly]="true" [stars]="5"
-                  [ngModelOptions]="{ standalone: true }"></p-rating>
-                <span class="text-sm text-muted-foreground">({{ product.reviewCount || 0 }})</span>
-              </div>
-
-              <!-- Price -->
-              <div class="flex items-center gap-2">
-                <span class="text-xl font-bold">{{ product.discountPrice || product.price | currency }}</span>
-                <span *ngIf="product.discountPrice" class="text-sm text-muted-foreground line-through">{{ product.price
-                  | currency }}</span>
-              </div>
-
-              <!-- Colors -->
-              <div class="flex gap-1">
-                <div *ngFor="let color of (product.colors || []).slice(0, 4)"
-                  class="w-5 h-5 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-400"
-                  [ngStyle]="{ 'background-color': getColorStyle(color) }" [pTooltip]="color" tooltipPosition="top">
-                </div>
-                <span *ngIf="(product.colors || []).length > 4"
-                  class="text-xs text-muted-foreground self-center ml-1">+{{ (product.colors || []).length - 4 }}</span>
-              </div>
-
-              <!-- Add to Cart Button -->
-              <button pButton pRipple type="button" icon="pi pi-shopping-cart" label="Add to Cart" class="w-full"
-                (click)="addToCart(product, $event)"></button>
-            </div>
-          </div>
-        </p-card>
-      </div>
 
       <!-- No Results -->
       <div class="text-center py-16" *ngIf="!loading && products.length === 0">

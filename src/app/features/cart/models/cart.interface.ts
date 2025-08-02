@@ -1,12 +1,12 @@
-import { IProduct } from '../../products/models/product.interface';
-
 export interface ICartItem {
   productId: string;
-  color?: string;
-  size?: string;
+  color: string;
+  size: string;
   quantity: number;
   price: number;
-  product?: IProduct; // Full product details (optional)
+  image: string;
+  productName: string;
+  discount: number;
 }
 
 export interface ICartSummary {
@@ -23,13 +23,7 @@ export interface ICartState {
 }
 
 // For adding/updating items in cart
-export interface IAddToCartRequest {
-  productId: string;
-  color: string;
-  size: string;
-  quantity: number;
-  price: number;
-}
+export interface IAddToCartRequest extends ICartItem {}
 
 // For the cart item component
 export interface ICartItemComponent extends ICartItem {

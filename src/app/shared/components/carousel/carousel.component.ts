@@ -10,7 +10,7 @@ import { ProductCardComponent } from "../product-card/product-card.component";
 
 @Component({
   selector: 'app-carousel',
-  imports: [Carousel, ButtonModule, Tag, CommonModule],
+  imports: [Carousel, ButtonModule, Tag, CommonModule, ProductCardComponent],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.scss'
 })

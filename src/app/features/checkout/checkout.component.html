@@ -1,275 +1,225 @@
-<div class="checkout-container p-4">
-  <div class="grid">
-    <!-- Left Column - Checkout Form -->
-    <div class="col-12 lg:col-8">
-      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="checkout-form">
-        <!-- Contact Information -->
-        <p-card header="Contact Information" class="mb-4">
-          <div class="grid">
-            <div class="col-12 md:col-6">
-              <div class="field">
-                <label for="email">Email Address *</label>
-                <input id="email" type="email" pInputText formControlName="email" [ngClass]="{'ng-invalid ng-dirty': f['email'].errors && (f['email'].dirty || f['email'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['email'].errors?.['required'] && (f['email'].dirty || f['email'].touched || submitted)">Email is required</small>
-                <small class="p-error" *ngIf="f['email'].errors?.['email'] && (f['email'].dirty || f['email'].touched)">Please enter a valid email</small>
+<section class="bg-gray-50 font-sans text-gray-800">
+  <div class="container mx-auto p-6 lg:p-12">
+    <!-- Success Message -->
+    <div *ngIf="success" class="bg-green-50 border border-green-200 text-green-800 p-6 rounded-lg mb-8">
+      <div class="flex flex-col items-center">
+        <img src="Done.gif" alt="confirm" width="120">
+        <div class="text-center">
+          <h3 class="text-xl font-semibold">Order Confirmed!</h3>
+          <p>Thank you for your purchase.
+             <!-- Your order ID is: <span class="font-semibold">{{orderId}}</span> -->
+            </p>
+          <!-- <p class="mt-2">We've sent a confirmation email with your order details.</p> -->
+          <!-- button -->
+          <button pButton pRipple label="Continue Shopping" icon="pi pi-arrow-left" class="mt-4"
+            routerLink="/products"></button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!success">
+      <h1 class="text-4xl font-bold mb-2 text-gray-900">Checkout</h1>
+      <p class="text-gray-600 mb-8">There are {{cartItems$.value.length}} {{cartItems$.value.length === 1 ? 'item' : 'items'}} in your cart</p>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Checkout Form -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Billing Details -->
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-6 text-gray-800">Billing Details</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="sm:col-span-2">
+                <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full name*</label>
+                <input type="text" id="fullName" formControlName="fullName" 
+                  [class.border-red-300]="f['fullName'].touched && f['fullName'].errors"
+                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <div *ngIf="f['fullName'].touched && f['fullName'].errors" class="text-red-600 text-sm mt-1">
+                  Full name is required
+                </div>
               </div>
-            </div>
-            <div class="col-12 md:col-6">
-              <div class="field">
-                <label for="phone">Phone Number *</label>
-                <input id="phone" type="tel" pInputText formControlName="phone" [ngClass]="{'ng-invalid ng-dirty': f['phone'].errors && (f['phone'].dirty || f['phone'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['phone'].errors?.['required'] && (f['phone'].dirty || f['phone'].touched || submitted)">Phone number is required</small>
+              <div class="sm:col-span-2">
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone number*</label>
+                <input type="tel" id="phone" formControlName="phone"
+                  [class.border-red-300]="f['phone'].touched && f['phone'].errors"
+                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <div *ngIf="f['phone'].touched && f['phone'].errors" class="text-red-600 text-sm mt-1">
+                  Phone number is required
+                </div>
               </div>
             </div>
           </div>
-        </p-card>
 
-        <!-- Shipping Address -->
-        <p-card header="Shipping Address" class="mb-4">
-          <div class="grid">
-            <div class="col-12">
-              <div class="field">
-                <label for="shippingName">Full Name *</label>
-                <input id="shippingName" type="text" pInputText formControlName="shippingName" [ngClass]="{'ng-invalid ng-dirty': f['shippingName'].errors && (f['shippingName'].dirty || f['shippingName'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['shippingName'].errors?.['required'] && (f['shippingName'].dirty || f['shippingName'].touched || submitted)">Name is required</small>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="field">
-                <label for="shippingAddress">Address *</label>
-                <input id="shippingAddress" type="text" pInputText formControlName="shippingAddress" [ngClass]="{'ng-invalid ng-dirty': f['shippingAddress'].errors && (f['shippingAddress'].dirty || f['shippingAddress'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['shippingAddress'].errors?.['required'] && (f['shippingAddress'].dirty || f['shippingAddress'].touched || submitted)">Address is required</small>
-              </div>
-            </div>
-            <div class="col-12 md:col-6">
-              <div class="field">
-                <label for="shippingCity">City *</label>
-                <input id="shippingCity" type="text" pInputText formControlName="shippingCity" [ngClass]="{'ng-invalid ng-dirty': f['shippingCity'].errors && (f['shippingCity'].dirty || f['shippingCity'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['shippingCity'].errors?.['required'] && (f['shippingCity'].dirty || f['shippingCity'].touched || submitted)">City is required</small>
-              </div>
-            </div>
-            <div class="col-12 md:col-6">
-              <div class="field">
-                <label for="shippingState">State/Province *</label>
-                <input id="shippingState" type="text" pInputText formControlName="shippingState" [ngClass]="{'ng-invalid ng-dirty': f['shippingState'].errors && (f['shippingState'].dirty || f['shippingState'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['shippingState'].errors?.['required'] && (f['shippingState'].dirty || f['shippingState'].touched || submitted)">State/Province is required</small>
-              </div>
-            </div>
-            <div class="col-12 md:col-6">
-              <div class="field">
-                <label for="shippingZip">ZIP/Postal Code *</label>
-                <input id="shippingZip" type="text" pInputText formControlName="shippingZip" [ngClass]="{'ng-invalid ng-dirty': f['shippingZip'].errors && (f['shippingZip'].dirty || f['shippingZip'].touched || submitted)}" />
-                <small class="p-error" *ngIf="f['shippingZip'].errors?.['required'] && (f['shippingZip'].dirty || f['shippingZip'].touched || submitted)">ZIP/Postal Code is required</small>
-              </div>
-            </div>
-            <div class="col-12 md:col-6">
-              <div class="field">
-                <label for="shippingCountry">Country *</label>
-                <p-select id="shippingCountry" [options]="countries" formControlName="shippingCountry" optionLabel="name" placeholder="Select a country"
-                  [ngClass]="{'ng-invalid ng-dirty': f['shippingCountry'].errors && (f['shippingCountry'].dirty || f['shippingCountry'].touched || submitted)}">
+          <!-- Shipping Address -->
+          <div class="bg-white p-6 rounded-lg shadow-sm" formGroupName="shippingAddress">
+            <h2 class="text-xl font-semibold mb-6 text-gray-800">Shipping Address</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country*</label>
+                <p-select [options]="countries" formControlName="country" optionLabel="label" optionValue="value"
+                  placeholder="Select a country"
+                  [class.border-red-300]="checkoutForm.get('shippingAddress.country')?.touched && checkoutForm.get('shippingAddress.country')?.errors"
+                  styleClass="w-full">
                 </p-select>
-                <small class="p-error" *ngIf="f['shippingCountry'].errors?.['required'] && (f['shippingCountry'].dirty || f['shippingCountry'].touched || submitted)">Country is required</small>
-              </div>
-            </div>
-          </div>
-        </p-card>
-
-        <!-- Billing Address -->
-        <p-card header="Billing Address" class="mb-4">
-          <div class="field-checkbox mb-4">
-            <p-checkbox id="sameAsBilling" formControlName="sameAsBilling" binary="true" inputId="sameAsBilling"></p-checkbox>
-            <label for="sameAsBilling" class="ml-2">Same as shipping address</label>
-          </div>
-
-          <div [hidden]="checkoutForm.get('sameAsBilling')?.value">
-            <div class="grid">
-              <div class="col-12">
-                <div class="field">
-                  <label for="billingName">Full Name</label>
-                  <input id="billingName" type="text" pInputText formControlName="billingName" />
+                <div *ngIf="checkoutForm.get('shippingAddress.country')?.touched && checkoutForm.get('shippingAddress.country')?.errors" class="text-red-600 text-sm mt-1">
+                  Country is required
                 </div>
               </div>
-              <div class="col-12">
-                <div class="field">
-                  <label for="billingAddress">Address</label>
-                  <input id="billingAddress" type="text" pInputText formControlName="billingAddress" />
+              <div>
+                <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State/Province*</label>
+                <p-select [options]="states" formControlName="state" optionLabel="label" optionValue="value"
+                  placeholder="Select a state"
+                  [class.border-red-300]="checkoutForm.get('shippingAddress.state')?.touched && checkoutForm.get('shippingAddress.state')?.errors"
+                  styleClass="w-full">
+                </p-select>
+                <div *ngIf="checkoutForm.get('shippingAddress.state')?.touched && checkoutForm.get('shippingAddress.state')?.errors" class="text-red-600 text-sm mt-1">
+                  State/Province is required
                 </div>
               </div>
-              <div class="col-12 md:col-6">
-                <div class="field">
-                  <label for="billingCity">City</label>
-                  <input id="billingCity" type="text" pInputText formControlName="billingCity" />
+              <div>
+                <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City*</label>
+                <input type="text" id="city" formControlName="city"
+                  [class.border-red-300]="checkoutForm.get('shippingAddress.city')?.touched && checkoutForm.get('shippingAddress.city')?.errors"
+                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <div *ngIf="checkoutForm.get('shippingAddress.city')?.touched && checkoutForm.get('shippingAddress.city')?.errors" class="text-red-600 text-sm mt-1">
+                  City is required
                 </div>
               </div>
-              <div class="col-12 md:col-6">
-                <div class="field">
-                  <label for="billingState">State/Province</label>
-                  <input id="billingState" type="text" pInputText formControlName="billingState" />
-                </div>
-              </div>
-              <div class="col-12 md:col-6">
-                <div class="field">
-                  <label for="billingZip">ZIP/Postal Code</label>
-                  <input id="billingZip" type="text" pInputText formControlName="billingZip" />
-                </div>
-              </div>
-              <div class="col-12 md:col-6">
-                <div class="field">
-                  <label for="billingCountry">Country</label>
-                  <p-select id="billingCountry" [options]="countries" formControlName="billingCountry" optionLabel="name" placeholder="Select a country">
-                  </p-select>
+              <div class="sm:col-span-2">
+                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Street Address*</label>
+                <input type="text" id="address" formControlName="address"
+                  [class.border-red-300]="checkoutForm.get('shippingAddress.address')?.touched && checkoutForm.get('shippingAddress.address')?.errors"
+                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <div *ngIf="checkoutForm.get('shippingAddress.address')?.touched && checkoutForm.get('shippingAddress.address')?.errors" class="text-red-600 text-sm mt-1">
+                  Address is required
                 </div>
               </div>
             </div>
           </div>
-        </p-card>
-
-        <!-- Payment Method -->
-        <p-card header="Payment Method" class="mb-4">
-          <div class="field">
-            <label>Payment Method *</label>
-            <div class="flex flex-column gap-3 mt-2">
-              <div *ngFor="let method of paymentMethods" class="flex align-items-center">
-                <p-radioButton [inputId]="method.value" [value]="method.value" formControlName="paymentMethod"></p-radioButton>
-                <label [for]="method.value" class="ml-2">{{method.label}}</label>
+          <!-- note -->
+           <div class="bg-white p-6 rounded-lg shadow-sm">
+            <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+            <textarea id="notes" formControlName="notes" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+           </div>
+          <!-- Payment Method -->
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-6 text-gray-800">Payment Method</h2>
+            <div class="space-y-4">
+              <div *ngFor="let method of paymentMethods" class="flex items-center border border-gray-200 rounded-lg p-4 hover:border-blue-500 cursor-pointer"
+                   [class.border-blue-500]="checkoutForm.get('paymentMethod')?.value === method.value"
+                   (click)="checkoutForm.patchValue({ paymentMethod: method.value })">
+                <input type="radio" id="{{method.value}}" [value]="method.value" formControlName="paymentMethod"
+                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                <label [for]="method.value" class="ml-3 block text-sm font-medium text-gray-700">
+                  {{method.label}}
+                </label>
               </div>
-            </div>
-          </div>
-
-          <!-- Credit Card Fields (shown when credit card is selected) -->
-          <div *ngIf="f['paymentMethod'].value === 'credit_card'" class="mt-4">
-            <div class="grid">
-              <div class="col-12">
-                <div class="field">
-                  <label for="cardNumber">Card Number *</label>
-                  <input id="cardNumber" type="text" pInputText formControlName="cardNumber" 
-                    placeholder="1234 5678 9012 3456" 
-                    (input)="formatCardNumber($event)"
-                    maxlength="19"
-                    [ngClass]="{'ng-invalid ng-dirty': f['cardNumber'].errors && (f['cardNumber'].dirty || f['cardNumber'].touched || submitted)}" />
-                  <small *ngIf="f['cardNumber'].errors?.['required'] && (f['cardNumber'].dirty || f['cardNumber'].touched || submitted)" 
-                    class="p-error">Card number is required</small>
-                  <small *ngIf="f['cardNumber'].errors?.['invalidCardNumber']" class="p-error">Please enter a valid card number</small>
+              
+              <!-- Credit Card Details (shown when credit card is selected) -->
+              <div *ngIf="checkoutForm.get('paymentMethod')?.value === 'credit_card'" class="mt-6 space-y-4 border-t border-gray-200 pt-6">
+                <div>
+                  <label for="cardNumber" class="block text-sm font-medium text-gray-700 mb-1">Card number</label>
+                  <input type="text" id="cardNumber" formControlName="cardNumber"
+                         class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         placeholder="1234 1234 1234 1234" />
                 </div>
-              </div>
-              <div class="col-12">
-                <div class="field">
-                  <label for="cardName">Name on Card *</label>
-                  <input id="cardName" type="text" pInputText formControlName="cardName" 
-                    [ngClass]="{'ng-invalid ng-dirty': f['cardName'].errors && (f['cardName'].dirty || f['cardName'].touched || submitted)}" />
-                  <small *ngIf="f['cardName'].errors?.['required'] && (f['cardName'].dirty || f['cardName'].touched || submitted)" 
-                    class="p-error">Cardholder name is required</small>
-                </div>
-              </div>
-              <div class="col-12 md:col-6">
-                <div class="field">
-                  <label for="cardExpiry">Expiry Date *</label>
-                  <input id="cardExpiry" type="text" pInputText formControlName="cardExpiry" 
-                    placeholder="MM/YY" 
-                    (input)="formatExpiry($event)"
-                    maxlength="5"
-                    [ngClass]="{'ng-invalid ng-dirty': f['cardExpiry'].errors && (f['cardExpiry'].dirty || f['cardExpiry'].touched || submitted)}" />
-                  <small *ngIf="f['cardExpiry'].errors?.['required'] && (f['cardExpiry'].dirty || f['cardExpiry'].touched || submitted)" 
-                    class="p-error">Expiry date is required</small>
-                  <small *ngIf="f['cardExpiry'].errors?.['invalidExpiry']" class="p-error">Invalid expiry format (MM/YY)</small>
-                  <small *ngIf="f['cardExpiry'].errors?.['invalidMonth']" class="p-error">Invalid month (01-12)</small>
-                  <small *ngIf="f['cardExpiry'].errors?.['cardExpired']" class="p-error">This card has expired</small>
-                </div>
-              </div>
-              <div class="col-12 md:col-6">
-                <div class="field">
-                  <label for="cardCvv">CVV *</label>
-                  <input id="cardCvv" type="password" pInputText formControlName="cardCvv" 
-                    placeholder="123" 
-                    maxlength="4"
-                    [ngClass]="{'ng-invalid ng-dirty': f['cardCvv'].errors && (f['cardCvv'].dirty || f['cardCvv'].touched || submitted)}" />
-                  <small *ngIf="f['cardCvv'].errors?.['required'] && (f['cardCvv'].dirty || f['cardCvv'].touched || submitted)" 
-                    class="p-error">CVV is required</small>
-                  <small *ngIf="f['cardCvv'].errors?.['minlength'] || f['cardCvv'].errors?.['maxlength']" 
-                    class="p-error">CVV must be 3-4 digits</small>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label for="cardExpiry" class="block text-sm font-medium text-gray-700 mb-1">Expiration date</label>
+                    <input type="text" id="cardExpiry" formControlName="cardExpiry"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="MM/YY" />
+                  </div>
+                  <div>
+                    <label for="cardCvc" class="block text-sm font-medium text-gray-700 mb-1">CVC</label>
+                    <input type="text" id="cardCvc" formControlName="cardCvc"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="CVC" />
+                  </div>
                 </div>
               </div>
             </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <input id="acceptTerms" type="checkbox" formControlName="acceptTerms"
+                         class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="acceptTerms" class="font-medium text-gray-700">I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a></label>
+                  <div *ngIf="f['acceptTerms'].touched && f['acceptTerms'].errors" class="text-red-600 text-sm mt-1">
+                    You must accept the terms and conditions
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Submit Button -->
+              <button type="submit" [disabled]="checkoutForm.invalid || loading"
+                      class="w-full mt-6 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span *ngIf="!loading">Place Order</span>
+                <span *ngIf="loading" class="flex items-center justify-center">
+                  <i class="pi pi-spin pi-spinner mr-2"></i> Processing...
+                </span>
+              </button>
+            </div>
           </div>
-        </p-card>
-
-        <!-- Order Notes -->
-        <p-card header="Order Notes" class="mb-4">
-          <textarea pInputTextarea formControlName="notes" rows="3" placeholder="Notes about your order, e.g. special delivery instructions"></textarea>
-        </p-card>
-
-        <!-- Terms & Conditions -->
-        <div class="field-checkbox mb-4">
-          <p-checkbox id="terms" formControlName="terms" binary="true" inputId="terms"></p-checkbox>
-          <label for="terms" class="ml-2">I have read and agree to the website <a href="/terms" target="_blank" class="text-primary">terms and conditions</a> *</label>
-          <small class="p-error d-block" *ngIf="f['terms'].errors?.['required'] && (f['terms'].dirty || f['terms'].touched || submitted)">You must accept the terms and conditions</small>
         </div>
-
-        <!-- Submit Button -->
-        <div class="flex justify-content-between align-items-center">
-          <a routerLink="/cart" class="text-primary no-underline hover:underline">
-            <i class="pi pi-arrow-left mr-2"></i> Return to Cart
-          </a>
-          <button pButton type="submit" label="Place Order" [disabled]="loading" [loading]="loading" class="p-button-primary">
-            <span *ngIf="!loading">Place Order</span>
-          </button>
-        </div>
-
-        <!-- Confirmation Dialog -->
-        <p-toast key="confirmOrder" position="center" styleClass="confirm-dialog">
-          <ng-template let-message pTemplate="message">
-            <div class="flex flex-column" style="flex: 1">
-              <div class="text-center">
-                <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
-                <h4>{{message.summary}}</h4>
-                <p>{{message.detail}}</p>
-              </div>
-              <div class="grid p-fluid">
-                <div class="col-6">
-                  <button type="button" pButton (click)="onConfirmOrder()" label="Yes" class="p-button-success"></button>
+        
+        <!-- Right Column - Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="bg-white p-6 rounded-lg shadow-sm sticky top-6">
+            <h2 class="text-xl font-semibold mb-6 text-gray-800">Order Summary</h2>
+            
+            <!-- Order Items -->
+            <div class="space-y-4 mb-6">
+              <div *ngFor="let item of cartItems$.value" class="flex items-start">
+                <img [src]="domain + item.image" [alt]="item.productName" class="w-16 h-16 object-cover rounded">
+                <div class="ml-4 flex-1">
+                  <h4 class="text-sm font-medium text-gray-900">{{item.productName}}</h4>
+                  <p class="text-sm text-gray-500">Size: {{item.size}}</p>
+                  <p class="text-sm text-gray-500">Color: {{item.color}}</p>
                 </div>
-                <div class="col-6">
-                  <button type="button" pButton (click)="onRejectOrder()" label="No" class="p-button-secondary"></button>
+                <div class="text-right">
+                  <p class="text-sm font-medium text-gray-900">{{item.price | currency}}</p>
+                  <p class="text-xs text-gray-500">Qty: {{item.quantity}}</p>
                 </div>
               </div>
             </div>
-          </ng-template>
-        </p-toast>
+            
+            <!-- Order Totals -->
+            <div class="border-t border-gray-200 pt-4 space-y-3">
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Subtotal</span>
+                <span>{{cartTotal | currency}}</span>
+              </div>
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Shipping</span>
+                <span>{{shippingCost | currency}}</span>
+              </div>
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Tax</span>
+                <span>{{calculateTax() | currency}}</span>
+              </div>
+              <div class="flex justify-between text-base font-medium text-gray-900 pt-2 border-t border-gray-200 mt-2">
+                <span>Total</span>
+                <span>{{orderTotal | currency}}</span>
+              </div>
+            </div>
+            
+            <!-- Secure Checkout -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <div class="flex items-center justify-center text-xs text-gray-500">
+                <i class="pi pi-lock mr-2"></i>
+                <span>Secure Checkout</span>
+              </div>
+              <p class="mt-2 text-xs text-gray-500 text-center">
+                Your payment information is encrypted and processed securely.
+              </p>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
-
-    <!-- Right Column - Order Summary -->
-    <div class="col-12 lg:col-4">
-      <p-card header="Order Summary" class="order-summary">
-        <div *ngIf="cart" class="order-items">
-          <div *ngFor="let item of cart.items" class="order-item flex justify-content-between align-items-center mb-3">
-            <div class="flex align-items-center">
-              <img [src]="item.product?.images?.[0] || 'assets/images/placeholder.png'" [alt]="item.product?.name" class="product-image" />
-              <div class="ml-3">
-                <div class="font-medium">{{item.product?.name}}</div>
-                <div class="text-500 text-sm">Qty: {{item.quantity}}</div>
-                <div *ngIf="item.product?.variants" class="text-500 text-sm">{{item.product?.variants?.[0]?.value}}: {{item.product?.variants?.[0]?.value}}</div>
-              </div>
-            </div>
-            <div class="font-medium">{{item.quantity * (item.product?.price || 0) | currency}}</div>
-          </div>
-        </div>
-
-        <div class="order-totals mt-4">
-          <div class="flex justify-content-between mb-2">
-            <span>Subtotal</span>
-            <span>{{cart?.subtotal | currency}}</span>
-          </div>
-          <div class="flex justify-content-between mb-2">
-            <span>Shipping</span>
-            <span>{{cart?.shipping | currency}}</span>
-          </div>
-          <div class="flex justify-content-between font-bold text-xl mt-3 pt-3 border-top-1 border-300">
-            <span>Total</span>
-            <span>{{cart?.total | currency}}</span>
-          </div>
-        </div>
-      </p-card>
-    </div>
   </div>
-</div>
+</section>

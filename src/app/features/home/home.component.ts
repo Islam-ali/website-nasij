@@ -104,7 +104,7 @@ export class HomeComponent implements OnInit {
   }
 
   getProductUrl(product: IProduct): string {
-    return `/products/${product.id}`;
+    return `/shop/${product.id}`;
   }
 
   private slugify(text: string): string {
@@ -123,33 +123,14 @@ export class HomeComponent implements OnInit {
       price: product.price,
       color: product.colors?.[0] || '',
       size: product.size?.[0] || '',
+      image: product.images[0].filePath,
+      productName: product.name,
+      discount: product.discountPrice || 0,
     });
     this.messageService.add({
       severity: 'success',
       summary: 'Added to Cart',
       detail: `${product.name} has been added to your cart.`
-    });
-  }
-
-  addToWishlist(product: IProduct): void {
-    this.wishlistService.addToWishlist({
-      productId: product.id,
-      
-    }).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Added to Wishlist',
-          detail: `${product.name} has been added to your wishlist.`
-        });
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message || 'Failed to add to wishlist.'
-        });
-      }
     });
   }
 
