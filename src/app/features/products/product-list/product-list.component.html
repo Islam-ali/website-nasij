@@ -1,65 +1,74 @@
-<div class="container mx-auto px-4 py-8">
+<div class="product-list-container min-h-screen bg-gradient-to-br from-gray-50 to-white">
   <p-messages></p-messages>
 
   <!-- Main Form Group -->
-  <form [formGroup]="filterForm">
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-      <div>
-        <h1 class="text-3xl font-bold">Products</h1>
-        <p class="text-muted-foreground mt-1">
-          Showing {{ products.length }} of {{ totalRecords }} products
-        </p>
-      </div>
+  <form [formGroup]="filterForm" class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div class="space-y-2">
+          <h1 class="text-4xl font-bold text-gray-900">Discover Products</h1>
+          <p class="text-gray-600">
+            Showing <span class="font-semibold text-primary">{{ products.length }}</span> of 
+            <span class="font-semibold">{{ totalRecords }}</span> products
+          </p>
+        </div>
 
-      <div class="flex items-center gap-4">
-        <!-- Sort Dropdown -->
-        <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Sort by" styleClass="w-48"
-          (onChange)="onSortChange()"></p-select>
+        <div class="flex items-center gap-4">
+          <!-- Search Bar -->
+          <div class="relative">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" placeholder="Search products..." 
+                formControlName="searchQuery" 
+                class="w-64 lg:w-80" />
+            </span>
+          </div>
 
-        <!-- Filter Drawer Trigger -->
-        <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" (click)="isDrawerOpen = true"
-          class="relative">
-          <span *ngIf="activeFiltersCount > 0"
-            class="ml-2 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">{{
-            activeFiltersCount }}</span>
-        </button>
+          <!-- Sort Dropdown -->
+          <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Sort by" 
+            styleClass="w-48" (onChange)="onSortChange()"></p-select>
+
+          <!-- Filter Button -->
+          <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" 
+            (click)="isDrawerOpen = true" class="relative bg-primary hover:bg-primary-dark">
+            <span *ngIf="activeFiltersCount > 0"
+              class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
+              {{ activeFiltersCount }}
+            </span>
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Filter Sidebar -->
     <p-drawer [(visible)]="isDrawerOpen" position="right" styleClass="w-full sm:w-96" [modal]="false"
       [dismissible]="false" [showCloseIcon]="true">
-      <div class="p-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-semibold">Filters</h2>
-          <button *ngIf="activeFiltersCount > 0" pButton type="button" label="Clear All" class="p-button-text"
-            (click)="clearAllFilters()"></button>
+      <div class="p-6 h-full overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900">Filters</h2>
+          <button *ngIf="activeFiltersCount > 0" pButton type="button" label="Clear All" 
+            class="p-button-text text-red-600 hover:text-red-700" (click)="clearAllFilters()"></button>
         </div>
 
-        <div class="space-y-6">
-          <!-- Search -->
-          <div class="space-y-2">
-            <label class="text-sm font-medium">Search</label>
-            <span class="p-input-icon-left w-full">
-              <input pInputText type="text" icon="pi pi-search" placeholder="Search products..."
-                formControlName="searchQuery" class="w-full" />
-            </span>
-          </div>
-
-          <p-divider></p-divider>
-
+        <div class="space-y-8">
           <!-- Price Range -->
-          <div class="space-y-3">
-            <label class="text-sm font-medium">Price Range</label>
-            <div class="px-2">
-              <div class="grid grid-cols-2 gap-2">
-                <p-inputNumber formControlName="minPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
-                  [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
-                <p-inputNumber formControlName="maxPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
-                  [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Price Range</h3>
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-sm font-medium text-gray-700 mb-2 block">Min Price</label>
+                  <p-inputNumber formControlName="minPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
+                    [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-gray-700 mb-2 block">Max Price</label>
+                  <p-inputNumber formControlName="maxPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
+                    [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+                </div>
               </div>
-              <div class="flex justify-between text-sm text-muted-foreground mt-2">
+              <div class="flex justify-between text-sm text-gray-500">
                 <span>{{ filterForm.get('minPrice')?.value | currency }}</span>
                 <span>{{ filterForm.get('maxPrice')?.value | currency }}</span>
               </div>
@@ -69,18 +78,17 @@
           <p-divider></p-divider>
 
           <!-- Rating -->
-          <div class="space-y-3">
-            <label class="text-sm font-medium">Minimum Rating</label>
-            <div class="space-y-2">
-              <div *ngFor="let rating of [4, 3, 2, 1]" class="flex items-center space-x-2">
-                <p-radioButton [value]="rating" formControlName="minRating"
-                  [inputId]="'rating-' + rating"></p-radioButton>
-                <label [for]="'rating-' + rating" class="flex items-center">
-                  <div class="flex mr-2">
-                    <i *ngFor="let i of [0,1,2,3,4]" class="pi pi-star-fill h-4 w-4"
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Minimum Rating</h3>
+            <div class="space-y-3">
+              <div *ngFor="let rating of [4, 3, 2, 1]" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <p-radioButton [value]="rating" formControlName="minRating" [inputId]="'rating-' + rating"></p-radioButton>
+                <label [for]="'rating-' + rating" class="flex items-center cursor-pointer">
+                  <div class="flex mr-3">
+                    <i *ngFor="let i of [0,1,2,3,4]" class="pi pi-star-fill h-5 w-5"
                       [ngClass]="i < rating ? 'text-yellow-400' : 'text-gray-300'"></i>
                   </div>
-                  <span class="text-sm">& up</span>
+                  <span class="text-sm font-medium">& up</span>
                 </label>
               </div>
             </div>
@@ -89,13 +97,13 @@
           <p-divider></p-divider>
 
           <!-- Categories -->
-          <div class="space-y-3">
-            <label class="text-sm font-medium">Category</label>
-            <div class="space-y-2">
-              <div *ngFor="let category of categories" class="flex items-center space-x-2">
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Categories</h3>
+            <div class="space-y-3 max-h-48 overflow-y-auto">
+              <div *ngFor="let category of categories" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="category._id" formControlName="selectedCategories"
                   [inputId]="'category-' + category._id"></p-checkbox>
-                <label [for]="'category-' + category._id" class="text-sm">{{ category.name }}</label>
+                <label [for]="'category-' + category._id" class="text-sm font-medium cursor-pointer">{{ category.name }}</label>
               </div>
             </div>
           </div>
@@ -103,13 +111,13 @@
           <p-divider></p-divider>
 
           <!-- Brands -->
-          <div class="space-y-3">
-            <label class="text-sm font-medium">Brand</label>
-            <div class="space-y-2">
-              <div *ngFor="let brand of brands" class="flex items-center space-x-2">
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Brands</h3>
+            <div class="space-y-3 max-h-48 overflow-y-auto">
+              <div *ngFor="let brand of brands" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="brand._id" formControlName="selectedBrands"
                   [inputId]="'brand-' + brand._id"></p-checkbox>
-                <label [for]="'brand-' + brand._id" class="text-sm">{{ brand.name }}</label>
+                <label [for]="'brand-' + brand._id" class="text-sm font-medium cursor-pointer">{{ brand.name }}</label>
               </div>
             </div>
           </div>
@@ -117,12 +125,12 @@
           <p-divider></p-divider>
 
           <!-- Sizes -->
-          <div class="space-y-3">
-            <label class="text-sm font-medium">Size</label>
-            <div class="grid grid-cols-3 gap-2">
-              <div *ngFor="let size of sizes" class="flex items-center space-x-2">
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Sizes</h3>
+            <div class="grid grid-cols-3 gap-3">
+              <div *ngFor="let size of sizes" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="size" formControlName="selectedSizes" [inputId]="'size-' + size"></p-checkbox>
-                <label [for]="'size-' + size" class="text-sm">{{ size }}</label>
+                <label [for]="'size-' + size" class="text-sm font-medium cursor-pointer">{{ size }}</label>
               </div>
             </div>
           </div>
@@ -130,15 +138,15 @@
           <p-divider></p-divider>
 
           <!-- Colors -->
-          <div class="space-y-3">
-            <label class="text-sm font-medium">Color</label>
-            <div class="space-y-2">
-              <div *ngFor="let color of colors" class="flex items-center space-x-2">
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Colors</h3>
+            <div class="space-y-3">
+              <div *ngFor="let color of colors" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="color" formControlName="selectedColors" [inputId]="'color-' + color"></p-checkbox>
-                <div class="flex items-center space-x-2">
-                  <div class="w-4 h-4 rounded-full border border-gray-300"
+                <div class="flex items-center space-x-3">
+                  <div class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"
                     [ngStyle]="{ 'background-color': getColorStyle(color) }"></div>
-                  <label [for]="'color-' + color" class="text-sm">{{ color }}</label>
+                  <label [for]="'color-' + color" class="text-sm font-medium cursor-pointer">{{ color }}</label>
                 </div>
               </div>
             </div>
@@ -147,110 +155,102 @@
           <p-divider></p-divider>
 
           <!-- Sale Items -->
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
             <p-checkbox formControlName="showOnSale" binary="true" inputId="on-sale"></p-checkbox>
-            <label for="on-sale" class="text-sm">On Sale Only</label>
+            <label for="on-sale" class="text-sm font-medium cursor-pointer">On Sale Only</label>
           </div>
         </div>
       </div>
     </p-drawer>
 
     <!-- Active Filters -->
-    <div class="flex flex-wrap gap-2 mb-6" *ngIf="activeFiltersCount > 0">
-      <p-chip *ngFor="let categoryId of filterForm.get('selectedCategories')?.value || []" removable
-        (onRemove)="removeCategoryFilter(categoryId)">
-        {{ getCategoryName(categoryId) }}
-      </p-chip>
-      <p-chip *ngFor="let brandId of filterForm.get('selectedBrands')?.value || []" removable
-        (onRemove)="removeBrandFilter(brandId)">
-        {{ getBrandName(brandId) }}
-      </p-chip>
-      <p-chip *ngFor="let size of filterForm.get('selectedSizes')?.value || []" removable
-        (onRemove)="removeSizeFilter(size)">
-        Size {{ size }}
-      </p-chip>
-      <p-chip *ngFor="let color of filterForm.get('selectedColors')?.value || []"
-        [style]="{'background-color': color, 'color': getContrastColor(color)}" removable
-        (onRemove)="removeColorFilter(color)">
-        {{ color }}
-      </p-chip>
-      <p-chip *ngIf="filterForm.get('showOnSale')?.value" removable
-        (onRemove)="filterForm.get('showOnSale')?.setValue(false)">
-        On Sale
-      </p-chip>
+    <div class="mb-8" *ngIf="activeFiltersCount > 0">
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-semibold text-gray-700">Active Filters</h3>
+          <button pButton type="button" label="Clear All" class="p-button-text text-red-600 hover:text-red-700 text-sm"
+            (click)="clearAllFilters()"></button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <p-chip *ngFor="let categoryId of filterForm.get('selectedCategories')?.value || []" removable
+            (onRemove)="removeCategoryFilter(categoryId)" styleClass="bg-blue-100 text-blue-800">
+            {{ getCategoryName(categoryId) }}
+          </p-chip>
+          <p-chip *ngFor="let brandId of filterForm.get('selectedBrands')?.value || []" removable
+            (onRemove)="removeBrandFilter(brandId)" styleClass="bg-green-100 text-green-800">
+            {{ getBrandName(brandId) }}
+          </p-chip>
+          <p-chip *ngFor="let size of filterForm.get('selectedSizes')?.value || []" removable
+            (onRemove)="removeSizeFilter(size)" styleClass="bg-purple-100 text-purple-800">
+            Size {{ size }}
+          </p-chip>
+          <p-chip *ngFor="let color of filterForm.get('selectedColors')?.value || []"
+            [style]="{'background-color': getColorStyle(color), 'color': getContrastColor(getColorStyle(color))}" removable
+            (onRemove)="removeColorFilter(color)">
+            {{ color }}
+          </p-chip>
+          <p-chip *ngIf="filterForm.get('showOnSale')?.value" removable
+            (onRemove)="filterForm.get('showOnSale')?.setValue(false)" styleClass="bg-red-100 text-red-800">
+            On Sale
+          </p-chip>
+        </div>
+      </div>
     </div>
 
-    <!-- Loading Spinner -->
-    <p-progressSpinner *ngIf="loading" styleClass="w-12 h-12 mx-auto my-16"></p-progressSpinner>
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center py-16">
+      <p-progressSpinner styleClass="w-16 h-16 mb-4"></p-progressSpinner>
+      <p class="text-gray-600 font-medium">Loading products...</p>
+    </div>
 
     <!-- Product Grid -->
-    <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2" *ngIf="!loading">
-      @for (product of products; track trackByProductId) {
-        <app-product-card [product]="product"></app-product-card>
-      }
-      <!-- <p-card *ngFor="let product of products; trackBy: trackByProductId"
-        [styleClass]="'group overflow-hidden hover:shadow-lg transition-all duration-300'"
-        (click)="navigateToProduct(product)">
-        <div class="relative">
-          <img [src]="getProductImage(product)" [alt]="product.name"
-            class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
+    <div *ngIf="!loading && products.length > 0" class="space-y-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (product of products; track trackByProductId) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
 
-        </div>
-
-        <div class="p-4">
-          <div class="space-y-3">
-            <div (click)="navigateToProduct(product)">
-              <h3 class="font-semibold text-lg line-clamp-2 mb-1">{{ product.name }}</h3>
-            </div>
-            <div class="flex items-center gap-2">
-              <p-rating [ngModel]="product.averageRating" [readonly]="true" [stars]="5"
-                [ngModelOptions]="{ standalone: true }"></p-rating>
-              <span class="text-sm text-muted-foreground">({{ product.reviewCount || 0 }})</span>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <span class="text-xl font-bold">{{ product.discountPrice || product.price | currency }}</span>
-              <span *ngIf="product.discountPrice" class="text-sm text-muted-foreground line-through">{{ product.price |
-                currency }}</span>
-            </div>
-
-            <div class="flex gap-1">
-              <div *ngFor="let color of (product.colors || []).slice(0, 4)"
-                class="w-5 h-5 rounded-full border-2 border-gray-300 cursor-pointer hover:border-gray-400"
-                [ngStyle]="{ 'background-color': getColorStyle(color) }" [pTooltip]="color" tooltipPosition="top"></div>
-              <span *ngIf="(product.colors || []).length > 4" class="text-xs text-muted-foreground self-center ml-1">+{{
-                (product.colors || []).length - 4 }}</span>
-            </div>
-
-          </div>
-        </div>
-      </p-card> -->
+      <!-- Pagination -->
+      <div class="flex justify-center mt-12">
+        <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords"
+          (onPageChange)="onPageChange($event)" [rowsPerPageOptions]="[12, 24, 48, 96]"
+          styleClass="bg-white rounded-xl shadow-sm border border-gray-100"></p-paginator>
+      </div>
     </div>
 
     <!-- No Results -->
-    <div class="text-center py-16" *ngIf="!loading && products.length === 0">
+    <div *ngIf="!loading && products.length === 0" class="text-center py-16">
       <div class="max-w-md mx-auto">
-        <h3 class="text-lg font-semibold mb-2">No products found</h3>
-        <p class="text-muted-foreground mb-4">
+        <div class="mb-6">
+          <i class="pi pi-search text-6xl text-gray-300"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">No products found</h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">
           Try adjusting your filters or search terms to find what you're looking for.
         </p>
-      </div>
-
-
-      <!-- No Results -->
-      <div class="text-center py-16" *ngIf="!loading && products.length === 0">
-        <div class="max-w-md mx-auto">
-          <h3 class="text-lg font-semibold mb-2">No products found</h3>
-          <p class="text-muted-foreground mb-4">
-            Try adjusting your filters or search terms to find what you're looking for.
-          </p>
-          <button pButton pRipple type="button" label="Clear All Filters" (click)="clearAllFilters()"></button>
+        <div class="flex gap-4 justify-center">
+          <button pButton pRipple type="button" label="Clear All Filters" 
+            class="bg-primary hover:bg-primary-dark" (click)="clearAllFilters()"></button>
+          <button pButton pRipple type="button" label="Browse All Products" 
+            class="p-button-outlined" routerLink="/products"></button>
         </div>
       </div>
+    </div>
 
-      <!-- Paginator -->
+    <!-- Error State -->
+    <div *ngIf="error" class="text-center py-16">
+      <div class="max-w-md mx-auto">
+        <div class="mb-6">
+          <i class="pi pi-exclamation-triangle text-6xl text-red-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Something went wrong</h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          {{ error }}
+        </p>
+        <button pButton pRipple type="button" label="Try Again" 
+          class="bg-primary hover:bg-primary-dark" (click)="loadProducts()"></button>
+      </div>
     </div>
   </form>
-  <p-paginator *ngIf="!loading && products.length > 0" [first]="first" [rows]="rows" [totalRecords]="totalRecords"
-    (onPageChange)="onPageChange($event)" [rowsPerPageOptions]="[12, 24, 48, 96]"></p-paginator>
 </div>

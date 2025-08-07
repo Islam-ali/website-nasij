@@ -9,88 +9,277 @@ import { InputTextModule } from 'primeng/inputtext';
   standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule, InputTextModule],
   template: `
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12">
-    <div class="container mx-auto px-4">
-      <div class="grid md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="w-6 h-6 bg-blue-600 rounded"></div>
-            <span class="text-xl font-bold">Planet</span>
+  <!-- Enhanced Footer -->
+  <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <!-- Main Footer Content -->
+    <div class="container mx-auto px-4 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Company Info -->
+        <div class="space-y-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">N</span>
+            </div>
+            <span class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Nasig</span>
           </div>
-          <p class="text-gray-400 text-sm mb-4">Your trusted online store & shop for all your needs.</p>
-          <div class="space-y-2 text-sm text-gray-400">
-            <div>📧 'info-planet.com'</div>
-            <div>📞 +1 234 567 890</div>
-            <div>📍 123 Street, City, Country</div>
-          </div>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">My Account</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white transition-colors">My Profile</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">My Order History</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">My Wish List</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Order Tracking</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Shopping Cart</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">Shop Departments</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="#" class="hover:text-white transition-colors">Computers & Accessories</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Smartphones & Tablets</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">TV, Video & Audio</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Cameras, Photo & Video</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Headphones</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">Download App</h4>
+          <p class="text-gray-300 leading-relaxed">
+            Your premier destination for fashion and lifestyle. Discover the latest trends, 
+            quality products, and exceptional shopping experience.
+          </p>
+          
+          <!-- Contact Info -->
           <div class="space-y-3">
-            <div
-              class="flex items-center space-x-2 bg-gray-800 rounded-lg p-2 cursor-pointer hover:bg-gray-700 transition-colors">
-              <div class="text-2xl">📱</div>
-              <div>
-                <div class="text-xs text-gray-400">Get it on</div>
-                <div class="font-semibold">Google Play</div>
-              </div>
+            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+              <i class="pi pi-envelope text-purple-400"></i>
+              <span>{{'info@nasig.com'}}</span>
             </div>
-            <div
-              class="flex items-center space-x-2 bg-gray-800 rounded-lg p-2 cursor-pointer hover:bg-gray-700 transition-colors">
-              <div class="text-2xl">🍎</div>
-              <div>
-                <div class="text-xs text-gray-400">Download on the</div>
-                <div class="font-semibold">App Store</div>
-              </div>
+            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+              <i class="pi pi-phone text-purple-400"></i>
+              <span>+1 (555) 123-4567</span>
+            </div>
+            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+              <i class="pi pi-map-marker text-purple-400"></i>
+              <span>123 Fashion Street, Style City, SC 12345</span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-gray-400 text-sm">© 2024 Planet. All rights reserved.</p>
-        <div class="flex space-x-4 mt-4 md:mt-0">
-          <div class="text-2xl cursor-pointer hover:scale-110 transition-transform">💳</div>
-          <div class="text-2xl cursor-pointer hover:scale-110 transition-transform">💳</div>
-          <div class="text-2xl cursor-pointer hover:scale-110 transition-transform">💳</div>
-          <div class="text-2xl cursor-pointer hover:scale-110 transition-transform">💳</div>
+
+        <!-- Quick Links -->
+        <div class="space-y-6">
+          <h4 class="text-xl font-bold text-white mb-4">Quick Links</h4>
+          <ul class="space-y-3">
+            <li>
+              <a routerLink="/" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-home text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/products" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-shopping-bag text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Shop</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/about" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-info-circle text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>About Us</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/contact" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-envelope text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Contact</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/faq" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-question-circle text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>FAQ</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Customer Service -->
+        <div class="space-y-6">
+          <h4 class="text-xl font-bold text-white mb-4">Customer Service</h4>
+          <ul class="space-y-3">
+            <li>
+              <a routerLink="/account/profile" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-user text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/orders" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-list text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Order History</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/wishlist" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-heart text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Wishlist</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/track-order" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-search text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Track Order</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/support" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-headset text-sm group-hover:translate-x-1 transition-transform"></i>
+                <span>Support</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter & Social -->
+        <div class="space-y-6">
+          <h4 class="text-xl font-bold text-white mb-4">Follow Us</h4>
+
+          <!-- Social Media -->
+          <div class="space-y-4">
+            <div class="flex space-x-4">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                <i class="pi pi-facebook text-white"></i>
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-blue-400 hover:bg-blue-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                <i class="pi pi-twitter text-white"></i>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                <i class="pi pi-instagram text-white"></i>
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                <i class="pi pi-youtube text-white"></i>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Bottom Footer -->
+    <div class="border-t border-gray-800">
+      <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          
+          <!-- Copyright -->
+          <div class="flex items-center space-x-4">
+            <p class="text-gray-400 text-sm">
+              © {{ currentYear }} Nasig. All rights reserved.
+            </p>
+            <div class="flex space-x-4 text-sm">
+              <a routerLink="/privacy" class="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+              <a routerLink="/terms" class="text-gray-400 hover:text-purple-400 transition-colors">Terms of Service</a>
+              <a routerLink="/cookies" class="text-gray-400 hover:text-purple-400 transition-colors">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button (click)="scrollToTop()" 
+            class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 z-50">
+      <i class="pi pi-arrow-up"></i>
+    </button>
   </footer>
   `,
   styles: [`
     footer {
-      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
     }
-    
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+
+    /* Hover Effects */
+    .group:hover .group-hover\\:translate-x-1 {
+      transform: translateX(0.25rem);
+    }
+
+    /* Newsletter Input Focus */
+    input[type="email"]:focus {
+      box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+    }
+
+    /* Social Media Icons */
+    .pi {
+      font-size: 1rem;
+    }
+
+    /* Responsive Design */
     @media (max-width: 768px) {
-      .col-6 {
-        margin-bottom: 1.5rem;
+      .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
       }
+    }
+
+    /* Animation for Back to Top Button */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    button[class*="fixed"]:hover {
+      animation: bounce 1s infinite;
+    }
+
+    /* Custom Scrollbar for Footer */
+    footer ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    footer ::-webkit-scrollbar-track {
+      background: #374151;
+    }
+
+    footer ::-webkit-scrollbar-thumb {
+      background: #8b5cf6;
+      border-radius: 3px;
+    }
+
+    footer ::-webkit-scrollbar-thumb:hover {
+      background: #7c3aed;
+    }
+
+    /* Dark mode enhancements */
+    @media (prefers-color-scheme: dark) {
+      footer {
+        background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%);
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Focus states for accessibility */
+    a:focus,
+    button:focus {
+      outline: 2px solid #8b5cf6;
+      outline-offset: 2px;
     }
   `]
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
 }

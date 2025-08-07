@@ -1,11 +1,11 @@
 <p-toast></p-toast>
 
-<div class="product-details-container min-h-screen">
+<div class="product-details-container min-h-screen bg-gradient-to-br from-gray-50 to-white">
   <!-- Loading Skeleton -->
-  <div *ngIf="loading" class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
+  <div *ngIf="loading" class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-7xl px-4 mx-auto py-8">
     <div class="col-span-1">
-      <p-skeleton width="100%" height="500px" styleClass="rounded-lg"></p-skeleton>
-      <div class="flex gap-3 mt-3">
+      <p-skeleton width="100%" height="500px" styleClass="rounded-xl"></p-skeleton>
+      <div class="flex gap-3 mt-4">
         <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
         <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
         <p-skeleton width="100px" height="120px" styleClass="rounded-lg"></p-skeleton>
@@ -27,180 +27,276 @@
 
   <!-- Error State -->
   <div *ngIf="error" class="text-center py-16">
-    <h3 class="text-2xl font-semibold mb-2">Product Not Found</h3>
-    <p class="text-muted-foreground mb-4">
-      The product you are looking for might have been removed or doesn't exist.
-    </p>
-    <button pButton pRipple label="Continue Shopping" icon="pi pi-arrow-left" class="mt-4"
-      routerLink="/products"></button>
+    <div class="max-w-md mx-auto">
+      <div class="mb-6">
+        <i class="pi pi-exclamation-triangle text-6xl text-orange-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-3 text-gray-800">Product Not Found</h3>
+      <p class="text-gray-600 mb-6 leading-relaxed">
+        The product you are looking for might have been removed or doesn't exist.
+      </p>
+      <button pButton pRipple label="Continue Shopping" icon="pi pi-arrow-left" 
+        class="px-6 py-3 bg-primary hover:bg-primary-dark transition-colors duration-200"
+        routerLink="/products"></button>
+    </div>
   </div>
 
   <!-- Product Details Content -->
-  <div *ngIf="product && !loading" class="p-4 md:p-8 max-w-6xl mx-auto">
-    <!-- Product Images -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="col-span-1 w-full bg-white rounded-lg shadow-lg overflow-hidden h-fit">
-        <p-galleria [value]="images" [autoPlay]="true" [circular]="true" [responsiveOptions]="responsiveOptions"
-          [numVisible]="5" [containerStyle]="{ 'max-width': '100%', 'border-radius': '0.5rem' }"
-          [showThumbnails]="images.length > 1" [showThumbnailNavigators]="images.length > 1"
-          [thumbnailsPosition]="'bottom'" [transitionInterval]="3000" class="product-gallery"
-          [(activeIndex)]="currentImageIndex">
-          <ng-template pTemplate="item" let-item>
-            <div class="relative w-full h-96 md:h-[500px] flex items-center justify-center">
-              <img [src]="item.itemImageSrc" [alt]="item.alt || product.name"
-                class="max-h-full max-w-full object-contain p-4 transition-opacity duration-300"
-                [ngClass]="{ 'opacity-100': imageLoaded, 'opacity-0': !imageLoaded }" (load)="onImageLoad()" />
-              <div *ngIf="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
-                <p-progressSpinner styleClass="w-12 h-12" strokeWidth="4" fill="var(--surface-ground)"
-                  animationDuration=".5s"></p-progressSpinner>
+  <div *ngIf="product && !loading" class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Main Product Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      <!-- Product Images -->
+      <div class="col-span-1">
+        <div class="bg-white rounded-2xl  overflow-hidden border border-gray-100">
+          <p-galleria [value]="images" [autoPlay]="true" [circular]="true" [responsiveOptions]="responsiveOptions"
+            [numVisible]="5" [containerStyle]="{ 'max-width': '100%', 'border-radius': '1rem' }"
+            [showThumbnails]="images.length > 1" [showThumbnailNavigators]="images.length > 1"
+            [thumbnailsPosition]="'bottom'" [transitionInterval]="4000" class="product-gallery"
+            [(activeIndex)]="currentImageIndex">
+            <ng-template pTemplate="item" let-item>
+              <div class="relative w-full h-96 lg:h-[600px] flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+                <img [src]="item.itemImageSrc" [alt]="item.alt || product.name"
+                  class="max-h-full max-w-full object-contain p-6 transition-all duration-500 hover:scale-105"
+                  [ngClass]="{ 'opacity-100': imageLoaded, 'opacity-0': !imageLoaded }" 
+                  (load)="onImageLoad()" />
+                <div *ngIf="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
+                  <p-progressSpinner styleClass="w-16 h-16" strokeWidth="4" fill="var(--surface-ground)"
+                    animationDuration=".5s"></p-progressSpinner>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="thumbnail" let-item>
+              <div
+                class="h-24 w-24 flex items-center justify-center bg-white border-2 rounded-xl overflow-hidden hover:border-primary transition-all duration-200 hover:shadow-md"
+                [ngClass]="{ 'border-primary shadow-lg': images[currentImageIndex].itemImageSrc === item.itemImageSrc, 'border-gray-200': images[currentImageIndex].itemImageSrc !== item.itemImageSrc }">
+                <img [src]="item.thumbnailImageSrc" [alt]="item.alt || product.name + ' thumbnail'"
+                  class="max-h-full max-w-full object-contain p-2" />
+              </div>
+            </ng-template>
+          </p-galleria>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="col-span-1">
+        <div class="bg-white rounded-2xl p-8  border border-gray-100">
+          <!-- Product Header -->
+          <div class="product-header mb-8">
+            <!-- Brand Badge -->
+            <div *ngIf="product.brand" class="mb-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                <i class="pi pi-tag mr-1"></i>
+                {{ product.brand.name }}
+              </span>
+            </div>
+
+            <!-- Product Title -->
+            <h1 class="text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">{{ product.name }}</h1>
+
+            <!-- Rating and Reviews -->
+            <div class="flex items-center mb-6">
+              <div class="flex items-center mr-4">
+                <p-rating [ngModel]="product.averageRating || 0" [readonly]="true" 
+                  [stars]="5" class="mr-2"></p-rating>
+                <span class="text-sm text-gray-600">({{ product.averageRating || 0 }} reviews)</span>
+              </div>
+              <span class="mx-3 text-gray-300">|</span>
+              <span class="font-medium text-sm" [ngClass]="{
+                'text-green-600': getStockStatus(product.stock).severity === 'success',
+                'text-orange-500': getStockStatus(product.stock).severity === 'warning',
+                'text-red-600': getStockStatus(product.stock).severity === 'danger'
+              }">
+                <i class="pi pi-circle-fill mr-1 text-xs"></i>
+                {{ getStockStatus(product.stock).text }}
+              </span>
+            </div>
+
+            <!-- Product Meta -->
+            <!-- <div class="product-meta text-sm text-gray-600 mb-6 p-4 bg-gray-50 rounded-xl">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="flex items-center">
+                  <span class="font-semibold mr-2 text-gray-700">SKU:</span>
+                  <span class="font-mono">{{ product.sku || 'N/A' }}</span>
+                </div>
+                <div class="flex items-center">
+                  <span class="font-semibold mr-2 text-gray-700">Category:</span>
+                  <a [routerLink]="['/products']" [queryParams]="{ category: product.category.slug }"
+                    class="text-primary hover:text-primary-dark transition-colors font-medium">
+                    {{ product.category.name }}
+                  </a>
+                </div>
+                <div *ngIf="product.brand" class="flex items-center">
+                  <span class="font-semibold mr-2 text-gray-700">Brand:</span>
+                  <a [routerLink]="['/products']" [queryParams]="{ brand: product.brand.name }"
+                    class="text-primary hover:text-primary-dark transition-colors font-medium">
+                    {{ product.brand.name }}
+                  </a>
+                </div>
+              </div>
+            </div> -->
+
+            <!-- Price Section -->
+            <div class="product-price mb-8">
+              <div class="flex items-baseline mb-2">
+                <span class="text-4xl font-bold text-gray-900 mr-4">
+                  {{ (product.discountPrice || product.price) | currency }}
+                </span>
+                <span *ngIf="product.discountPrice && product.discountPrice < product.price"
+                  class="line-through text-2xl text-gray-400 mr-3">
+                  {{ product.price | currency }}
+                </span>
+                <span *ngIf="product.discountPrice"
+                  class="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full animate-pulse">
+                  {{ getDiscountPercentage(product.discountPrice || product.price, product.price) }}% OFF
+                </span>
+              </div>
+              <p *ngIf="product.discountPrice" class="text-sm text-green-600 font-medium">
+                <i class="pi pi-check-circle mr-1"></i>
+                You save {{ (product.price - (product.discountPrice || product.price)) | currency }}!
+              </p>
+            </div>
+          </div>
+
+          <!-- Product Options -->
+          <form class="space-y-6 mb-8">
+            <!-- Color Selection -->
+            <div *ngIf="product.colors && product.colors.length > 0" class="space-y-3">
+              <label class="text-lg font-semibold text-gray-800">Color</label>
+              <div class="flex flex-wrap gap-3">
+                <label *ngFor="let color of product.colors" [for]="'color-' + color"
+                  class="relative cursor-pointer group">
+                  <input type="radio" [id]="'color-' + color" [value]="color" name="color" [(ngModel)]="selectedColor"
+                    class="sr-only" />
+                  <div class="flex items-center space-x-2 p-3 rounded-xl border-2 transition-all duration-200"
+                    [ngClass]="{ 
+                      'border-primary bg-primary/5': selectedColor === color,
+                      'border-gray-200 hover:border-gray-300': selectedColor !== color 
+                    }">
+                    <div class="w-6 h-6 rounded-full border-2 shadow-sm"
+                      [ngStyle]="{ 'background-color': color, 'border-color': color === 'white' ? '#e5e7eb' : color }"></div>
+                    <span class="font-medium text-gray-700">{{ color | titlecase }}</span>
+                  </div>
+                </label>
               </div>
             </div>
-          </ng-template>
-          <ng-template pTemplate="thumbnail" let-item>
-            <div
-              class="h-20 w-20 flex items-center justify-center bg-white border rounded overflow-hidden hover:border-primary transition-colors"
-              [ngClass]="{ 'border-primary': images[currentImageIndex].itemImageSrc === item.itemImageSrc }">
-              <img [src]="item.thumbnailImageSrc" [alt]="item.alt || product.name + ' thumbnail'"
-                class="max-h-full max-w-full object-contain p-1" />
-            </div>
-          </ng-template>
-        </p-galleria>
-      </div>
-      <!-- Product Info -->
-      <div class="col-span-1 w-full">
-        <div class="product-header">
-          <h1 class="text-3xl lg:text-4xl font-bold mb-2">{{ product.name }}</h1>
-          <div class="flex items-center mb-3">
-            <!-- <p-rating [ngModel]="product.averageRating || 0" [readonly]="true" class="mr-2"></p-rating>
-            <span class="text-muted-foreground">({{ product.reviewCount || 0 }} reviews)</span>
-            <span class="mx-2 text-muted-foreground">|</span> -->
-            <!-- <span class="font-medium" [ngClass]="{
-                 'text-green-600': getStockStatus(product.stock).severity === 'success',
-                 'text-orange-500': getStockStatus(product.stock).severity === 'warning',
-                 'text-red-600': getStockStatus(product.stock).severity === 'danger'
-               }">
-              {{ getStockStatus(product.stock).text }}
-            </span> -->
-          </div>
 
-          <!-- Product Meta -->
-          <div class="product-meta text-sm text-muted-foreground mb-4">
-            <div class="flex items-center mb-1">
-              <span class="font-medium mr-2 text-foreground">SKU:</span>
-              <span>{{ product.sku || 'N/A' }}</span>
+            <!-- Size Selection -->
+            <div *ngIf="product.size && product.size.length > 0" class="space-y-3">
+              <label class="text-lg font-semibold text-gray-800">Size</label>
+              <div class="flex flex-wrap gap-3">
+                <label *ngFor="let size of product.size" [for]="'size-' + size"
+                  class="relative cursor-pointer group">
+                  <input type="radio" [id]="'size-' + size" [value]="size" name="size" [(ngModel)]="selectedSize"
+                    [ngModelOptions]="{standalone: true}" class="sr-only" />
+                  <div class="px-4 py-3 rounded-xl border-2 transition-all duration-200 text-center min-w-[60px]"
+                    [ngClass]="{ 
+                      'border-primary bg-primary text-white': selectedSize === size,
+                      'border-gray-200 hover:border-gray-300 text-gray-700': selectedSize !== size 
+                    }">
+                    <span class="font-semibold">{{ size | uppercase }}</span>
+                  </div>
+                </label>
+              </div>
             </div>
-            <div class="flex items-center mb-1">
-              <span class="font-medium mr-2 text-foreground">Category:</span>
-              <a [routerLink]="['/products']" [queryParams]="{ category: product.category.slug }"
-                class="text-primary hover:underline">
-                {{ product.category.name }}
-              </a>
-            </div>
-            <div *ngIf="product.brand" class="flex items-center mb-1">
-              <span class="font-medium mr-2 text-foreground">Brand:</span>
-              <a [routerLink]="['/products']" [queryParams]="{ brand: product.brand.name }"
-                class="text-primary hover:underline">
-                {{ product.brand.name }}
-              </a>
-            </div>
-          </div>
 
-          <div class="product-price mb-6 flex items-baseline">
-            <span class="text-3xl font-semibold mr-3">
-              {{ (product.discountPrice || product.price) | currency }}
-            </span>
-            <span *ngIf="product.discountPrice && product.discountPrice < product.price"
-              class="line-through text-muted-foreground text-xl mr-2">
-              {{ product.price | currency }}
-            </span>
-            <span *ngIf="product.discountPrice"
-              class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-              {{ getDiscountPercentage(product.discountPrice || product.price, product.price) }}% OFF
-            </span>
+            <!-- Quantity Selection -->
+            <div class="space-y-3">
+              <label class="text-lg font-semibold text-gray-800">Quantity</label>
+              <div class="flex items-center space-x-4">
+                <p-inputNumber inputId="quantity" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
+                  [max]="product.stock > 10 ? 10 : product.stock" [showButtons]="true" buttonLayout="horizontal"
+                  spinnerMode="horizontal" decrementButtonClass="p-button-secondary"
+                  incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
+                  decrementButtonIcon="pi pi-minus" class="w-32"></p-inputNumber>
+                <span class="text-sm text-gray-600">
+                  {{ product.stock }} available
+                </span>
+              </div>
+            </div>
+          </form>
+
+          <!-- Action Buttons -->
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <button pButton pRipple type="button" [disabled]="checkCart()" 
+                label="Add to Cart" icon="pi pi-shopping-cart" 
+                class="flex-1 py-4 text-lg font-semibold bg-primary hover:bg-primary-dark transition-all duration-200 transform hover:scale-105"
+                [disabled]="product.stock === 0" (click)="addToCart()" 
+                pTooltip="Add item to your shopping cart" tooltipPosition="top"></button>
+
+              <button pButton pRipple type="button" 
+                [icon]="isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
+                [label]="isInWishlist ? 'Saved' : 'Wishlist'" 
+                class="px-6 py-4 text-lg font-semibold border-2 transition-all duration-200 transform hover:scale-105"
+                [ngClass]="{ 
+                  'border-red-500 text-red-500 hover:bg-red-50': isInWishlist,
+                  'border-gray-300 text-gray-700 hover:border-primary hover:text-primary': !isInWishlist 
+                }" 
+                (click)="toggleWishlist()"
+                [pTooltip]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" 
+                tooltipPosition="top"></button>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="flex items-center justify-between text-sm text-gray-600 pt-4 border-t border-gray-200">
+              <div class="flex items-center">
+                <i class="pi pi-truck mr-2 text-primary"></i>
+                <span>Free shipping on orders over $50</span>
+              </div>
+              <div class="flex items-center">
+                <i class="pi pi-shield mr-2 text-primary"></i>
+                <span>30-day return policy</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- Product Options -->
-        <form class="grid gap-6 mb-6">
-          <div *ngIf="product.colors && product.colors.length > 0" class="grid gap-2">
-            <label for="color" class="text-base font-medium">Color</label>
-            <div class="flex items-center gap-2">
-              <label *ngFor="let color of product.colors" [for]="'color-' + color"
-                class="border cursor-pointer rounded-md p-2 flex items-center gap-2"
-                [ngClass]="{ 'bg-muted': selectedColor === color }">
-                <input type="radio" [id]="'color-' + color" [value]="color" name="color" [(ngModel)]="selectedColor"
-                  class="sr-only" />
-                <span class="w-5 h-5 rounded-full border"
-                  [ngStyle]="{ 'background-color': color, 'border-color': color === 'white' ? '#ccc' : color }"></span>
-                {{ color | titlecase }}
-              </label>
-            </div>
-          </div>
-
-          <div *ngIf="product.size && product.size.length > 0" class="grid gap-2">
-            <label for="size" class="text-base font-medium">Size</label>
-            <div class="flex items-center gap-2">
-              <label *ngFor="let size of product.size" [for]="'size-' + size"
-                class="border cursor-pointer rounded-md p-2 flex items-center gap-2"
-                [ngClass]="{ 'bg-muted': selectedSize === size }">
-                <input type="radio" [id]="'size-' + size" [value]="size" name="size" [(ngModel)]="selectedSize"
-                  [ngModelOptions]="{standalone: true}" class="sr-only" />
-                {{ size | uppercase }}
-              </label>
-            </div>
-          </div>
-
-          <div class="grid gap-2">
-            <label for="quantity" class="text-base font-medium">Quantity</label>
-            <p-inputNumber inputId="quantity" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
-              [max]="product.stock > 10 ? 10 : product.stock" [showButtons]="true" buttonLayout="horizontal"
-              spinnerMode="horizontal" decrementButtonClass="p-button-secondary"
-              incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
-              decrementButtonIcon="pi pi-minus" class="w-24"></p-inputNumber>
-          </div>
-
-          <div class="flex gap-4">
-            <button pButton pRipple type="button" [disabled]="checkCart()" label="Add to Cart" icon="pi pi-shopping-cart" class="flex-1"
-              [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart"
-              tooltipPosition="top"></button>
-
-            <button pButton pRipple type="button" [icon]="isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
-              [label]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" class="p-button-outlined flex-1"
-              [ngClass]="{ 'text-red-500 border-red-500': isInWishlist }" (click)="toggleWishlist()"
-              [pTooltip]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'" tooltipPosition="top"></button>
-          </div>
-        </form>
-
       </div>
     </div>
-    <div class="w-full">
-      <div class="grid gap-4 mt-8">
-        <h2 class="font-bold text-xl">More Information</h2>
-        <p-accordion [multiple]="true">
-          <p-accordionTab header="Description">
-            <p>{{ product?.description }}</p>
+
+    <!-- Product Details Tabs -->
+    <div class="mt-16">
+      <div class="bg-white rounded-2xl  border border-gray-100 overflow-hidden">
+        <p-accordion [multiple]="true" styleClass="product-accordion">
+          <p-accordionTab header="Product Description" styleClass="text-lg font-semibold">
+            <div class="p-6 bg-gray-50 rounded-xl">
+              <p class="text-gray-700 leading-relaxed text-lg">{{ product?.description }}</p>
+            </div>
           </p-accordionTab>
 
-          <p-accordionTab *ngIf="product?.details && product.details.length > 0" header="Product Details">
-            <ul class="list-disc pl-5 space-y-1">
-              <li *ngFor="let detail of product?.details">
-                <span class="font-medium">{{ detail.name }}:</span> {{ detail.value }}
-              </li>
-            </ul>
+          <p-accordionTab *ngIf="product?.details && product.details.length > 0" header="Product Details" styleClass="text-lg font-semibold">
+            <div class="p-6 bg-gray-50 rounded-xl">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div *ngFor="let detail of product?.details" class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200">
+                  <span class="font-semibold text-gray-800">{{ detail.name }}:</span>
+                  <span class="text-gray-600">{{ detail.value }}</span>
+                </div>
+              </div>
+            </div>
           </p-accordionTab>
 
-          <p-accordionTab header="Customer Reviews ({{ product?.reviewCount }})">
-            <p class="text-muted-foreground">No reviews yet. Be the first to review this product!</p>
-          </p-accordionTab>
+          <!-- <p-accordionTab header="Customer Reviews ({{ product?.reviewCount || 0 }})" styleClass="text-lg font-semibold">
+            <div class="p-6 bg-gray-50 rounded-xl">
+              <div class="text-center py-8">
+                <i class="pi pi-star text-4xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">No reviews yet</h3>
+                <p class="text-gray-600 mb-4">Be the first to review this product!</p>
+                <button pButton pRipple label="Write a Review" icon="pi pi-pencil" 
+                  class="bg-primary hover:bg-primary-dark"></button>
+              </div>
+            </div>
+          </p-accordionTab> -->
         </p-accordion>
       </div>
     </div>
   </div>
 
   <!-- Related Products -->
-  <div *ngIf="relatedProducts.length > 0" class="mt-12 p-4 md:p-8 max-w-6xl mx-auto">
-    <h2 class="text-2xl font-semibold mb-6">You May Also Like</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  <div *ngIf="relatedProducts.length > 0" class="mt-20 max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">You May Also Like</h2>
+      <p class="text-gray-600 text-lg">Discover more amazing products</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       @for (relatedProduct of relatedProducts; track $index) {
         <app-product-card [product]="relatedProduct"></app-product-card>
       }

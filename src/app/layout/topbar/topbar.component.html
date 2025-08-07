@@ -1,178 +1,335 @@
-<header [class]="isDarkTheme() ? 'dark' : ''" class="w-full bg-white dark:bg-dark">
-  <!-- <div class="hidden border-b border-stroke dark:border-dark-3 sm:block">
-    <div class="container mx-auto">
-      <div class="-mx-4 flex flex-wrap items-center">
-        <div class="w-full px-4 md:w-2/3 lg:w-1/2">
-          <ul class="-mx-3 flex items-center">
-            <li>
-              <a href="javascript:void(0)" class="text-primary inline-block px-3 py-4 text-sm font-medium text-body-color hover:text-primary dark:text-dark-6">
-                About Us
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" class="text-primary inline-block px-3 py-4 text-sm font-medium text-body-color hover:text-primary dark:text-dark-6">
-                Order Tracking
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" class="text-primary inline-block px-3 py-4 text-sm font-medium text-body-color hover:text-primary dark:text-dark-6">
-                Contact Us
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" class="text-primary inline-block px-3 py-4 text-sm font-medium text-body-color hover:text-primary dark:text-dark-6">
-                FAQs
-              </a>
-            </li>
-          </ul>
+<!-- Enhanced Fixed Navbar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg transition-all duration-300"
+        [class.dark]="isDarkTheme()"
+        [class.dark:bg-gray-900]="isDarkTheme()"
+        [class.dark:border-gray-700]="isDarkTheme()">
+  
+  <!-- Top Bar -->
+  <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between text-sm">
+        <div class="flex items-center space-x-6">
+          <span class="flex items-center">
+            <i class="pi pi-phone mr-2"></i>
+            +1 (555) 123-4567
+          </span>
+          <span class="flex items-center">
+            <i class="pi pi-envelope mr-2"></i>
+            {{'info@nasig.com'}}
+          </span>
         </div>
-        <div class="w-full px-4 md:w-1/3 lg:w-1/2">
-          <div class="hidden items-center justify-end md:flex">
-            <div>
-              <div class="relative">
-                <select class="w-full appearance-none rounded-lg bg-transparent py-3 pl-3 pr-5 text-sm font-medium text-body-color outline-none transition dark:text-dark-6">
-                  <option value="" class="dark:bg-dark-2">English</option>
-                  <option value="" class="dark:bg-dark-2">Arabic</option>
-                </select>
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 text-body-color dark:text-dark-6">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
-                    <path d="M7.00001 9.97501C6.86876 9.97501 6.75938 9.93126 6.65001 9.84376L1.61876 4.90001C1.42188 4.70314 1.42188 4.39689 1.61876 4.20001C1.81563 4.00314 2.12188 4.00314 2.31876 4.20001L7.00001 8.77189L11.6813 4.15626C11.8781 3.95939 12.1844 3.95939 12.3813 4.15626C12.5781 4.35314 12.5781 4.65939 12.3813 4.85626L7.35001 9.80001C7.24063 9.90939 7.13126 9.97501 7.00001 9.97501Z"></path>
-                  </svg>
-                </span>
-              </div>
-            </div>
-            <div>
-              <div class="relative">
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 text-body-color dark:text-dark-6">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
-                    <path d="M7.00001 9.97501C6.86876 9.97501 6.75938 9.93126 6.65001 9.84376L1.61876 4.90001C1.42188 4.70314 1.42188 4.39689 1.61876 4.20001C1.81563 4.00314 2.12188 4.00314 2.31876 4.20001L7.00001 8.77189L11.6813 4.15626C11.8781 3.95939 12.1844 3.95939 12.3813 4.15626C12.5781 4.35314 12.5781 4.65939 12.3813 4.85626L7.35001 9.80001C7.24063 9.90939 7.13126 9.97501 7.00001 9.97501Z"></path>
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </div>
+        <div class="flex items-center space-x-4">
+          <a href="https://facebook.com" target="_blank" class="hover:text-purple-200 transition-colors">
+            <i class="pi pi-facebook"></i>
+          </a>
+          <a href="https://twitter.com" target="_blank" class="hover:text-purple-200 transition-colors">
+            <i class="pi pi-twitter"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" class="hover:text-purple-200 transition-colors">
+            <i class="pi pi-instagram"></i>
+          </a>
         </div>
       </div>
     </div>
-  </div> -->
-  <div class="container mx-auto">
-    <p-menubar [model]="menuItems" [styleClass]="'flex items-center justify-between py-4'">
-      <ng-template pTemplate="start">
-        <a routerLink="/" class="block w-20  max-w-full lg:w-20 p-2">
-          <img src="images/logo-Nasij.png" alt="logo" class="w-full dark:hidden">
-          <img src="images/logo-Nasij2.png" alt="logo" class="hidden w-full dark:block">
-        </a>
-      </ng-template>
-      <!-- <ng-template pTemplate="item" let-item let-root="root">
-        <a pRipple class="flex items-center p-menubar-item-link">
-          <span class="">{{ item.label }}</span>
-          <p-badge *ngIf="item.badge" [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
-          <span *ngIf="item.shortcut" class="ml-auto border border-surface rounded  text-muted-color text-xs p-1">{{ item.shortcut }}</span>
-          <i *ngIf="item.items" [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
-        </a>
-      </ng-template> -->
-      <ng-template pTemplate="end">
-        <div class="flex items-center gap-2">
-          <!-- <div class="flex items-center pr-1">
-            <div class="mr-3 flex h-[42px] w-[42px] items-center justify-center rounded-full border-[.5px] border-stroke bg-gray-2 text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
-                <path d="M20.6937 18.975L20.075 12.7531C19.9719 11.6187 19.0094 10.7594 17.875 10.7594H4.125C2.99062 10.7594 2.0625 11.6187 1.925 12.7531L1.30625 18.975C1.2375 19.5937 1.44375 20.2125 1.85625 20.6594C2.26875 21.1062 2.85312 21.3812 3.47187 21.3812H18.4594C19.0781 21.3812 19.6625 21.1062 20.075 20.6594C20.5562 20.2125 20.7281 19.5937 20.6937 18.975ZM18.975 19.6281C18.8375 19.7656 18.6656 19.8344 18.4937 19.8344H3.50625C3.33437 19.8344 3.1625 19.7656 3.025 19.6281C2.8875 19.4906 2.85312 19.3187 2.85312 19.1125L3.47187 12.8906C3.50625 12.5469 3.78125 12.3062 4.125 12.3062H17.875C18.2187 12.3062 18.4937 12.5469 18.5281 12.8906L19.1469 19.1125C19.1469 19.3187 19.1125 19.4906 18.975 19.6281Z"></path>
-                <path d="M11 13.5094C9.59063 13.5094 8.42188 14.6781 8.42188 16.0875C8.42188 17.5312 9.59063 18.6656 11 18.6656C12.4437 18.6656 13.5781 17.4969 13.5781 16.0875C13.5781 14.6781 12.4437 13.5094 11 13.5094ZM11 17.1187C10.4156 17.1187 9.96875 16.6375 9.96875 16.0875C9.96875 15.5031 10.45 15.0562 11 15.0562C11.5844 15.0562 12.0312 15.5375 12.0312 16.0875C12.0312 16.6719 11.5844 17.1187 11 17.1187Z"></path>
-                <path d="M2.09687 7.08124C2.16562 8.59374 3.47187 9.38437 4.36562 9.38437H6.77187H6.80625C7.90625 9.31562 9.00625 8.59374 9.00625 7.08124V6.42812C10.175 6.42812 12.4094 6.42812 13.5437 6.42812V7.08124C13.5437 8.59374 14.6437 9.31562 15.7437 9.38437H18.1844C19.1125 9.38437 20.3844 8.59374 20.4531 7.08124C20.4531 6.97812 20.4531 5.74062 20.4531 5.67187C20.4531 5.63749 20.4531 5.60312 20.4531 5.56874C20.35 4.57187 20.0062 3.74687 19.3875 3.09374L19.3531 3.05937C18.4594 2.23437 17.4281 1.78749 16.6375 1.51249C14.3 0.618744 11.3781 0.618744 11.2406 0.618744C9.17812 0.653119 7.87187 0.824994 5.87812 1.51249C5.05312 1.82187 4.02187 2.26874 3.12812 3.05937L3.09375 3.09374C2.475 3.74687 2.13125 4.57187 2.02812 5.56874C2.02812 5.60312 2.02812 5.63749 2.02812 5.67187C2.0625 5.74062 2.09687 6.94374 2.09687 7.08124ZM4.22812 4.19374C4.91562 3.57499 5.74062 3.23124 6.42812 2.95624C8.21562 2.30312 9.35 2.19999 11.275 2.13124C11.4469 2.13124 14.0594 2.16562 16.1219 2.95624C16.8437 3.23124 17.6687 3.57499 18.3219 4.19374C18.6656 4.57187 18.8719 5.08749 18.9406 5.67187C18.9406 5.77499 18.9406 6.90937 18.9406 7.01249C18.9062 7.73437 18.2187 7.83749 18.2187 7.83749H15.8469C15.5031 7.80312 15.125 7.66562 15.125 7.08124V5.67187C15.125 5.32812 14.9187 5.01874 14.575 4.94999C14.3344 4.81249 8.25 4.81249 8.00937 4.91562C7.7 5.01874 7.45937 5.32812 7.45937 5.63749V7.08124C7.45937 7.66562 7.08125 7.80312 6.7375 7.83749H4.36562C4.36562 7.83749 3.67812 7.73437 3.64375 7.04687C3.64375 6.94374 3.64375 6.56562 3.64375 6.22187C3.64375 5.98124 3.64375 5.80937 3.64375 5.70624C3.67812 5.05312 3.88437 4.57187 4.22812 4.19374Z"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-dark dark:text-white">
-                Need Help?
-                <br>
-                +001 123 456 789
-              </p>
-            </div>
-          </div> -->
-          <button class="relative flex h-[42px] w-[42px] items-center justify-center rounded-full border-[.5px] border-stroke bg-gray-2 text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white" (click)="wishlistOpen = !wishlistOpen">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
-              <path d="M11 20.2812C10.5531 20.2812 10.1062 20.1094 9.7625 19.8C8.97187 19.1125 8.24999 18.4937 7.59687 17.9438C5.63749 16.2594 3.91874 14.85 2.71562 13.4062C1.30624 11.6875 0.618744 10.0719 0.618744 8.25C0.618744 6.49687 1.23749 4.84688 2.33749 3.64375C3.47187 2.40625 5.05312 1.71875 6.73749 1.71875C8.00937 1.71875 9.21249 2.13125 10.2437 2.92188C10.5187 3.12812 10.7594 3.33438 11 3.60938C11.2406 3.36875 11.4812 3.12812 11.7562 2.92188C12.7875 2.13125 13.9562 1.71875 15.2625 1.71875C16.9812 1.71875 18.5281 2.40625 19.6625 3.64375C20.7969 4.84688 21.3812 6.49687 21.3812 8.25C21.3812 10.0719 20.7281 11.6875 19.2844 13.4062C18.0812 14.85 16.3625 16.2937 14.4031 17.9438C13.75 18.4937 12.9937 19.1469 12.2031 19.8C11.8937 20.1094 11.4469 20.2812 11 20.2812ZM6.73749 3.26562C5.46562 3.26562 4.29687 3.78125 3.43749 4.675C2.61249 5.60313 2.16562 6.875 2.16562 8.25C2.16562 9.65938 2.71562 11 3.88437 12.4094C5.01874 13.75 6.66874 15.1594 8.55937 16.775C9.21249 17.325 9.96874 17.9781 10.7594 18.6656C10.8969 18.7687 11.1031 18.7687 11.2406 18.6656C12.0312 17.9781 12.7875 17.3594 13.4406 16.775C15.3656 15.125 17.0156 13.75 18.1156 12.4094C19.2844 11 19.8344 9.65938 19.8344 8.25C19.8344 6.875 19.3531 5.60312 18.5281 4.70937C17.6687 3.78125 16.5 3.26562 15.2625 3.26562C14.3344 3.26562 13.475 3.575 12.7187 4.125C12.4094 4.36562 12.1344 4.64062 11.8594 4.95C11.6531 5.19062 11.3437 5.3625 11 5.3625C10.6562 5.3625 10.3812 5.225 10.1406 4.95C9.86562 4.64062 9.59062 4.36562 9.28125 4.125C8.55937 3.575 7.7 3.26562 6.73749 3.26562Z"></path>
-            </svg>
-            <p-badge [value]="wishlistCount()" severity="info" class="absolute -right-1 -top-1"></p-badge>
-          </button>
-          <button (click)="cartOpen = !cartOpen" class="relative flex h-[42px] w-[42px] items-center justify-center rounded-full border-[.5px] border-stroke bg-gray-2 text-dark dark:border-dark-3 dark:bg-dark-2 dark:text-white">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
-              <path d="M19.3875 6.7375H18.5625L16.3281 1.1C16.1562 0.687499 15.7094 0.515624 15.3312 0.653124C14.9187 0.824999 14.7469 1.27187 14.8844 1.65L16.8781 6.7375H5.12187L7.11562 1.68437C7.28749 1.27187 7.08124 0.824999 6.66874 0.687499C6.29062 0.515624 5.84374 0.687499 5.67187 1.1L3.43749 6.7375H2.61249C1.99374 6.7375 1.47812 7.25312 1.47812 7.87187V10.6562C1.47812 11.2406 1.89062 11.6875 2.47499 11.7562L3.33437 19.25C3.47187 20.4875 4.50312 21.4156 5.74062 21.4156H16.2594C17.4969 21.4156 18.5281 20.4875 18.6656 19.25L19.525 11.7562C20.075 11.6875 20.5219 11.2062 20.5219 10.6562V7.8375C20.5219 7.21875 20.0062 6.7375 19.3875 6.7375ZM3.02499 8.28437H18.975V10.2437H3.02499V8.28437ZM16.2594 19.8687H5.74062C5.29374 19.8687 4.91562 19.525 4.84687 19.0781L4.02187 11.7906H17.9781L17.1531 19.0781C17.0844 19.525 16.7062 19.8687 16.2594 19.8687Z"></path>
-              <path d="M7.49375 13.3375C7.08125 13.3375 6.70312 13.6812 6.70312 14.1281V16.7062C6.70312 17.1187 7.04687 17.4969 7.49375 17.4969C7.94062 17.4969 8.28438 17.1531 8.28438 16.7062V14.0937C8.28438 13.6812 7.94062 13.3375 7.49375 13.3375Z"></path>
-              <path d="M14.5062 13.3375C14.0937 13.3375 13.7156 13.6812 13.7156 14.1281V16.7062C13.7156 17.1187 14.0594 17.4969 14.5062 17.4969C14.9531 17.4969 15.2969 17.1531 15.2969 16.7062V14.0937C15.2625 13.6812 14.9187 13.3375 14.5062 13.3375Z"></path>
-            </svg>
-            <p-badge [value]="cartItemCount()" severity="info" class="absolute -right-1 -top-1"></p-badge>
-          </button>
-        </div>
-      </ng-template>
-    </p-menubar>
   </div>
 
-  <!-- drawer for Cart -->
-  <p-drawer [(visible)]="cartOpen" position="right" styleClass="w-full md:w-1/3 lg:w-1/4">
-    <ng-template #header>
-      <h3 class="text-xl font-bold text-gray-900">Shopping Cart</h3>
-    </ng-template>
-    <div class="p-4">
-      @if (cartItems().length === 0) {
-      <p class="text-center text-gray-500">Your cart is empty.</p>
-      } @else {
-      @for (item of cartItems(); track item.productId) {
-      <div class="flex items-center justify-between p-2 border-b border-gray-200 dark:border-dark-3">
-        <div class="flex items-center">
-          <img [src]="domain + item.image" alt="{{ item.productName }}" class="w-16 h-16 object-cover rounded">
-          <div class="ml-4">
-            <a href="javascript:void(0)" class="text-sm font-medium text-dark hover:text-primary dark:text-white">{{ item.productName }}</a>
-            <p class="text-xs text-gray-500 dark:text-dark-6">Qty: {{ item.quantity }}</p>
+  <!-- Main Navigation -->
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between py-4 gap-2">
+      
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a routerLink="/" class="flex items-center space-x-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-lg">N</span>
+          </div>
+          <span class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent group-hover:from-purple-700 group-hover:to-pink-700 transition-all duration-300">
+            Nasig
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-8">
+        <a routerLink="/" routerLinkActive="text-purple-600" [routerLinkActiveOptions]="{exact: true}"
+           class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
+          <i class="pi pi-home text-sm"></i>
+          <span>Home</span>
+        </a>
+        
+        <a routerLink="/products" routerLinkActive="text-purple-600"
+           class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
+          <i class="pi pi-shopping-bag text-sm"></i>
+          <span>Shop</span>
+        </a>
+        
+        <div class="relative group">
+          <button class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
+            <i class="pi pi-box text-sm"></i>
+            <span>Categories</span>
+            <i class="pi pi-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100">
+            <div class="py-2">
+              <a routerLink="/products" [queryParams]="{category: 'dresses'}" 
+                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
+                Dresses
+              </a>
+              <a routerLink="/products" [queryParams]="{category: 'jackets'}" 
+                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
+                Jackets
+              </a>
+              <a routerLink="/products" [queryParams]="{category: 'tops'}" 
+                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
+                Tops & Tees
+              </a>
+              <a routerLink="/products" [queryParams]="{category: 'accessories'}" 
+                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
+                Accessories
+              </a>
+            </div>
           </div>
         </div>
-        <div class="text-right">
-          <p class="text-base font-semibold text-dark dark:text-white">${{ (item.price * item.quantity!) }}</p>
-          <p-button icon="pi pi-times" [rounded]="true" severity="danger" size="small" [outlined]="true" (click)="removeFromCart(item)"></p-button>
-        </div>
-      </div>
-      }
+        
+        <a routerLink="/about" routerLinkActive="text-purple-600"
+           class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
+          <i class="pi pi-info-circle text-sm"></i>
+          <span>About</span>
+        </a>
+        
+        <a routerLink="/contact" routerLinkActive="text-purple-600"
+           class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
+          <i class="pi pi-envelope text-sm"></i>
+          <span>Contact</span>
+        </a>
+      </nav>
 
-      }
-    </div>
-    <ng-template #footer>
-      <div class="p-2 border-t border-gray-200 dark:border-dark-3">
-        <div class="flex justify-between mb-2">
-          <span class="text-gray-700">Subtotal</span>
-          <span class="text-gray-900 font-medium">${{ cartTotal() }}</span>
+      <!-- Search Bar -->
+      <!-- <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+        <div class="relative w-full">
+          <input type="text" 
+                 [(ngModel)]="searchQuery"
+                 (keyup.enter)="search($event)"
+                 placeholder="Search products..."
+                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300">
+          <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
         </div>
-        <button pButton label="View Cart" class="w-full mt-2 bg-blue-600 text-white p-2 rounded hover:bg-blue-700" (click)="viewCart()"></button>
-        <button pButton label="Checkout" class="w-full mt-2 bg-green-600 text-white p-2 rounded hover:bg-green-700" (click)="checkout()"></button>
-      </div>
-    </ng-template>
-  </p-drawer>
+      </div> -->
 
-  <!-- drawer for Wishlist -->
-  <p-drawer [(visible)]="wishlistOpen" position="right" styleClass="w-full md:w-1/3 lg:w-1/4">
-    <ng-template #header>
-      <h3 class="text-xl font-bold text-gray-900">Wishlist</h3>
-    </ng-template>
-    <div class="p-4">
-      @if (wishlistItems().length === 0) {
-      <p class="text-center text-gray-500">Your wishlist is empty.</p>
-      } @else {
-      @for (item of wishlistItems(); track item.productId) {
-      <div class="flex items-center justify-between mb-4 p-2 border-b border-gray-200 dark:border-dark-3">
-        <div class="flex items-center">
-          <img [src]="domain + item.product.images[0].filePath" class="w-16 h-16 object-cover rounded">
-          <div class="ml-4">
-            <a href="javascript:void(0)" class="text-sm font-medium text-dark hover:text-primary dark:text-white">{{ item.product.name }}</a>
-            <p class="text-xs text-gray-500 dark:text-dark-6">Price: ${{ item.product.price }}</p>
-          </div>
+      <!-- Right Side Actions -->
+      <div class="flex items-center space-x-4">
+        
+        <!-- Theme Toggle -->
+        <button (click)="toggleTheme()" 
+                class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
+                [class.dark:bg-gray-800]="isDarkTheme()"
+                [class.dark:hover:bg-gray-700]="isDarkTheme()">
+          <i class="pi" [class.pi-sun]="!isDarkTheme()" [class.pi-moon]="isDarkTheme()"></i>
+        </button>
+
+        <!-- Wishlist -->
+        <button (click)="wishlistOpen = !wishlistOpen" 
+                class="relative w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
+                [class.dark:bg-gray-800]="isDarkTheme()"
+                [class.dark:hover:bg-gray-700]="isDarkTheme()">
+          <i class="pi pi-heart text-gray-600" [class.dark:text-gray-300]="isDarkTheme()"></i>
+          <span *ngIf="wishlistCount() > 0" 
+                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+            {{ wishlistCount() }}
+          </span>
+        </button>
+
+        <!-- Cart -->
+        <button (click)="cartOpen = !cartOpen" 
+                class="relative w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
+                [class.dark:bg-gray-800]="isDarkTheme()"
+                [class.dark:hover:bg-gray-700]="isDarkTheme()">
+          <i class="pi pi-shopping-cart text-gray-600" [class.dark:text-gray-300]="isDarkTheme()"></i>
+          <span *ngIf="cartItemCount() > 0" 
+                class="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 text-white text-xs rounded-full flex items-center justify-center">
+            {{ cartItemCount() }}
+          </span>
+        </button>
+
+        <!-- User Menu -->
+        <div class="relative" *ngIf="currentUser; else loginButton">
+          <button class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white flex items-center justify-center font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
+            {{ userInitials }}
+          </button>
         </div>
-        <div class="text-right">
-          <button pButton icon="pi pi-times" class="p-button-rounded p-button-danger p-button-sm mt-2" (click)="removeFromWishlist(item)"></button>
-          <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-success p-button-sm mt-2" (click)="addToCart(item)"></button>
-        </div>
+        <ng-template #loginButton>
+          <a routerLink="/auth/login" 
+             class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+            Login
+          </a>
+        </ng-template>
+
+        <!-- Mobile Menu Button -->
+        <button (click)="toggleNavbar()" 
+                class="lg:hidden w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
+                [class.dark:bg-gray-800]="isDarkTheme()"
+                [class.dark:hover:bg-gray-700]="isDarkTheme()">
+          <i class="pi pi-bars text-gray-600" [class.dark:text-gray-300]="isDarkTheme()"></i>
+        </button>
       </div>
-      }
-      <button pButton label="View Wishlist" class="w-full mt-4 bg-blue-600 text-white p-2 rounded hover:bg-blue-700" (click)="navigateToWishlist($event)"></button>
-      }
     </div>
-  </p-drawer>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div class="lg:hidden" [class.hidden]="!navbarOpen()">
+    <div class="px-4 py-6 bg-white border-t border-gray-200" [class.dark:bg-gray-900]="isDarkTheme()" [class.dark:border-gray-700]="isDarkTheme()">
+      <div class="space-y-4">
+        <a routerLink="/" routerLinkActive="text-purple-600" [routerLinkActiveOptions]="{exact: true}"
+           class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
+          <i class="pi pi-home"></i>
+          <span>Home</span>
+        </a>
+        <a routerLink="/products" routerLinkActive="text-purple-600"
+           class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
+          <i class="pi pi-shopping-bag"></i>
+          <span>Shop</span>
+        </a>
+        <a routerLink="/about" routerLinkActive="text-purple-600"
+           class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
+          <i class="pi pi-info-circle"></i>
+          <span>About</span>
+        </a>
+        <a routerLink="/contact" routerLinkActive="text-purple-600"
+           class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
+          <i class="pi pi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </header>
+
+<!-- Spacer for fixed navbar -->
+<div class="h-32"></div>
+
+<!-- Enhanced Cart Drawer -->
+<p-drawer [(visible)]="cartOpen" [showCloseIcon]="false" position="right" styleClass="w-full md:w-96 lg:w-1/3">
+  <ng-template pTemplate="header">
+    <div class="flex items-center justify-between w-full">
+      <h3 class="text-xl font-bold text-gray-900" [class.dark:text-white]="isDarkTheme()">Shopping Cart</h3>
+      <button (click)="cartOpen = false" class="text-gray-500 hover:text-gray-700 transition-colors">
+        <i class="pi pi-times text-lg"></i>
+      </button>
+    </div>
+  </ng-template>
+  
+  <div class="p-6">
+    @if (cartItems().length === 0) {
+      <div class="text-center py-12">
+        <i class="pi pi-shopping-cart text-6xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500 text-lg mb-4">Your cart is empty</p>
+        <a routerLink="/products" 
+           class="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+          Start Shopping
+        </a>
+      </div>
+    } @else {
+      <div class="space-y-4 max-h-96 overflow-y-auto">
+        @for (item of cartItems(); track item.productId) {
+          <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg" [class.dark:bg-gray-800]="isDarkTheme()">
+            <img [src]="domain + item.image" [alt]="item.productName" 
+                 class="w-16 h-16 object-cover rounded-lg">
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900" [class.dark:text-white]="isDarkTheme()">{{ item.productName }}</h4>
+              <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
+              <p class="text-lg font-bold text-purple-600">${{ (item.price * item.quantity!) }}</p>
+            </div>
+            <button (click)="removeFromCart(item)" 
+                    class="text-red-500 hover:text-red-700 transition-colors">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+  
+  <ng-template pTemplate="footer">
+    @if (cartItems().length > 0) {
+      <div class="p-6 border-t border-gray-200" [class.dark:border-gray-700]="isDarkTheme()">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-lg font-medium text-gray-900" [class.dark:text-white]="isDarkTheme()">Total:</span>
+          <span class="text-2xl font-bold text-purple-600">${{ cartTotal() }}</span>
+        </div>
+        <div class="space-y-3">
+          <button (click)="viewCart()" 
+                  class="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+            View Cart
+          </button>
+          <button (click)="checkout()" 
+                  class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+            Checkout
+          </button>
+        </div>
+      </div>
+    }
+  </ng-template>
+</p-drawer>
+
+<!-- Enhanced Wishlist Drawer -->
+<p-drawer [(visible)]="wishlistOpen" [showCloseIcon]="false" position="right" styleClass="w-full md:w-96 lg:w-1/3">
+  <ng-template pTemplate="header">
+    <div class="flex items-center justify-between w-full">
+      <h3 class="text-xl font-bold text-gray-900" [class.dark:text-white]="isDarkTheme()">Wishlist</h3>
+      <button (click)="wishlistOpen = false" class="text-gray-500 hover:text-gray-700 transition-colors">
+        <i class="pi pi-times text-lg"></i>
+      </button>
+    </div>
+  </ng-template>
+  
+  <div class="p-6">
+    @if (wishlistItems().length === 0) {
+      <div class="text-center py-12">
+        <i class="pi pi-heart text-6xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500 text-lg mb-4">Your wishlist is empty</p>
+        <a routerLink="/products" 
+           class="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+          Start Shopping
+        </a>
+      </div>
+    } @else {
+      <div class="space-y-4 max-h-96 overflow-y-auto">
+        @for (item of wishlistItems(); track item.productId) {
+          <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg" [class.dark:bg-gray-800]="isDarkTheme()">
+            <img [src]="domain + item.product.images[0].filePath" [alt]="item.product.name" 
+                 class="w-16 h-16 object-cover rounded-lg">
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-900" [class.dark:text-white]="isDarkTheme()">{{ item.product.name }}</h4>
+              <p class="text-lg font-bold text-purple-600">${{ item.product.price }}</p>
+            </div>
+            <div class="flex flex-col space-y-2">
+              <!-- <button (click)="addToCart(item)" 
+                      class="text-green-500 hover:text-green-700 transition-colors">
+                <i class="pi pi-shopping-cart"></i>
+              </button> -->
+              <button (click)="removeFromWishlist(item)" 
+                      class="text-red-500 hover:text-red-700 transition-colors">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+  
+  <ng-template pTemplate="footer">
+    @if (wishlistItems().length > 0) {
+      <div class="p-6 border-t border-gray-200" [class.dark:border-gray-700]="isDarkTheme()">
+        <button (click)="navigateToWishlist($event)" 
+                class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+          View Wishlist
+        </button>
+      </div>
+    }
+  </ng-template>
+</p-drawer>

@@ -281,10 +281,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     return colorMap[color.toLowerCase()] || color.toLowerCase();
   }
 
-  navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/products', product._id ,product.name]);
-  }
-
   addToCart(product: IProduct, event: Event): void {
     event.stopPropagation();
     this.messageService.add({ severity: 'info', summary: 'Added to Cart', detail: `${product.name} added to cart.` });

@@ -80,7 +80,7 @@ export class ProductCardComponent implements OnInit {
   }
   
   navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/shop', product.id ,product.name]);
+    this.router.navigate(['/shop', product._id || product.id ,product.name]);
   }
   
   ngOnInit(): void {
