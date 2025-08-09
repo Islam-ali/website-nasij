@@ -84,17 +84,17 @@
     opacity: 0.8;
   }
 }
-
 /* Drawer Enhancement */
 ::ng-deep .p-drawer {
   .p-drawer-header {
     background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
     border-bottom: 1px solid #e5e7eb;
-    padding: 1.5rem;
+    padding: 0.5rem;
   }
 
   .p-drawer-content {
     background: #ffffff;
+    padding: 0.5rem;
   }
 
   .p-drawer-close {
@@ -113,7 +113,7 @@
 }
 
 .product-list-container .space-y-8 > div:hover {
-  transform: translateX(4px);
+  // transform: translateX(4px);
 }
 
 /* Checkbox and Radio Enhancements */
@@ -132,6 +132,9 @@
     background: var(--primary-color);
     border-color: var(--primary-color);
   }
+}
+::ng-deep .p-inputnumber-input {
+  width: inherit !important;
 }
 
 /* Color Swatches */
@@ -228,35 +231,6 @@
   }
 }
 
-/* Pagination Enhancement */
-::ng-deep .p-paginator {
-  .p-paginator-pages .p-paginator-page {
-    transition: all 0.3s ease;
-    border-radius: 0.5rem;
-  }
-
-  .p-paginator-pages .p-paginator-page:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: scale(1.1);
-  }
-
-  .p-paginator-pages .p-paginator-page.p-highlight {
-    background: var(--primary-color);
-    color: white;
-  }
-
-  .p-paginator-first, .p-paginator-prev, .p-paginator-next, .p-paginator-last {
-    transition: all 0.3s ease;
-    border-radius: 0.5rem;
-  }
-
-  .p-paginator-first:hover, .p-paginator-prev:hover, .p-paginator-next:hover, .p-paginator-last:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: scale(1.05);
-  }
-}
 
 /* No Results Enhancement */
 .product-list-container .text-center.py-16 {
@@ -391,4 +365,7 @@
     stroke: var(--primary-color);
     stroke-width: 3;
   }
+}
+::ng-deep .p-button {
+  overflow: visible !important;
 }

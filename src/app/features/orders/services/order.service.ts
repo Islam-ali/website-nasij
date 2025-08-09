@@ -18,7 +18,7 @@ export interface CreateOrderDto {
   total: number;
   shippingAddress: {
     name: string;
-    street: string;
+    address: string;
     city: string;
     state: string;
     zip: string;
@@ -26,7 +26,7 @@ export interface CreateOrderDto {
   };
   billingAddress: {
     name: string;
-    street: string;
+    address: string;
     city: string;
     state: string;
     zip: string;

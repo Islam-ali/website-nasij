@@ -18,7 +18,7 @@ import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { IProduct } from '../models/product.interface';
+import { EnumProductVariant, IProduct, ProductVariant } from '../models/product.interface';
 import { ProductService } from '../services/product.service';
 import { WishlistService } from '../../wishlist/services/wishlist.service';
 import { CartService } from '../../cart/services/cart.service';
@@ -72,7 +72,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   currentImageIndex: number = 0;
   selectedColor: string | null = null;
   selectedSize: string | null = null;
-  selectedVariant: IVariant | null = null;
+  selectedVariant: ProductVariant | null = null;
   product: IProduct | null = null;
   loading = true;
   error: string | null = null;
@@ -103,7 +103,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       },
       {
         breakpoint: '768px',
-        numVisible: 3
+        numVisible: 4
       }
     ];
   }
@@ -125,8 +125,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
 
-  isVariantSelected(variant: any): boolean {
-    return variant?._id === this.selectedVariant?._id;
+  isVariantSelected(variant: ProductVariant): boolean {
+    return variant === this.selectedVariant;
   }
   toggleWishlist(): void {
     if (!this.product) return;
@@ -135,7 +135,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     setTimeout(() => {
       this.wishlistLoading = false;
     }, 1000);
-    // this.wishlistService.toggleWishlist(this.product.id, this.selectedVariant?._id).subscribe({
+    // this.wishlistService.toggleWishlist(this.product._id, this.selectedVariant?._id).subscribe({
     //   next: () => {
     //     this.wishlistLoading = false;
     //     this.isInWishlist = !this.isInWishlist;
@@ -156,8 +156,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     .subscribe({
         next: (response: BaseResponse<IProduct>) => {
           this.product = response.data;
+          this.extractColorsAndSizes();
           this.prepareImages();
-          this.loadRelatedProducts(this.product.id);
+          this.loadRelatedProducts(this.product._id);
           this.checkWishlistStatus();
           this.loading = false;
         },
@@ -167,6 +168,29 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.loading = false;
         }
       })
+  }
+
+  private extractColorsAndSizes(): void {
+    if (!this.product || !this.product.variants) return;
+
+    const colors = new Set<string>();
+    const sizes = new Set<string>();
+
+    this.product.variants.forEach(variant => {
+      if (variant.attributes) {
+        variant.attributes.forEach(attr => {
+          if (attr.variant === EnumProductVariant.COLOR) {
+            colors.add(attr.value);
+          } else if (attr.variant === EnumProductVariant.SIZE) {
+            sizes.add(attr.value);
+          }
+        });
+      }
+    });
+
+    this.product.colors = Array.from(colors);
+    this.product.sizes = Array.from(sizes);
+    console.log(this.product.colors, this.product.sizes);
   }
 
   private loadRelatedProducts(productId: string): void {
@@ -229,9 +253,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     return `${environment.domain}${imagePath}`;
   }
 
-  getDiscountPercentage(price: number, compareAtPrice?: number): number | null {
-    if (compareAtPrice && compareAtPrice > price) {
-      return Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+  getDiscountPercentage(price: number, discountPrice?: number): number | null {
+    if (discountPrice && discountPrice < price) {
+      return Math.round(100 - ((price - discountPrice) / price) * 100);
     }
     return null;
   }
@@ -244,10 +268,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   private checkWishlistStatus(): void {
     if (!this.product) return;
-
     this.isInWishlist = this.wishlistService.isInWishlist(
-      this.product.id,
-      this.selectedVariant?._id
+      this.product._id,
+      this.selectedVariant ? JSON.stringify(this.selectedVariant) : undefined
     );
   }
 
@@ -256,11 +279,19 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   addToCart(): void {
-    if (this.checkCart()) return;
+    if (this.checkCart()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please select a color and size',
+        life: 3000
+      });
+      return;
+    };
     if (!this.product) return;
     const productToAdd:IAddToCartRequest = {
-      productId: this.product.id,
-      price: this.selectedVariant?.price || this.product.price,
+      productId: this.product._id,
+      price:  this.product.price,
       quantity: this.quantity,
       color: this.selectedColor || '',
       size: this.selectedSize || '',
@@ -277,6 +308,11 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       detail: `${this.quantity} x ${this.product.name} has been added to your cart`,
       life: 3000
     });
+  }
+
+  checkout(): void {
+    this.addToCart();
+    this.router.navigate(['/checkout']);
   }
 
   addToWishlist(): void {
@@ -314,7 +350,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/products', product.id]);
+    this.router.navigate(['/products', product._id]);
   }
 
   getVariantOptions(variant: any): string {
@@ -327,5 +363,31 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     if (stock === 0) return { text: 'Out of Stock', severity: 'danger' };
     if (stock < 5) return { text: `Only ${stock} left`, severity: 'warning' };
     return { text: 'In Stock', severity: 'success' };
+  }
+
+  onColorSelect(color: string): void {
+    this.selectedColor = color;
+    this.findSelectedVariant();
+  }
+
+  onSizeSelect(size: string): void {
+    this.selectedSize = size;
+    this.findSelectedVariant();
+  }
+
+  private findSelectedVariant(): void {
+    if (!this.product || !this.product.variants) return;
+
+    this.selectedVariant = this.product.variants.find(variant => {
+      if (!variant.attributes) return false;
+      
+      const hasSelectedColor = !this.selectedColor || 
+        variant.attributes.some(attr => attr.variant === 'color' && attr.value === this.selectedColor);
+      
+      const hasSelectedSize = !this.selectedSize || 
+        variant.attributes.some(attr => attr.variant === 'size' && attr.value === this.selectedSize);
+      
+      return hasSelectedColor && hasSelectedSize;
+    }) || null;
   }
 }

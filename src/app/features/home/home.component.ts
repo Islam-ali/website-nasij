@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ProductService } from '../products/services/product.service';
 import { IProduct } from '../products/models/product.interface';
@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { RatingModule } from 'primeng/rating';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
@@ -16,13 +16,9 @@ import { WishlistService } from '../wishlist/services/wishlist.service';
 import { BaseResponse, pagination } from '../../core/models/baseResponse';
 import { GalleriaComponent } from "../../shared/components/galleria/galleria.component";
 import { CarouselComponent } from "../../shared/components/carousel/carousel.component";
-
-interface ICategory {
-  id: string;
-  name: string;
-  image: string;
-  slug: string;
-}
+import { CategoryService } from '../products/services/category.service';
+import { ICategory } from '../../interfaces/category.interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -51,24 +47,40 @@ interface ICategory {
 export class HomeComponent implements OnInit {
   featuredProducts: IProduct[] = [];
   newArrivals: IProduct[] = [];
-  categories: ICategory[] = [
-    { id: 'electronics', name: 'Electronics', image: 'assets/images/categories/electronics.jpg', slug: 'electronics' },
-    { id: 'clothing', name: 'Clothing', image: 'assets/images/categories/clothing.jpg', slug: 'clothing' },
-    { id: 'home', name: 'Home & Living', image: 'assets/images/categories/home.jpg', slug: 'home' },
-    { id: 'books', name: 'Books', image: 'assets/images/categories/books.jpg', slug: 'books' },
-  ];
+  categories: ICategory[] = [];
   loading = true;
-
+  loadingCategories = true;
+  domain = environment.domain;  
+  router = inject(Router);
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit() {
     this.loadFeaturedProducts();
     this.loadNewArrivals();
+    this.loadCategories();
+  }
+
+  private loadCategories() {
+    this.categoryService.listCategories().subscribe({
+      next: (response: BaseResponse<ICategory[]>) => {
+        this.categories = response.data;
+        this.loadingCategories = false;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.loadingCategories = false;
+      }
+    });
+  }
+
+  navigateToProductList(categoryId?: string) {
+    this.router.navigate(['/shop'], { queryParams: { category: categoryId } });
   }
 
   private loadFeaturedProducts() {
@@ -104,7 +116,7 @@ export class HomeComponent implements OnInit {
   }
 
   getProductUrl(product: IProduct): string {
-    return `/shop/${product.id}`;
+    return `/shop/${product._id}`;
   }
 
   private slugify(text: string): string {
@@ -118,11 +130,11 @@ export class HomeComponent implements OnInit {
 
   addToCart(product: IProduct): void {
     this.cartService.addToCart({
-      productId: product.id,
+      productId: product._id,
       quantity: 1,
       price: product.price,
-      color: product.colors?.[0] || '',
-      size: product.size?.[0] || '',
+      color: product.variants?.[0]?.attributes?.[0]?.variant === 'color' ? product.variants?.[0]?.attributes?.[0]?.value : '',
+      size: product.variants?.[0]?.attributes?.[0]?.variant === 'size' ? product.variants?.[0]?.attributes?.[0]?.value : '',
       image: product.images[0].filePath,
       productName: product.name,
       discount: product.discountPrice || 0,

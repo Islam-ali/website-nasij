@@ -26,7 +26,7 @@ interface Order {
   total: number;
   shippingAddress: {
     name: string;
-    street: string;
+    address: string;
     city: string;
     state: string;
     zip: string;
@@ -113,7 +113,7 @@ interface Order {
               <h4>Shipping Address</h4>
               <p *ngIf="order?.shippingAddress">
                 {{order?.shippingAddress?.name}}<br>
-                {{order?.shippingAddress?.street}}<br>
+                {{order?.shippingAddress?.address}}<br>
                 {{order?.shippingAddress?.city}}, {{order?.shippingAddress?.state}} {{order?.shippingAddress?.zip}}<br>
                 {{order?.shippingAddress?.country}}
               </p>
@@ -176,7 +176,7 @@ export class OrderDetailsComponent implements OnInit {
       paymentMethod: 'Visa ending in 4242',
       shippingAddress: {
         name: 'John Doe',
-        street: '123 Main St',
+        address: '123 Main St',
         city: 'New York',
         state: 'NY',
         zip: '10001',

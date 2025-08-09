@@ -4,7 +4,6 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
 import { catchError, delay, finalize, map, takeUntil, tap } from 'rxjs/operators';
-import { IArchived, IProduct } from '../../interfaces/product.interface';
 
 // PrimeNG Modules
 import { ButtonModule } from 'primeng/button';

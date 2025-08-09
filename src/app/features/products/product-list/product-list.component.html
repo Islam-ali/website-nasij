@@ -4,68 +4,69 @@
   <!-- Main Form Group -->
   <form [formGroup]="filterForm" class="max-w-7xl mx-auto px-4 py-8">
     <!-- Header Section -->
-    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
+    <div class="mb-8">
       <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div class="space-y-2">
           <h1 class="text-4xl font-bold text-gray-900">Discover Products</h1>
           <p class="text-gray-600">
-            Showing <span class="font-semibold text-primary">{{ products.length }}</span> of 
+            Showing <span class="font-semibold text-primary">{{ products.length }}</span> of
             <span class="font-semibold">{{ totalRecords }}</span> products
           </p>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex flex-wrap items-center md:gap-4 justify-between md:justify-normal w-full md:w-auto">
           <!-- Search Bar -->
           <div class="relative">
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
-              <input pInputText type="text" placeholder="Search products..." 
-                formControlName="searchQuery" 
-                class="w-64 lg:w-80" />
+              <input pInputText type="text" placeholder="Search products..." formControlName="searchQuery"
+                class="w-64 lg:w-96" />
             </span>
           </div>
-
-          <!-- Sort Dropdown -->
-          <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Sort by" 
-            styleClass="w-48" (onChange)="onSortChange()"></p-select>
-
-          <!-- Filter Button -->
-          <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" 
-            (click)="isDrawerOpen = true" class="relative bg-primary hover:bg-primary-dark">
-            <span *ngIf="activeFiltersCount > 0"
-              class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
-              {{ activeFiltersCount }}
-            </span>
-          </button>
+                    <!-- Filter Button -->
+                    <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" (click)="isDrawerOpen = true"
+                    styleClass="relative bg-primary hover:bg-primary-dark">
+                    <span *ngIf="activeFiltersCount > 0"
+                      class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
+                      {{ activeFiltersCount }}
+                    </span>
+                  </button>
         </div>
       </div>
     </div>
 
     <!-- Filter Sidebar -->
-    <p-drawer [(visible)]="isDrawerOpen" position="right" styleClass="w-full sm:w-96" [modal]="false"
-      [dismissible]="false" [showCloseIcon]="true">
-      <div class="p-6 h-full overflow-y-auto">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-gray-900">Filters</h2>
-          <button *ngIf="activeFiltersCount > 0" pButton type="button" label="Clear All" 
-            class="p-button-text text-red-600 hover:text-red-700" (click)="clearAllFilters()"></button>
+    <p-drawer [(visible)]="isDrawerOpen" position="right" styleClass="!w-96 sm:!w-[30rem] p-2" [dismissible]="false"
+      [showCloseIcon]="true" header="Filters">
+      <div class="p-2 h-full overflow-y-auto">
+        <div class="flex items-center justify-end ">
+          <!-- <h2 class="text-2xl font-bold text-gray-900">Filters</h2> -->
+          <p-button pRipple type="button" icon="pi pi-times" label="Clear All" (click)="clearAllFilters()"
+            styleClass="w-full p-button-text p-button-danger p-button-sm"></p-button>
         </div>
 
         <div class="space-y-8">
+          <!-- Sort Dropdown -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Sort by</h3>
+            <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Sort by" styleClass="w-full"
+              (onChange)="onSortChange()"></p-select>
+          </div>
+
           <!-- Price Range -->
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900">Price Range</h3>
             <div class="space-y-4">
               <div class="grid grid-cols-2 gap-4">
-                <div>
+                <div class="flex flex-col gap-2">
                   <label class="text-sm font-medium text-gray-700 mb-2 block">Min Price</label>
                   <p-inputNumber formControlName="minPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
-                    [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+                    [showButtons]="false" [step]="5" class="w-full"></p-inputNumber>
                 </div>
-                <div>
+                <div class="flex flex-col gap-2">
                   <label class="text-sm font-medium text-gray-700 mb-2 block">Max Price</label>
                   <p-inputNumber formControlName="maxPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
-                    [showButtons]="true" [step]="5" class="w-full"></p-inputNumber>
+                    [showButtons]="false" [step]="5" class="w-full"></p-inputNumber>
                 </div>
               </div>
               <div class="flex justify-between text-sm text-gray-500">
@@ -78,7 +79,7 @@
           <p-divider></p-divider>
 
           <!-- Rating -->
-          <div class="space-y-4">
+          <!-- <div class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900">Minimum Rating</h3>
             <div class="space-y-3">
               <div *ngFor="let rating of [4, 3, 2, 1]" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
@@ -92,18 +93,20 @@
                 </label>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <p-divider></p-divider>
+          <!-- <p-divider></p-divider> -->
 
           <!-- Categories -->
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900">Categories</h3>
             <div class="space-y-3 max-h-48 overflow-y-auto">
-              <div *ngFor="let category of categories" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+              <div *ngFor="let category of categories"
+                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="category._id" formControlName="selectedCategories"
                   [inputId]="'category-' + category._id"></p-checkbox>
-                <label [for]="'category-' + category._id" class="text-sm font-medium cursor-pointer">{{ category.name }}</label>
+                <label [for]="'category-' + category._id" class="text-sm font-medium cursor-pointer">{{ category.name
+                  }}</label>
               </div>
             </div>
           </div>
@@ -114,7 +117,8 @@
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900">Brands</h3>
             <div class="space-y-3 max-h-48 overflow-y-auto">
-              <div *ngFor="let brand of brands" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+              <div *ngFor="let brand of brands"
+                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="brand._id" formControlName="selectedBrands"
                   [inputId]="'brand-' + brand._id"></p-checkbox>
                 <label [for]="'brand-' + brand._id" class="text-sm font-medium cursor-pointer">{{ brand.name }}</label>
@@ -128,7 +132,8 @@
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900">Sizes</h3>
             <div class="grid grid-cols-3 gap-3">
-              <div *ngFor="let size of sizes" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+              <div *ngFor="let size of sizes"
+                class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="size" formControlName="selectedSizes" [inputId]="'size-' + size"></p-checkbox>
                 <label [for]="'size-' + size" class="text-sm font-medium cursor-pointer">{{ size }}</label>
               </div>
@@ -141,7 +146,8 @@
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-gray-900">Colors</h3>
             <div class="space-y-3">
-              <div *ngFor="let color of colors" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+              <div *ngFor="let color of colors"
+                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <p-checkbox [value]="color" formControlName="selectedColors" [inputId]="'color-' + color"></p-checkbox>
                 <div class="flex items-center space-x-3">
                   <div class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"
@@ -185,8 +191,8 @@
             Size {{ size }}
           </p-chip>
           <p-chip *ngFor="let color of filterForm.get('selectedColors')?.value || []"
-            [style]="{'background-color': getColorStyle(color), 'color': getContrastColor(getColorStyle(color))}" removable
-            (onRemove)="removeColorFilter(color)">
+            [style]="{'background-color': getColorStyle(color), 'color': getContrastColor(getColorStyle(color))}"
+            removable (onRemove)="removeColorFilter(color)">
             {{ color }}
           </p-chip>
           <p-chip *ngIf="filterForm.get('showOnSale')?.value" removable
@@ -205,16 +211,16 @@
 
     <!-- Product Grid -->
     <div *ngIf="!loading && products.length > 0" class="space-y-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6">
         @for (product of products; track trackByProductId) {
-          <app-product-card [product]="product"></app-product-card>
+        <app-product-card [product]="product"></app-product-card>
         }
       </div>
 
       <!-- Pagination -->
       <div class="flex justify-center mt-12">
-        <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords"
-          (onPageChange)="onPageChange($event)" [rowsPerPageOptions]="[12, 24, 48, 96]"
+        <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+          dropdownAppendTo="body" appendTo="body" [rowsPerPageOptions]="[12, 24, 48, 96]"
           styleClass="bg-white rounded-xl shadow-sm border border-gray-100"></p-paginator>
       </div>
     </div>
@@ -230,10 +236,10 @@
           Try adjusting your filters or search terms to find what you're looking for.
         </p>
         <div class="flex gap-4 justify-center">
-          <button pButton pRipple type="button" label="Clear All Filters" 
-            class="bg-primary hover:bg-primary-dark" (click)="clearAllFilters()"></button>
-          <button pButton pRipple type="button" label="Browse All Products" 
-            class="p-button-outlined" routerLink="/products"></button>
+          <button pButton pRipple type="button" label="Clear All Filters" class="bg-primary hover:bg-primary-dark"
+            (click)="clearAllFilters()"></button>
+          <button pButton pRipple type="button" label="Browse All Products" class="p-button-outlined"
+            routerLink="/products"></button>
         </div>
       </div>
     </div>
@@ -248,8 +254,8 @@
         <p class="text-gray-600 mb-6 leading-relaxed">
           {{ error }}
         </p>
-        <button pButton pRipple type="button" label="Try Again" 
-          class="bg-primary hover:bg-primary-dark" (click)="loadProducts()"></button>
+        <button pButton pRipple type="button" label="Try Again" class="bg-primary hover:bg-primary-dark"
+          (click)="loadProducts()"></button>
       </div>
     </div>
   </form>

@@ -28,6 +28,7 @@ export class CartService implements OnDestroy {
     this.subscriptions.add(
       this.cartState$.subscribe(cart => {
         this.saveCartToStorage(cart);
+        console.log('cart', cart);
       })
     );
   }
@@ -152,8 +153,27 @@ export class CartService implements OnDestroy {
 
   // Update cart state and notify subscribers
   private updateCartState(items: ICartItem[]): Observable<ICartState> {
+    console.log('=== CART SERVICE UPDATE ===');
+    console.log('Items before summary calculation:', items);
+    
+    items.forEach((item, index) => {
+      console.log(`Item ${index + 1} in service:`, {
+        productId: item.productId,
+        productName: item.productName,
+        quantity: item.quantity,
+        quantityType: typeof item.quantity,
+        price: item.price,
+        color: item.color,
+        size: item.size
+      });
+    });
+    
     const summary = this.calculateSummary(items);
     const newState: ICartState = { items, summary };
+    
+    console.log('Cart summary:', summary);
+    console.log('New cart state:', newState);
+    console.log('=== END CART SERVICE UPDATE ===');
     
     // In a real app, you would make an API call here to sync with the server
     // For now, we'll just update the local state
@@ -187,13 +207,26 @@ export class CartService implements OnDestroy {
       const savedCart = localStorage.getItem(this.CART_STORAGE_KEY);
       if (savedCart) {
         const parsedCart = JSON.parse(savedCart);
+        console.log('=== LOADING CART FROM STORAGE ===');
+        console.log('Raw saved cart:', savedCart);
+        console.log('Parsed cart:', parsedCart);
+        
         // Validate the loaded cart structure
         if (parsedCart && Array.isArray(parsedCart.items)) {
+          // Ensure quantity is a number
+          const validatedItems = parsedCart.items.map((item: any) => ({
+            ...item,
+            quantity: Number(item.quantity) || 1
+          }));
+          
+          console.log('Validated items:', validatedItems);
+          
           this.cartState.next({
-            items: parsedCart.items,
-            summary: this.calculateSummary(parsedCart.items)
+            items: validatedItems,
+            summary: this.calculateSummary(validatedItems)
           });
         }
+        console.log('=== END LOADING CART ===');
       }
     } catch (error) {
       console.error('Error loading cart from storage:', error);

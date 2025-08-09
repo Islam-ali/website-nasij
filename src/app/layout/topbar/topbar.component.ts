@@ -103,6 +103,20 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     this.loadWishlist();
   }
 
+  updateCartQuantity(item: ICartItem, quantity: number): void {
+    this.cartService.updateQuantity(item.productId, quantity, item.color, item.size).pipe(
+      takeUntil(this.destroy$),
+      tap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Updated',
+          detail: 'Item quantity updated',
+          life: 3000,
+        });
+      })
+    ).subscribe();
+  }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.authService.currentUser$.subscribe({
@@ -129,7 +143,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         console.error('Error loading cart items:', error);
       }
     });
-
   }
 
   loadWishlist(): void {

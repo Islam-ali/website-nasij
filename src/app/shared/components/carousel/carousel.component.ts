@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { Tag } from 'primeng/tag';
-import { IProduct } from '../../../interfaces/product.interface';
+import { IProduct } from '../../../features/products/models/product.interface';
 import { ProductService } from '../../../features/products/services/product.service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
@@ -26,7 +26,7 @@ export class CarouselComponent implements OnInit {
     this.responsiveOptions = [
       {
         breakpoint: '1400px',
-        numVisible: 2,
+        numVisible: 3,
         numScroll: 1,
       },
       {
@@ -36,7 +36,7 @@ export class CarouselComponent implements OnInit {
       },
       {
         breakpoint: '767px',
-        numVisible: 2,
+        numVisible: 3,
         numScroll: 1,
       },
       {

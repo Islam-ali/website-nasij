@@ -51,13 +51,13 @@
 
       <!-- Desktop Navigation -->
       <nav class="hidden lg:flex items-center space-x-8">
-        <a routerLink="/" routerLinkActive="text-purple-600" [routerLinkActiveOptions]="{exact: true}"
+        <!-- <a routerLink="/" routerLinkActive="text-purple-600" [routerLinkActiveOptions]="{exact: true}"
            class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
           <i class="pi pi-home text-sm"></i>
           <span>Home</span>
-        </a>
+        </a> -->
         
-        <a routerLink="/products" routerLinkActive="text-purple-600"
+        <a routerLink="/shop" routerLinkActive="text-purple-600"
            class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
           <i class="pi pi-shopping-bag text-sm"></i>
           <span>Shop</span>
@@ -71,22 +71,22 @@
           </button>
           <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100">
             <div class="py-2">
-              <a routerLink="/products" [queryParams]="{category: 'dresses'}" 
+              <a routerLink="/shop" [queryParams]="{category: 'dresses'}" 
                  class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
                 <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
                 Dresses
               </a>
-              <a routerLink="/products" [queryParams]="{category: 'jackets'}" 
+              <a routerLink="/shop" [queryParams]="{category: 'jackets'}" 
                  class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
                 <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
                 Jackets
               </a>
-              <a routerLink="/products" [queryParams]="{category: 'tops'}" 
+              <a routerLink="/shop" [queryParams]="{category: 'tops'}" 
                  class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
                 <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
                 Tops & Tees
               </a>
-              <a routerLink="/products" [queryParams]="{category: 'accessories'}" 
+              <a routerLink="/shop" [queryParams]="{category: 'accessories'}" 
                  class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
                 <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
                 Accessories
@@ -124,15 +124,15 @@
       <div class="flex items-center space-x-4">
         
         <!-- Theme Toggle -->
-        <button (click)="toggleTheme()" 
+        <!-- <button (click)="toggleTheme()" 
                 class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
                 [class.dark:bg-gray-800]="isDarkTheme()"
                 [class.dark:hover:bg-gray-700]="isDarkTheme()">
           <i class="pi" [class.pi-sun]="!isDarkTheme()" [class.pi-moon]="isDarkTheme()"></i>
-        </button>
+        </button> -->
 
         <!-- Wishlist -->
-        <button (click)="wishlistOpen = !wishlistOpen" 
+        <!-- <button (click)="wishlistOpen = !wishlistOpen" 
                 class="relative w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
                 [class.dark:bg-gray-800]="isDarkTheme()"
                 [class.dark:hover:bg-gray-700]="isDarkTheme()">
@@ -141,7 +141,7 @@
                 class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
             {{ wishlistCount() }}
           </span>
-        </button>
+        </button> -->
 
         <!-- Cart -->
         <button (click)="cartOpen = !cartOpen" 
@@ -156,7 +156,7 @@
         </button>
 
         <!-- User Menu -->
-        <div class="relative" *ngIf="currentUser; else loginButton">
+        <!-- <div class="relative" *ngIf="currentUser; else loginButton">
           <button class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white flex items-center justify-center font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
             {{ userInitials }}
           </button>
@@ -166,7 +166,7 @@
              class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
             Login
           </a>
-        </ng-template>
+        </ng-template> -->
 
         <!-- Mobile Menu Button -->
         <button (click)="toggleNavbar()" 
@@ -188,7 +188,7 @@
           <i class="pi pi-home"></i>
           <span>Home</span>
         </a>
-        <a routerLink="/products" routerLinkActive="text-purple-600"
+        <a routerLink="/shop" routerLinkActive="text-purple-600"
            class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
           <i class="pi pi-shopping-bag"></i>
           <span>Shop</span>
@@ -212,7 +212,7 @@
 <div class="h-32"></div>
 
 <!-- Enhanced Cart Drawer -->
-<p-drawer [(visible)]="cartOpen" [showCloseIcon]="false" position="right" styleClass="w-full md:w-96 lg:w-1/3">
+<p-drawer [(visible)]="cartOpen" [showCloseIcon]="false" position="right" styleClass="md:!w-96 lg:!w-1/3">
   <ng-template pTemplate="header">
     <div class="flex items-center justify-between w-full">
       <h3 class="text-xl font-bold text-gray-900" [class.dark:text-white]="isDarkTheme()">Shopping Cart</h3>
@@ -222,12 +222,12 @@
     </div>
   </ng-template>
   
-  <div class="p-6">
+  <div class="p-2">
     @if (cartItems().length === 0) {
       <div class="text-center py-12">
-        <i class="pi pi-shopping-cart text-6xl text-gray-300 mb-4"></i>
+        <i style="font-size: 120px;" class="pi pi-shopping-cart text-6xl text-gray-300 mb-4"></i>
         <p class="text-gray-500 text-lg mb-4">Your cart is empty</p>
-        <a routerLink="/products" 
+        <a routerLink="/shop" 
            class="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
           Start Shopping
         </a>
@@ -239,7 +239,7 @@
             <img [src]="domain + item.image" [alt]="item.productName" 
                  class="w-16 h-16 object-cover rounded-lg">
             <div class="flex-1">
-              <h4 class="font-medium text-gray-900" [class.dark:text-white]="isDarkTheme()">{{ item.productName }}</h4>
+              <h4 class="font-medium text-gray-900 text-sm mb-0" [class.dark:text-white]="isDarkTheme()">{{ item.productName }}</h4>
               <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
               <p class="text-lg font-bold text-purple-600">${{ (item.price * item.quantity!) }}</p>
             </div>
@@ -255,7 +255,7 @@
   
   <ng-template pTemplate="footer">
     @if (cartItems().length > 0) {
-      <div class="p-6 border-t border-gray-200" [class.dark:border-gray-700]="isDarkTheme()">
+      <div class="p-2 border-t border-gray-200" [class.dark:border-gray-700]="isDarkTheme()">
         <div class="flex justify-between items-center mb-4">
           <span class="text-lg font-medium text-gray-900" [class.dark:text-white]="isDarkTheme()">Total:</span>
           <span class="text-2xl font-bold text-purple-600">${{ cartTotal() }}</span>
@@ -289,9 +289,9 @@
   <div class="p-6">
     @if (wishlistItems().length === 0) {
       <div class="text-center py-12">
-        <i class="pi pi-heart text-6xl text-gray-300 mb-4"></i>
+        <i style="font-size: 120px;" class="pi pi-heart text-6xl text-gray-300 mb-4"></i>
         <p class="text-gray-500 text-lg mb-4">Your wishlist is empty</p>
-        <a routerLink="/products" 
+        <a routerLink="/shop" 
            class="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
           Start Shopping
         </a>

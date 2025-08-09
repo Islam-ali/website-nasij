@@ -69,7 +69,7 @@
 }
 
 .product-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  // transform: translateY(-8px) scale(1.02);
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.1),
     0 8px 16px rgba(0, 0, 0, 0.05);
@@ -87,14 +87,12 @@
 }
 
 .product-card:hover img {
-  transform: scale(1.1);
-  filter: brightness(1.05) contrast(1.1);
+  // transform: scale(1.1);
+  // filter: brightness(1.05) contrast(1.1);
 }
 
 /* Badge Styling */
 .product-card .absolute.top-4 {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 }
@@ -327,23 +325,23 @@
 
 /* Loading Overlay */
 .product-card .absolute.inset-0 {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  // backdrop-filter: blur(4px);
+  // -webkit-backdrop-filter: blur(4px);
   animation: fadeInUp 0.3s ease-out;
 }
 
 .product-card .w-5.h-5 {
-  animation: spin 1s linear infinite;
+  // animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+// @keyframes spin {
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }
 
 /* Enhanced Focus States */
 .product-card:focus-within {

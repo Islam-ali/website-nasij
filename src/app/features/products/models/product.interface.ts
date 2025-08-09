@@ -1,13 +1,23 @@
-import { IArchived } from "../../../interfaces/product.interface";
+import { IArchived } from "../../../interfaces/archive.interface";
 import { IBrand } from "../models/brand.interface";
-import { ICategory } from "../models/category.interface";
+import { ICategory } from "../../../interfaces/category.interface";
+
+export enum EnumProductVariant {
+  SIZE = 'size',
+  COLOR = 'color',
+}
 
 export interface ProductVariant {
-  name: string;
-  value: string;
+  attributes?: ProductVariantAttribute[];
   price: number;
   stock?: number;
   sku?: string;
+  image?: IArchived;
+}
+
+export interface ProductVariantAttribute {
+  variant: string;
+  value: string;
 }
 
 export enum ProductStatus {
@@ -17,41 +27,32 @@ export enum ProductStatus {
 }
 
 export interface IProduct {
-  _id: string | null;
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
   discountPrice?: number;
+  factoryPrice?: number;
   category: ICategory;
   brand: IBrand;
   images: IArchived[];
   variants: ProductVariant[];
   stock: number;
   status: ProductStatus;
-  sku: string;
   tags: string[];
-  weight?: number;
   colors?: string[];
-  size?: string[];
+  sizes?: string[];
   gender?: string;
   season?: string;
-  material?: string;
   details: { name: string; value: string }[];
   seoTitle?: string;
   seoDescription?: string;
-  seoKeywords?: string;
-  dimensions: {
-    length: number;
-    width: number;
-    height: number;
-  };
+  seoKeywords?: string[];
   averageRating?: number;
   reviewCount?: number;
   soldCount?: number;
   isInWishlist?: boolean;
 }
-
 
 export interface IProductQueryParams {
   page?: number;

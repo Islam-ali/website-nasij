@@ -4,8 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { IVariant } from '../models/variant.interface';
-import { IProduct, IProductListResponse, IProductQueryParams } from '../models/product.interface';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
+import { IProductQueryParams } from '../models/product.interface';
+import { IProduct } from '../models/product.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class ProductService {
   getProducts(params?: IProductQueryParams): Observable<BaseResponse<{products: IProduct[], pagination: pagination}>> {
     let httpParams = new HttpParams();
     
-    if (params) {
+    if (params && typeof params === 'object') {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           httpParams = httpParams.append(key, value.toString());
@@ -69,7 +70,7 @@ export class ProductService {
   searchProducts(query: string, params?: IProductQueryParams): Observable<BaseResponse<{products: IProduct[], pagination: pagination}>> {
     let httpParams = new HttpParams().set('q', query);
     
-    if (params) {
+    if (params && typeof params === 'object') {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           httpParams = httpParams.append(key, value.toString());

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,11 +11,11 @@ import { RatingModule } from 'primeng/rating';
 import { MessageModule } from 'primeng/message';
 
 // Services
-import { IProduct } from '../../../interfaces/product.interface';
 import { environment } from '../../../../environments/environment';
 import { WishlistService } from '../../../features/wishlist/services/wishlist.service';
 import { MessageService } from 'primeng/api';
 import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlist.interface';
+import { EnumProductVariant, IProduct } from '../../../features/products/models/product.interface';
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -27,15 +27,15 @@ import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlis
     TooltipModule,
     RippleModule,
     RatingModule,
-    MessageModule
-  ],
+    MessageModule,
+],
   providers: [
     { provide: Window, useValue: window }
   ],
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss']
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent implements OnInit, OnChanges {
   @Input() product!: IProduct;
   @Input() showViewDetails = true;
   
@@ -80,18 +80,24 @@ export class ProductCardComponent implements OnInit {
   }
   
   navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/shop', product._id || product.id ,product.name]);
+    this.router.navigate(['/shop', product._id ,product.name]);
   }
   
   ngOnInit(): void {
     // Check if product is in wishlist
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['product']) {
+      this.extractColorsAndSizes();
+    }
+  }
+
   // add to wishlist
   addToWishlist(product: IProduct): void {
     this.loading = true;
     const wishlistItem: IAddToWishlistRequest = {
-      productId: product.id,
+      productId: product._id || '',
       addedAt: new Date(),
       product: product
     };
@@ -107,4 +113,27 @@ export class ProductCardComponent implements OnInit {
     });
   }
 
+  // extract colors and sizes from variants
+  private extractColorsAndSizes(): void {
+    if (!this.product || !this.product.variants) return;
+
+    const colors = new Set<string>();
+    const sizes = new Set<string>();
+
+    this.product.variants.forEach(variant => {
+      if (variant.attributes) {
+        variant.attributes.forEach(attr => {
+          if (attr.variant === EnumProductVariant.COLOR) {
+            colors.add(attr.value);
+          } else if (attr.variant === EnumProductVariant.SIZE) {
+            sizes.add(attr.value);
+          }
+        });
+      }
+    });
+
+    this.product.colors = Array.from(colors);
+    this.product.sizes = Array.from(sizes);
+    console.log(this.product.colors, this.product.sizes);
+  }
 }

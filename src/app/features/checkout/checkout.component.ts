@@ -1,101 +1,118 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SelectItem } from 'primeng/api';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { CheckoutService } from './services/checkout.service';
-import { ICheckout, Item } from './models/checkout';
-// Import enums from the correct path in the frontend project
-import { OrderStatus, PaymentMethod, PaymentStatus } from './models/order.enum';
-import { SelectModule } from 'primeng/select';
+import { takeUntil, Subject } from 'rxjs';
 import { ICartItem } from '../cart/models/cart.interface';
 import { CartService } from '../cart/services/cart.service';
-import { BehaviorSubject, map } from 'rxjs';
+import { CheckoutService } from './services/checkout.service';
+import { ICheckout } from './models/checkout';
 import { environment } from '../../../environments/environment';
+import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { OrderStatus, PaymentMethod, PaymentStatus } from './models/order.enum';
+
 @Component({
   selector: 'app-checkout',
-  templateUrl: './checkout.component.html',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
+    FormsModule,
     RouterModule,
-    CheckboxModule,
-    InputTextModule,
-    // InputTextarea removed as it's not used in the template
-    RadioButtonModule,
+    ToastModule,
+    ProgressSpinnerModule,
     SelectModule,
-    ButtonModule,
+    InputTextModule,
+    RadioButtonModule,
+    CheckboxModule,
+    ButtonModule
   ],
+  providers: [MessageService, CartService, CheckoutService],
+  templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  checkoutForm: FormGroup;
+  checkoutForm!: FormGroup;
   loading = false;
-  error: string | null = null;
   success = false;
-  orderId: string | null = null;
   domain = environment.domain;
+
+  // Cart items using signals
+  cartItems = signal<ICartItem[]>([]);
+
+  // Computed cart total
+  cartTotal = computed(() => {
+    return this.cartItems().reduce((total, item) => total + (item.price * item.quantity), 0);
+  });
+
+  // Computed order total
+  orderTotal = computed(() => {
+    return this.cartTotal() + this.shippingCost;
+  });
+
+  shippingCost = 0;
+  private destroy$ = new Subject<void>();
+
   // Form options
-  countries: SelectItem[] = [
+  countries = [
     { label: 'Select Country', value: null },
-    { label: 'United States', value: 'US' },
-    { label: 'United Kingdom', value: 'UK' },
-    { label: 'Canada', value: 'CA' },
-    { label: 'Australia', value: 'AU' }
+    { label: 'Egypt', value: 'EG' }
   ];
-  states: SelectItem[] = [
+
+  states = [
     { label: 'Select State', value: null },
-    { label: 'New York', value: 'NY' },
-    { label: 'California', value: 'CA' },
-    { label: 'Texas', value: 'TX' },
-    { label: 'Florida', value: 'FL' }
+    { label: 'Cairo', value: 'Cairo' },
+    { label: 'Giza', value: 'Giza' },
+    { label: 'Alexandria', value: 'Alexandria' },
+    { label: 'Mansoura', value: 'Mansoura' },
+    { label: 'Port Said', value: 'Port Said' },
+    { label: 'Tanta', value: 'Tanta' },
+    { label: 'Ismailia', value: 'Ismailia' },
+    { label: 'Sohag', value: 'Sohag' },
+    { label: 'Qena', value: 'Qena' },
+    { label: 'Asyut', value: 'Asyut' },
+    { label: 'Beni Suef', value: 'Beni Suef' },
+    { label: 'Fayoum', value: 'Fayoum' },
+    { label: 'Minya', value: 'Minya' },
+    { label: 'Suez', value: 'Suez' },
+    { label: 'Luxor', value: 'Luxor' },
   ];
 
   paymentMethods = [
-    { label: 'Cash', value: 'cash' },
+    { label: 'Cash', value: PaymentMethod.CASH },
     // { label: 'Credit Card', value: 'credit_card' },
-    // { label: 'PayPal', value: 'paypal' },
-    // { label: 'Bank Transfer', value: 'bank_transfer' }
+    // { label: 'PayPal', value: 'paypal' }
   ];
-
-  shippingMethods: any[] = [];
-  selectedShippingMethod: any;
-
-  // Sample cart items - in a real app, this would come from a cart service
-  cartItems$: BehaviorSubject<ICartItem[]> = new BehaviorSubject<ICartItem[]>([]);
-
-  get cartTotal(): number {
-    return this.cartItems$.value.reduce((total, item) => total + item.price * item.quantity, 0);
-  }
-
-  get shippingCost(): number {
-    return this.selectedShippingMethod?.price || 0;
-  }
-
-  get orderTotal(): number {
-    return this.cartTotal + this.shippingCost;
-  }
 
   constructor(
     private fb: FormBuilder,
+    private cartService: CartService,
     private checkoutService: CheckoutService,
-    private cartService: CartService
-  ) {
+    private messageService: MessageService
+  ) { }
+
+  ngOnInit(): void {
     this.checkoutForm = this.createCheckoutForm();
-    this.cartService.getCart().subscribe(items => {
-      debugger
-      this.cartItems$.next(items.items);
+
+    // Subscribe to cart state and update signal
+    this.cartService.cartState$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((items: any) => {
+      console.log('Cart state updated:', items);
+      this.cartItems.set(items.items);
     });
   }
 
-  ngOnInit(): void {
-    // this.loadShippingMethods();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private createCheckoutForm(): FormGroup {
@@ -103,7 +120,7 @@ export class CheckoutComponent implements OnInit {
       // Billing Details
       fullName: ['', [Validators.required]],
       phone: ['', [Validators.required]],
-      
+
       // Shipping Address
       shippingAddress: this.fb.group({
         address: ['', [Validators.required]],
@@ -111,14 +128,14 @@ export class CheckoutComponent implements OnInit {
         state: ['', [Validators.required]],
         country: ['', [Validators.required]]
       }),
-      
-      // Payment Details
-      paymentMethod: [PaymentMethod.CASH],
 
-      
+      // Payment Details
+      paymentMethod: [PaymentMethod.CASH], // Changed to null as PaymentMethod enum is removed
+
+
       // Order Notes
       notes: [''],
-      
+
       // Terms & Conditions
       acceptTerms: [false, [Validators.requiredTrue]]
     });
@@ -126,67 +143,114 @@ export class CheckoutComponent implements OnInit {
 
 
   onShippingMethodChange(method: any): void {
-    this.selectedShippingMethod = method;
+    this.shippingCost = method.price || 0;
     // Recalculate order total when shipping method changes
   }
 
   onSubmit(): void {
     if (this.checkoutForm.invalid || this.loading) {
+      console.log('Form is invalid:', this.checkoutForm.errors);
+      console.log('Form values:', this.checkoutForm.value);
       return;
     }
 
     this.loading = true;
-    this.error = null;
 
     const formValue = this.checkoutForm.value;
+    console.log('Form value:', formValue);
     
-    const orderData: ICheckout = {
-      items: this.cartItems$.value.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price,
-        totalPrice: item.price * item.quantity,
-        discountPrice: item.discount,
-        color: item.color,
-        size: item.size
+    // Validate required fields
+    if (!formValue.fullName || !formValue.phone || !formValue.shippingAddress.address || 
+        !formValue.shippingAddress.city || !formValue.shippingAddress.state || !formValue.shippingAddress.country) {
+      this.messageService.add({ 
+        severity: 'error', 
+        summary: 'Validation Error', 
+        detail: 'Please fill in all required fields.' 
+      });
+      this.loading = false;
+      return;
+    }
+
+    // Validate cart items
+    if (this.cartItems().length === 0) {
+      this.messageService.add({ 
+        severity: 'error', 
+        summary: 'Cart Empty', 
+        detail: 'Your cart is empty. Please add items before checkout.' 
+      });
+      this.loading = false;
+      return;
+    }
+
+    const orderData: any = {
+      items: this.cartItems().map(item => ({
+        productId: item.productId, // This should be a valid MongoDB ObjectId string
+        quantity: Number(item.quantity), // Ensure quantity is a number
+        price: Number(item.price), // Ensure price is a number
+        discountPrice: item.discount ? Number(item.discount) : 0,
+        color: item.color || undefined,
+        size: item.size || undefined
       })),
-      subtotal: this.cartTotal,
-      tax: this.calculateTax(),
-      shippingCost: this.shippingCost,
-      total: this.orderTotal,
+      subtotal: Number(this.cartTotal()),
+      tax: Number(this.calculateTax()),
+      shippingCost: Number(this.shippingCost),
+      total: Number(this.orderTotal()),
       orderStatus: OrderStatus.PENDING,
       paymentStatus: PaymentStatus.PENDING,
-      paymentMethod: formValue.paymentMethod as PaymentMethod,
+      paymentMethod: formValue.paymentMethod,
       shippingAddress: {
         fullName: formValue.fullName,
-        phone: formValue.phone,
-        street: formValue.shippingAddress.address,
+        phone: formValue.phone.startsWith('+') ? formValue.phone : `+20${formValue.phone.replace(/^0/, '')}`, // Convert to E.164 format for Egypt
+        address: formValue.shippingAddress.address,
         city: formValue.shippingAddress.city,
         state: formValue.shippingAddress.state,
-        country: formValue.shippingAddress.country
+        country: formValue.shippingAddress.country // Should be 'EG' for Egypt
       },
-      notes: formValue.notes // Add empty notes field as required by ICheckout
+      notes: formValue.notes || ''
     };
+
+    console.log('Order data being sent:', JSON.stringify(orderData, null, 2));
 
     this.checkoutService.createOrder(orderData).subscribe({
       next: (response) => {
         this.loading = false;
         this.success = true;
-        this.orderId = response.orderId;
+        this.messageService.add({ severity: 'success', summary: 'Order Successful', detail: `Order ID: ${response.orderId}` });
+        this.cartService.clearCart();
         // Optionally redirect to order confirmation page
         // this.router.navigate(['/order-confirmation', response.orderId]);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Order submission failed', error);
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          error: error.error
+        });
+        
+        let errorMessage = 'Failed to place order. Please try again.';
+        
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
         this.loading = false;
-        this.error = 'Failed to place order. Please try again.';
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Order Failed', 
+          detail: errorMessage 
+        });
       }
     });
   }
 
   public calculateTax(): number {
     // Simple tax calculation - in a real app, this would be more sophisticated
-    return this.cartTotal * 0.1; // 10% tax
+    // return this.cartTotal() * 0.1; // 10% tax
+    return 0;
   }
 
   // Helper method to get form control

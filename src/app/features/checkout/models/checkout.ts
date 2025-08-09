@@ -26,7 +26,7 @@ export interface ICheckout {
   export interface IShippingAddress {
     fullName: string
     phone: string
-    street: string
+    address: string
     state: string
     city: string
     country: string

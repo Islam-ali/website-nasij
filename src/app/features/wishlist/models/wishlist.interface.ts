@@ -1,4 +1,4 @@
-import { IProduct } from '../../../features/products/models/product.interface';
+import { IProduct } from "../../products/models/product.interface";
 
 export interface IWishlistItem {
   productId: string;

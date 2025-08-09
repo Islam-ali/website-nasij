@@ -33,7 +33,7 @@ export interface OrderItem {
 
 export interface ShippingAddress {
     fullName: string;
-    street: string;
+    address: string;
     city: string;
     state: string;
     zipCode: string;

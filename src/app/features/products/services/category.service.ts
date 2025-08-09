@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { GenericApiService } from '../../../core/services/generic-api.service';
 import { CommonService } from '../../../core/services/common.service';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
-import { ICategory } from '../models/category.interface';
 import { environment } from '../../../../environments/environment';
+import { ICategory } from '../../../interfaces/category.interface';
 
 @Injectable({
   providedIn: 'root'

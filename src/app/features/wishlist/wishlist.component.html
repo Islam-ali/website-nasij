@@ -62,8 +62,8 @@
                   <!-- select color and size -->
                   <div class="flex gap-2 flex-col py-2">
                     <div class="flex gap-2 flex-wrap">
-                      @if (item.product.size) {
-                      @for (size of item.product.size; track $index) {
+                      @if (item.product.sizes) {
+                      @for (size of item.product.sizes; track $index) {
                       <button
                         (click)="selectedSize(item, size)"
                         [class.border-primary]="item.size === size"

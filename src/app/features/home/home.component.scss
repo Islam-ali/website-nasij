@@ -442,27 +442,6 @@ input[type="email"] {
       font-size: 1.125rem;
     }
   }
-  
-  .grid.grid-cols-3.gap-6 {
-    grid-template-columns: repeat(2, 1fr);
-    
-    .text-center:last-child {
-      grid-column: span 2;
-    }
-  }
-  
-  .grid.grid-cols-2 {
-    grid-template-columns: 1fr;
-    height: auto;
-    
-    .col-span-2 {
-      height: 300px;
-    }
-    
-    .relative.group {
-      height: 200px;
-    }
-  }
 }
 
 @media (max-width: 640px) {
@@ -472,9 +451,6 @@ input[type="email"] {
     }
   }
   
-  .grid.grid-cols-2.md\\:grid-cols-4.gap-6 {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /* Dark Mode Support */

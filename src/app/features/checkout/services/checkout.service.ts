@@ -14,6 +14,8 @@ export class CheckoutService {
 
   // Create a new order
   createOrder(checkoutData: ICheckout): Observable<any> {
+    console.log('Sending order data to:', this.apiUrl);
+    console.log('Order data:', checkoutData);
     return this.http.post(this.apiUrl, checkoutData);
   }
 

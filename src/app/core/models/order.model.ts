@@ -16,7 +16,7 @@ export interface OrderItem {
 
 export interface OrderAddress {
   name: string;
-  street: string;
+  address: string;
   city: string;
   state: string;
   zip: string;

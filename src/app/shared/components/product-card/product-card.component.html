@@ -1,9 +1,19 @@
-<div class="product-card w-full max-w-sm rounded-3xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] group bg-white relative transform-gpu">
-  <!-- Image Container -->
-  <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-white">
+<div class="product-card w-full cursor-pointer  rounded-3xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-2xl transition-all duration-500  group bg-white relative "
+(click)="navigateToProduct(product)">
+  <!-- Full Image Container -->
+  <div class="relative w-full h-[18rem] sm:h-[26rem] overflow-hidden">
+    <!-- Product Image -->
+    <img [src]="domain + product.images[0].filePath" 
+      [alt]="product.name" 
+      width="600" height="800" 
+      class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-105" />
+    
+    <!-- Gradient Overlay for Text Readability -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+    
     <!-- Sale Badge -->
     @if (isOnSale) {
-    <div class="absolute top-4 left-4 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg animate-pulse-once backdrop-blur-sm">
+    <div class="absolute top-4 left-4 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg animate-pulse-once">
       <i class="pi pi-tag mr-1"></i>
       {{ discountPercentage }}% OFF
     </div>
@@ -25,139 +35,117 @@
     <!-- Action Buttons -->
     <div class="absolute top-4 right-4 flex flex-col gap-2 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out transform translate-y-2 group-hover:translate-y-0">
       <!-- Wishlist Button -->
-      <div (click)="addToWishlist(product)" 
-        class="bg-white/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-red-50 hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-gray-100">
+      <!-- <div (click)="addToWishlist(product)" 
+        class="bg-white/90 p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-red-50 hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-gray-100">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           class="w-5 h-5 text-gray-700 hover:text-red-500 transition-colors duration-200">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
-      </div>
+      </div> -->
       
       <!-- Quick View Button -->
-      <div (click)="navigateToProduct(product)" 
-        class="bg-white/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-blue-50 hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-gray-100">
+      <!-- <div (click)="navigateToProduct(product)" 
+        class="bg-white/90 p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-blue-50 hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-gray-100">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           class="w-5 h-5 text-gray-700 hover:text-blue-500 transition-colors duration-200">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
           <circle cx="12" cy="12" r="3"></circle>
         </svg>
-      </div>
+      </div> -->
     </div>
 
-    <!-- Product Image -->
-    <div class="relative h-72 overflow-hidden">
-      <img [src]="domain + product.images[0].filePath" 
-        (error)="handleImageError($event)" 
-        [alt]="product.name" 
-        width="600" height="800" 
-        class="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-105" />
-      
-      <!-- Image Overlay -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    </div>
-  </div>
-
-  <!-- Product Info Container -->
-  <div class="p-4 bg-gradient-to-b from-white to-gray-50/50">
-    <!-- Category Badge -->
-    <div class="mb-2">
-      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-        <i class="pi pi-tag mr-1 text-xs"></i>
-        {{ product.category?.name || 'Product' }}
-      </span>
-    </div>
-
-    <!-- Product Title and Price -->
-    <div class="space-y-2">
-      <h3 class="text-base font-bold text-gray-900 leading-tight line-clamp-2 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
-        (click)="navigateToProduct(product)">
-        {{ product.name }}
-      </h3>
-      
-      <!-- Price Section -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-baseline gap-2">
-          @if (isOnSale) {
-          <span class="text-lg font-bold text-red-600">{{ price | currency }}</span>
-          <span class="text-sm text-gray-500 line-through">{{ product.price | currency }}</span>
-          } @else {
-          <span class="text-lg font-bold text-gray-900">{{ price | currency }}</span>
-          }
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Variants (if available) -->
-    <div class="mt-3 space-y-2">
-      <!-- Colors -->
-      @if (product.colors && product.colors.length > 0) {
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-medium text-gray-600">Colors:</span>
-        <div class="flex gap-1">
-          @for (color of product.colors.slice(0, 4); track $index) {
-          <div [ngStyle]="{ 'background-color': color }" 
-            class="w-3 h-3 rounded-full border border-white shadow-sm cursor-pointer hover:scale-125 transition-transform duration-200"
-            [title]="color">
+    <!-- Product Info Overlay -->
+    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+      <!-- Product Variants (Hover Only) -->
+      <div class="mb-3 space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+        <!-- Colors -->
+        @if (product.colors && product.colors.length > 0) {
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-medium text-gray-100">Colors:</span>
+          <div class="flex gap-1">
+            @for (color of product.colors.slice(0, 4); track $index) {
+            <div [ngStyle]="{ 'background-color': color }" 
+              class="w-3 h-3 rounded-full border border-white shadow-sm cursor-pointer hover:scale-125 transition-transform duration-200"
+              [title]="color">
+            </div>
+            }
+            @if (product.colors.length > 4) {
+            <span class="text-xs text-gray-300">+{{ product.colors.length - 4 }}</span>
+            }
           </div>
-          }
-          @if (product.colors.length > 4) {
-          <span class="text-xs text-gray-500">+{{ product.colors.length - 4 }}</span>
+        </div>
+        }
+
+        <!-- Sizes -->
+        @if (product.sizes && product.sizes.length > 0) {
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-medium text-gray-100">Sizes:</span>
+          <div class="flex gap-1">
+            @for (size of product.sizes.slice(0, 3); track $index) {
+            <span class="px-1.5 py-0.5 text-xs bg-white/70 text-black rounded font-medium">
+              {{ size }}
+            </span>
+            }
+            @if (product.sizes.length > 3) {
+            <span class="text-xs text-gray-300">+{{ product.sizes.length - 3 }}</span>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Stock Status (Hover Only) -->
+      <div class="mb-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+        @if (product.stock > 0) {
+        <div class="flex items-center gap-1">
+          <i class="pi pi-check-circle text-green-300 text-xs"></i>
+          <span class="text-xs text-green-200 font-medium">In Stock</span>
+        </div>
+        } @else {
+        <div class="flex items-center gap-1">
+          <i class="pi pi-times-circle text-red-300 text-xs"></i>
+          <span class="text-xs text-red-200 font-medium">Out of Stock</span>
+        </div>
+        }
+      </div>
+
+      <!-- Product Title and Price (Bottom) -->
+      <div class="flex items-center justify-between gap-3">
+        <h3 class="text-base mb-0 font-bold text-white leading-tight line-clamp-2 hover:text-blue-200 transition-colors duration-200 cursor-pointer flex-1"
+          (click)="navigateToProduct(product)">
+          {{ product.name }}
+        </h3>
+        
+        <!-- Price Section -->
+        <div class="flex items-baseline gap-2 flex-shrink-0">
+          @if (isOnSale) {
+          <span class="text-lg font-bold text-red-300">{{ price | currency }}</span>
+          <span class="text-sm text-gray-300 line-through">{{ product.price | currency }}</span>
+          } @else {
+          <span class="text-lg font-bold text-white">{{ price | currency }}</span>
           }
         </div>
       </div>
-      }
 
-      <!-- Sizes -->
-      @if (product.size && product.size.length > 0) {
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-medium text-gray-600">Sizes:</span>
-        <div class="flex gap-1">
-          @for (size of product.size.slice(0, 3); track $index) {
-          <span class="px-1.5 py-0.5 text-xs bg-gray-100 text-gray-700 rounded font-medium">
-            {{ size }}
-          </span>
-          }
-          @if (product.size.length > 3) {
-          <span class="text-xs text-gray-500">+{{ product.size.length - 3 }}</span>
-          }
-        </div>
-      </div>
+      <!-- Action Button -->
+      @if (showViewDetails) {
+      <!-- <div class="mt-3">
+        <button pButton 
+          [label]="product.stock === 0 ? 'Out of Stock' : 'View Details'" 
+          [disabled]="product.stock === 0"
+          class="w-full bg-white/20 text-white border border-white/30 px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:bg-white/30 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          (click)="navigateToProduct(product)">
+        </button>
+      </div> -->
       }
     </div>
-
-    <!-- Stock Status -->
-    <div class="mt-3 flex items-center gap-2">
-      @if (product.stock > 0) {
-      <div class="flex items-center gap-1">
-        <i class="pi pi-check-circle text-green-500 text-xs"></i>
-        <span class="text-xs text-green-600 font-medium">In Stock</span>
-      </div>
-      } @else {
-      <div class="flex items-center gap-1">
-        <i class="pi pi-times-circle text-red-500 text-xs"></i>
-        <span class="text-xs text-red-600 font-medium">Out of Stock</span>
-      </div>
-      }
-    </div>
-  </div>
-
-  <!-- Action Button -->
-  <div class="p-4 pt-0">
-    @if (showViewDetails) {
-    <button pButton 
-      [label]="product.stock === 0 ? 'Out of Stock' : 'View Details'" 
-      [disabled]="product.stock === 0"
-      class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-      (click)="navigateToProduct(product)">
-    </button>
-    }
   </div>
 
   <!-- Loading Overlay -->
   @if (loading) {
-  <div class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50 rounded-3xl">
+  <div class="absolute inset-0 bg-white/80 flex items-center justify-center z-50 rounded-3xl">
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
       <span class="text-sm font-medium text-gray-700">Adding to wishlist...</span>

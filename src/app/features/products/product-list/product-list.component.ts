@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CardModule } from 'primeng/card';
@@ -20,8 +20,6 @@ import { ProductService } from '../services/product.service';
 import { CategoryService } from '../services/category.service';
 import { BrandService } from '../services/brand.service';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
-import { IProduct, IProductQueryParams } from '../models/product.interface';
-import { ICategory } from '../models/category.interface';
 import { IBrand } from '../models/brand.interface';
 import { DividerModule } from "primeng/divider";
 import { ChipModule } from "primeng/chip";
@@ -30,6 +28,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { environment } from '../../../../environments/environment.development';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 import { DrawerModule } from 'primeng/drawer';
+import { IProductQueryParams } from '../models/product.interface';
+import { ICategory } from '../../../interfaces/category.interface';
+import { IProduct } from '../models/product.interface';
 
 @Component({
   selector: 'app-product-list',
@@ -58,7 +59,7 @@ import { DrawerModule } from 'primeng/drawer';
     ProductCardComponent,
     DrawerModule  
 ],
-  providers: [MessageService, ProductService, CategoryService, BrandService],
+  providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
@@ -95,6 +96,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private brandService: BrandService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private messageService: MessageService
   ) {
@@ -118,6 +120,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.loadSizesAndColors();
     this.loadProducts();
     this.filterForm.valueChanges.subscribe(() => this.onFilterChange());
+    
+    // Subscribe to query parameter changes
+    this.subscriptions.add(
+      this.route.queryParams.subscribe(params => {
+        this.updateFiltersFromQueryParams(params);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -146,9 +155,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       inStock: showOnSale ? true : undefined,
     };
 
+    // Debug logging
+    console.log('Search Query:', searchQuery);
+    console.log('API Params:', params);
+
     this.subscriptions.add(
       this.productService.getProducts(params).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
+          console.log('Search Results:', response.data.products.length, 'products found');
           this.products = response.data.products;
           this.totalRecords = response.data.pagination.total;
           this.loading = false;
@@ -196,7 +210,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.productService.getProducts({ limit: 12 }).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
-          this.sizes = [...new Set(response.data.products.flatMap((p) => p.size || []))];
+          this.sizes = [...new Set(response.data.products.flatMap((p) => p.sizes || []))];
           this.colors = [...new Set(response.data.products.flatMap((p) => p.colors || []))];
         },
         error: (err) => {
@@ -220,6 +234,32 @@ export class ProductListComponent implements OnInit, OnDestroy {
   onFilterChange(): void {
     this.first = 0;
     this.loadProducts();
+    this.updateQueryParams();
+  }
+
+  updateQueryParams(): void {
+    const { searchQuery, selectedCategories, selectedBrands, selectedSizes, selectedColors, minPrice, maxPrice, minRating, showOnSale, sortBy } = this.filterForm.value;
+    
+    const queryParams: any = {};
+    
+    if (searchQuery) queryParams.search = searchQuery;
+    if (selectedCategories.length > 0) queryParams.category = selectedCategories.join(',');
+    if (selectedBrands.length > 0) queryParams.brand = selectedBrands.join(',');
+    if (selectedSizes.length > 0) queryParams.size = selectedSizes.join(',');
+    if (selectedColors.length > 0) queryParams.color = selectedColors.join(',');
+    if (minPrice > 0) queryParams.minPrice = minPrice;
+    if (maxPrice < 1000) queryParams.maxPrice = maxPrice;
+    if (minRating > 0) queryParams.minRating = minRating;
+    if (showOnSale) queryParams.inStock = true;
+    if (sortBy !== 'featured') queryParams.sortBy = sortBy;
+    
+    // Update URL without reloading the page
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParams,
+    //   queryParamsHandling: 'merge',
+    //   replaceUrl: true
+    // });
   }
 
   clearAllFilters(): void {
@@ -235,6 +275,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       showOnSale: false,
       sortBy: 'featured',
     });
+    
+    // Clear query parameters
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true
+    });
+    
     this.onFilterChange();
   }
 
@@ -313,6 +361,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.filterForm.get('selectedCategories')?.setValue(
       currentCategories.filter((c: string) => c !== categoryId)
     );
+    // remove category from query params
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { ...this.route.snapshot.queryParams, category: undefined },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
     this.onFilterChange();
   }
 
@@ -356,5 +411,20 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     // Return black for light colors, white for dark colors
     return luminance > 0.5 ? '#000000' : '#ffffff';
+  }
+
+  updateFiltersFromQueryParams(params: any): void {
+    this.filterForm.patchValue({
+      searchQuery: params['search'] || '',
+      selectedCategories: params['category'] ? params['category'].split(',') : [],
+      selectedBrands: params['brand'] ? params['brand'].split(',') : [],
+      selectedSizes: params['size'] ? params['size'].split(',') : [],
+      selectedColors: params['color'] ? params['color'].split(',') : [],
+      minPrice: params['minPrice'] ? parseInt(params['minPrice']) : 0,
+      maxPrice: params['maxPrice'] ? parseInt(params['maxPrice']) : 1000,
+      minRating: params['minRating'] ? parseInt(params['minRating']) : 0,
+      showOnSale: params['inStock'] === 'true' || params['inStock'] === true,
+      sortBy: params['sortBy'] || 'featured',
+    });
   }
 }

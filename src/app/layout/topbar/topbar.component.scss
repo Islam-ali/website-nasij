@@ -151,11 +151,16 @@ input[type="text"] {
   .p-drawer-header {
     background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
     border-bottom: 1px solid #e5e7eb;
-    padding: 1.5rem;
+    padding: 0.5rem;
   }
   
   .p-drawer-content {
     background: #ffffff;
+    padding: 0.5rem;
+  }
+
+  .p-drawer-footer {
+    padding: 0.5rem;
   }
   
   .p-drawer-close {
@@ -301,7 +306,7 @@ button:focus,
 a:focus,
 input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.3);
+  // box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.3);
 }
 
 /* Loading States */

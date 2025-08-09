@@ -9,48 +9,48 @@
 /* Enhanced Galleria Styling */
 .product-gallery {
   ::ng-deep {
-    .p-galleria-thumbnail-container {
-      padding: 1rem;
-      background: linear-gradient(to right, #f8fafc, #ffffff);
-    }
+    // .p-galleria-thumbnail-container {
+    //   padding: 1rem;
+    //   background: linear-gradient(to right, #f8fafc, #ffffff);
+    // }
 
-    .p-galleria-thumbnail-item {
-      margin: 0 0.5rem;
-      transition: all 0.3s ease;
-    }
+    // .p-galleria-thumbnail-item {
+    //   margin: 0 0.5rem;
+    //   transition: all 0.3s ease;
+    // }
 
-    .p-galleria-thumbnail-item:hover {
-      transform: translateY(-2px);
-    }
+    // .p-galleria-thumbnail-item:hover {
+    //   transform: translateY(-2px);
+    // }
 
-    .p-galleria-item {
-      border-radius: 1rem;
-      overflow: hidden;
-    }
+    // .p-galleria-item {
+    //   border-radius: 1rem;
+    //   overflow: hidden;
+    // }
 
-    .p-galleria-item img {
-      transition: all 0.5s ease;
-    }
+    // .p-galleria-item img {
+    //   transition: all 0.5s ease;
+    // }
 
-    .p-galleria-item img:hover {
-      transform: scale(1.05);
-    }
+    // .p-galleria-item img:hover {
+    //   transform: scale(1.05);
+    // }
 
-    .p-galleria-indicators {
-      bottom: 1rem;
-    }
+    // .p-galleria-indicators {
+    //   bottom: 1rem;
+    // }
 
-    .p-galleria-indicator {
-      background: rgba(255, 255, 255, 0.8);
-      border: 2px solid transparent;
-      transition: all 0.3s ease;
-    }
+    // .p-galleria-indicator {
+    //   background: rgba(255, 255, 255, 0.8);
+    //   border: 2px solid transparent;
+    //   transition: all 0.3s ease;
+    // }
 
-    .p-galleria-indicator.p-highlight {
-      background: var(--primary-color);
-      border-color: var(--primary-color);
-      transform: scale(1.2);
-    }
+    // .p-galleria-indicator.p-highlight {
+    //   background: var(--primary-color);
+    //   border-color: var(--primary-color);
+    //   transform: scale(1.2);
+    // }
   }
 }
 
@@ -242,7 +242,7 @@ p-card {
     border-radius: 1rem;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     border: none;
-    padding: 1rem 1.5rem;
+    padding: 0 !important;
   }
 
   .p-toast-message-success {
@@ -262,7 +262,10 @@ p-card {
 
   .p-toast-message-error {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
+    color: white !important;
+  }
+  .p-toast-detail {
+    color: white !important;
   }
 }
 
