@@ -13,10 +13,10 @@
             <i class="pi pi-phone mr-2"></i>
             +1 (555) 123-4567
           </span>
-          <span class="flex items-center">
+          <!-- <span class="flex items-center">
             <i class="pi pi-envelope mr-2"></i>
             {{'info@nasig.com'}}
-          </span>
+          </span> -->
         </div>
         <div class="flex items-center space-x-4">
           <a href="https://facebook.com" target="_blank" class="hover:text-purple-200 transition-colors">
@@ -71,26 +71,13 @@
           </button>
           <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100">
             <div class="py-2">
-              <a routerLink="/shop" [queryParams]="{category: 'dresses'}" 
+              @for (category of categories(); track category._id) {
+              <a routerLink="/shop" [queryParams]="{category: category._id}" 
                  class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
                 <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
-                Dresses
+                {{ category.name }}
               </a>
-              <a routerLink="/shop" [queryParams]="{category: 'jackets'}" 
-                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
-                Jackets
-              </a>
-              <a routerLink="/shop" [queryParams]="{category: 'tops'}" 
-                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
-                Tops & Tees
-              </a>
-              <a routerLink="/shop" [queryParams]="{category: 'accessories'}" 
-                 class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                <i class="pi pi-circle-fill text-xs mr-2 text-purple-400"></i>
-                Accessories
-              </a>
+              }
             </div>
           </div>
         </div>
@@ -101,11 +88,11 @@
           <span>About</span>
         </a>
         
-        <a routerLink="/contact" routerLinkActive="text-purple-600"
+        <!-- <a routerLink="/contact" routerLinkActive="text-purple-600"
            class="text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-1">
           <i class="pi pi-envelope text-sm"></i>
           <span>Contact</span>
-        </a>
+        </a> -->
       </nav>
 
       <!-- Search Bar -->
@@ -183,25 +170,20 @@
   <div class="lg:hidden" [class.hidden]="!navbarOpen()">
     <div class="px-4 py-6 bg-white border-t border-gray-200" [class.dark:bg-gray-900]="isDarkTheme()" [class.dark:border-gray-700]="isDarkTheme()">
       <div class="space-y-4">
-        <a routerLink="/" routerLinkActive="text-purple-600" [routerLinkActiveOptions]="{exact: true}"
+        <a routerLink="/" (click)="toggleNavbar()" routerLinkActive="text-purple-600" [routerLinkActiveOptions]="{exact: true}"
            class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
           <i class="pi pi-home"></i>
           <span>Home</span>
         </a>
-        <a routerLink="/shop" routerLinkActive="text-purple-600"
+        <a routerLink="/shop" (click)="toggleNavbar()" routerLinkActive="text-purple-600"
            class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
           <i class="pi pi-shopping-bag"></i>
           <span>Shop</span>
         </a>
-        <a routerLink="/about" routerLinkActive="text-purple-600"
+        <a routerLink="/about" (click)="toggleNavbar()" routerLinkActive="text-purple-600"
            class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
           <i class="pi pi-info-circle"></i>
           <span>About</span>
-        </a>
-        <a routerLink="/contact" routerLinkActive="text-purple-600"
-           class="block text-gray-700 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center space-x-2">
-          <i class="pi pi-envelope"></i>
-          <span>Contact</span>
         </a>
       </div>
     </div>
@@ -209,7 +191,7 @@
 </header>
 
 <!-- Spacer for fixed navbar -->
-<div class="h-32"></div>
+<div class="h-[7rem]"></div>
 
 <!-- Enhanced Cart Drawer -->
 <p-drawer [(visible)]="cartOpen" [showCloseIcon]="false" position="right" styleClass="md:!w-96 lg:!w-1/3">

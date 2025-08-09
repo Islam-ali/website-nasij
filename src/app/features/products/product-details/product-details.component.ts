@@ -284,7 +284,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
         severity: 'warn',
         summary: 'Warning',
         detail: 'Please select a color and size',
-        life: 3000
+        life: 1000
       });
       return;
     };
@@ -306,7 +306,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       severity: 'success',
       summary: 'Added to Cart',
       detail: `${this.quantity} x ${this.product.name} has been added to your cart`,
-      life: 3000
+      life: 1000
     });
   }
 
@@ -322,7 +322,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       severity: 'info',
       summary: 'Coming Soon',
       detail: 'Wishlist functionality is coming soon!',
-      life: 3000
+      life: 1000
     });
   }
 

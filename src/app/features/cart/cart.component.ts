@@ -140,7 +140,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to load cart. Please try again.',
-          life: 5000,
+          life: 1000,
         });
         this.loading = false;
         return of(null);
@@ -159,7 +159,7 @@ export class CartComponent implements OnInit, OnDestroy {
         severity: 'error',
         summary: 'Error',
         detail: 'Failed to proceed to checkout. Please try again.',
-        life: 5000,
+        life: 1000,
       });
     }).finally(() => {
       this.loading = false;
@@ -183,7 +183,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'success',
           summary: 'Updated',
           detail: 'Quantity updated successfully',
-          life: 3000,
+          life: 1000,
         });
       }),
       catchError((error: any) => {
@@ -192,7 +192,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to update quantity. Please try again.',
-          life: 5000,
+          life: 1000,
         });
         return of(null);
       }),
@@ -216,7 +216,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'success',
           summary: 'Removed',
           detail: 'Item removed from cart',
-          life: 3000,
+          life: 1000,
         });
       }),
       catchError((error: any) => {
@@ -225,7 +225,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to remove item. Please try again.',
-          life: 5000,
+          life: 1000,
         });
         return of(null);
       }),
@@ -249,7 +249,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'success',
           summary: 'Cleared',
           detail: 'Your cart has been cleared',
-          life: 3000
+          life: 1000
         });
       }),
       catchError((error: any) => {
@@ -258,7 +258,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to clear cart. Please try again.',
-          life: 5000
+          life: 1000
         });
         return of(null);
       }),
@@ -282,14 +282,14 @@ export class CartComponent implements OnInit, OnDestroy {
             severity: 'success',
             summary: 'Voucher Applied',
             detail: 'Your voucher has been applied successfully!',
-            life: 5000,
+            life: 1000,
           });
         } else {
           this.messageService.add({
             severity: 'error',
             summary: 'Invalid Voucher',
             detail: 'The voucher code you entered is invalid or has expired.',
-            life: 5000,
+            life: 1000,
           });
         }
       }),
@@ -299,7 +299,7 @@ export class CartComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to apply voucher. Please try again.',
-          life: 5000,
+          life: 1000,
         });
         return of(false);
       }),

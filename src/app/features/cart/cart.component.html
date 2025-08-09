@@ -35,7 +35,7 @@
         <ng-container *ngIf="(cartItems$ | async) as cartItems; else emptyCart">
           <div *ngFor="let item of cartItems; trackBy: trackByFn"
             class="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-5 py-6 border-b border-gray-200 group">
-            <div class="w-full md:max-w-[126px]">
+            <div class="w-36 md:max-w-[126px]">
               <img [src]="domain + item.image || 'assets/images/placeholder-product.png'" [alt]="item.productName || 'Product'"
                 class="mx-auto rounded-xl w-full h-32 object-cover">
             </div>
@@ -152,7 +152,7 @@
             <!-- Checkout Button -->
             <button type="button" (click)="onCheckout()" [disabled]="loading || !(cartState$ | async)?.items?.length"
               [class.opacity-50]="loading || !(cartState$ | async)?.items?.length"
-              class="w-full mt-8 text-center bg-indigo-600 rounded-xl py-3 px-6 font-semibold text-lg text-white transition-all duration-500 hover:bg-indigo-700 disabled:cursor-not-allowed">
+              class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300 mt-8 disabled:opacity-50 disabled:cursor-not-allowed">
               {{ loading ? 'Processing...' : 'Proceed to Checkout' }}
             </button>
 

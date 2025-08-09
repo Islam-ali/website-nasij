@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject, signal, computed, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
@@ -17,7 +17,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CardModule } from 'primeng/card';
 import { CartService } from '../../features/cart/services/cart.service';
 import { IUser } from '../../features/auth/models/auth.interface';
-import { IAddToCartRequest, ICartItem } from '../../features/cart/models/cart.interface';
+import { IAddToCartRequest, ICartItem, ICartState } from '../../features/cart/models/cart.interface';
 import { FormsModule } from '@angular/forms';
 import { LayoutService } from '../service/layout.service';
 import { ButtonModule } from 'primeng/button';
@@ -25,6 +25,9 @@ import { environment } from '../../../environments/environment';
 import { DrawerModule } from 'primeng/drawer';
 import { IWishlistItem, IWishlistState } from '../../features/wishlist/models/wishlist.interface';
 import { ComponentBase } from '../../core/directives/component-base.directive';
+import { ICategory } from '../../interfaces/category.interface';
+import { CategoryService } from '../../features/products/services/category.service';
+import { BaseResponse } from '../../core/models/baseResponse';
 
 @Component({
   selector: 'app-topbar',
@@ -58,8 +61,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   cartOpen: boolean = false;
   navbarOpen = signal(false);
   searchForm: boolean = false;
-  categories: boolean = false;
-  categoryOne: boolean = true;
+  categories = signal<ICategory[]>([]);
   isDarkTheme = computed(() => this.LayoutService.layoutConfig().darkTheme);
   searchQuery = '';
   cartItems = signal<ICartItem[]>([]);
@@ -68,23 +70,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   cartTotal = signal<number>(0);
   wishlistCount = signal<number>(0);
   currentUser: IUser | null = null;
-  menuItems: MenuItem[] = [
-    // { label: 'Home', icon: 'pi pi-home', routerLink: '/' },
-    { label: 'Shop', icon: 'pi pi-shopping-cart', routerLink: '/shop' },
-    {
-      label: 'Products',
-      icon: 'pi pi-box',
-      items: [
-        { label: 'Dresses', routerLink: '/shop' },
-        { label: 'Jackets', routerLink: '/shop' },
-        { label: 'Sweatshirts', routerLink: '/shop' },
-        { label: 'Tops & Tees', routerLink: '/shop' },
-        { label: 'Party Dresses', routerLink: '/shop' }
-      ]
-    },
-    // { label: 'Accessories', icon: 'pi pi-gift', routerLink: '/accessories' },
-    { label: 'Contact', icon: 'pi pi-envelope', routerLink: '/contact' }
-  ];
   private subscriptions = new Subscription();
 
   userMenuItems: MenuItem[] = [];
@@ -103,6 +88,8 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     this.loadWishlist();
   }
 
+  private categoryService = inject(CategoryService);
+
   updateCartQuantity(item: ICartItem, quantity: number): void {
     this.cartService.updateQuantity(item.productId, quantity, item.color, item.size).pipe(
       takeUntil(this.destroy$),
@@ -111,13 +98,24 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           severity: 'success',
           summary: 'Updated',
           detail: 'Item quantity updated',
-          life: 3000,
+          life: 1000,
         });
       })
     ).subscribe();
   }
 
+  // load categories  
+  loadCategories(): void {
+    this.categoryService.listCategories().pipe(
+      takeUntil(this.destroy$),
+      tap((response: BaseResponse<ICategory[]>) => {
+        this.categories.set(response.data);
+      })
+    ).subscribe();
+  }
+
   ngOnInit(): void {
+    this.loadCategories();
     this.subscriptions.add(
       this.authService.currentUser$.subscribe({
         next: (user: IUser | null) => {
@@ -130,7 +128,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       })
     );
   }
-
 
   loadCart(): void {
     this.cartService.getCartItems().subscribe({
@@ -175,7 +172,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
               severity: 'success',
               summary: 'Added',
               detail: 'Item added to cart',
-              life: 3000,
+              life: 1000,
             });
           }),
           catchError((error: any) => {
@@ -184,7 +181,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
               severity: 'error',
               summary: 'Error',
               detail: 'Failed to add item. Please try again.',
-              life: 5000,
+              life: 1000,
             });
             return of(null);
           }),
@@ -201,7 +198,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
               severity: 'success',
               summary: 'Removed',
               detail: 'Item removed from cart',
-              life: 3000,
+              life: 1000,
             });
           }),
           catchError((error: any) => {
@@ -210,7 +207,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
               severity: 'error',
               summary: 'Error',
               detail: 'Failed to remove item. Please try again.',
-              life: 5000,
+              life: 1000,
             });
             return of(null);
           }),

@@ -29,7 +29,7 @@ import { InputTextModule } from 'primeng/inputtext';
           </p>
           
           <!-- Contact Info -->
-          <div class="space-y-3">
+          <!-- <div class="space-y-3">
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-purple-400"></i>
               <span>{{'info@nasig.com'}}</span>
@@ -42,7 +42,7 @@ import { InputTextModule } from 'primeng/inputtext';
               <i class="pi pi-map-marker text-purple-400"></i>
               <span>123 Fashion Street, Style City, SC 12345</span>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- Quick Links -->
@@ -56,7 +56,7 @@ import { InputTextModule } from 'primeng/inputtext';
               </a>
             </li>
             <li>
-              <a routerLink="/products" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
+              <a routerLink="/shop" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
                 <i class="pi pi-shopping-bag text-sm group-hover:translate-x-1 transition-transform"></i>
                 <span>Shop</span>
               </a>
@@ -67,12 +67,12 @@ import { InputTextModule } from 'primeng/inputtext';
                 <span>About Us</span>
               </a>
             </li>
-            <li>
+            <!-- <li>
               <a routerLink="/contact" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
                 <i class="pi pi-envelope text-sm group-hover:translate-x-1 transition-transform"></i>
                 <span>Contact</span>
               </a>
-            </li>
+            </li> -->
             <li>
               <a routerLink="/faq" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
                 <i class="pi pi-question-circle text-sm group-hover:translate-x-1 transition-transform"></i>
@@ -83,7 +83,7 @@ import { InputTextModule } from 'primeng/inputtext';
         </div>
 
         <!-- Customer Service -->
-        <div class="space-y-6">
+        <!-- <div class="space-y-6">
           <h4 class="text-xl font-bold text-white mb-4">Customer Service</h4>
           <ul class="space-y-3">
             <li>
@@ -117,8 +117,24 @@ import { InputTextModule } from 'primeng/inputtext';
               </a>
             </li>
           </ul>
+        </div> -->
+        <div class="space-y-6">
+          <h4 class="text-xl font-bold text-white mb-4">Contact Info</h4>
+          <div class="space-y-4">
+            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+              <i class="pi pi-envelope text-purple-400"></i>
+              <span>{{'info@nasig.com'}}</span>
+            </div>
+            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+              <i class="pi pi-phone text-purple-400"></i>
+              <span>+1 (555) 123-4567</span>
+            </div>
+            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+              <i class="pi pi-map-marker text-purple-400"></i>
+              <span>123 Fashion Street, Style City, SC 12345</span>
+            </div>
+          </div>
         </div>
-
         <!-- Newsletter & Social -->
         <div class="space-y-6">
           <h4 class="text-xl font-bold text-white mb-4">Follow Us</h4>
@@ -265,12 +281,6 @@ import { InputTextModule } from 'primeng/inputtext';
       }
     }
 
-    /* Focus states for accessibility */
-    a:focus,
-    button:focus {
-      outline: 2px solid #8b5cf6;
-      outline-offset: 2px;
-    }
   `]
 })
 export class FooterComponent {

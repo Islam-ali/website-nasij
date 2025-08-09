@@ -273,9 +273,9 @@
           @for (detail of product?.details; track $index) {
           <p-accordionTab *ngIf="product?.details && product.details.length > 0" [header]="detail.name" styleClass="text-lg font-semibold">
             <div class="p-6 bg-gray-50 rounded-xl">
-              <div class="grid grid-cols-1">
+              <div class="w-full">
                 <!-- <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200"> -->
-                  <div [innerHTML]="detail.value"></div>
+                  <div class="ql-editor" [innerHTML]="detail.value"></div>
                 <!-- </div> -->
               </div>
             </div>
@@ -304,7 +304,7 @@
       <h2 class="text-3xl font-bold text-gray-900 mb-4">You May Also Like</h2>
       <p class="text-gray-600 text-lg">Discover more amazing products</p>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6">
       @for (relatedProduct of relatedProducts; track $index) {
         <app-product-card [product]="relatedProduct"></app-product-card>
       }

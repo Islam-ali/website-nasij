@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ProductService } from '../products/services/product.service';
 import { IProduct } from '../products/models/product.interface';
@@ -19,6 +19,7 @@ import { CarouselComponent } from "../../shared/components/carousel/carousel.com
 import { CategoryService } from '../products/services/category.service';
 import { ICategory } from '../../interfaces/category.interface';
 import { environment } from '../../../environments/environment';
+import AOS from 'aos';
 
 @Component({
   selector: 'app-home',
@@ -44,7 +45,7 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   featuredProducts: IProduct[] = [];
   newArrivals: IProduct[] = [];
   categories: ICategory[] = [];
@@ -52,6 +53,7 @@ export class HomeComponent implements OnInit {
   loadingCategories = true;
   domain = environment.domain;  
   router = inject(Router);
+  aosInitialized = false;
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -65,7 +67,23 @@ export class HomeComponent implements OnInit {
     this.loadNewArrivals();
     this.loadCategories();
   }
-
+  ngAfterViewInit(): void {
+    AOS.init({
+      duration: 3000,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 60,
+      delay: 200,
+    });
+    this.aosInitialized = true;
+  }
+  ngAfterViewChecked(): void {
+    // إعادة تحديث AOS لما العناصر تتغير
+    if (this.aosInitialized) {
+      AOS.refresh();
+      AOS.refreshHard();
+    }
+  }
   private loadCategories() {
     this.categoryService.listCategories().subscribe({
       next: (response: BaseResponse<ICategory[]>) => {

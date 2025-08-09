@@ -7,8 +7,12 @@
     <div class="mb-8">
       <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div class="space-y-2">
-          <h1 class="text-4xl font-bold text-gray-900">Discover Products</h1>
-          <p class="text-gray-600">
+          <h1 data-aos="fade-down"
+            data-aos-delay="100"
+            class="text-4xl font-bold text-gray-900">Discover Products</h1>
+          <p data-aos="fade-down"
+            data-aos-delay="100"
+            class="text-gray-600">
             Showing <span class="font-semibold text-primary">{{ products.length }}</span> of
             <span class="font-semibold">{{ totalRecords }}</span> products
           </p>
@@ -20,17 +24,17 @@
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" placeholder="Search products..." formControlName="searchQuery"
-                class="w-64 lg:w-96" />
+                class="w-64 lg:w-96 max-w-[60vw]" />
             </span>
           </div>
-                    <!-- Filter Button -->
-                    <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" (click)="isDrawerOpen = true"
-                    styleClass="relative bg-primary hover:bg-primary-dark">
-                    <span *ngIf="activeFiltersCount > 0"
-                      class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
-                      {{ activeFiltersCount }}
-                    </span>
-                  </button>
+          <!-- Filter Button -->
+          <button pButton pRipple type="button" icon="pi pi-filter" label="Filters" (click)="isDrawerOpen = true"
+            styleClass="relative bg-primary hover:bg-primary-dark">
+            <span *ngIf="activeFiltersCount > 0"
+              class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
+              {{ activeFiltersCount }}
+            </span>
+          </button>
         </div>
       </div>
     </div>
@@ -203,17 +207,20 @@
       </div>
     </div>
 
-    <!-- Loading State -->
-    <div *ngIf="loading" class="flex flex-col items-center justify-center py-16">
-      <p-progressSpinner styleClass="w-16 h-16 mb-4"></p-progressSpinner>
-      <p class="text-gray-600 font-medium">Loading products...</p>
+    <!-- Loading State skeleton -->
+    <div *ngIf="loading" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6">
+      @for (i of [1,2,3,4,5,6,7,8,9,10]; track $index) {
+      <div class="w-full h-[18rem] sm:h-[26rem] bg-gray-200 relative rounded-lg overflow-hidden animate-pulse">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-400/80 via-gray-400/20 to-transparent"></div>
+      </div>
+      }
     </div>
 
     <!-- Product Grid -->
     <div *ngIf="!loading && products.length > 0" class="space-y-8">
       <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6">
-        @for (product of products; track trackByProductId) {
-        <app-product-card [product]="product"></app-product-card>
+        @for (product of products; track product._id) {
+        <app-product-card data-aos="fade-up" [product]="product"></app-product-card>
         }
       </div>
 

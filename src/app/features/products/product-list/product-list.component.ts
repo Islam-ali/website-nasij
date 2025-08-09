@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -31,6 +31,7 @@ import { DrawerModule } from 'primeng/drawer';
 import { IProductQueryParams } from '../models/product.interface';
 import { ICategory } from '../../../interfaces/category.interface';
 import { IProduct } from '../models/product.interface';
+import AOS from 'aos';
 
 @Component({
   selector: 'app-product-list',
@@ -63,11 +64,11 @@ import { IProduct } from '../models/product.interface';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   products: IProduct[] = [];
   loading = true;
   error: string | null = null;
-
+  aosInitialized = false;
   // Pagination
   totalRecords = 0;
   rows = 12;
@@ -112,6 +113,24 @@ export class ProductListComponent implements OnInit, OnDestroy {
       showOnSale: [false],
       sortBy: ['featured'],
     });
+  }
+
+  ngAfterViewInit(): void {
+    AOS.init({
+      duration: 1000,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 60,
+      delay: 200,
+    });
+    this.aosInitialized = true;
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.aosInitialized) {
+      AOS.refresh();
+      AOS.refreshHard();
+    }
   }
 
   ngOnInit(): void {
@@ -162,14 +181,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.productService.getProducts(params).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
-          console.log('Search Results:', response.data.products.length, 'products found');
           this.products = response.data.products;
           this.totalRecords = response.data.pagination.total;
           this.loading = false;
           this.error = null;
         },
         error: (err) => {
-          console.error('Error loading products:', err);
           this.error = 'Failed to load products. Please try again later.';
           this.messageService.add({ severity: 'error', summary: 'Error', detail: this.error });
           this.loading = false;
@@ -224,6 +241,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.first = event.first;
     this.rows = event.rows;
     this.loadProducts();
+    // scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onSortChange(): void {

@@ -25,6 +25,14 @@ export const routes: Routes = [
         data: { breadcrumb: 'shop' }
       },
       {
+        path: 'about',
+        loadComponent: () => import('./features/about/about.component')
+          .then(m => m.AboutComponent)
+          .catch(() => ErrorComponent),
+        title: 'About',
+        data: { breadcrumb: 'About' }
+      },
+      {
         path: 'shop/:id/:slug',
         loadComponent: () => import('./features/products/product-details/product-details.component')
           .then(m => m.ProductDetailsComponent)

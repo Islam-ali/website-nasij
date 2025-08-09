@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericApiService } from '../../../core/services/generic-api.service';
 import { CommonService } from '../../../core/services/common.service';

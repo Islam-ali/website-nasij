@@ -112,8 +112,8 @@
       </div>
 
       <!-- Product Title and Price (Bottom) -->
-      <div class="flex items-center justify-between gap-3">
-        <h3 class="text-base mb-0 font-bold text-white leading-tight line-clamp-2 hover:text-blue-200 transition-colors duration-200 cursor-pointer flex-1"
+      <div class="flex flex-col gap-3">
+        <h3 class="text-sm mb-0 font-bold text-white leading-tight line-clamp-2 hover:text-blue-200 transition-colors duration-200 cursor-pointer flex-1"
           (click)="navigateToProduct(product)">
           {{ product.name }}
         </h3>
@@ -121,10 +121,10 @@
         <!-- Price Section -->
         <div class="flex items-baseline gap-2 flex-shrink-0">
           @if (isOnSale) {
-          <span class="text-lg font-bold text-red-300">{{ price | currency }}</span>
+          <span class="text-md font-bold text-red-300">{{ price | currency }}</span>
           <span class="text-sm text-gray-300 line-through">{{ product.price | currency }}</span>
           } @else {
-          <span class="text-lg font-bold text-white">{{ price | currency }}</span>
+          <span class="text-md font-bold text-white">{{ price | currency }}</span>
           }
         </div>
       </div>

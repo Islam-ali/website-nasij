@@ -34,7 +34,7 @@ import { OrderStatus, PaymentMethod, PaymentStatus } from './models/order.enum';
     CheckboxModule,
     ButtonModule
   ],
-  providers: [MessageService, CartService, CheckoutService],
+  providers: [MessageService, CheckoutService],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
@@ -126,7 +126,7 @@ export class CheckoutComponent implements OnInit {
         address: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
-        country: ['', [Validators.required]]
+        country: ['EG', [Validators.required]]
       }),
 
       // Payment Details
@@ -215,8 +215,11 @@ export class CheckoutComponent implements OnInit {
       next: (response) => {
         this.loading = false;
         this.success = true;
+        // Clear cart so all subscribers (Topbar, Cart page) update
+        this.cartService.clearCart().subscribe();
+        // window scroll to top
+        window.scrollTo(0, 0);
         this.messageService.add({ severity: 'success', summary: 'Order Successful', detail: `Order ID: ${response.orderId}` });
-        this.cartService.clearCart();
         // Optionally redirect to order confirmation page
         // this.router.navigate(['/order-confirmation', response.orderId]);
       },
