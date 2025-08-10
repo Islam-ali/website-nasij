@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  domain: 'https://nasig-backend-production.up.railway.app',
-  apiUrl: 'https://nasig-backend-production.up.railway.app/api/v1', // Development API URL
+  domain: 'https://nasig-backend-sigma.vercel.app',
+  apiUrl: 'https://nasig-backend-sigma.vercel.app/api/v1', // Development API URL
   appName: 'Online Store (Dev)',
   appVersion: '1.0.0',
   stripePublishableKey: 'your-test-stripe-key',
