@@ -1,4 +1,4 @@
-export type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'COMPLETED';
+import { OrderStatus, PaymentMethod, PaymentStatus } from "../../features/checkout/models/order.enum";
 
 export interface OrderItem {
   id: string;
@@ -37,8 +37,8 @@ export interface Order {
   total: number;
   shippingAddress: OrderAddress;
   billingAddress?: OrderAddress;
-  paymentMethod: string;
-  paymentStatus: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
   trackingNumber?: string;
   notes?: string;
 }

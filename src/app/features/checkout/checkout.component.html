@@ -170,13 +170,13 @@
         
         <!-- Right Column - Order Summary -->
         <div class="lg:col-span-1">
-          <div class="bg-white p-6 rounded-lg shadow-sm sticky top-6">
+          <div class="bg-white p-6 rounded-lg shadow-sm sticky top-28 z-40 max-h-[calc(100vh-6rem)] overflow-y-auto">
             <h2 class="text-xl font-semibold mb-6 text-gray-800">Order Summary</h2>
             
             <!-- Order Items -->
             <div class="space-y-4 mb-6">
               <div *ngFor="let item of cartItems()" class="flex items-start">
-                <img [src]="domain + item.image" [alt]="item.productName" class="w-16 h-16 object-cover rounded">
+                <img [src]="item.image" [alt]="item.productName" class="w-16 h-16 object-cover rounded">
                 <div class="ml-4 flex-1">
                   <h4 class="text-sm font-medium text-gray-900 mb-0">{{item.productName}}</h4>
                   <p class="text-sm text-gray-500">Size: {{item.size}}</p>

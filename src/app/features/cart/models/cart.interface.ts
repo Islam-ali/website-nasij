@@ -1,3 +1,5 @@
+import { IArchived } from '../../../interfaces/archive.interface';
+
 export interface ICartItem {
   productId: string;
   color: string;
@@ -7,6 +9,7 @@ export interface ICartItem {
   image: string;
   productName: string;
   discount: number;
+  variantImage?: IArchived | null;
 }
 
 export interface ICartSummary {

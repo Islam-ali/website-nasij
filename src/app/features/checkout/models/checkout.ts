@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentMethod, PaymentStatus } from "../../../interfaces/order.interface"
+import { OrderStatus, PaymentMethod, PaymentStatus } from "./order.enum"
 
 export interface ICheckout {
     items: Item[]

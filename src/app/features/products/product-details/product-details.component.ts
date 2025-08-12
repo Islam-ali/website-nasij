@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -32,6 +32,7 @@ import { BaseComponent } from 'primeng/basecomponent';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
+import { IArchived } from '../../../interfaces/archive.interface';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -86,7 +87,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   // Image gallery
   images: ProductImage[] = [];
   responsiveOptions: any[];
-
+  variantToImageAndColor = signal<{ image: IArchived | null, color: string }[]>([]);
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -175,12 +176,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     const colors = new Set<string>();
     const sizes = new Set<string>();
-
+    // map variant to image
+    const variantImageMap = new Map<string, { image: IArchived | null, color: string }>();
     this.product.variants.forEach(variant => {
       if (variant.attributes) {
         variant.attributes.forEach(attr => {
           if (attr.variant === EnumProductVariant.COLOR) {
-            colors.add(attr.value);
+              variantImageMap.set(attr.value, { image: attr.image || null, color: attr.value });
           } else if (attr.variant === EnumProductVariant.SIZE) {
             sizes.add(attr.value);
           }
@@ -190,7 +192,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     this.product.colors = Array.from(colors);
     this.product.sizes = Array.from(sizes);
-    console.log(this.product.colors, this.product.sizes);
+    this.variantToImageAndColor.set(Array.from(variantImageMap.values()));
+    console.log(this.variantToImageAndColor());
   }
 
   private loadRelatedProducts(productId: string): void {
@@ -295,7 +298,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       quantity: this.quantity,
       color: this.selectedColor || '',
       size: this.selectedSize || '',
-      image: this.product.images[0].filePath,
+      image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product.images[0].filePath,
       productName: this.product.name,
       discount: this.product.discountPrice || 0,
     };
@@ -367,7 +370,22 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   onColorSelect(color: string): void {
     this.selectedColor = color;
+    this.selectImageForColor(color);
     this.findSelectedVariant();
+  }
+
+  selectImageForColor(color: string): void {
+    // Find the variant image for the selected color
+    const variantData = this.variantToImageAndColor().find(item => item.color === color);
+    if (variantData && variantData.image) {
+      // Find the index of this image in the images array
+      const imageIndex = this.images.findIndex(img => 
+        img.itemImageSrc === this.getImageUrl(variantData.image?.filePath || '')
+      );
+      if (imageIndex !== -1) {
+        this.activeIndex = imageIndex;
+      }
+    }
   }
 
   onSizeSelect(size: string): void {

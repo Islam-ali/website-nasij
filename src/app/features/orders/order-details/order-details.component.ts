@@ -5,7 +5,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { OrderStatus } from '../../../interfaces/order.interface';
+import { OrderStatus } from '../../checkout/models/order.enum';
 
 interface OrderItem {
   id: string;

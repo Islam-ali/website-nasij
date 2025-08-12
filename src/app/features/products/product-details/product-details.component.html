@@ -48,11 +48,11 @@
       <!-- Product Images -->
       <div class="col-span-1">
         <div class="bg-white rounded-2xl  overflow-hidden border border-gray-100">
-          <p-galleria [value]="images" [autoPlay]="true" [circular]="true" [responsiveOptions]="responsiveOptions"
+          <p-galleria [value]="images" [autoPlay]="false" [circular]="true" [responsiveOptions]="responsiveOptions"
             [numVisible]="5" [containerStyle]="{ 'max-width': '100%', 'border-radius': '1rem' }"
             [showThumbnails]="images.length > 1" [showThumbnailNavigators]="images.length > 1"
             [thumbnailsPosition]="'bottom'" [transitionInterval]="4000" class="product-gallery"
-            [(activeIndex)]="currentImageIndex">
+            [(activeIndex)]="activeIndex">
             <ng-template pTemplate="item" let-item>
               <div class="relative w-full h-96 lg:h-[600px] flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
                 <img [src]="item.itemImageSrc" [alt]="item.alt || product.name"
@@ -68,7 +68,7 @@
             <ng-template pTemplate="thumbnail" let-item>
               <div
                 class="h-24 w-24 flex items-center justify-center bg-white border-2 rounded-xl overflow-hidden hover:border-primary transition-all duration-200 hover:shadow-md"
-                [ngClass]="{ 'border-primary shadow-lg': images[currentImageIndex].itemImageSrc === item.itemImageSrc, 'border-gray-200': images[currentImageIndex].itemImageSrc !== item.itemImageSrc }">
+                [ngClass]="{ 'border-primary shadow-lg': images[activeIndex].itemImageSrc === item.itemImageSrc, 'border-gray-200': images[activeIndex].itemImageSrc !== item.itemImageSrc }">
                 <img [src]="item.thumbnailImageSrc" [alt]="item.alt || product.name + ' thumbnail'"
                   class="max-h-full max-w-full object-contain p-2" />
               </div>
@@ -104,7 +104,7 @@
                 <span class="text-sm text-gray-600">({{ product.averageRating || 0 }} reviews)</span>
               </div>
               <span class="mx-3 text-gray-300">|</span> -->
-              <span class="font-medium text-sm" [ngClass]="{
+              <span class="font-medium text-sm flex items-center" [ngClass]="{
                 'text-green-600': getStockStatus(product.stock).severity === 'success',
                 'text-orange-500': getStockStatus(product.stock).severity === 'warning',
                 'text-red-600': getStockStatus(product.stock).severity === 'danger'
@@ -142,20 +142,20 @@
             <div class="product-price mb-8">
               <div class="flex flex-wrap gap-2 items-baseline mb-2">
                 <span class="text-4xl font-bold text-gray-900 mr-4">
-                  {{ (product.price) | currency }}
+                  {{ (product.price - (product.discountPrice || 0)) | currency }}
                 </span>
                 <span *ngIf="product.discountPrice && product.discountPrice < product.price"
                   class="line-through text-2xl text-gray-400 mr-3">
-                  {{ product.discountPrice | currency }}
+                  {{  product.price | currency }}
                 </span>
                 <p *ngIf="product.discountPrice"
                   class="bg-red-500 text-white m-0 text-sm font-bold px-3 py-1 rounded-full animate-pulse">
                   {{ getDiscountPercentage(product.price,product.discountPrice) }}% OFF
                 </p>
               </div>
-              <p *ngIf="product.discountPrice" class="text-sm text-green-600 font-medium">
+              <p *ngIf="product.discountPrice" class="text-sm text-green-600 font-medium flex items-center">
                 <i class="pi pi-check-circle mr-1"></i>
-                You save {{ (product.price - (product.discountPrice || product.price)) | currency }}!
+                You save {{ (product.price - (product.discountPrice || 0)) | currency }}!
               </p>
             </div>
           </div>
@@ -163,21 +163,24 @@
           <!-- Product Options -->
           <form class="space-y-6 mb-8">
             <!-- Color Selection -->
-            <div *ngIf="product.colors && product.colors.length > 0" class="space-y-2">
+          <div *ngIf="variantToImageAndColor() && variantToImageAndColor().length > 0" class="space-y-2">
               <label class="text-lg font-semibold text-gray-800">Color</label>
               <div class="flex flex-wrap gap-3">
-                <label *ngFor="let color of product.colors" [for]="'color-' + color"
-                  class="relative cursor-pointer group">
-                  <input type="radio" [id]="'color-' + color" [value]="color" name="color" [(ngModel)]="selectedColor"
-                    (change)="onColorSelect(color)" class="sr-only" />
-                  <div class="flex items-center space-x-2 p-[4px] rounded-xl border-2 transition-all duration-200"
-                    [ngStyle]="{ 'border-color': selectedColor === color ? color : color === 'white' ? '#e5e7eb' : '#e5e7eb' }"
-                   >
-                    <div class="w-6 h-6 rounded-full border-2 shadow-sm"
-                      [ngStyle]="{ 'background-color': color, 'border-color': color === 'white' ? '#e5e7eb' : color }"></div>
-                    <span class="font-medium text-gray-700">{{ color }}</span>
-                  </div>
-                </label>
+                                <label *ngFor="let variantimgAndColor of variantToImageAndColor()" [for]="'color-' + variantimgAndColor.color"
+                   class="relative cursor-pointer group rounded-full border-4 shadow-sm"
+                   [ngClass]="{ 'border-x-primary-900 border-y-green-500': selectedColor === variantimgAndColor.color }">
+                   <input type="radio" [id]="'color-' + variantimgAndColor.color" [value]="variantimgAndColor.color" name="color" [(ngModel)]="selectedColor"
+                     (change)="onColorSelect(variantimgAndColor.color)" class="sr-only" />
+                     @if(variantimgAndColor.image) {
+                       <img [src]="variantimgAndColor.image.filePath" [alt]="variantimgAndColor.color" 
+                       class="w-10 h-10 rounded-full object-contain p-1 cursor-pointer"
+                       (click)="selectImageForColor(variantimgAndColor.color)">
+                     } @else {
+                       <div class="w-10 h-10 rounded-full p-1 cursor-pointer"
+                         [ngStyle]="{'background-color': variantimgAndColor.color}"
+                         (click)="selectImageForColor(variantimgAndColor.color)"></div>
+                       }                    
+                 </label>
               </div>
             </div>
 

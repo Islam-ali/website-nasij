@@ -18,6 +18,7 @@ export interface ProductVariant {
 export interface ProductVariantAttribute {
   variant: string;
   value: string;
+  image?: IArchived;
 }
 
 export enum ProductStatus {

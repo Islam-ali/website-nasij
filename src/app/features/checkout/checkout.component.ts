@@ -86,7 +86,7 @@ export class CheckoutComponent implements OnInit {
   ];
 
   paymentMethods = [
-    { label: 'Cash', value: PaymentMethod.CASH },
+    { label: 'Cash', value: PaymentMethod.Cash },
     // { label: 'Credit Card', value: 'credit_card' },
     // { label: 'PayPal', value: 'paypal' }
   ];
@@ -130,7 +130,7 @@ export class CheckoutComponent implements OnInit {
       }),
 
       // Payment Details
-      paymentMethod: [PaymentMethod.CASH], // Changed to null as PaymentMethod enum is removed
+      paymentMethod: [PaymentMethod.Cash], // Changed to null as PaymentMethod enum is removed
 
 
       // Order Notes
