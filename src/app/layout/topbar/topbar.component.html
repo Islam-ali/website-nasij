@@ -282,7 +282,7 @@
       <div class="space-y-4 max-h-96 overflow-y-auto">
         @for (item of wishlistItems(); track item.productId) {
           <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg" [class.dark:bg-gray-800]="isDarkTheme()">
-            <img [src]="domain + item.product.images[0].filePath" [alt]="item.product.name" 
+            <img [src]="item.product.images[0].filePath" [alt]="item.product.name" 
                  class="w-16 h-16 object-cover rounded-lg">
             <div class="flex-1">
               <h4 class="font-medium text-gray-900" [class.dark:text-white]="isDarkTheme()">{{ item.product.name }}</h4>

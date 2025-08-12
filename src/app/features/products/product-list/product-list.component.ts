@@ -327,7 +327,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   getProductImage(product: IProduct): string {
-    return `${environment.domain}${product.images?.[0]?.filePath}` || 'assets/images/placeholder.png';
+    return `${product.images?.[0]?.filePath}` || 'assets/images/placeholder.png';
   }
 
   getColorStyle(color: string): string {

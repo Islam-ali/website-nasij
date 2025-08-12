@@ -250,7 +250,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   getImageUrl(imagePath: string, size: 'original' | 'thumbnail' = 'original'): string {
     if (!imagePath) return 'assets/images/placeholder.png';
     if (imagePath.startsWith('http')) return imagePath;
-    return `${environment.domain}${imagePath}`;
+    return imagePath;
   }
 
   getDiscountPercentage(price: number, discountPrice?: number): number | null {

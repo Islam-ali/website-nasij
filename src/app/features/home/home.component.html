@@ -229,7 +229,7 @@
             data-aos="fade-up"
             class="group relative overflow-hidden rounded-xl md:rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer transform hover:-translate-y-2">
             <div class="aspect-square relative overflow-hidden">
-              <img [src]="category.image ? `${domain}${category.image.filePath}` : null" alt="{{category.name}}"
+              <img [src]="category.image ? category.image.filePath : null" alt="{{category.name}}"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
               <!-- Category Name -->
