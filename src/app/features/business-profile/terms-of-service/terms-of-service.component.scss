@@ -1,0 +1,161 @@
+:host {
+  display: block;
+}
+
+// Custom card styles
+::ng-deep .p-card {
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  .p-card-body {
+    padding: 2rem;
+  }
+}
+
+// Custom button styles
+::ng-deep .p-button {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Prose styles for content
+.prose {
+  color: #374151;
+  line-height: 1.75;
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #111827;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+  }
+  
+  ul, ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+  }
+  
+  strong {
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  em {
+    font-style: italic;
+  }
+  
+  a {
+    color: #667eea;
+    text-decoration: underline;
+    
+    &:hover {
+      color: #5a67d8;
+    }
+  }
+  
+  blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #6b7280;
+  }
+  
+  code {
+    background-color: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc2626;
+  }
+  
+  pre {
+    background-color: #1f2937;
+    color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    
+    code {
+      background-color: transparent;
+      padding: 0;
+      color: inherit;
+    }
+  }
+}
+
+// Loading spinner styles
+::ng-deep .p-progressspinner {
+  .p-progressspinner-circle {
+    stroke: #667eea;
+  }
+}
+
+// Toast styles
+::ng-deep .p-toast {
+  .p-toast-message {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  ::ng-deep .p-card {
+    .p-card-body {
+      padding: 1rem;
+    }
+  }
+  
+  ::ng-deep .p-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .prose {
+    h1 {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+    
+    h3 {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+  }
+} 

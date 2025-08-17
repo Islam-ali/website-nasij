@@ -20,6 +20,10 @@ import { CategoryService } from '../products/services/category.service';
 import { ICategory } from '../../interfaces/category.interface';
 import { environment } from '../../../environments/environment';
 import AOS from 'aos';
+import { HeroSectionComponent } from "./hero-section/hero-section.component";
+import { FeaturedCollectionComponent } from "./featured-collection/featured-collection.component";
+import { BannarComponent } from "./bannar/bannar.component";
+import { FeatureComponent } from "./feature/feature.component";
 
 @Component({
   selector: 'app-home',
@@ -36,6 +40,10 @@ import AOS from 'aos';
     TooltipModule,
     GalleriaComponent,
     CarouselComponent,
+    HeroSectionComponent,
+    FeaturedCollectionComponent,
+    BannarComponent,
+    FeatureComponent
 ],
   providers: [
     MessageService,
@@ -69,9 +77,9 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
   ngAfterViewInit(): void {
     AOS.init({
-      duration: 3000,
+      duration: 800,
       easing: 'ease-out-cubic',
-      once: true,
+      once: false,
       offset: 60,
       delay: 200,
     });

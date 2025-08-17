@@ -1,7 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, signal, computed, Inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { takeUntil, Subject } from 'rxjs';
 import { ICartItem } from '../cart/models/cart.interface';
 import { CartService } from '../cart/services/cart.service';
@@ -90,24 +90,51 @@ export class CheckoutComponent implements OnInit {
     // { label: 'Credit Card', value: 'credit_card' },
     // { label: 'PayPal', value: 'paypal' }
   ];
-
+  isBuyNow = false;
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
     private checkoutService: CheckoutService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.checkoutForm = this.createCheckoutForm();
-
-    // Subscribe to cart state and update signal
-    this.cartService.cartState$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe((items: any) => {
-      console.log('Cart state updated:', items);
-      this.cartItems.set(items.items);
+    this.route.queryParams.subscribe(params => {
+      if (params['productId']) {
+        this.isBuyNow = true;
+      const productId = params['productId'];
+      const quantity = params['quantity'];
+      const color = params['color'];
+      const size = params['size'];
+      const productName = params['productName'];
+      const price = params['price'];
+      const discount = params['discount'];
+      const image = params['image'];
+      this.cartItems.set([{
+        productId: productId,
+        quantity: quantity,
+        color: color,
+        size: size,
+        productName: productName,
+        price: price,
+        discount: discount,
+        image: image
+      }]);
+    }else{
+      this.cartService.cartState$.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe((items: any) => {
+        console.log('Cart state updated:', items);
+        this.cartItems.set(items.items);
+      });
+      this.isBuyNow = false;
+    }
     });
+    // Subscribe to cart state and update signal
+    
   }
 
   ngOnDestroy(): void {
@@ -215,10 +242,14 @@ export class CheckoutComponent implements OnInit {
       next: (response) => {
         this.loading = false;
         this.success = true;
+        if (!this.isBuyNow) {
+          this.cartService.clearCart().subscribe();
+        }
         // Clear cart so all subscribers (Topbar, Cart page) update
-        this.cartService.clearCart().subscribe();
         // window scroll to top
-        window.scrollTo(0, 0);
+        if (isPlatformBrowser(this.platformId)) {
+          window.scrollTo(0, 0);
+        }
         this.messageService.add({ severity: 'success', summary: 'Order Successful', detail: `Order ID: ${response.orderId}` });
         // Optionally redirect to order confirmation page
         // this.router.navigate(['/order-confirmation', response.orderId]);

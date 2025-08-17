@@ -2,7 +2,7 @@
 <div>
     <p-carousel [value]="products" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
         <ng-template let-product #item>
-            <div class="p-2 min-w-[264px] max-w-[320px]">
+            <div class="p-2 min-w-[264px]">
                 <app-product-card [product]="product"></app-product-card>
             </div>
         </ng-template>

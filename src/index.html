@@ -1,23 +1,25 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>NasigWebsite</title>
+  <title>NASIJ</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
+
 <body>
-  <app-root>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay">
-      <p-progressSpinner 
-        styleClass="w-2rem h-2rem" 
-        strokeWidth="4" 
-        fill="var(--surface-ground)" 
-        animationDuration=".5s">
-      </p-progressSpinner>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-container">
+      <div class="logo-container">
+        <div class="loading-logo">
+          <img src="images/logo-Nasij.png" alt="NASIJ Logo" class="loading-logo-image">
+        </div>
+      </div>
     </div>
-  </app-root>
+  </div>
+  <app-root></app-root>
 </body>
+
 </html>

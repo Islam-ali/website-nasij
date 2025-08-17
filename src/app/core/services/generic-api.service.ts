@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -19,7 +19,7 @@ function toHttpParams(params?: Record<string, any>): HttpParams {
   providedIn: 'root'
 })
 export class GenericApiService<T> {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient = inject(HttpClient)) {}
 
   Get(endpoint: string, queryParams?: Record<string, any>): Observable<T> {
     const params = toHttpParams(queryParams);

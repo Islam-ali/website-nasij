@@ -112,7 +112,6 @@ label.border:has(input:checked) {
       @apply bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-200;
       border: 1px solid #e5e7eb;
       border-radius: 0.5rem;
-      width: 2.5rem;
       height: 2.5rem;
       display: flex;
       align-items: center;
@@ -123,23 +122,25 @@ label.border:has(input:checked) {
       @apply bg-gray-200 transform scale-105;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
-    .p-inputnumber-input {
-      @apply text-center font-semibold;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5rem;
-      padding: 0.5rem;
-      font-size: 1.1rem;
-    }
-
-    .p-inputnumber-input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
-    }
   }
 }
+:host ::ng-deep {.p-inputnumber-input {
+  @apply text-center font-semibold;
+  border: 1px solid #e5e7eb;
+  width: inherit !important;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+::ng-deep .p-inputtext {
+  width: inherit !important;
+}
 
+.p-inputnumber-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+}
 /* Enhanced Card Styling */
 p-card {
   ::ng-deep .p-card-body {

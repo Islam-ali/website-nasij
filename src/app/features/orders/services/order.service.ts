@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Order, OrderStatus } from '../../../core/models/order.model';
+import { Order } from '../../../core/models/order.model';
+import { OrderStatus } from '../../checkout/models/order.enum';
 
 export interface CreateOrderDto {
   items: Array<{
@@ -65,6 +66,6 @@ export class OrderService {
   }
 
   cancelOrder(orderId: string): Observable<Order> {
-    return this.updateOrderStatus(orderId, 'CANCELLED');
+    return this.updateOrderStatus(orderId, OrderStatus.CANCELLED);
   }
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -99,7 +99,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     this.filterForm = this.fb.group({
       searchQuery: [''],
@@ -119,7 +120,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     AOS.init({
       duration: 1000,
       easing: 'ease-out-cubic',
-      once: true,
+      once: false,
       offset: 60,
       delay: 200,
     });
@@ -137,7 +138,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     this.loadCategories();
     this.loadBrands();
     this.loadSizesAndColors();
-    this.loadProducts();
+    // this.loadProducts();
     this.filterForm.valueChanges.subscribe(() => this.onFilterChange());
     
     // Subscribe to query parameter changes
@@ -153,6 +154,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   loadProducts(): void {
+    debugger;
     this.loading = true;
     this.error = null;
 
@@ -225,7 +227,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
 
   loadSizesAndColors(): void {
     this.subscriptions.add(
-      this.productService.getProducts({ limit: 12 }).subscribe({
+      this.productService.getProducts({ limit: 100 }).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
           this.sizes = [...new Set(response.data.products.flatMap((p) => p.sizes || []))];
           this.colors = [...new Set(response.data.products.flatMap((p) => p.colors || []))];
@@ -242,12 +244,14 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     this.rows = event.rows;
     this.loadProducts();
     // scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   onSortChange(): void {
     this.first = 0;
-    this.loadProducts();
+    // this.loadProducts();
   }
 
   onFilterChange(): void {

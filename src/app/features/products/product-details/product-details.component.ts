@@ -33,6 +33,7 @@ import { ComponentBase } from '../../../core/directives/component-base.directive
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 import { IArchived } from '../../../interfaces/archive.interface';
+import { SafePipe } from '../../../core/pipes/safe.pipe';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -63,8 +64,9 @@ interface ProductImage {
     TabsModule,
     Card,
     AccordionModule,
-    ProductCardComponent
-],
+    ProductCardComponent,
+    SafePipe
+  ],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })
@@ -95,7 +97,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     private wishlistService: WishlistService,
     private cartService: CartService,
     private messageService: MessageService
-  ) { 
+  ) {
     super();
     this.responsiveOptions = [
       {
@@ -154,7 +156,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     this.productService.getProductById(productId).pipe(
       takeUntil(this.destroy$)
     )
-    .subscribe({
+      .subscribe({
         next: (response: BaseResponse<IProduct>) => {
           this.product = response.data;
           this.extractColorsAndSizes();
@@ -182,7 +184,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       if (variant.attributes) {
         variant.attributes.forEach(attr => {
           if (attr.variant === EnumProductVariant.COLOR) {
-              variantImageMap.set(attr.value, { image: attr.image || null, color: attr.value });
+            variantImageMap.set(attr.value, { image: attr.image || null, color: attr.value });
           } else if (attr.variant === EnumProductVariant.SIZE) {
             sizes.add(attr.value);
           }
@@ -198,9 +200,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   private loadRelatedProducts(productId: string): void {
 
-      this.productService.getProducts({ limit: 4 }).pipe(
-        takeUntil(this.destroy$)
-      )
+    this.productService.getProducts({ limit: 4 }).pipe(
+      takeUntil(this.destroy$)
+    )
       .subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
           this.relatedProducts = response.data.products;
@@ -292,9 +294,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       return;
     };
     if (!this.product) return;
-    const productToAdd:IAddToCartRequest = {
+    const productToAdd: IAddToCartRequest = {
       productId: this.product._id,
-      price:  this.product.price,
+      price: this.product.price,
       quantity: this.quantity,
       color: this.selectedColor || '',
       size: this.selectedSize || '',
@@ -314,8 +316,25 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   checkout(): void {
-    this.addToCart();
-    this.router.navigate(['/checkout']);
+    if (!this.product || !this.selectedColor || !this.selectedSize) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please select a color and size',
+        life: 1000
+      });
+      return;
+    }
+    this.router.navigate(['/checkout'],
+      {
+        queryParams: {
+          productId: this.product?._id, quantity: this.quantity,
+          color: this.selectedColor, size: this.selectedSize,
+          productName: this.product?.name, price: this.product?.price,
+          discount: this.product?.discountPrice,
+          image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product?.images[0].filePath
+        }
+      });
   }
 
   addToWishlist(): void {
@@ -379,7 +398,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     const variantData = this.variantToImageAndColor().find(item => item.color === color);
     if (variantData && variantData.image) {
       // Find the index of this image in the images array
-      const imageIndex = this.images.findIndex(img => 
+      const imageIndex = this.images.findIndex(img =>
         img.itemImageSrc === this.getImageUrl(variantData.image?.filePath || '')
       );
       if (imageIndex !== -1) {
@@ -398,13 +417,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     this.selectedVariant = this.product.variants.find(variant => {
       if (!variant.attributes) return false;
-      
-      const hasSelectedColor = !this.selectedColor || 
+
+      const hasSelectedColor = !this.selectedColor ||
         variant.attributes.some(attr => attr.variant === 'color' && attr.value === this.selectedColor);
-      
-      const hasSelectedSize = !this.selectedSize || 
+
+      const hasSelectedSize = !this.selectedSize ||
         variant.attributes.some(attr => attr.variant === 'size' && attr.value === this.selectedSize);
-      
+
       return hasSelectedColor && hasSelectedSize;
     }) || null;
   }

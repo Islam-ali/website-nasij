@@ -55,6 +55,30 @@ export const routes: Routes = [
         title: 'Wishlist',
         data: { breadcrumb: 'Wishlist' }
       },
+      {
+        path: 'privacy-policy',
+        loadComponent: () => import('./features/business-profile/privacy-policy/privacy-policy.component')
+          .then(m => m.PrivacyPolicyComponent)
+          .catch(() => ErrorComponent),
+        title: 'Privacy Policy',
+        data: { breadcrumb: 'Privacy Policy' }
+      },
+      {
+        path: 'terms-of-service',
+        loadComponent: () => import('./features/business-profile/terms-of-service/terms-of-service.component')
+          .then(m => m.TermsOfServiceComponent)
+          .catch(() => ErrorComponent),
+        title: 'Terms of Service',
+        data: { breadcrumb: 'Terms of Service' }
+      },
+      {
+        path: 'faq',
+        loadComponent: () => import('./features/business-profile/faq/faq.component')
+          .then(m => m.FaqComponent)
+          .catch(() => ErrorComponent),
+        title: 'FAQ',
+        data: { breadcrumb: 'FAQ' }
+      },
       
       // Protected routes
       {
@@ -91,7 +115,6 @@ export const routes: Routes = [
         canActivate: [authGuard],
         data: { breadcrumb: 'Order Details' }
       },
-      
       // Auth routes (login, register, etc.)
       {
         path: 'auth',

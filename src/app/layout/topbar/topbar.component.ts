@@ -28,6 +28,8 @@ import { ComponentBase } from '../../core/directives/component-base.directive';
 import { ICategory } from '../../interfaces/category.interface';
 import { CategoryService } from '../../features/products/services/category.service';
 import { BaseResponse } from '../../core/models/baseResponse';
+import { IBusinessProfile } from '../../interfaces/business-profile.interface';
+import { BusinessProfileService } from '../../services/business-profile.service';
 
 @Component({
   selector: 'app-topbar',
@@ -71,7 +73,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   wishlistCount = signal<number>(0);
   currentUser: IUser | null = null;
   private subscriptions = new Subscription();
-
+  businessProfile: IBusinessProfile | null = null;
   userMenuItems: MenuItem[] = [];
   toggleNavbar(): void {
     this.navbarOpen.set(!this.navbarOpen());
@@ -82,8 +84,10 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     private wishlistService: WishlistService,
     private messageService: MessageService,
     private router: Router,
+    private businessProfileService: BusinessProfileService
   ) {
     super();
+    this.getBusinessProfile();
     this.loadCart();
     this.loadWishlist();
   }
@@ -298,5 +302,13 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
 
   toggleRTL(): void {
     console.log('RTL toggle requested');
+  }
+
+  getBusinessProfile() {
+    this.businessProfileService.getBusinessProfile$().subscribe({
+      next: (businessProfile) => {
+        this.businessProfile = businessProfile;
+      }
+    });
   }
 }

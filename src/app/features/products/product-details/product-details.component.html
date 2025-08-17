@@ -67,7 +67,7 @@
             </ng-template>
             <ng-template pTemplate="thumbnail" let-item>
               <div
-                class="h-24 w-24 flex items-center justify-center bg-white border-2 rounded-xl overflow-hidden hover:border-primary transition-all duration-200 hover:shadow-md"
+                class="w-full h-32 flex items-center justify-center bg-white border-2 rounded-xl overflow-hidden hover:border-primary transition-all duration-200 hover:shadow-md"
                 [ngClass]="{ 'border-primary shadow-lg': images[activeIndex].itemImageSrc === item.itemImageSrc, 'border-gray-200': images[activeIndex].itemImageSrc !== item.itemImageSrc }">
                 <img [src]="item.thumbnailImageSrc" [alt]="item.alt || product.name + ' thumbnail'"
                   class="max-h-full max-w-full object-contain p-2" />
@@ -204,14 +204,14 @@
             </div>
 
             <!-- Quantity Selection -->
-            <div class="space-y-3">
+            <div class="space-y-3 w-full">
               <label class="text-lg font-semibold text-gray-800">Quantity</label>
               <div class="flex items-center space-x-4">
                 <p-inputNumber inputId="quantity" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
                   [max]="product.stock > 10 ? 10 : product.stock" [showButtons]="true" buttonLayout="horizontal"
                   spinnerMode="horizontal" decrementButtonClass="p-button-secondary"
                   incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
-                  decrementButtonIcon="pi pi-minus" class="w-32"></p-inputNumber>
+                  decrementButtonIcon="pi pi-minus"  styleClass="w-24 max-w-max"></p-inputNumber>
                 <!-- <span class="text-sm text-gray-600">
                   {{ product.stock }} available
                 </span> -->
@@ -229,11 +229,13 @@
                 pTooltip="Add item to your shopping cart" tooltipPosition="top"></button>
                 
                 <!-- buy now checkout button -->
-                <!-- <button pButton pRipple type="button"
-                label="Buy Now" icon="pi pi-shopping-cart" 
-                class="flex-1 py-4 text-lg font-semibold bg-primary hover:bg-primary-dark transition-all duration-200 transform hover:scale-105"
+                <button type="button"
+                class="w-full py-3 mt-6 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105"
                 [disabled]="product.stock === 0" (click)="checkout()" 
-                pTooltip="Checkout" tooltipPosition="top"></button> -->
+                pTooltip="Checkout" tooltipPosition="top">
+                <i class="pi pi-shopping-cart mr-2"></i>
+                Buy Now
+              </button>
 
               <!-- <button pButton pRipple type="button" 
                 [icon]="isInWishlist ? 'pi pi-heart-fill' : 'pi pi-heart'"
@@ -278,7 +280,7 @@
             <div class="p-6 bg-gray-50 rounded-xl">
               <div class="w-full">
                 <!-- <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200"> -->
-                  <div class="ql-editor" [innerHTML]="detail.value"></div>
+                  <div class="ql-editor" [innerHTML]="detail.value | safe:'html'"></div>
                 <!-- </div> -->
               </div>
             </div>

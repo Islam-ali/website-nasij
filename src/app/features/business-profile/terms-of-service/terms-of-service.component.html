@@ -1,0 +1,103 @@
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-8">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <p-toast></p-toast>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center py-12">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+        <p class="text-gray-600">Loading terms of service...</p>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!loading" class="space-y-8">
+      <!-- Header -->
+      <div class="text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full mb-6">
+          <i class="pi pi-file text-2xl text-white"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
+        <p class="text-lg text-gray-600 mb-8">
+          Please read these terms carefully before using our services
+        </p>
+        <div class="flex justify-center">
+          <button 
+            (click)="goBack()" 
+            class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200"
+          >
+            <i class="pi pi-arrow-left mr-2"></i>
+            Back to Business Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Terms of Service Content -->
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Terms of Service</h2>
+              <p class="text-green-100 mt-2">Last updated: {{ businessProfile?.updatedAt ? (businessProfile!.updatedAt | date:'longDate') : 'N/A' }}</p>
+            </div>
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+              <i class="pi pi-file text-white text-xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8">
+          <div *ngIf="businessProfile?.termsOfService; else noContent" class="prose prose-lg max-w-none">
+            <div [innerHTML]="businessProfile!.termsOfService | nl2br"></div>
+          </div>
+          
+          <ng-template #noContent>
+            <div class="text-center py-12">
+              <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="pi pi-file text-3xl text-gray-400"></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">Terms of Service Not Available</h3>
+              <p class="text-gray-600">The terms of service content has not been set up yet.</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div *ngIf="businessProfile?.contactInfo" class="bg-white rounded-2xl shadow-xl p-8">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">Contact Us</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <i class="pi pi-envelope text-blue-600"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Email</p>
+              <p class="font-medium text-gray-900">{{ businessProfile!.contactInfo!.email }}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <i class="pi pi-phone text-green-600"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Phone</p>
+              <p class="font-medium text-gray-900">{{ businessProfile!.contactInfo!.phone }}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-4 md:col-span-2">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mt-1">
+              <i class="pi pi-map-marker text-purple-600"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Address</p>
+              <p class="font-medium text-gray-900">{{ businessProfile!.contactInfo!.address }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

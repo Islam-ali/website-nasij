@@ -11,21 +11,21 @@
         <div class="flex items-center space-x-6">
           <span class="flex items-center">
             <i class="pi pi-phone mr-2"></i>
-            +1 (555) 123-4567
+          {{businessProfile?.contactInfo?.phone}}
           </span>
           <!-- <span class="flex items-center">
             <i class="pi pi-envelope mr-2"></i>
-            {{'info@nasig.com'}}
+            {{businessProfile?.email}}
           </span> -->
         </div>
         <div class="flex items-center space-x-4">
-          <a href="https://facebook.com" target="_blank" class="hover:text-purple-200 transition-colors">
+          <a *ngIf="businessProfile?.socialMedia?.facebook" [href]="businessProfile!.socialMedia!.facebook!" target="_blank" class="hover:text-purple-200 transition-colors">
             <i class="pi pi-facebook"></i>
           </a>
-          <a href="https://twitter.com" target="_blank" class="hover:text-purple-200 transition-colors">
+          <a *ngIf="businessProfile?.socialMedia?.twitter" [href]="businessProfile!.socialMedia!.twitter!" target="_blank" class="hover:text-purple-200 transition-colors">
             <i class="pi pi-twitter"></i>
           </a>
-          <a href="https://instagram.com" target="_blank" class="hover:text-purple-200 transition-colors">
+          <a *ngIf="businessProfile?.socialMedia?.instagram" [href]="businessProfile!.socialMedia!.instagram!" target="_blank" class="hover:text-purple-200 transition-colors">
             <i class="pi pi-instagram"></i>
           </a>
         </div>
@@ -40,12 +40,12 @@
       <!-- Logo -->
       <div class="flex items-center">
         <a routerLink="/" class="flex items-center space-x-3 group">
-          <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-lg">N</span>
+          <div class="w-12 h-12 flex items-center justify-center">
+            <img [src]="businessProfile?.logo?.filePath" alt="logo" class="w-full h-full object-contain">
           </div>
-          <span class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent group-hover:from-purple-700 group-hover:to-pink-700 transition-all duration-300">
-            Nasig
-          </span>
+          <!-- <span class="text-xl font-bold text-gray-900 transition-all duration-300">
+            {{businessProfile?.name}}
+          </span> -->
         </a>
       </div>
 

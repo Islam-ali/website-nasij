@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { BusinessProfileService } from '../../services/business-profile.service';
+import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 
 @Component({
   selector: 'app-footer',
@@ -24,8 +26,7 @@ import { InputTextModule } from 'primeng/inputtext';
             <span class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Nasig</span>
           </div>
           <p class="text-gray-300 leading-relaxed">
-            Your premier destination for fashion and lifestyle. Discover the latest trends, 
-            quality products, and exceptional shopping experience.
+            {{ businessProfile?.description || 'Your premier destination for fashion and lifestyle. Discover the latest trends, quality products, and exceptional shopping experience.' }}
           </p>
           
           <!-- Contact Info -->
@@ -123,15 +124,15 @@ import { InputTextModule } from 'primeng/inputtext';
           <div class="space-y-4">
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-purple-400"></i>
-              <span>{{'info@nasig.com'}}</span>
+              <span>{{ businessProfile?.contactInfo?.email || 'info@nasig.com' }}</span>
             </div>
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-phone text-purple-400"></i>
-              <span>+1 (555) 123-4567</span>
+              <span>{{ businessProfile?.contactInfo?.phone || '+1 (555) 123-4567' }}</span>
             </div>
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-map-marker text-purple-400"></i>
-              <span>123 Fashion Street, Style City, SC 12345</span>
+              <span>{{ businessProfile?.contactInfo?.address || '123 Fashion Street, Style City, SC 12345' }}</span>
             </div>
           </div>
         </div>
@@ -142,21 +143,29 @@ import { InputTextModule } from 'primeng/inputtext';
           <!-- Social Media -->
           <div class="space-y-4">
             <div class="flex space-x-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
+              <a *ngIf="businessProfile?.socialMedia?.facebook" 
+                 [href]="businessProfile!.socialMedia!.facebook!" 
+                 target="_blank" rel="noopener noreferrer" 
                  class="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-facebook text-white"></i>
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" 
-                 class="w-10 h-10 bg-blue-400 hover:bg-blue-500 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+              <a *ngIf="businessProfile?.socialMedia?.twitter" 
+                 [href]="businessProfile!.socialMedia!.twitter!" 
+                 target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-twitter text-white"></i>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
+              <a *ngIf="businessProfile?.socialMedia?.instagram" 
+                 [href]="businessProfile!.socialMedia!.instagram!" 
+                 target="_blank" rel="noopener noreferrer" 
                  class="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-instagram text-white"></i>
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
-                 class="w-10 h-10 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <i class="pi pi-youtube text-white"></i>
+              <a *ngIf="businessProfile?.socialMedia?.tiktok" 
+                 [href]="businessProfile!.socialMedia!.tiktok!" 
+                 target="_blank" rel="noopener noreferrer" 
+                 class="w-10 h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                <i class="pi pi-tiktok text-white"></i>
               </a>
             </div>
           </div>
@@ -175,9 +184,8 @@ import { InputTextModule } from 'primeng/inputtext';
               © {{ currentYear }} Nasig. All rights reserved.
             </p>
             <div class="flex space-x-4 text-sm">
-              <a routerLink="/privacy" class="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
-              <a routerLink="/terms" class="text-gray-400 hover:text-purple-400 transition-colors">Terms of Service</a>
-              <a routerLink="/cookies" class="text-gray-400 hover:text-purple-400 transition-colors">Cookie Policy</a>
+              <a routerLink="/privacy-policy" class="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+              <a routerLink="/terms-of-service" class="text-gray-400 hover:text-purple-400 transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>
@@ -283,13 +291,35 @@ import { InputTextModule } from 'primeng/inputtext';
 
   `]
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
   currentYear = new Date().getFullYear();
+  businessProfile: IBusinessProfile | null = null;
+  
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private businessProfileService: BusinessProfileService
+  ) { }
 
+  ngOnInit() {
+    this.loadBusinessProfile();
+  }
+
+  private loadBusinessProfile() {
+    this.businessProfileService.getBusinessProfile$().subscribe({
+      next: (businessProfile) => {
+        this.businessProfile = businessProfile;
+      },
+      error: (error) => {
+        console.error('Error loading business profile:', error);
+      }
+    });
+  }
   scrollToTop() {
+    if (isPlatformBrowser(this.platformId)) {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
-    });
+        behavior: 'smooth'
+      });
+    }
   }
 }
