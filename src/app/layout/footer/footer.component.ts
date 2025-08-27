@@ -62,12 +62,12 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
                 <span>Shop</span>
               </a>
             </li>
-            <li>
+            <!-- <li>
               <a routerLink="/about" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
                 <i class="pi pi-info-circle text-sm group-hover:translate-x-1 transition-transform"></i>
                 <span>About Us</span>
               </a>
-            </li>
+            </li> -->
             <!-- <li>
               <a routerLink="/contact" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 flex items-center space-x-2 group">
                 <i class="pi pi-envelope text-sm group-hover:translate-x-1 transition-transform"></i>
