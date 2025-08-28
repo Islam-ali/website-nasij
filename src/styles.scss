@@ -4,12 +4,156 @@
 @tailwind components;
 @tailwind utilities;
 
-a {
-  text-decoration: none !important;
+/* Base styles */
+@layer base {
+  html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  body {
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    @apply bg-white text-gray-900;
+  }
+  
+  /* Dark mode base styles */
+  .dark body {
+    @apply bg-dark-bg text-dark-text;
+  }
+  
+  /* Smooth transitions for all elements */
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-dark-surface;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-dark-border;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark-textSecondary;
+  }
 }
 
-body {
-  overflow: hidden;
+/* Component styles */
+@layer components {
+  /* Card styles */
+  .card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm;
+  }
+  
+  .dark .card {
+    @apply bg-dark-surface border-dark-border;
+  }
+  
+  /* Button styles */
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-800 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors;
+  }
+  
+  .dark .btn-secondary {
+    @apply bg-dark-surface text-dark-text hover:bg-dark-surfaceHover;
+  }
+  
+  /* Input styles */
+  .input {
+    @apply bg-white border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary focus:ring-1 focus:ring-primary;
+  }
+  
+  .dark .input {
+    @apply bg-dark-surface border-dark-border text-dark-text placeholder-dark-textMuted focus:border-primary focus:ring-primary;
+  }
+  
+  /* Modal/Drawer styles */
+  .modal-content {
+    @apply bg-white border border-gray-200;
+  }
+  
+  .dark .modal-content {
+    @apply bg-dark-surface border-dark-border;
+  }
+  
+  /* Navigation styles */
+  .nav-item {
+    @apply text-gray-700 hover:text-primary transition-colors;
+  }
+  
+  .dark .nav-item {
+    @apply text-dark-textSecondary hover:text-primary;
+  }
+  
+  /* Table styles */
+  .table {
+    @apply bg-white border border-gray-200;
+  }
+  
+  .dark .table {
+    @apply bg-dark-surface border-dark-border;
+  }
+  
+  .table th {
+    @apply bg-gray-50 text-gray-900 border-b border-gray-200;
+  }
+  
+  .dark .table th {
+    @apply bg-dark-surfaceHover text-dark-text border-dark-border;
+  }
+  
+  .table td {
+    @apply border-b border-gray-200 text-gray-700;
+  }
+  
+  .dark .table td {
+    @apply border-dark-border text-dark-textSecondary;
+  }
+}
+
+/* Utility styles */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+  
+  .dark .glass-effect {
+    @apply bg-dark-surface/80 border-dark-border/20;
+  }
+}
+
+a {
+  text-decoration: none !important;
 }
 
 .loading-overlay {
@@ -24,6 +168,10 @@ body {
   align-items: center;
   z-index: 9999;
   transition: opacity 0.3s ease-in-out;
+}
+
+.dark .loading-overlay {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
 .loading-container {
@@ -47,7 +195,7 @@ body {
   transition: transform 0.3s ease;
   padding: 1rem;
 }
-// .loading-logo animation border
+
 .loading-logo::before {
   content: '';
   position: absolute;
@@ -108,7 +256,6 @@ body {
 
 /* Responsive design */
 @media (max-width: 768px) {
-
   .loading-message {
       font-size: 1rem;
   }
@@ -119,13 +266,99 @@ body {
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .loading-overlay {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  }
-}
-
 .ql-editor p {
   margin: 10px 0;
+}
+
+/* PrimeNG Dark Mode Overrides */
+.dark .p-component {
+  @apply text-dark-text;
+}
+
+.dark .p-dialog {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-dialog .p-dialog-header {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-dialog .p-dialog-content {
+  @apply bg-dark-surface;
+}
+
+.dark .p-drawer {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-drawer .p-drawer-header {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-drawer .p-drawer-content {
+  @apply bg-dark-surface;
+}
+
+.dark .p-button {
+  @apply bg-dark-surface text-dark-text border-dark-border;
+}
+
+.dark .p-button:hover {
+  @apply bg-dark-surfaceHover;
+}
+
+.dark .p-inputtext {
+  @apply bg-dark-surface text-dark-text border-dark-border;
+}
+
+.dark .p-inputtext:focus {
+  @apply border-primary ring-primary;
+}
+
+.dark .p-dropdown {
+  @apply bg-dark-surface text-dark-text border-dark-border;
+}
+
+.dark .p-dropdown-panel {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-dropdown-item {
+  @apply text-dark-text hover:bg-dark-surfaceHover;
+}
+
+.dark .p-menu {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-menuitem-link {
+  @apply text-dark-text hover:bg-dark-surfaceHover;
+}
+
+.dark .p-tooltip {
+  @apply bg-dark-surface text-dark-text border-dark-border;
+}
+
+.dark .p-toast {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-toast .p-toast-message {
+  @apply bg-dark-surface border-dark-border;
+}
+
+.dark .p-toast .p-toast-message-content {
+  @apply text-dark-text;
+}
+
+/* Custom animations for theme switching */
+.theme-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-transition * {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

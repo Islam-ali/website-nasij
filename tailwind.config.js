@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{html,ts}",
   ],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       colors: {
@@ -83,6 +84,16 @@ module.exports = {
           light: '#DBEAFE',
           dark: '#1E40AF',
         },
+        // Dark mode specific colors
+        dark: {
+          bg: '#0F172A', // slate-900
+          surface: '#1E293B', // slate-800
+          surfaceHover: '#334155', // slate-700
+          border: '#334155', // slate-700
+          text: '#F1F5F9', // slate-100
+          textSecondary: '#CBD5E1', // slate-300
+          textMuted: '#64748B', // slate-500
+        }
       },
       screens: {
         xs: '425px',
@@ -91,6 +102,25 @@ module.exports = {
         lg: '1024px',
         xl: '1280px',
         '2xl': '1536px',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.3s ease-in-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'scale-in': 'scaleIn 0.2s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
       },
     },
   },

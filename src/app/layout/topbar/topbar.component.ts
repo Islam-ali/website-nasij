@@ -30,6 +30,8 @@ import { CategoryService } from '../../features/products/services/category.servi
 import { BaseResponse } from '../../core/models/baseResponse';
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { BusinessProfileService } from '../../services/business-profile.service';
+import { ThemeService } from '../../core/services/theme.service';
+import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-topbar',
@@ -48,7 +50,8 @@ import { BusinessProfileService } from '../../services/business-profile.service'
     CardModule,
     FormsModule,
     ButtonModule,
-    DrawerModule
+    DrawerModule,
+    ThemeToggleComponent
   ],
   providers: [MessageService],
   templateUrl: './topbar.component.html',
@@ -64,7 +67,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   navbarOpen = signal(false);
   searchForm: boolean = false;
   categories = signal<ICategory[]>([]);
-  isDarkTheme = computed(() => this.LayoutService.layoutConfig().darkTheme);
+  isDarkTheme = computed(() => this.themeService.isDark());
   searchQuery = '';
   cartItems = signal<ICartItem[]>([]);
   wishlistItems = signal<IWishlistItem[]>([]);
@@ -84,7 +87,8 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     private wishlistService: WishlistService,
     private messageService: MessageService,
     private router: Router,
-    private businessProfileService: BusinessProfileService
+    private businessProfileService: BusinessProfileService,
+    public themeService: ThemeService
   ) {
     super();
     this.getBusinessProfile();
@@ -269,9 +273,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     this.LayoutService.onMenuToggle();
   }
 
-  toggleTheme(): void {
-    this.LayoutService.toggleTheme();
-  }
+
 
   search(event: Event): void {
     event.preventDefault();
