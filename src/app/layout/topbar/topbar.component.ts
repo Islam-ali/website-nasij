@@ -19,7 +19,6 @@ import { CartService } from '../../features/cart/services/cart.service';
 import { IUser } from '../../features/auth/models/auth.interface';
 import { IAddToCartRequest, ICartItem, ICartState } from '../../features/cart/models/cart.interface';
 import { FormsModule } from '@angular/forms';
-import { LayoutService } from '../service/layout.service';
 import { ButtonModule } from 'primeng/button';
 import { environment } from '../../../environments/environment';
 import { DrawerModule } from 'primeng/drawer';
@@ -55,11 +54,9 @@ import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme
   ],
   providers: [MessageService],
   templateUrl: './topbar.component.html',
-  styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy {
   domain = environment.domain;
-  LayoutService = inject(LayoutService);
   @ViewChild('cartDialog') cartDialog: any;
   submenuOpen: boolean = false;
   wishlistOpen: boolean = false;
@@ -269,9 +266,9 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     this.router.navigate(['/auth/login']);
   }
 
-  toggleSidebar(): void {
-    this.LayoutService.onMenuToggle();
-  }
+  // toggleSidebar(): void {
+  //   this.LayoutService.onMenuToggle();
+  // }
 
 
 

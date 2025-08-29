@@ -9,7 +9,6 @@ import { RouterModule } from '@angular/router';
   selector: 'app-featured-collection',
   imports: [CommonModule, RouterModule],
   templateUrl: './featured-collection.component.html',
-  styleUrl: './featured-collection.component.scss'
 })
 export class FeaturedCollectionComponent {
   featuredCollections: IFeaturedCollection[] = [];

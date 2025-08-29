@@ -154,7 +154,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   loadProducts(): void {
-    debugger;
     this.loading = true;
     this.error = null;
 
@@ -166,10 +165,12 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     const params: IProductQueryParams = {
       page: Math.floor(this.first / this.rows) + 1,
       limit: 12,
-      category: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
-      brand: selectedBrands.length > 0 ? selectedBrands.join(',') : undefined,
+      category: selectedCategories,
+      brand: selectedBrands,
       minPrice,
       // maxPrice,
+      size: selectedSizes,
+      color: selectedColors,
       sortBy: sortField,
       sortOrder: sortOrder as 'asc' | 'desc',
       search: searchQuery || undefined,
@@ -179,7 +180,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     // Debug logging
     console.log('Search Query:', searchQuery);
     console.log('API Params:', params);
-
     this.subscriptions.add(
       this.productService.getProducts(params).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {

@@ -7,7 +7,6 @@ import { BusinessProfileService } from './services/business-profile.service';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
   providers: [BusinessProfileService]
 })
 export class AppComponent implements OnInit {

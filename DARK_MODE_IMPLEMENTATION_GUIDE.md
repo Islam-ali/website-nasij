@@ -38,7 +38,7 @@
 ### 2. Category Pages
 ```html
 <!-- قبل التحديث -->
-<div class="container mx-auto px-4 py-8">
+<div class="max-w-7xl mx-auto px-4 py-8">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">Category Name</h1>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     <!-- Product cards here -->
@@ -46,7 +46,7 @@
 </div>
 
 <!-- بعد التحديث -->
-<div class="container mx-auto px-4 py-8">
+<div class="max-w-7xl mx-auto px-4 py-8">
   <h1 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-8 transition-colors duration-300">Category Name</h1>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     <!-- Updated product cards here -->
@@ -58,7 +58,7 @@
 ```html
 <!-- قبل التحديث -->
 <section class="bg-gray-50 py-16">
-  <div class="container mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-4">
     <div class="max-w-4xl mx-auto">
       <h2 class="text-3xl font-bold text-gray-900 mb-8">About Us</h2>
       <p class="text-gray-600 leading-relaxed mb-6">
@@ -74,7 +74,7 @@
 
 <!-- بعد التحديث -->
 <section class="bg-gray-50 dark:bg-dark-bg py-16 transition-all duration-300">
-  <div class="container mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-4">
     <div class="max-w-4xl mx-auto">
       <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-8 transition-colors duration-300">About Us</h2>
       <p class="text-gray-600 dark:text-dark-textSecondary leading-relaxed mb-6 transition-colors duration-300">

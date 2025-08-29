@@ -8,7 +8,6 @@ import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { LoadingService } from '../core/services/loading.service';
-import { LayoutService, layoutConfig } from './service/layout.service';
 
 @Component({
   selector: 'app-layout',
@@ -63,27 +62,27 @@ export class LayoutComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   
   // Local layout config signal
-  private layoutConfig = signal<layoutConfig>({
-    preset: 'Aura',
-    primary: 'emerald',
-    surface: null,
-    darkTheme: false,
-    menuMode: 'static'
-  });
+  // private layoutConfig = signal<layoutConfig>({
+  //   preset: 'Aura',
+  //   primary: 'emerald',
+  //   surface: null,
+  //   darkTheme: false,
+  //   menuMode: 'static'
+  // });
   
   // Public computed property for template
-  config = this.layoutConfig.asReadonly();
+  // config = this.layoutConfig.asReadonly();
 
   constructor(
     private loadingService: LoadingService,
-    private layoutService: LayoutService,
+    // private layoutService: LayoutService,
     private router: Router,
     private messageService: MessageService
   ) {
     this.loading$ = this.loadingService.loading$;
     
     // Initialize with current layout config
-    this.layoutConfig.set(this.layoutService.layoutConfig());
+    // this.layoutConfig.set(this.layoutService.layoutConfig());
   }
 
   private destroyRef = inject(DestroyRef);
@@ -94,14 +93,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
     Promise.resolve().then(() => {
       // Update layout config when it changes
       effect(() => {
-        const config = this.layoutService.layoutConfig();
-        this.layoutConfig.set(config);
-        this.updateTheme(config.darkTheme ?? false);
+        // const config = this.layoutService.layoutConfig();
+        // this.layoutConfig.set(config);
+        // this.updateTheme(config.darkTheme ?? false);
       }, { injector: this.injector });
     });
     
     // Handle initial theme
-    this.updateTheme(this.layoutConfig().darkTheme ?? false);
+    // this.updateTheme(this.layoutConfig().darkTheme ?? false);
   }
 
   ngOnDestroy() {
@@ -109,27 +108,27 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   
-  private updateTheme(isDark: boolean) {
-    // Add/remove dark theme class from html element for better theming support
-    const html = document.documentElement;
-    if (isDark) {
-      html.classList.add('dark-theme');
-      html.setAttribute('data-theme', 'dark');
-    } else {
-      html.classList.remove('dark-theme');
-      html.removeAttribute('data-theme');
-    }
-  }
+  // private updateTheme(isDark: boolean) {
+  //   // Add/remove dark theme class from html element for better theming support
+  //   const html = document.documentElement;
+  //   if (isDark) {
+  //     html.classList.add('dark-theme');
+  //     html.setAttribute('data-theme', 'dark');
+  //   } else {
+  //     html.classList.remove('dark-theme');
+  //     html.removeAttribute('data-theme');
+  //   }
+  // }
   
-  toggleTheme() {
-    this.layoutService.toggleTheme();
-  }
+  // toggleTheme() {
+  //   this.layoutService.toggleTheme();
+  // }
   
-  isDarkTheme(): boolean {
-    return this.config().darkTheme ?? false;
-  }
+  // isDarkTheme(): boolean {
+  //   return this.config().darkTheme ?? false;
+  // }
   
-  toggleSidebar() {
-    this.layoutService.onMenuToggle();
-  }
+  // toggleSidebar() {
+  //   this.layoutService.onMenuToggle();
+  // }
 }

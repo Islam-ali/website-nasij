@@ -1,364 +1,178 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles - Tailwind CSS only */
 @use 'primeicons/primeicons.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles */
+/* Essential base styles using Tailwind */
 @layer base {
   html {
-    transition: background-color 0.3s ease, color 0.3s ease;
+    @apply transition-colors duration-300;
   }
   
   body {
-    overflow: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    @apply bg-white text-gray-900;
+    @apply bg-white text-gray-900 transition-colors duration-300;
   }
   
   /* Dark mode base styles */
   .dark body {
-    @apply bg-dark-bg text-dark-text;
+    @apply bg-gray-900 text-white;
   }
   
   /* Smooth transitions for all elements */
   * {
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-gray-100;
-  }
-  
-  .dark ::-webkit-scrollbar-track {
-    @apply bg-dark-surface;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
-  }
-  
-  .dark ::-webkit-scrollbar-thumb {
-    @apply bg-dark-border;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
-  }
-  
-  .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-dark-textSecondary;
+    @apply transition-colors duration-300;
   }
 }
 
-/* Component styles */
+/* Essential component styles using Tailwind */
 @layer components {
   /* Card styles */
   .card {
-    @apply bg-white border border-gray-200 rounded-lg shadow-sm;
-  }
-  
-  .dark .card {
-    @apply bg-dark-surface border-dark-border;
+    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm dark:shadow-gray-900/50 transition-all duration-300;
   }
   
   /* Button styles */
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-800 transition-colors;
+    @apply bg-purple-600 dark:bg-purple-500 text-white hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors duration-300;
   }
   
   .btn-secondary {
-    @apply bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors;
-  }
-  
-  .dark .btn-secondary {
-    @apply bg-dark-surface text-dark-text hover:bg-dark-surfaceHover;
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300;
   }
   
   /* Input styles */
   .input {
-    @apply bg-white border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary focus:ring-1 focus:ring-primary;
-  }
-  
-  .dark .input {
-    @apply bg-dark-surface border-dark-border text-dark-text placeholder-dark-textMuted focus:border-primary focus:ring-primary;
-  }
-  
-  /* Modal/Drawer styles */
-  .modal-content {
-    @apply bg-white border border-gray-200;
-  }
-  
-  .dark .modal-content {
-    @apply bg-dark-surface border-dark-border;
-  }
-  
-  /* Navigation styles */
-  .nav-item {
-    @apply text-gray-700 hover:text-primary transition-colors;
-  }
-  
-  .dark .nav-item {
-    @apply text-dark-textSecondary hover:text-primary;
-  }
-  
-  /* Table styles */
-  .table {
-    @apply bg-white border border-gray-200;
-  }
-  
-  .dark .table {
-    @apply bg-dark-surface border-dark-border;
-  }
-  
-  .table th {
-    @apply bg-gray-50 text-gray-900 border-b border-gray-200;
-  }
-  
-  .dark .table th {
-    @apply bg-dark-surfaceHover text-dark-text border-dark-border;
-  }
-  
-  .table td {
-    @apply border-b border-gray-200 text-gray-700;
-  }
-  
-  .dark .table td {
-    @apply border-dark-border text-dark-textSecondary;
+    @apply bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-1 focus:ring-purple-500 dark:focus:ring-purple-400 transition-colors duration-300;
   }
 }
 
-/* Utility styles */
+/* Essential utility styles using Tailwind */
 @layer utilities {
   .text-shadow {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dark .text-shadow {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    @apply drop-shadow-lg;
   }
   
   .glass-effect {
-    @apply bg-white/80 backdrop-blur-md border border-white/20;
-  }
-  
-  .dark .glass-effect {
-    @apply bg-dark-surface/80 border-dark-border/20;
+    @apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-white/20 dark:border-gray-700/20;
   }
 }
 
+/* Essential link styles */
 a {
-  text-decoration: none !important;
+  @apply no-underline;
 }
 
+/* Essential loading styles using Tailwind */
 .loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #dee0e6 0%, #cbc7ce 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.dark .loading-overlay {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  @apply fixed inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex justify-center items-center z-50 transition-opacity duration-300;
 }
 
 .loading-container {
-  text-align: center;
-  color: white;
-}
-
-.logo-container {
-  margin-bottom: 2rem;
+  @apply text-center text-white;
 }
 
 .loading-logo {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease;
-  padding: 1rem;
-}
-
-.loading-logo::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #dee0e6;
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.loading-logo-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.loading-logo:hover {
-  transform: scale(1.05);
+  @apply w-32 h-32 mx-auto rounded-full bg-white/10 dark:bg-gray-800/10 shadow-2xl backdrop-blur-lg border border-white/20 dark:border-gray-700/20 transition-transform duration-300 p-4 hover:scale-105;
 }
 
 .loading-text {
-  margin-top: 1rem;
+  @apply mt-4;
 }
 
 .loading-message {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  @apply text-xl font-medium mb-4 drop-shadow-lg;
 }
 
 .loading-spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+  @apply flex justify-center mt-4;
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  @apply w-10 h-10 border-4 border-white/30 dark:border-gray-600/30 border-t-white dark:border-t-gray-400 rounded-full animate-spin;
 }
 
-@keyframes spin {
-  from {
-      transform: rotate(0deg);
-  }
-  to {
-      transform: rotate(360deg);
-  }
+.p-inputtext {
+  @apply w-[inherit];
 }
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .loading-message {
-      font-size: 1rem;
-  }
-
-  .spinner {
-      width: 30px;
-      height: 30px;
-  }
-}
-
-.ql-editor p {
-  margin: 10px 0;
-}
-
-/* PrimeNG Dark Mode Overrides */
+/* Essential PrimeNG Dark Mode Overrides using Tailwind */
 .dark .p-component {
-  @apply text-dark-text;
+  @apply text-white;
 }
 
 .dark .p-dialog {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .p-dialog .p-dialog-header {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .p-dialog .p-dialog-content {
-  @apply bg-dark-surface;
+  @apply bg-gray-800;
 }
 
 .dark .p-drawer {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
-.dark .p-drawer .p-drawer-header {
-  @apply bg-dark-surface border-dark-border;
+.p-drawer .p-drawer-header {
+  @apply dark:bg-none dark:!bg-gray-800 dark:!border-gray-700;
 }
 
 .dark .p-drawer .p-drawer-content {
-  @apply bg-dark-surface;
+  @apply bg-gray-800;
 }
 
 .dark .p-button {
-  @apply bg-dark-surface text-dark-text border-dark-border;
-}
-
-.dark .p-button:hover {
-  @apply bg-dark-surfaceHover;
+  @apply bg-gray-700 text-white border-gray-600 hover:bg-gray-600;
 }
 
 .dark .p-inputtext {
-  @apply bg-dark-surface text-dark-text border-dark-border;
-}
-
-.dark .p-inputtext:focus {
-  @apply border-primary ring-primary;
+  @apply bg-gray-800 text-white border-gray-600 focus:border-purple-400 focus:ring-purple-400;
 }
 
 .dark .p-dropdown {
-  @apply bg-dark-surface text-dark-text border-dark-border;
+  @apply bg-gray-800 text-white border-gray-600;
 }
 
 .dark .p-dropdown-panel {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .p-dropdown-item {
-  @apply text-dark-text hover:bg-dark-surfaceHover;
+  @apply text-white hover:bg-gray-700;
 }
 
 .dark .p-menu {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .p-menuitem-link {
-  @apply text-dark-text hover:bg-dark-surfaceHover;
+  @apply text-white hover:bg-gray-700;
 }
 
 .dark .p-tooltip {
-  @apply bg-dark-surface text-dark-text border-dark-border;
+  @apply bg-gray-800 text-white border-gray-700;
 }
 
 .dark .p-toast {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .p-toast .p-toast-message {
-  @apply bg-dark-surface border-dark-border;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .p-toast .p-toast-message-content {
-  @apply text-dark-text;
+  @apply text-white;
 }
 
-/* Custom animations for theme switching */
+/* Essential theme transition */
 .theme-transition {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply transition-all duration-300 ease-in-out;
 }
 
 .theme-transition * {
-  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply transition-colors duration-300 ease-in-out;
 }

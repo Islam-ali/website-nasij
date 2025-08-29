@@ -6,7 +6,6 @@ import { Feature } from '../../../interfaces/feature.interface';
   selector: 'app-feature',
   imports: [],
   templateUrl: './feature.component.html',
-  styleUrl: './feature.component.scss'
 })
 export class FeatureComponent {
   features: Feature[] = [];

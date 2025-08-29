@@ -227,7 +227,7 @@ export class CheckoutComponent implements OnInit {
       paymentMethod: formValue.paymentMethod,
       shippingAddress: {
         fullName: formValue.fullName,
-        phone: formValue.phone.startsWith('+') ? formValue.phone : `+20${formValue.phone.replace(/^0/, '')}`, // Convert to E.164 format for Egypt
+        phone: String(formValue.phone).startsWith('+') ? String(formValue.phone) : `+20${String(formValue.phone).replace(/^0/, '')}`, // Convert to E.164 format for Egypt
         address: formValue.shippingAddress.address,
         city: formValue.shippingAddress.city,
         state: formValue.shippingAddress.state,
@@ -250,7 +250,7 @@ export class CheckoutComponent implements OnInit {
         if (isPlatformBrowser(this.platformId)) {
           window.scrollTo(0, 0);
         }
-        this.messageService.add({ severity: 'success', summary: 'Order Successful', detail: `Order ID: ${response.orderId}` });
+        this.messageService.add({ severity: 'success', summary: 'Order Successful', detail: `Thank you for your purchase. Your order has been placed successfully.` });
         // Optionally redirect to order confirmation page
         // this.router.navigate(['/order-confirmation', response.orderId]);
       },

@@ -427,4 +427,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       return hasSelectedColor && hasSelectedSize;
     }) || null;
   }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }

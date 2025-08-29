@@ -21,7 +21,7 @@ export class ProductService {
     
     if (params && typeof params === 'object') {
       Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') {
+        if (value !== undefined && value !== null && value !== '' && value.length > 0) {
           httpParams = httpParams.append(key, value.toString());
         }
       });

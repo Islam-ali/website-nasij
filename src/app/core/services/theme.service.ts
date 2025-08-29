@@ -49,9 +49,9 @@ export class ThemeService {
   }
 
   private getIsDark(mode: ThemeMode): boolean {
-    // if (mode === 'system') {
-    //   return this.getSystemPrefersDark();
-    // }
+    if (!mode) {
+      return this.getSystemPrefersDark();
+    }
     return mode === 'dark';
   }
 
@@ -93,7 +93,6 @@ export class ThemeService {
     if (isPlatformBrowser(this.platformId)) {
       const html = document.documentElement;
       const body = document.body;
-      
       if (isDark) {
         html.classList.add('dark');
         body.classList.add('dark');

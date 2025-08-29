@@ -50,7 +50,6 @@ import { FeatureComponent } from "./feature/feature.component";
     CurrencyPipe
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
 })
 
 export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {

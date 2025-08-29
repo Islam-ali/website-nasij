@@ -1,15 +1,15 @@
-<section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
+<section class="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
       <div class="grid md:grid-cols-3 gap-8">
         @for(feature of features; track feature._id) {
         <!-- Free Shipping -->
         <div data-aos="fade-up" class="text-center group">
           <div
-            class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-purple-200 transition-colors">
+            class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/50 transition-colors duration-300">
             <img [src]="feature.icon.filePath" [alt]="feature.icon.fileName" class="w-10 h-10 object-contain">
           </div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">{{feature.title}}</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{{feature.title}}</h3>
+          <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">
             {{feature.description}}
           </p>
         </div>

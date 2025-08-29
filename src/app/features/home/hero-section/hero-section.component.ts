@@ -8,10 +8,12 @@ import { HeroSection } from './hero-section';
   selector: 'app-hero-section',
   imports: [CommonModule, RouterModule],
   templateUrl: './hero-section.component.html',
-  styleUrl: './hero-section.component.scss'
 })
 export class HeroSectionComponent implements OnInit {
   heroes: HeroSection[] = [];
+  isLoading = true;
+  loading = true;
+  heroSection: any = null;
 
   constructor(
     private heroSectionService: HeroSectionService,
@@ -21,6 +23,7 @@ export class HeroSectionComponent implements OnInit {
   ngOnInit() {
     this.heroSectionService.getHeroesActive().subscribe((response) => {
       this.heroes = response.data;
+      this.isLoading = false;
     });
   }
 
@@ -110,5 +113,19 @@ export class HeroSectionComponent implements OnInit {
 
   navigateTo(url: string) {
     this.router.navigate([url]);
+  }
+  
+  navigateToProducts() {
+    this.router.navigate(['/products']);
+  }
+  
+  navigateToCategories() {
+    this.router.navigate(['/categories']);
+  }
+  
+  navigateToButton(button: any) {
+    if (button && button.link) {
+      this.router.navigate([button.link]);
+    }
   }
 }

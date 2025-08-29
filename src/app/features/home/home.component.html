@@ -1,5 +1,5 @@
 <!-- Fashion Home Page -->
-<div class="fashion-home min-h-screen bg-gradient-to-br from-gray-50 to-white">
+<div class="fashion-home min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
   <!-- Hero Section -->
   <app-hero-section></app-hero-section>
 
@@ -7,17 +7,17 @@
   <app-featured-collection></app-featured-collection>
 
   <!-- Enhanced Categories Section -->
-  <section class="py-20 bg-gradient-to-br from-gray-50 to-white">
-    <div class="container mx-auto px-4">
+  <section class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
         <span data-aos="fade-up"
-          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-purple-100 text-purple-800 mb-4">
+          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 mb-4 transition-colors duration-300">
           <i class="pi pi-star-fill mr-2"></i>
           SHOP BY CATEGORY
         </span>
-        <h2 data-aos="fade-up" class="text-4xl lg:text-5xl font-bold text-gray-900 mt-2 mb-4">
+        <h2 data-aos="fade-up" class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
           <!-- Explore Fashion -->
-          <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Categories</span>
+          <span class="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">Categories</span>
         </h2>
         <!-- <p class="text-gray-600 max-w-2xl mx-auto text-lg">
           Find exactly what you're looking for in our carefully curated fashion categories. 
@@ -31,7 +31,7 @@
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-10 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[250px] lg:auto-rows-[280px]">
           @for (category of categories; track category._id; let i = $index) {
           <div data-aos="fade-up"
-            class="group relative overflow-hidden rounded-2xl bg-white shadow-lg"
+            class="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 transition-all duration-300"
             [ngClass]="getCategoryGridClass(i)">
             <div class="w-full h-full relative overflow-hidden">
               <img [src]="category.image ? category.image.filePath : null" alt="{{category.name}}"
@@ -44,25 +44,25 @@
               <div class="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
                 <!-- Category Name -->
                 <div class="mb-3">
-                  <h3 data-aos="fade-down" class="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 leading-tight drop-shadow-lg">
+                  <h3 data-aos="fade-down" class="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 leading-tight drop-shadow-lg transition-colors duration-300">
                     {{category.name}}
                   </h3>
                   <div data-aos="fade-up" class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                    <span class="text-white/80 text-sm font-medium">Explore Collection</span>
+                    <div class="w-2 h-2 bg-purple-400 dark:bg-purple-300 rounded-full animate-pulse transition-colors duration-300"></div>
+                    <span class="text-white/80 dark:text-white/70 text-sm font-medium transition-colors duration-300">Explore Collection</span>
                   </div>
                 </div>
 
                 <!-- Hover Overlay -->
                 <div
-                  class="absolute inset-0 bg-gradient-to-r from-purple-600/90 to-pink-600/90 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                  class="absolute inset-0 bg-gradient-to-r from-purple-600/90 to-pink-600/90 dark:from-purple-500/90 dark:to-pink-500/90 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
                   <div
                     class="text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     <div class="mb-4">
                       <i class="pi pi-arrow-right text-white text-2xl md:text-3xl"></i>
                     </div>
                     <button (click)="navigateToProductList(category._id)"
-                      class="bg-white text-purple-600 px-6 py-3 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-base hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                      class="bg-white dark:bg-gray-100 text-purple-600 dark:text-purple-700 px-6 py-3 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-base hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
                       Shop Now
                     </button>
                   </div>
@@ -73,10 +73,10 @@
                   <div class="w-8 h-8 md:w-12 md:h-12 border-2 border-white rounded-full animate-pulse"></div>
                 </div>
                 <div class="absolute bottom-4 left-4 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
-                  <div class="w-4 h-4 md:w-6 md:h-6 bg-purple-400 rounded-full animate-bounce"></div>
+                  <div class="w-4 h-4 md:w-6 md:h-6 bg-purple-400 dark:bg-purple-300 rounded-full animate-bounce transition-colors duration-300"></div>
                 </div>
                 <div class="absolute top-1/2 left-4 opacity-10 group-hover:opacity-30 transition-opacity duration-300">
-                  <div class="w-3 h-3 md:w-4 md:h-4 bg-pink-400 rounded-full"></div>
+                  <div class="w-3 h-3 md:w-4 md:h-4 bg-pink-400 dark:bg-pink-300 rounded-full transition-colors duration-300"></div>
                 </div>
               </div>
             </div>
@@ -84,12 +84,12 @@
           }
           @empty {
           <div class="col-span-full text-center py-16">
-            <div class="bg-white rounded-2xl shadow-lg p-8">
-              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="pi pi-tag text-gray-400 text-2xl"></i>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 p-8 transition-all duration-300">
+              <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors duration-300">
+                <i class="pi pi-tag text-gray-400 dark:text-gray-500 text-2xl transition-colors duration-300"></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">No Categories Found</h3>
-              <p class="text-gray-500">Categories will appear here once they are added.</p>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">No Categories Found</h3>
+              <p class="text-gray-500 dark:text-gray-400 transition-colors duration-300">Categories will appear here once they are added.</p>
             </div>
           </div>
           }
@@ -99,12 +99,12 @@
   </section>
 
   <!-- Featured Products -->
-  <section class="py-20 bg-white">
-    <div class="container mx-auto px-4">
+  <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
-        <span data-aos="fade-up" class="text-purple-600 font-medium">FEATURED PRODUCTS</span>
-        <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-900 mt-2 mb-4">Trending Now</h2>
-        <p data-aos="fade-up" class="text-gray-600 max-w-2xl mx-auto">
+        <span data-aos="fade-up" class="text-purple-600 dark:text-purple-400 font-medium transition-colors duration-300">FEATURED PRODUCTS</span>
+        <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">Trending Now</h2>
+        <p data-aos="fade-up" class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
           Discover the most popular fashion items that everyone is talking about
         </p>
       </div>

@@ -33,7 +33,6 @@ import { EnumProductVariant, IProduct } from '../../../features/products/models/
     { provide: Window, useValue: window }
   ],
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss']
 })
 export class ProductCardComponent implements OnInit, OnChanges {
   @Input() product!: IProduct;

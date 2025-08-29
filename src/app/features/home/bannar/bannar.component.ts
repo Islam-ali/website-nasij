@@ -9,7 +9,6 @@ import { RouterModule } from '@angular/router';
   selector: 'app-bannar',
   imports: [CommonModule , RouterModule],
   templateUrl: './bannar.component.html',
-  styleUrl: './bannar.component.scss'
 })
 export class BannarComponent {
   bannar = signal<Banner[]>([]);

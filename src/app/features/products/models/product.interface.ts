@@ -58,8 +58,10 @@ export interface IProduct {
 export interface IProductQueryParams {
   page?: number;
   limit?: number;
-  category?: string;
-  brand?: string;
+  category?: string[];
+  brand?: string[];
+  size?: string[];
+  color?: string[];
   minPrice?: number;
   maxPrice?: number;
   sortBy?: string;
