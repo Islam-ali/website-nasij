@@ -366,5 +366,5 @@ console.log(`Theme switch took ${endTime - startTime} milliseconds`);
 
 ---
 
-**تم إنشاؤه بواسطة فريق Nasig Development Team**
+**تم إنشاؤه بواسطة فريق pledge Development Team**
 **آخر تحديث: ديسمبر 2024** 

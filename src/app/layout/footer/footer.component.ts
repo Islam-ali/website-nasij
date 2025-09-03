@@ -23,7 +23,7 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
             <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
               <span class="text-white font-bold text-lg">N</span>
             </div>
-            <span class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Nasig</span>
+            <span class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">pledge</span>
           </div>
           <p class="text-gray-300 leading-relaxed">
             {{ businessProfile?.description || 'Your premier destination for fashion and lifestyle. Discover the latest trends, quality products, and exceptional shopping experience.' }}
@@ -33,7 +33,7 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
           <!-- <div class="space-y-3">
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-purple-400"></i>
-              <span>{{'info@nasig.com'}}</span>
+              <span>{{'info@pledge.com'}}</span>
             </div>
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-phone text-purple-400"></i>
@@ -124,7 +124,7 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
           <div class="space-y-4">
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-purple-400"></i>
-              <span>{{ businessProfile?.contactInfo?.email || 'info@nasig.com' }}</span>
+              <span>{{ businessProfile?.contactInfo?.email || 'info@pledge.com' }}</span>
             </div>
             <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-phone text-purple-400"></i>
@@ -181,7 +181,7 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
           <!-- Copyright -->
           <div class="flex items-center space-x-4">
             <p class="text-gray-400 text-sm">
-              © {{ currentYear }} Nasig. All rights reserved.
+              © {{ currentYear }} pledge. All rights reserved.
             </p>
             <div class="flex space-x-4 text-sm">
               <a routerLink="/privacy-policy" class="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>

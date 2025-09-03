@@ -9,7 +9,7 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root'
 })
 export class WishlistService implements OnDestroy {
-  private readonly WISHLIST_STORAGE_KEY = 'nasig_wishlist';
+  private readonly WISHLIST_STORAGE_KEY = 'pledge_wishlist';
   private wishlistState = new BehaviorSubject<IWishlistState>(this.getInitialWishlistState());
   private subscriptions = new Subscription();
 

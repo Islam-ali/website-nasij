@@ -10,7 +10,7 @@ import { BusinessProfileService } from './services/business-profile.service';
   providers: [BusinessProfileService]
 })
 export class AppComponent implements OnInit {
-  title = 'nasig-website';
+  title = 'pledge-website';
   isLoading: boolean = true;
   constructor(
     private renderer: Renderer2,

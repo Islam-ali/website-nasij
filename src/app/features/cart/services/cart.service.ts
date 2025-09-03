@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root'
 })
 export class CartService implements OnDestroy {
-  private readonly CART_STORAGE_KEY = 'nasig_cart';
+  private readonly CART_STORAGE_KEY = 'pledge_cart';
   private cartState = new BehaviorSubject<ICartState>(this.getInitialCartState());
   private subscriptions = new Subscription();
 

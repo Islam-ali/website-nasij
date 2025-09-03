@@ -1,8 +1,8 @@
-# Dark/Light Mode System - Nasig Website
+# Dark/Light Mode System - pledge Website
 
 ## نظرة عامة
 
-تم تطوير نظام Dark/Light Mode شامل لموقع Nasig مع دعم ثلاثة أوضاع:
+تم تطوير نظام Dark/Light Mode شامل لموقع pledge مع دعم ثلاثة أوضاع:
 - **Light Mode**: الوضع الفاتح
 - **Dark Mode**: الوضع الداكن  
 - **System Mode**: يتبع إعدادات النظام
@@ -237,5 +237,5 @@ colors: {
 
 ---
 
-**تم التطوير بواسطة فريق Nasig Development Team**
+**تم التطوير بواسطة فريق pledge Development Team**
 **آخر تحديث: ديسمبر 2024** 

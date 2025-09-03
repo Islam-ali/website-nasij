@@ -12,7 +12,7 @@ export interface ThemeConfig {
   providedIn: 'root'
 })
 export class ThemeService {
-  private readonly THEME_KEY = 'nasig-theme-mode';
+  private readonly THEME_KEY = 'pledge-theme-mode';
   
   private _themeConfig = signal<ThemeConfig>({
     mode: 'light',

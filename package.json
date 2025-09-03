@@ -1,5 +1,5 @@
 {
-  "name": "nasig-website",
+  "name": "pledge-website",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:nasig-website": "node dist/nasig-website/server/server.mjs"
+    "serve:ssr:pledge-website": "node dist/pledge-website/server/server.mjs"
   },
   "private": true,
   "dependencies": {
