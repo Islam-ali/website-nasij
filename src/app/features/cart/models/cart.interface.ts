@@ -1,15 +1,25 @@
 import { IArchived } from '../../../interfaces/archive.interface';
+import { IPackageItem, IProductVariantAttribute } from '../../checkout/models/checkout';
 
 export interface ICartItem {
-  productId: string;
-  color: string;
-  size: string;
+  // Product fields
+  productId?: string;
+  color?: string;
+  size?: string;
   quantity: number;
   price: number;
   image: string;
   productName: string;
-  discount: number;
+  discount?: number;
   variantImage?: IArchived | null;
+  
+  // Package fields
+  packageId?: string;
+  packageItems?: IPackageItem[];
+  selectedVariants?: any;
+  
+  // Common fields
+  itemType?: 'product' | 'package';
 }
 
 export interface ICartSummary {

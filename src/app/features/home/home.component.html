@@ -1,5 +1,6 @@
 <!-- Fashion Home Page -->
-<div class="fashion-home min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+<div
+  class="fashion-home min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
   <!-- Hero Section -->
   <app-hero-section></app-hero-section>
 
@@ -7,7 +8,9 @@
   <app-featured-collection></app-featured-collection>
 
   <!-- Enhanced Categories Section -->
-  <section class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+  @if (categories.length > 0) {
+  <section
+    class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
         <span data-aos="fade-up"
@@ -15,9 +18,11 @@
           <i class="pi pi-star-fill mr-2"></i>
           SHOP BY CATEGORY
         </span>
-        <h2 data-aos="fade-up" class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
+        <h2 data-aos="fade-up"
+          class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
           <!-- Explore Fashion -->
-          <span class="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">Categories</span>
+          <span
+            class="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">Categories</span>
         </h2>
         <!-- <p class="text-gray-600 max-w-2xl mx-auto text-lg">
           Find exactly what you're looking for in our carefully curated fashion categories. 
@@ -44,12 +49,17 @@
               <div class="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
                 <!-- Category Name -->
                 <div class="mb-3">
-                  <h3 data-aos="fade-down" class="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 leading-tight drop-shadow-lg transition-colors duration-300">
+                  <h3 data-aos="fade-down"
+                    class="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 leading-tight drop-shadow-lg transition-colors duration-300">
                     {{category.name}}
                   </h3>
                   <div data-aos="fade-up" class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-purple-400 dark:bg-purple-300 rounded-full animate-pulse transition-colors duration-300"></div>
-                    <span class="text-white/80 dark:text-white/70 text-sm font-medium transition-colors duration-300">Explore Collection</span>
+                    <div
+                      class="w-2 h-2 bg-purple-400 dark:bg-purple-300 rounded-full animate-pulse transition-colors duration-300">
+                    </div>
+                    <span
+                      class="text-white/80 dark:text-white/70 text-sm font-medium transition-colors duration-300">Explore
+                      Collection</span>
                   </div>
                 </div>
 
@@ -73,10 +83,14 @@
                   <div class="w-8 h-8 md:w-12 md:h-12 border-2 border-white rounded-full animate-pulse"></div>
                 </div>
                 <div class="absolute bottom-4 left-4 opacity-20 group-hover:opacity-40 transition-opacity duration-300">
-                  <div class="w-4 h-4 md:w-6 md:h-6 bg-purple-400 dark:bg-purple-300 rounded-full animate-bounce transition-colors duration-300"></div>
+                  <div
+                    class="w-4 h-4 md:w-6 md:h-6 bg-purple-400 dark:bg-purple-300 rounded-full animate-bounce transition-colors duration-300">
+                  </div>
                 </div>
                 <div class="absolute top-1/2 left-4 opacity-10 group-hover:opacity-30 transition-opacity duration-300">
-                  <div class="w-3 h-3 md:w-4 md:h-4 bg-pink-400 dark:bg-pink-300 rounded-full transition-colors duration-300"></div>
+                  <div
+                    class="w-3 h-3 md:w-4 md:h-4 bg-pink-400 dark:bg-pink-300 rounded-full transition-colors duration-300">
+                  </div>
                 </div>
               </div>
             </div>
@@ -84,12 +98,16 @@
           }
           @empty {
           <div class="col-span-full text-center py-16">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 p-8 transition-all duration-300">
-              <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors duration-300">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 p-8 transition-all duration-300">
+              <div
+                class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors duration-300">
                 <i class="pi pi-tag text-gray-400 dark:text-gray-500 text-2xl transition-colors duration-300"></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">No Categories Found</h3>
-              <p class="text-gray-500 dark:text-gray-400 transition-colors duration-300">Categories will appear here once they are added.</p>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">No
+                Categories Found</h3>
+              <p class="text-gray-500 dark:text-gray-400 transition-colors duration-300">Categories will appear here
+                once they are added.</p>
             </div>
           </div>
           }
@@ -97,22 +115,44 @@
       </div>
     </div>
   </section>
+  }
+
+  <!-- packages -->
+  @if (packages.length > 0) {
+  <section>
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-16">
+        <span data-aos="fade-up"
+          class="text-purple-600 dark:text-purple-400 font-medium transition-colors duration-300">PACKAGES</span>
+        <h2 data-aos="fade-up"
+          class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">Our Packages
+        </h2>
+      </div>
+      <app-carousel data-aos="fade-up" [items]="packages"></app-carousel>
+    </div>
+  </section>
+  }
 
   <!-- Featured Products -->
+  @if (featuredProducts.length > 0) {
   <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
-        <span data-aos="fade-up" class="text-purple-600 dark:text-purple-400 font-medium transition-colors duration-300">FEATURED PRODUCTS</span>
-        <h2 data-aos="fade-up" class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">Trending Now</h2>
+        <span data-aos="fade-up"
+          class="text-purple-600 dark:text-purple-400 font-medium transition-colors duration-300">FEATURED
+          PRODUCTS</span>
+        <h2 data-aos="fade-up"
+          class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">Trending Now
+        </h2>
         <p data-aos="fade-up" class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
           Discover the most popular fashion items that everyone is talking about
         </p>
       </div>
 
-      <app-carousel data-aos="fade-up" [products]="featuredProducts"></app-carousel>
+      <app-carousel data-aos="fade-up" [items]="featuredProducts"></app-carousel>
     </div>
   </section>
-
+  }
   <!-- Fashion Banner -->
   <app-bannar></app-bannar>
 

@@ -16,9 +16,8 @@ import { ProductService } from '../products/services/product.service';
 import { WishlistService } from './services/wishlist.service';
 import { IAddToCartRequest } from '../cart/models/cart.interface';
 import { environment } from '../../../environments/environment';
-import { Checkbox } from "primeng/checkbox";
 
-@Component({
+@Component({  
   selector: 'app-wishlist',
   standalone: true,
   imports: [
@@ -29,8 +28,7 @@ import { Checkbox } from "primeng/checkbox";
     ProgressSpinnerModule,
     TooltipModule,
     RippleModule,
-    DividerModule,
-    Checkbox
+    DividerModule
 ],
   templateUrl: './wishlist.component.html',
   styleUrls: ['./wishlist.component.scss']

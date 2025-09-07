@@ -1,22 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
-import { Tag } from 'primeng/tag';
-import { IProduct } from '../../../features/products/models/product.interface';
-import { ProductService } from '../../../features/products/services/product.service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { ProductCardComponent } from "../product-card/product-card.component";
 
 @Component({
   selector: 'app-carousel',
-  imports: [Carousel, ButtonModule, Tag, CommonModule, ProductCardComponent],
+  imports: [Carousel, ButtonModule, CommonModule, ProductCardComponent],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.scss'
 })
 
 export class CarouselComponent implements OnInit {
-  @Input() products: IProduct[] = [];
+  @Input() items: any[] = [];
 
   responsiveOptions: any[] | undefined;
   domain = environment.domain;

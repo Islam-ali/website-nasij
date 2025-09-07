@@ -39,47 +39,88 @@ export class CartService implements OnDestroy {
   // Add item to cart or update quantity if item exists
   addToCart(item: IAddToCartRequest): Observable<ICartState> {
     const currentState = this.cartState.value;
-    const existingItemIndex = this.findCartItemIndex(
-      currentState.items, 
-      item.productId, 
-      item.color, 
-      item.size
-    );
     
-    let updatedItems: ICartItem[];
-    
-    if (existingItemIndex > -1) {
-      // Update existing item
-      updatedItems = [...currentState.items];
-      updatedItems[existingItemIndex] = {
-        ...updatedItems[existingItemIndex],
-        quantity: updatedItems[existingItemIndex].quantity + item.quantity
-      };
+    // Check if it's a package or product
+    if (item.packageId) {
+      // Handle package
+      const existingItemIndex = this.findCartItemIndex(
+        currentState.items, 
+        undefined, 
+        undefined, 
+        undefined,
+        item.packageId
+      );
+      
+      let updatedItems: ICartItem[];
+      
+      if (existingItemIndex > -1) {
+        // Update existing package
+        updatedItems = [...currentState.items];
+        updatedItems[existingItemIndex] = {
+          ...updatedItems[existingItemIndex],
+          quantity: updatedItems[existingItemIndex].quantity + item.quantity
+        };
+      } else {
+        // Add new package
+        const newItem: ICartItem = {
+          ...item,
+          quantity: item.quantity,
+          itemType: 'package'
+        };
+        updatedItems = [...currentState.items, newItem];
+      }
+      
+      return this.updateCartState(updatedItems);
     } else {
-      // Add new item
-      const newItem: ICartItem = {
-        ...item,
-        quantity: item.quantity
-      };
-      updatedItems = [...currentState.items, newItem];
+      // Handle product (existing logic)
+      const existingItemIndex = this.findCartItemIndex(
+        currentState.items, 
+        item.productId!, 
+        item.color, 
+        item.size
+      );
+      
+      let updatedItems: ICartItem[];
+      
+      if (existingItemIndex > -1) {
+        // Update existing item
+        updatedItems = [...currentState.items];
+        updatedItems[existingItemIndex] = {
+          ...updatedItems[existingItemIndex],
+          quantity: updatedItems[existingItemIndex].quantity + item.quantity
+        };
+      } else {
+        // Add new item
+        const newItem: ICartItem = {
+          ...item,
+          quantity: item.quantity,
+          itemType: 'product'
+        };
+        updatedItems = [...currentState.items, newItem];
+      }
+      
+      return this.updateCartState(updatedItems);
     }
-    
-    return this.updateCartState(updatedItems);
   }
 
-  // Update item quantity
+  // Update item quantity (supports both products and packages)
   updateQuantity(
-    productId: string, 
-    quantity: number, 
+    productId?: string, 
+    quantity: number = 1, 
     color?: string, 
-    size?: string
+    size?: string,
+    packageId?: string
   ): Observable<ICartState> {
     if (quantity < 1) {
-      return this.removeItem(productId, color, size);
+      if (packageId) {
+        return this.removeItem(undefined, undefined, undefined, packageId);
+      } else {
+        return this.removeItem(productId, color, size);
+      }
     }
     
     const currentState = this.cartState.value;
-    const itemIndex = this.findCartItemIndex(currentState.items, productId, color, size);
+    const itemIndex = this.findCartItemIndex(currentState.items, productId, color, size, packageId);
     
     if (itemIndex === -1) {
       return of(currentState);
@@ -94,21 +135,53 @@ export class CartService implements OnDestroy {
     return this.updateCartState(updatedItems);
   }
 
-  // Remove item from cart by productId, color, and size
+  // Remove item from cart by productId, color, size, or packageId
   removeItem(
-    productId: string, 
+    productId?: string, 
     color?: string, 
-    size?: string
+    size?: string,
+    packageId?: string
   ): Observable<ICartState> {
     const currentState = this.cartState.value;
     const updatedItems = currentState.items.filter(item => {
-      const matchesProduct = item.productId === productId;
-      const matchesColor = !color || item.color === color;
-      const matchesSize = !size || item.size === size;
-      return !(matchesProduct && matchesColor && matchesSize);
+      if (packageId) {
+        // Remove package
+        return item.packageId !== packageId;
+      } else if (productId) {
+        // Remove product
+        const matchesProduct = item.productId === productId;
+        const matchesColor = !color || item.color === color;
+        const matchesSize = !size || item.size === size;
+        return !(matchesProduct && matchesColor && matchesSize);
+      }
+      return true; // Keep item if no criteria match
     });
     
     return this.updateCartState(updatedItems);
+  }
+
+  // Add package to cart
+  addPackageToCart(packageData: {
+    packageId: string;
+    quantity: number;
+    price: number;
+    productName: string;
+    image: string;
+    packageItems?: any[];
+    discount?: number;
+  }): Observable<ICartState> {
+    const packageItem: IAddToCartRequest = {
+      packageId: packageData.packageId,
+      quantity: packageData.quantity,
+      price: packageData.price,
+      productName: packageData.productName,
+      image: packageData.image,
+      packageItems: packageData.packageItems,
+      discount: packageData.discount,
+      itemType: 'package'
+    };
+    
+    return this.addToCart(packageItem);
   }
 
   // Clear the entire cart
@@ -163,18 +236,26 @@ export class CartService implements OnDestroy {
     return of(newState);
   }
 
-  // Find item index in cart by productId, color, and size
+  // Find item index in cart by productId, color, size, or packageId
   private findCartItemIndex(
     items: ICartItem[], 
-    productId: string, 
+    productId?: string, 
     color?: string, 
-    size?: string
+    size?: string,
+    packageId?: string
   ): number {
-    return items.findIndex(item => 
-      item.productId === productId &&
-      (!color || item.color === color) &&
-      (!size || item.size === size)
-    );
+    return items.findIndex(item => {
+      if (packageId) {
+        // Looking for a package
+        return item.packageId === packageId;
+      } else if (productId) {
+        // Looking for a product
+        return item.productId === productId &&
+               (!color || item.color === color) &&
+               (!size || item.size === size);
+      }
+      return false;
+    });
   }
 
   // Round to 2 decimal places for currency

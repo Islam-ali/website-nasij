@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
 import { catchError, delay, finalize, map, takeUntil, tap } from 'rxjs/operators';
@@ -17,6 +17,8 @@ import { MessageService } from 'primeng/api';
 
 // Services
 import { CartService } from './services/cart.service';
+import { PackageUrlService } from '../packages/services/package-url.service';
+import { ProductUrlService } from '../products/services/product-url.service';
 import { ICartItem, ICartState, ICartSummary } from './models/cart.interface';
 import { environment } from '../../../environments/environment';
 
@@ -99,7 +101,10 @@ export class CartComponent implements OnInit, OnDestroy {
   constructor(
     private cartService: CartService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private packageUrlService: PackageUrlService,
+    private productUrlService: ProductUrlService
   ) {
     // Initialize observables
     this.cartState$ = this.cartService.cartState$
@@ -119,8 +124,122 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Check for encoded data in query parameters
+    this.route.queryParams.subscribe(queryParams => {
+      this.handleEncodedData(queryParams);
+    });
+
     // Load cart data when component initializes
     this.loadCart();
+  }
+
+  private handleEncodedData(queryParams: any): void {
+    try {
+      // Check for encoded package data
+      if (queryParams['addPackage']) {
+        const encodedPackageData = this.packageUrlService.getPackageFromUrl({ package: queryParams['addPackage'] });
+        if (encodedPackageData && encodedPackageData.data) {
+          this.addEncodedPackageToCart(encodedPackageData.data);
+        }
+      }
+
+      // Check for encoded product data
+      if (queryParams['addProduct']) {
+        const encodedProductData = this.productUrlService.getProductFromUrl({ product: queryParams['addProduct'] });
+        if (encodedProductData && encodedProductData.data) {
+          this.addEncodedProductToCart(encodedProductData.data);
+        }
+      }
+
+      // Clear encoded data from URL after processing
+      if (queryParams['addPackage'] || queryParams['addProduct']) {
+        this.clearEncodedDataFromUrl();
+      }
+    } catch (error) {
+      console.error('Error handling encoded data:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to process item data from URL'
+      });
+    }
+  }
+
+  private addEncodedPackageToCart(packageData: any): void {
+    const packageItem = {
+      packageId: packageData.packageId,
+      quantity: packageData.quantity || 1,
+      price: packageData.price,
+      productName: packageData.productName,
+      image: packageData.image,
+      packageItems: packageData.packageItems || [],
+      discount: packageData.discount || 0,
+      itemType: 'package' as const,
+      selectedVariants: packageData.selectedVariants || {}
+    };
+
+    this.cartService.addPackageToCart(packageItem).subscribe({
+      next: (cartState) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Package added to cart successfully'
+        });
+      },
+      error: (error) => {
+        console.error('Error adding package to cart:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to add package to cart'
+        });
+      }
+    });
+  }
+
+  private addEncodedProductToCart(productData: any): void {
+    const productItem = {
+      productId: productData.productId,
+      quantity: productData.quantity || 1,
+      price: productData.price,
+      productName: productData.productName,
+      image: productData.image,
+      color: productData.color,
+      size: productData.size,
+      discount: productData.discount || 0,
+      itemType: 'product' as const
+    };
+
+    this.cartService.addToCart(productItem).subscribe({
+      next: (cartState) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Product added to cart successfully'
+        });
+      },
+      error: (error) => {
+        console.error('Error adding product to cart:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to add product to cart'
+        });
+      }
+    });
+  }
+
+  private clearEncodedDataFromUrl(): void {
+    const queryParams = { ...this.route.snapshot.queryParams };
+    delete queryParams['addPackage'];
+    delete queryParams['addProduct'];
+    delete queryParams['source'];
+    
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge'
+    });
   }
 
 
@@ -176,7 +295,7 @@ export class CartComponent implements OnInit, OnDestroy {
     if (newQuantity < 1) return;
     
     this.loading = true;
-    this.cartService.updateQuantity(item.productId, newQuantity, item.color, item.size).pipe(
+    this.cartService.updateQuantity(item.productId!, newQuantity, item.color, item.size).pipe(
       takeUntil(this.destroy$),
       tap(() => {
         this.messageService.add({
@@ -209,7 +328,7 @@ export class CartComponent implements OnInit, OnDestroy {
     }
     
     this.loading = true;
-    this.cartService.removeItem(item.productId, item.color, item.size).pipe(
+    this.cartService.removeItem(item.productId!, item.color, item.size).pipe(
       takeUntil(this.destroy$),
       tap(() => {
         this.messageService.add({

@@ -40,6 +40,21 @@ export const routes: Routes = [
         data: { breadcrumb: 'Product Details' }
       },
       {
+        path: 'packages',
+        loadComponent: () => import('./features/packages/packages.component')
+          .then(m => m.PackagesComponent)
+          .catch(() => ErrorComponent),
+        title: 'Packages',
+        data: { breadcrumb: 'Packages' }
+      },
+      {
+        path: 'packages/:id',
+        loadComponent: () => import('./features/packages/package-details/package-details.component')
+          .then(m => m.PackageDetailsComponent)
+          .catch(() => ErrorComponent),
+        data: { breadcrumb: 'Package Details' }
+      },
+      {
         path: 'cart',
         loadComponent: () => import('./features/cart/cart.component')
           .then(m => m.CartComponent)

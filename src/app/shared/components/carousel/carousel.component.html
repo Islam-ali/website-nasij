@@ -1,6 +1,6 @@
-@if (products) {
+@if (items.length > 0) {
 <div>
-    <p-carousel [value]="products" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+    <p-carousel [value]="items" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
         <ng-template let-product #item>
             <div class="min-w-[264px]">
                 <app-product-card [product]="product"></app-product-card>

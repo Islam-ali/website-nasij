@@ -24,6 +24,8 @@ import { HeroSectionComponent } from "./hero-section/hero-section.component";
 import { FeaturedCollectionComponent } from "./featured-collection/featured-collection.component";
 import { BannarComponent } from "./bannar/bannar.component";
 import { FeatureComponent } from "./feature/feature.component";
+import { PackageService } from '../packages/services/package.service';
+import { IPackage } from '../../interfaces/package.interface';
 
 @Component({
   selector: 'app-home',
@@ -61,18 +63,21 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   domain = environment.domain;  
   router = inject(Router);
   aosInitialized = false;
+  packages: IPackage[] = [];
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private wishlistService: WishlistService,
     private messageService: MessageService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private packageService: PackageService
   ) {}
 
   ngOnInit() {
     this.loadFeaturedProducts();
     this.loadNewArrivals();
     this.loadCategories();
+    this.loadPackages();
   }
   ngAfterViewInit(): void {
     AOS.init({
@@ -100,6 +105,14 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       error: (error) => {
         console.error('Error loading categories:', error);
         this.loadingCategories = false;
+      }
+    });
+  }
+
+  private loadPackages() {
+    this.packageService.getPackages().subscribe({
+      next: (response: BaseResponse<IPackage[]>) => {
+        this.packages = response.data;
       }
     });
   }

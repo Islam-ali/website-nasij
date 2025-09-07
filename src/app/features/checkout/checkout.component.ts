@@ -7,6 +7,9 @@ import { ICartItem } from '../cart/models/cart.interface';
 import { CartService } from '../cart/services/cart.service';
 import { CheckoutService } from './services/checkout.service';
 import { ICheckout } from './models/checkout';
+import { AuthService } from '../auth/services/auth.service';
+import { PackageUrlService } from '../packages/services/package-url.service';
+import { ProductUrlService } from '../products/services/product-url.service';
 import { environment } from '../../../environments/environment';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -16,7 +19,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
-import { OrderStatus, PaymentMethod, PaymentStatus } from './models/order.enum';
+import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
+import { ICreateOrder, IOrderItem, IPaymentInfo, IShippingAddress } from './models/checkout';
+import { OrderStatus } from '../../../../../pledge-dashbord/src/app/interfaces/order.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -86,16 +91,20 @@ export class CheckoutComponent implements OnInit {
   ];
 
   paymentMethods = [
-    { label: 'Cash', value: PaymentMethod.Cash },
-    // { label: 'Credit Card', value: 'credit_card' },
-    // { label: 'PayPal', value: 'paypal' }
+    { label: 'Cash', value: PaymentMethod.CASH },
+    // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
+    // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
+    // { label: 'PayPal', value: PaymentMethod.PAYPAL }
   ];
   isBuyNow = false;
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
     private checkoutService: CheckoutService,
+    private authService: AuthService,
     private messageService: MessageService,
+    private packageUrlService: PackageUrlService,
+    private productUrlService: ProductUrlService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute
   ) { }
@@ -103,38 +112,137 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.checkoutForm = this.createCheckoutForm();
     this.route.queryParams.subscribe(params => {
+      // Check for encoded data first
+      if (this.handleEncodedData(params)) {
+        return;
+      }
+
+      // Legacy product handling
       if (params['productId']) {
         this.isBuyNow = true;
-      const productId = params['productId'];
-      const quantity = params['quantity'];
-      const color = params['color'];
-      const size = params['size'];
-      const productName = params['productName'];
-      const price = params['price'];
-      const discount = params['discount'];
-      const image = params['image'];
-      this.cartItems.set([{
-        productId: productId,
-        quantity: quantity,
-        color: color,
-        size: size,
-        productName: productName,
-        price: price,
-        discount: discount,
-        image: image
-      }]);
-    }else{
-      this.cartService.cartState$.pipe(
-        takeUntil(this.destroy$)
-      ).subscribe((items: any) => {
-        console.log('Cart state updated:', items);
-        this.cartItems.set(items.items);
-      });
-      this.isBuyNow = false;
-    }
+        const productId = params['productId'];
+        const quantity = params['quantity'];
+        const color = params['color'];
+        const size = params['size'];
+        const productName = params['productName'];
+        const price = params['price'];
+        const discount = params['discount'];
+        const image = params['image'];
+        this.cartItems.set([{
+          productId: productId,
+          quantity: quantity,
+          color: color,
+          size: size,
+          productName: productName,
+          price: price,
+          discount: discount,
+          image: image
+        }]);
+      } else {
+        // Regular cart checkout
+        this.cartService.cartState$.pipe(
+          takeUntil(this.destroy$)
+        ).subscribe((items: any) => {
+          console.log('Cart state updated:', items);
+          this.cartItems.set(items.items);
+        });
+        this.isBuyNow = false;
+      }
     });
-    // Subscribe to cart state and update signal
-    
+  }
+
+  private handleEncodedData(params: any): boolean {
+    try {
+      // Check for encoded package data
+      if (params['package']) {
+        const encodedPackageData = this.packageUrlService.getPackageFromUrl(params);
+        if (encodedPackageData && encodedPackageData.data) {
+          this.handleEncodedPackage(encodedPackageData.data);
+          return true;
+        }
+      }
+
+      // Check for encoded product data
+      if (params['product']) {
+        const encodedProductData = this.productUrlService.getProductFromUrl(params);
+        if (encodedProductData && encodedProductData.data) {
+          this.handleEncodedProduct(encodedProductData.data);
+          return true;
+        }
+      }
+
+      // Check for encoded items data
+      if (params['items']) {
+        const encodedItemsData = this.packageUrlService.getItemsFromUrl(params);
+        if (encodedItemsData && encodedItemsData.data) {
+          this.handleEncodedItems(encodedItemsData.data);
+          return true;
+        }
+      }
+
+      // Check for encoded cart data
+      if (params['cart']) {
+        const encodedCartData = this.packageUrlService.getCartFromUrl(params);
+        if (encodedCartData && encodedCartData.data) {
+          this.handleEncodedCart(encodedCartData.data);
+          return true;
+        }
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Error handling encoded data:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to process checkout data from URL'
+      });
+      return false;
+    }
+  }
+
+  private handleEncodedPackage(packageData: any): void {
+    this.isBuyNow = true;
+    const packageItem = {
+      packageId: packageData.packageId,
+      quantity: packageData.quantity || 1,
+      price: packageData.price,
+      productName: packageData.productName,
+      image: packageData.image,
+      packageItems: packageData.packageItems || [],
+      discount: packageData.discount || 0,
+      itemType: 'package' as const,
+      selectedVariants: packageData.selectedVariants || {}
+    };
+    this.cartItems.set([packageItem]);
+    console.log('Package item:', packageItem);
+    console.log('Package items details:', packageData.packageItems);
+  }
+
+  private handleEncodedProduct(productData: any): void {
+    this.isBuyNow = true;
+    const productItem = {
+      productId: productData.productId,
+      quantity: productData.quantity || 1,
+      price: productData.price,
+      productName: productData.productName,
+      image: productData.image,
+      color: productData.color,
+      size: productData.size,
+      discount: productData.discount || 0,
+      itemType: 'product' as const
+    };
+    this.cartItems.set([productItem]);
+  }
+
+  private handleEncodedItems(itemsData: any[]): void {
+    this.isBuyNow = true;
+    this.cartItems.set(itemsData);
+  }
+
+  private handleEncodedCart(cartData: any): void {
+    this.isBuyNow = false;
+    this.cartItems.set(cartData.items || []);
   }
 
   ngOnDestroy(): void {
@@ -157,7 +265,7 @@ export class CheckoutComponent implements OnInit {
       }),
 
       // Payment Details
-      paymentMethod: [PaymentMethod.Cash], // Changed to null as PaymentMethod enum is removed
+      paymentMethod: [PaymentMethod.CASH],
 
 
       // Order Notes
@@ -209,33 +317,38 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    const orderData: any = {
-      items: this.cartItems().map(item => ({
-        productId: item.productId, // This should be a valid MongoDB ObjectId string
-        quantity: Number(item.quantity), // Ensure quantity is a number
-        price: Number(item.price), // Ensure price is a number
-        discountPrice: item.discount ? Number(item.discount) : 0,
-        color: item.color || undefined,
-        size: item.size || undefined
-      })),
-      subtotal: Number(this.cartTotal()),
-      tax: Number(this.calculateTax()),
-      shippingCost: Number(this.shippingCost),
-      total: Number(this.orderTotal()),
-      orderStatus: OrderStatus.PENDING,
-      paymentStatus: PaymentStatus.PENDING,
-      paymentMethod: formValue.paymentMethod,
+    // Create order items using new structure
+    const orderItems: IOrderItem[] = this.checkoutService.convertCartItemsToOrderItems(this.cartItems());
+    
+    // Create payment info
+    const paymentInfo: IPaymentInfo = this.checkoutService.createPaymentInfo(
+      formValue.paymentMethod,
+      formValue.paymentMethod === PaymentMethod.CASH ? Number(this.orderTotal()) : undefined,
+      formValue.notes || ''
+    );
+
+    // Get customer ID from auth service (optional)
+    const currentUser = this.authService.currentUserValue;
+    const customerId = currentUser?._id || undefined; // Don't use fallback, let it be undefined for guest orders
+
+    // Create order data using new backend structure
+    const orderData: ICreateOrder = {
+      customerId: customerId, // This can be undefined for guest orders
+      items: orderItems,
+      totalPrice: Number(this.orderTotal()),
+      status: OrderStatus.PENDING,
+      paymentInfo: paymentInfo,
       shippingAddress: {
         fullName: formValue.fullName,
-        phone: String(formValue.phone).startsWith('+') ? String(formValue.phone) : `+20${String(formValue.phone).replace(/^0/, '')}`, // Convert to E.164 format for Egypt
         address: formValue.shippingAddress.address,
         city: formValue.shippingAddress.city,
         state: formValue.shippingAddress.state,
-        country: formValue.shippingAddress.country // Should be 'EG' for Egypt
-      },
-      notes: formValue.notes || ''
+        country: formValue.shippingAddress.country,
+        phone: formValue.phone
+      }
     };
 
+    
     console.log('Order data being sent:', JSON.stringify(orderData, null, 2));
 
     this.checkoutService.createOrder(orderData).subscribe({

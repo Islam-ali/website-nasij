@@ -5,7 +5,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { OrderStatus } from '../../checkout/models/order.enum';
+import { OrderStatus } from '../../../../../../pledge-dashbord/src/app/interfaces/order.interface';
 
 interface Order {
   id: string;
@@ -101,8 +101,10 @@ export class OrderListComponent implements OnInit {
         return 'warning';
       case OrderStatus.CANCELLED:
         return 'danger';
-      case OrderStatus.PROCESSING:
-        return 'info';
+      case OrderStatus.POSTPONED:
+        return 'warn';
+      case OrderStatus.RETURNED:
+        return 'danger';
       default:
         return null;
     }
@@ -123,7 +125,7 @@ export class OrderListComponent implements OnInit {
         id: 'ORD-002',
         date: new Date(2023, 5, 10),
         total: 149.99,
-        status: OrderStatus.PROCESSING,
+        status: OrderStatus.PENDING,
         items: [
           { name: 'Product 2', quantity: 1, price: 149.99 }
         ]

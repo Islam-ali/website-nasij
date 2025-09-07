@@ -5,7 +5,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { OrderStatus } from '../../checkout/models/order.enum';
+import { OrderStatus } from '../../../../../../pledge-dashbord/src/app/interfaces/order.interface';
 
 interface OrderItem {
   id: string;

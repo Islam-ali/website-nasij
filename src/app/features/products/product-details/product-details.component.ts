@@ -34,6 +34,7 @@ import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 import { IArchived } from '../../../interfaces/archive.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
+import { IQueryParamsBuyNow } from '../../../interfaces/package.interface';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -325,15 +326,17 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       });
       return;
     }
+    const queryParams: IQueryParamsBuyNow = {
+      type: 'product',
+      productId: this.product?._id, quantity: this.quantity,
+      color: this.selectedColor, size: this.selectedSize,
+      name: this.product?.name, price: this.product?.price,
+      discount: this.product?.discountPrice,
+      image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product?.images[0].filePath
+    }
     this.router.navigate(['/checkout'],
       {
-        queryParams: {
-          productId: this.product?._id, quantity: this.quantity,
-          color: this.selectedColor, size: this.selectedSize,
-          productName: this.product?.name, price: this.product?.price,
-          discount: this.product?.discountPrice,
-          image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product?.images[0].filePath
-        }
+        queryParams: queryParams
       });
   }
 

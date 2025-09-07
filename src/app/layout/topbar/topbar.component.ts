@@ -96,7 +96,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   private categoryService = inject(CategoryService);
 
   updateCartQuantity(item: ICartItem, quantity: number): void {
-    this.cartService.updateQuantity(item.productId, quantity, item.color, item.size).pipe(
+    this.cartService.updateQuantity(item.productId!, quantity, item.color, item.size).pipe(
       takeUntil(this.destroy$),
       tap(() => {
         this.messageService.add({
@@ -196,7 +196,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   removeFromCart(item: ICartItem): void {
-    this.cartService.removeItem(item.productId, item.color, item.size).pipe(
+    this.cartService.removeItem(item.productId!, item.color, item.size).pipe(
           takeUntil(this.destroy$),
           tap(() => {
             this.messageService.add({

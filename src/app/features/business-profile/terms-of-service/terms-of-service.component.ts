@@ -10,6 +10,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { Nl2brPipe } from '../../../core/pipes/nl2br.pipe';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
+import { SafePipe } from '../../../core/pipes/safe.pipe';
 
 @Component({
   selector: 'app-terms-of-service',
@@ -20,7 +21,7 @@ import { IBusinessProfile } from '../../../interfaces/business-profile.interface
     ButtonModule,
     CardModule,
     ProgressSpinnerModule,
-    Nl2brPipe
+    SafePipe
   ],
   providers: [MessageService],
   templateUrl: './terms-of-service.component.html',

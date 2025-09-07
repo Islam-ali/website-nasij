@@ -1,0 +1,246 @@
+<div class="bg-background-color text-primary">
+  <p-toast></p-toast>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-container">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div class="flex flex-col items-center">
+          <div class="w-full max-w-xl sticky top-">
+            <div class="relative bg-white shadow-xl rounded-2xl p-6 border border-box-border">
+              <p-skeleton height="400px" class="mb-4"></p-skeleton>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-10">
+          <p-skeleton height="60px" class="mb-4"></p-skeleton>
+          <p-skeleton height="200px" class="mb-4"></p-skeleton>
+          <p-skeleton height="200px" class="mb-4"></p-skeleton>
+          <p-skeleton height="200px" class="mb-4"></p-skeleton>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="error-container">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 text-center">
+      <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+      <h3 class="text-xl font-semibold text-primary mb-2">
+        Oops! Something went wrong
+      </h3>
+      <p class="text-secondary mb-4">{{ error() }}</p>
+      <button 
+        pButton 
+        label="Try Again" 
+        icon="pi pi-refresh" 
+        class="p-button-primary"
+        (click)="loadPackage()"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Package Details Content -->
+  <div *ngIf="!loading() && !error() && package()" class="package-content">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <!-- Package Images -->
+        <div class="flex flex-col items-center">
+          <div class="w-full max-w-xl sticky top-28">
+            <div class="relative bg-white shadow-xl rounded-2xl p-6 border border-box-border overflow-hidden">
+              <div class="absolute top-4 right-4 z-10">
+                <span class="bg-[var(--primary-color)] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                  <i class="pi pi-images text-xs"></i>
+                  {{ images.length || 1 }} Photos
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <img 
+                  *ngFor="let image of images.slice(0, 4); let i = index"
+                  [alt]="'Selected ' + package()?.name + ' ' + (i + 1)" 
+                  class="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105" 
+                  [src]="image.itemImageSrc"
+                  (error)="onImageError($event)"
+                  (click)="openImageModal(image.itemImageSrc)"
+                />
+                <img 
+                  *ngIf="images.length === 0"
+                  [src]="getMainImage()" 
+                  [alt]="package()?.name"
+                  class="w-full h-auto object-cover rounded-lg col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
+                  (error)="onImageError($event)"
+                  (click)="openImageModal(getMainImage())"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Package Info -->
+        <div class="space-y-10">
+          <!-- Package Header -->
+          <div class="relative">
+            <div class="absolute -top-2 -left-2 w-4 h-4 bg-[var(--primary-color)] rounded-full opacity-20"></div>
+            <div class="absolute -top-1 -left-1 w-2 h-2 bg-[var(--primary-color)] rounded-full opacity-40"></div>
+            <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package()?.name }}</h1>
+            <p class="text-lg text-secondary leading-relaxed relative z-10">{{ package()?.description }}</p>
+          </div>
+
+          <!-- Package Items with Variants -->
+          <div class="space-y-8">
+            <div *ngFor="let item of package()?.items" class="bg-white p-6 rounded-xl shadow-md border border-box-border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-primary flex items-center gap-2">
+                  <i class="pi pi-box text-lg text-[var(--primary-color)]"></i>
+                  {{ item.productId.name || 'Product' }}
+                  <span *ngIf="item.quantity > 1" class="text-base font-medium text-secondary">(Select {{ item.quantity }})</span>
+                </h3>
+                <span class=" text-gray-600 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
+                  <i class="pi pi-check-circle text-xs"></i>
+                  Required
+                </span>
+              </div>
+
+              <!-- Variants Selection by Quantity -->
+              <div *ngIf="item.productId.variants && item.productId.variants.length > 0" class="space-y-6">
+                <div *ngFor="let qty of getQuantityArray(getSelectedQuantity(item.productId._id)); let qtyIndex = index" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                  <div *ngFor="let variant of item.productId.variants; let i = index">
+                    <img 
+                      [alt]="item.productId.name + ' ' + (qtyIndex + 1)" 
+                      class="w-full h-48 object-cover rounded-lg mb-4 border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
+                      [src]="getVariantImage(variant, item.productId, qtyIndex + 1)"
+                      (error)="onImageError($event)"
+                    />
+                    <label class="text-sm font-medium text-secondary mb-3 flex items-center gap-2">
+                      <i class="pi pi-palette text-sm text-[var(--primary-color)]"></i>
+                      {{ item.productId.name }} {{ qtyIndex + 1 }} {{ variant.attributes?.[0]?.variant || 'Option' }}
+                    </label>
+                    <div class="flex space-x-4 pb-6">
+                      <div *ngFor="let attr of variant.attributes" class="relative group">
+                        <!-- Image Swatch -->
+                        <button 
+                          type="button"
+                          class="w-16 h-16 rounded-lg border-2 border-box-border transition-all duration-300 relative overflow-hidden cursor-pointer"
+                          [class.border-[var(--primary-color)]!important]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.border-4!important]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.scale-110]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.shadow-2xl]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.animate-pulse]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.hover:scale-105]="!isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.hover:shadow-lg]="!isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [class.hover:border-3]="!isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
+                          [title]="attr.value"
+                          (click)="onVariantChangeByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value, $event)"
+                          (mouseenter)="onColorHover(attr.value)"
+                          (mouseleave)="onColorLeave()"
+                        >
+                          <!-- Image -->
+                          <img 
+                            [src]="getAttributeImage(attr, variant, item.productId)"
+                            [alt]="attr.value"
+                            class="w-full h-full object-cover"
+                            (error)="onImageError($event)"
+                          />
+                          
+                          <!-- Shimmer Effect -->
+                          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600"></div>
+                          
+                          <!-- Gradient Overlays -->
+                          <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          
+                          <!-- Checkmark for selected state -->
+                          <div *ngIf="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)" 
+                               class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
+                            <div class="bg-white rounded-full p-1">
+                              <i class="pi pi-check text-green-600 text-sm font-bold"></i>
+                            </div>
+                          </div>
+                        </button>
+                        
+                        <!-- Tooltip -->
+                        <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                          {{ attr.value }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fallback for items without variants -->
+              <div *ngIf="!item.productId.variants || item.productId.variants.length === 0" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <img 
+                  [alt]="item.productId.name" 
+                  class="w-full h-48 object-cover rounded-lg border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
+                  [src]="item.productId.images[0]?.filePath || 'assets/images/placeholder.jpg'"
+                  (error)="onImageError($event)"
+                />
+                <div>
+                  <p class="text-sm text-secondary">This item is included in your package</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quantity and Actions -->
+          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg border border-box-border">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="flex items-center border border-gray-300 rounded-lg">
+                  <button 
+                    class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-l-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    (click)="decreaseQuantity()"
+                    [disabled]="quantity <= 1"
+                  >
+                    <i class="pi pi-minus text-sm"></i>
+                  </button>
+                  <span class="px-4 py-2 font-semibold text-lg">{{ quantity }}</span>
+                  <button 
+                    class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-r-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    (click)="increaseQuantity()"
+                    [disabled]="quantity >= (package().stock || 1)"
+                  >
+                    <i class="pi pi-plus text-sm"></i>
+                  </button>
+                </div>
+                <div *ngIf="getSavings() > 0" class="flex flex-col gap-1">
+                  <p class="text-sm text-green-600 font-semibold flex items-center gap-1">
+                    <i class="pi pi-check-circle text-xs"></i>
+                    You save ${{ getSavings().toFixed(2) }}!
+                  </p>
+                  <p class="text-sm text-secondary flex items-center gap-1">
+                    <i class="pi pi-tag text-xs"></i>
+                    <span class="line-through">${{ getTotalValue().toFixed(2) }}</span> Box Discount
+                  </p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-secondary flex items-center justify-end gap-1">
+                  <i class="pi pi-dollar text-xs"></i>
+                  Total Price
+                </p>
+                <p class="text-4xl font-extrabold text-primary">${{ getPackageTotalPrice().toFixed(2) }}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-4 mt-8">
+                <button pButton pRipple type="button" label="Add Box to Cart" icon="pi pi-shopping-cart"
+                  class="flex-1 py-5 text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 text-white border-0 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  [disabled]="!package().stock || package().stock === 0" (click)="addToCart()"  pTooltip="Add item to your shopping cart"
+                  tooltipPosition="top"></button>
+  
+                <!-- Buy Now Button -->
+                <button type="button"
+                  class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-600 dark:hover:to-emerald-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  [disabled]="!package().stock || package().stock === 0" (click)="buyNow()" pTooltip="Checkout" tooltipPosition="top">
+                  <i class="pi pi-shopping-cart mr-3"></i>
+                  Buy Now
+                </button>
+              </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> 
