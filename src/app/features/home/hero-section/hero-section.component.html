@@ -23,12 +23,12 @@
         }
         @else {
         <!-- Dynamic Grid Layout -->
-        <div class="grid gap-6 min-h-max max-h-[600px]" [ngClass]="getGridClasses(heroes.length)">
+        <div class="grid gap-6 min-h-max " [ngClass]="getGridClasses(heroes.length)">
             @for (hero of heroes; let i = $index; track i) {
             <div class="relative group overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-900/50 h-full transition-all duration-300 hover:shadow-2xl dark:hover:shadow-gray-900/70"
                  [ngClass]="getTileClasses(i, heroes.length)">
                 <img [src]="hero.image?.filePath" [alt]="hero.title"
-                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                     class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-4 left-4 right-4 text-white">
                     <h3 class="font-bold mb-2 text-white" 

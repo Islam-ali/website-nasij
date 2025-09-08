@@ -1,10 +1,11 @@
-import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, inject, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { BusinessProfileService } from '../../services/business-profile.service';
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-footer',
@@ -21,8 +22,12 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
         <div class="space-y-6">
           <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-              <img [src]="businessProfile?.logo?.filePath" alt="pledge Logo" class="w-10 h-10">
-            </div>
+              @if(isDarkTheme()) {
+                <img [src]="businessProfile?.logo_dark?.filePath" alt="pledge Logo" class="w-10 h-10">
+              } @else {
+              <img [src]="businessProfile?.logo_light?.filePath" alt="pledge Logo" class="w-10 h-10">
+              }
+            </div>  
             <span class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">pledge</span>
           </div>
           <p class="text-gray-300 leading-relaxed">
@@ -292,9 +297,11 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
   `]
 })
 export class FooterComponent implements OnInit {
+  themeService = inject(ThemeService);
   currentYear = new Date().getFullYear();
   businessProfile: IBusinessProfile | null = null;
-  
+  isDarkTheme = computed(() => this.themeService.isDark());
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private businessProfileService: BusinessProfileService
@@ -316,8 +323,8 @@ export class FooterComponent implements OnInit {
   }
   scrollToTop() {
     if (isPlatformBrowser(this.platformId)) {
-    window.scrollTo({
-      top: 0,
+      window.scrollTo({
+        top: 0,
         behavior: 'smooth'
       });
     }

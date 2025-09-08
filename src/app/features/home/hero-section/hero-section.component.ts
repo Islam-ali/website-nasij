@@ -34,9 +34,9 @@ export class HeroSectionComponent implements OnInit {
     } else if (total === 2) {
       return 'grid-cols-1 sm:grid-cols-2 auto-rows-[200px] sm:auto-rows-[350px] md:auto-rows-[400px] lg:auto-rows-[500px]';
     } else if (total >= 3) {
-      return 'grid-cols-2 md:grid-cols-3 auto-rows-[160px]  md:auto-rows-[240px]';
+      return 'grid-cols-2 md:grid-cols-3 auto-rows-[200px]  md:auto-rows-[280px]';
     }
-    return 'grid-cols-1 auto-rows-[400px]';
+    return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
   }
 
   // Compute tile classes based on index and total count

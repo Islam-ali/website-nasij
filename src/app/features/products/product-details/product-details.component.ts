@@ -281,7 +281,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   checkCart(): boolean {
-    return !this.product || !this.selectedColor || !this.selectedSize;
+    return !this.product || (!this.selectedColor && this.variantToImageAndColor() && this.variantToImageAndColor().length > 0) || (!this.selectedSize && this.product.sizes.length > 0);
   }
 
   addToCart(): void {

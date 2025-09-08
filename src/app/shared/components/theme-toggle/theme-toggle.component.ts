@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
 
@@ -41,6 +41,7 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
   `]
 })
 export class ThemeToggleComponent {
+  isDarkTheme = computed(() => this.themeService.isDark());
   themeService = inject(ThemeService);
 
   cycleTheme(): void {

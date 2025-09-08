@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -83,13 +83,17 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
 
   constructor(
     private packageService: PackageService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.loadPackages();
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.selectedCategory = params['category'] || 'all';
+      this.loadPackages();
+    });
   }
 
   override ngOnDestroy(): void {
@@ -100,8 +104,11 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   loadPackages(): void {
     this.loading.set(true);
     this.error.set(null);
-
-    this.packageService.getPackages()
+    const filter: any = {};
+    if (this.selectedCategory !== 'all') {
+      filter.category = this.selectedCategory;
+    }
+    this.packageService.getPackages(filter)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (packages: BaseResponse<IPackage[]> ) => {
@@ -197,6 +204,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   getDiscountPercentage(pkg: IPackage): number {
     console.log(pkg);
     if (!pkg.discountPrice) return 0;
+    
     return Math.round(((pkg.price - pkg.discountPrice) / pkg.price) * 100);
   }
 

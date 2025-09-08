@@ -1,15 +1,33 @@
 import { OrderStatus } from "../../../../../../pledge-dashbord/src/app/interfaces/order.interface";
 import { PaymentMethod, PaymentStatus, OrderItemType } from "./order.enum"
 
-// Backend-compatible interfaces
+// Backend-compatible interfaces - matches CreateOrderDto
 export interface ICreateOrder {
   customerId?: string;
   items: IOrderItem[];
   totalPrice: number;
   status?: OrderStatus;
-  createdAt?: string;
-  paymentInfo: IPaymentInfo;
-  shippingAddress: IShippingAddress;
+  
+  // Additional fields from backend DTO
+  orderId?: string;
+  orderDate?: Date;
+  user?: string;
+  coupon?: string;
+  subtotal?: number;
+  tax?: number;
+  shippingCost?: number;
+  discount?: number;
+  total?: number;
+  paymentStatus?: PaymentStatus;
+  orderStatus?: OrderStatus;
+  cashPayment?: {
+    amountPaid: number;
+    changeDue: number;
+  };
+  shippingAddress?: IShippingAddress;
+  paymentMethod?: PaymentMethod;
+  deliveryDate?: string;
+  notes?: string;
 }
 
 export interface IShippingAddress {

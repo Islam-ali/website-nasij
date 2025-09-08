@@ -97,7 +97,7 @@ export class CheckoutService {
     return variants;
   }
 
-  // Create payment info
+  // Create payment info - updated to match backend DTO
   createPaymentInfo(paymentMethod: PaymentMethod, cashAmount?: number, notes?: string): IPaymentInfo {
     return {
       paymentStatus: PaymentStatus.PENDING,

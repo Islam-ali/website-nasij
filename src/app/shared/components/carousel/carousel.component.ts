@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { ProductCardComponent } from "../product-card/product-card.component";
 
 export class CarouselComponent implements OnInit {
   @Input() items: any[] = [];
-
+  @Output() onItemClick: EventEmitter<any> = new EventEmitter<any>();
   responsiveOptions: any[] | undefined;
   domain = environment.domain;
   constructor() { }

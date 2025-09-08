@@ -41,8 +41,8 @@ export interface IProduct {
   stock: number;
   status: ProductStatus;
   tags: string[];
-  colors?: string[];
-  sizes?: string[];
+  colors: string[];
+  sizes: string[];
   gender?: string;
   season?: string;
   details: { name: string; value: string }[];

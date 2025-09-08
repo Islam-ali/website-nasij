@@ -12,8 +12,8 @@ export class PackageService {
   private apiUrl = `${environment.apiUrl}/packages`;
   constructor(private http: HttpClient) {}
 
-  getPackages(): Observable<BaseResponse<IPackage[]>> {
-    return this.http.get<BaseResponse<IPackage[]>>(`${this.apiUrl}/active`);
+  getPackages(queryParams?: any): Observable<BaseResponse<IPackage[]>> {
+    return this.http.get<BaseResponse<IPackage[]>>(`${this.apiUrl}/active`, { params: queryParams });
   }
 
   getPackage(id: string): Observable<BaseResponse<IPackage>> {

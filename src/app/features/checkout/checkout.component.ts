@@ -20,7 +20,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
-import { ICreateOrder, IOrderItem, IPaymentInfo, IShippingAddress } from './models/checkout';
+import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
 import { OrderStatus } from '../../../../../pledge-dashbord/src/app/interfaces/order.interface';
 
 @Component({
@@ -319,25 +319,27 @@ export class CheckoutComponent implements OnInit {
 
     // Create order items using new structure
     const orderItems: IOrderItem[] = this.checkoutService.convertCartItemsToOrderItems(this.cartItems());
-    
-    // Create payment info
-    const paymentInfo: IPaymentInfo = this.checkoutService.createPaymentInfo(
-      formValue.paymentMethod,
-      formValue.paymentMethod === PaymentMethod.CASH ? Number(this.orderTotal()) : undefined,
-      formValue.notes || ''
-    );
 
     // Get customer ID from auth service (optional)
     const currentUser = this.authService.currentUserValue;
     const customerId = currentUser?._id || undefined; // Don't use fallback, let it be undefined for guest orders
 
-    // Create order data using new backend structure
+    // Create order data using backend DTO structure
     const orderData: ICreateOrder = {
       customerId: customerId, // This can be undefined for guest orders
       items: orderItems,
       totalPrice: Number(this.orderTotal()),
       status: OrderStatus.PENDING,
-      paymentInfo: paymentInfo,
+      
+      // Additional fields from backend DTO
+      subtotal: Number(this.cartTotal()),
+      tax: this.calculateTax(),
+      shippingCost: this.shippingCost,
+      discount: 0, // Can be calculated from coupons
+      total: Number(this.orderTotal()),
+      paymentStatus: PaymentStatus.PENDING,
+      orderStatus: OrderStatus.PENDING,
+      paymentMethod: formValue.paymentMethod,
       shippingAddress: {
         fullName: formValue.fullName,
         address: formValue.shippingAddress.address,
@@ -345,7 +347,8 @@ export class CheckoutComponent implements OnInit {
         state: formValue.shippingAddress.state,
         country: formValue.shippingAddress.country,
         phone: formValue.phone
-      }
+      },
+      notes: formValue.notes || ''
     };
 
     

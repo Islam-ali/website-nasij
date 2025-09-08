@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
 import { WishlistService } from '../../../features/wishlist/services/wishlist.service';
 import { MessageService } from 'primeng/api';
 import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlist.interface';
-import { EnumProductVariant, IProduct } from '../../../features/products/models/product.interface';
+import { EnumProductVariant } from '../../../features/products/models/product.interface';
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -35,9 +35,9 @@ import { EnumProductVariant, IProduct } from '../../../features/products/models/
   templateUrl: './product-card.component.html',
 })
 export class ProductCardComponent implements OnInit, OnChanges {
-  @Input() product!: IProduct;
+  @Input() product!: any;
   @Input() showViewDetails = true;
-  
+  @Output() clicked: EventEmitter<any> = new EventEmitter<any>();
   quantity = 1;
   loading = false;
   domain = environment.domain;
@@ -62,7 +62,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   ) {}
 
   // Get product image with fallback to placeholder
-  getProductImage(product: IProduct): string {
+  getProductImage(product: any): string {
     return `${product?.images?.[0].filePath}` || 'assets/images/placeholder.png';
   }
 
@@ -78,8 +78,8 @@ export class ProductCardComponent implements OnInit, OnChanges {
     console.log('Rating changed:', event.value);
   }
   
-  navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/shop', product._id ,product.name]);
+  navigateToProduct(product: any): void {
+    this.clicked.emit(product);
   }
   
   ngOnInit(): void {
@@ -93,7 +93,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   }
 
   // add to wishlist
-  addToWishlist(product: IProduct): void {
+  addToWishlist(product: any): void {
     this.loading = true;
     const wishlistItem: IAddToWishlistRequest = {
       productId: product._id || '',
@@ -119,9 +119,9 @@ export class ProductCardComponent implements OnInit, OnChanges {
     const colors = new Set<string>();
     const sizes = new Set<string>();
 
-    this.product.variants.forEach(variant => {
+    this.product.variants.forEach((variant: any) => {
       if (variant.attributes) {
-        variant.attributes.forEach(attr => {
+        variant.attributes.forEach((attr: any) => {
           if (attr.variant === EnumProductVariant.COLOR) {
             colors.add(attr.value);
           } else if (attr.variant === EnumProductVariant.SIZE) {

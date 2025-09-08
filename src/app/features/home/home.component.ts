@@ -174,6 +174,12 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.loading = false;
     }
   }
+  navigateToPackage(pkg: any) {
+    this.router.navigate(['/packages', pkg._id]);
+  }
+  navigateToProduct(product: any) {
+    this.router.navigate(['/shop', product._id, this.slugify(product.name)]);
+  }
 
   getProductUrl(product: IProduct): string {
     return `/shop/${product._id}`;
