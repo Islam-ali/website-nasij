@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   domain: 'https://pledge-backend-roan.vercel.app/',
-  apiUrl: 'https://pledge-backend-roan.vercel.app//api/v1', // Development API URL
+  apiUrl: 'https://pledge-backend-roan.vercel.app/api/v1', // Development API URL
   appName: 'Online Store (Dev)',
   appVersion: '1.0.0',
   stripePublishableKey: 'your-test-stripe-key',
