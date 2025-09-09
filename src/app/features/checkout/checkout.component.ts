@@ -21,7 +21,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
 import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
-import { OrderStatus } from '../../../../../pledge-dashbord/src/app/interfaces/order.interface';
+import { OrderStatus } from '../../interfaces/product.interface';
 
 @Component({
   selector: 'app-checkout',

@@ -1,4 +1,4 @@
-import { OrderStatus } from "../../../../../../pledge-dashbord/src/app/interfaces/order.interface";
+import { OrderStatus } from "../../../interfaces/product.interface";
 import { PaymentMethod, PaymentStatus, OrderItemType } from "./order.enum"
 
 // Backend-compatible interfaces - matches CreateOrderDto

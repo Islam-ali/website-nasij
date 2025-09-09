@@ -16,6 +16,16 @@ export enum ProductStatus {
   OUT_OF_STOCK = 'out_of_stock',
 }
 
+export enum OrderStatus {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  CANCELLED = 'cancelled',
+  POSTPONED = 'postponed',
+  RETURNED = 'returned',
+}
+
 export interface IProduct {
   _id: string | null;
   id: string;
