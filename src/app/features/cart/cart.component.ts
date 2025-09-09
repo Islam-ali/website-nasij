@@ -295,30 +295,64 @@ export class CartComponent implements OnInit, OnDestroy {
     if (newQuantity < 1) return;
     
     this.loading = true;
-    this.cartService.updateQuantity(item.productId!, newQuantity, item.color, item.size).pipe(
-      takeUntil(this.destroy$),
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Updated',
-          detail: 'Quantity updated successfully',
-          life: 1000,
-        });
-      }),
-      catchError((error: any) => {
-        console.error('Error updating quantity:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update quantity. Please try again.',
-          life: 1000,
-        });
-        return of(null);
-      }),
-      finalize(() => {
-        this.loading = false;
-      })
-    ).subscribe();
+    
+    // Check if it's a package or product
+    if (item.packageId && item.itemType === 'package') {
+      // Handle package update
+      this.cartService.updateQuantity(undefined, newQuantity, undefined, undefined, item.packageId).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: 'Package quantity updated successfully',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error updating package quantity:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update package quantity. Please try again.',
+            life: 1000,
+          });
+          return of(null);
+        }),
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe();
+    } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+      // Handle product update
+      this.cartService.updateQuantity(item.productId, newQuantity, item.color, item.size).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: 'Product quantity updated successfully',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error updating product quantity:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update product quantity. Please try again.',
+            life: 1000,
+          });
+          return of(null);
+        }),
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe();
+    } else {
+      console.error('Invalid item type for quantity update:', item);
+      this.loading = false;
+    }
   }
 
   // Remove item from cart
@@ -328,30 +362,64 @@ export class CartComponent implements OnInit, OnDestroy {
     }
     
     this.loading = true;
-    this.cartService.removeItem(item.productId!, item.color, item.size).pipe(
-      takeUntil(this.destroy$),
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Removed',
-          detail: 'Item removed from cart',
-          life: 1000,
-        });
-      }),
-      catchError((error: any) => {
-        console.error('Error removing item:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to remove item. Please try again.',
-          life: 1000,
-        });
-        return of(null);
-      }),
-      finalize(() => {
-        this.loading = false;
-      })
-    ).subscribe();
+    
+    // Check if it's a package or product
+    if (item.packageId && item.itemType === 'package') {
+      // Handle package removal
+      this.cartService.removeItem(undefined, undefined, undefined, item.packageId).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Removed',
+            detail: 'Package removed from cart',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error removing package:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to remove package. Please try again.',
+            life: 1000,
+          });
+          return of(null);
+        }),
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe();
+    } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+      // Handle product removal
+      this.cartService.removeItem(item.productId, item.color, item.size).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Removed',
+            detail: 'Product removed from cart',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error removing product:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to remove product. Please try again.',
+            life: 1000,
+          });
+          return of(null);
+        }),
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe();
+    } else {
+      console.error('Invalid item type for removal:', item);
+      this.loading = false;
+    }
   }
 
   // Clear entire cart

@@ -21,24 +21,24 @@
     style="animation-delay: -4s;"></div>
 
   <!-- Loading Skeleton -->
-  <div *ngIf="loading"
-    class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-7xl px-4 mx-auto py-8 relative z-10">
-    <div class="col-span-1">
+  <div
+    class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start w-full max-w-7xl px-4 mx-auto py-8 relative z-10 overflow-hidden">
+    <div class="col-span-1 w-full">
       <div
         class="w-full h-[500px] bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-3xl animate-pulse shadow-lg">
       </div>
       <div class="flex gap-3 mt-6">
         <div
-          class="w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
+          class="w-1/4 max-w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
         </div>
         <div
-          class="w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
+          class="w-1/4 max-w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
         </div>
         <div
-          class="w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
+          class="w-1/4 max-w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
         </div>
         <div
-          class="w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
+          class="w-1/4 max-w-24 h-28 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl animate-pulse shadow-md">
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@
   </div>
 
   <!-- Product Details Content -->
-  <div *ngIf="product && !loading" class="max-w-7xl mx-auto px-4 py-8 relative z-10">
+  <div *ngIf="product && !loading" class="max-w-7xl mx-auto px-4 py-8 relative z-10 overflow-hidden">
     <!-- Breadcrumb Navigation -->
     <nav class="mb-8" aria-label="Breadcrumb">
       <ol class="flex items-center space-x-2 text-sm">
@@ -128,9 +128,9 @@
     </nav>
 
     <!-- Main Product Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start w-full overflow-hidden">
       <!-- Product Images -->
-      <div class="col-span-1">
+      <div class="col-span-1 w-full overflow-hidden">
         <div
           class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl overflow-hidden border-2 border-gray-200/50 dark:border-gray-700/50 shadow-2xl dark:shadow-gray-900/50 transition-all duration-500 hover:shadow-3xl dark:hover:shadow-gray-900/70">
           <p-galleria [value]="images" [autoPlay]="false" [circular]="true" [responsiveOptions]="responsiveOptions"
@@ -182,7 +182,7 @@
       </div>
 
       <!-- Product Info -->
-      <div class="col-span-1">
+      <div class="col-span-1 w-full overflow-hidden">
         <div
           class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl p-8 border-2 border-gray-200/50 dark:border-gray-700/50 shadow-2xl dark:shadow-gray-900/50 transition-all duration-500 hover:shadow-3xl dark:hover:shadow-gray-900/70">
           <!-- Product Header -->
@@ -431,14 +431,14 @@
 
   <!-- Related Products -->
   @if (relatedProducts.length > 0) {
-  <div class="mt-24 max-w-7xl mx-auto px-4 relative z-10">
+  <div class="mt-24 max-w-7xl mx-auto px-4 relative z-10 overflow-hidden">
     <div class="text-center mb-16">
       <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">You May Also Like
       </h2>
       <p class="text-gray-600 dark:text-gray-300 text-xl transition-colors duration-300">Discover more amazing products
       </p>
     </div>
-    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full overflow-hidden">
       @for (relatedProduct of relatedProducts; track $index) {
       <div
         class="transform hover:scale-105 transition-transform duration-300">

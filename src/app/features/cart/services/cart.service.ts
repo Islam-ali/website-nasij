@@ -42,6 +42,7 @@ export class CartService implements OnDestroy {
     
     // Check if it's a package or product
     if (item.packageId) {
+      console.log('🔄 Adding package to cart:', item);
       // Handle package
       const existingItemIndex = this.findCartItemIndex(
         currentState.items, 
@@ -54,6 +55,7 @@ export class CartService implements OnDestroy {
       let updatedItems: ICartItem[];
       
       if (existingItemIndex > -1) {
+        console.log('📦 Updating existing package at index:', existingItemIndex);
         // Update existing package
         updatedItems = [...currentState.items];
         updatedItems[existingItemIndex] = {
@@ -61,6 +63,7 @@ export class CartService implements OnDestroy {
           quantity: updatedItems[existingItemIndex].quantity + item.quantity
         };
       } else {
+        console.log('📦 Adding new package to cart');
         // Add new package
         const newItem: ICartItem = {
           ...item,
@@ -70,6 +73,7 @@ export class CartService implements OnDestroy {
         updatedItems = [...currentState.items, newItem];
       }
       
+      console.log('📦 Updated cart items:', updatedItems);
       return this.updateCartState(updatedItems);
     } else {
       // Handle product (existing logic)
@@ -111,10 +115,14 @@ export class CartService implements OnDestroy {
     size?: string,
     packageId?: string
   ): Observable<ICartState> {
+    console.log('🔄 Updating quantity:', { productId, quantity, color, size, packageId });
+    
     if (quantity < 1) {
       if (packageId) {
+        console.log('📦 Removing package due to quantity < 1');
         return this.removeItem(undefined, undefined, undefined, packageId);
       } else {
+        console.log('🛍️ Removing product due to quantity < 1');
         return this.removeItem(productId, color, size);
       }
     }
@@ -122,7 +130,10 @@ export class CartService implements OnDestroy {
     const currentState = this.cartState.value;
     const itemIndex = this.findCartItemIndex(currentState.items, productId, color, size, packageId);
     
+    console.log('🔍 Found item at index:', itemIndex);
+    
     if (itemIndex === -1) {
+      console.log('❌ Item not found in cart');
       return of(currentState);
     }
     
@@ -132,6 +143,7 @@ export class CartService implements OnDestroy {
       quantity: quantity
     };
     
+    console.log('✅ Updated item quantity:', updatedItems[itemIndex]);
     return this.updateCartState(updatedItems);
   }
 
@@ -142,21 +154,28 @@ export class CartService implements OnDestroy {
     size?: string,
     packageId?: string
   ): Observable<ICartState> {
+    console.log('🗑️ Removing item:', { productId, color, size, packageId });
+    
     const currentState = this.cartState.value;
     const updatedItems = currentState.items.filter(item => {
       if (packageId) {
         // Remove package
-        return item.packageId !== packageId;
+        const shouldKeep = item.packageId !== packageId;
+        console.log('📦 Package filter:', { itemPackageId: item.packageId, targetPackageId: packageId, shouldKeep });
+        return shouldKeep;
       } else if (productId) {
         // Remove product
         const matchesProduct = item.productId === productId;
         const matchesColor = !color || item.color === color;
         const matchesSize = !size || item.size === size;
-        return !(matchesProduct && matchesColor && matchesSize);
+        const shouldKeep = !(matchesProduct && matchesColor && matchesSize);
+        console.log('🛍️ Product filter:', { itemProductId: item.productId, targetProductId: productId, matchesProduct, matchesColor, matchesSize, shouldKeep });
+        return shouldKeep;
       }
       return true; // Keep item if no criteria match
     });
     
+    console.log('✅ Items after removal:', updatedItems);
     return this.updateCartState(updatedItems);
   }
 

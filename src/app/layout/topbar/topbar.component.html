@@ -132,7 +132,7 @@
                  [(ngModel)]="searchQuery"
                  (keyup.enter)="search($event)"
                  placeholder="Search products..."
-                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-900 focus:border-transparent transition-all duration-300">
+                 class="w-full pl-10 primary-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-900 focus:border-transparent transition-all duration-300">
           <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
         </div>
       </div> -->
@@ -169,13 +169,13 @@
 
         <!-- User Menu -->
         <!-- <div class="relative" *ngIf="currentUser; else loginButton">
-          <button class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-900 to-pr-500 text-white flex items-center justify-center font-semibold hover:from-primary-900 hover:to-pr-600 transition-all duration-300">
+          <button class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-900 to-primary-500 text-white flex items-center justify-center font-semibold hover:from-primary-900 hover:to-primary-600 transition-all duration-300">
             {{ userInitials }}
           </button>
         </div>
         <ng-template #loginButton>
           <a routerLink="/auth/login" 
-             class="px-4 py-2 bg-gradient-to-r from-primary-900 to-pr-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-pr-700 transition-all duration-300">
+             class="px-4 py-2 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
             Login
           </a>
         </ng-template> -->
@@ -250,7 +250,7 @@
       </a>
     </div>
     } @else {
-    <div class="space-y-4 max-h-96 overflow-y-auto">
+    <div class="space-y-4 overflow-y-auto">
       @for (item of cartItems(); track item.productId) {
       <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg transition-all duration-300"
         [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
@@ -288,7 +288,7 @@
           View Cart
         </button>
         <button (click)="checkout()"
-          class="w-full py-3 bg-gradient-to-r from-primary-900 to-pr-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-pr-700 transition-all duration-300">
+          class="w-full py-3 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
           Checkout
         </button>
       </div>
@@ -318,12 +318,12 @@
       <p class="text-gray-500 text-lg mb-4 transition-colors duration-300"
         [class.dark:text-dark-textSecondary]="isDarkTheme()">Your wishlist is empty</p>
       <a routerLink="/shop"
-        class="inline-block px-6 py-3 bg-gradient-to-r from-primary-900 to-pr-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-pr-700 transition-all duration-300">
+        class="inline-block px-6 py-3 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
         Start Shopping
       </a>
     </div>
     } @else {
-    <div class="space-y-4 max-h-96 overflow-y-auto">
+    <div class="space-y-4 overflow-y-auto">
       @for (item of wishlistItems(); track item.productId) {
       <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg transition-all duration-300"
         [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
@@ -355,7 +355,7 @@
     <div class="p-6 border-t border-gray-200 transition-all duration-300"
       [class.dark:border-dark-border]="isDarkTheme()">
       <button (click)="navigateToWishlist($event)"
-        class="w-full py-3 bg-gradient-to-r from-primary-900 to-pr-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-pr-700 transition-all duration-300">
+        class="w-full py-3 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
         View Wishlist
       </button>
     </div>

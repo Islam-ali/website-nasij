@@ -57,6 +57,14 @@ export const serverRoutes: ServerRoute[] = [
     path: 'orders/:id',
     renderMode: RenderMode.Server
   },
+  {
+    path: 'packages',
+    renderMode: RenderMode.Server
+  },
+  {
+    path: 'packages/:id',
+    renderMode: RenderMode.Server
+  },
   // Add catch-all route to handle any other routes including dynamic ones
   {
     path: '**',

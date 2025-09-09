@@ -28,6 +28,7 @@ import { IProduct } from '../../products/models/product.interface';
 import { IArchived } from '../../../interfaces/archive.interface';
 import { PackageService } from '../services/package.service';
 import { PackageUrlService } from '../services/package-url.service';
+import { CartService } from '../../cart/services/cart.service';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { BaseResponse } from '../../../core/models/baseResponse';
 import { environment } from '../../../../environments/environment';
@@ -99,6 +100,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   private packageService = inject(PackageService);
   private messageService = inject(MessageService);
   private packageUrlService = inject(PackageUrlService);
+  private cartService = inject(CartService);
 
   constructor() {
     super();
@@ -581,29 +583,11 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       }
     }
 
-    // Prepare cart data
-    const cartData = {
-      packageId: packageData._id,
-      packageName: packageData.name,
-      packagePrice: packageData.discountPrice || packageData.price,
-      packageQuantity: this.quantity,
-      totalPrice: this.getPackageTotalPrice(),
-      items: packageData.items.map(item => ({
-        productId: item.productId._id,
-        productName: item.productId.name,
-        quantity: this.getSelectedQuantity(item.productId._id),
-        selectedVariants: this.selectedVariants[item.productId._id] || {},
-        selectedVariantsByQuantity: this.selectedVariantsByQuantity[item.productId._id] || {}
-      }))
-    };
-
-    console.log('Adding to cart:', cartData);
-
-    // Create package data for URL encoding
-    const packageDataForUrl = {
-      packageId: packageData._id,
+    // Prepare package data for cart
+    const packageDataForCart = {
+      packageId: packageData._id!,
       quantity: this.quantity,
-      price: packageData.price,
+      price: packageData.discountPrice || packageData.price,
       productName: packageData.name,
       image: packageData.images?.[0]?.filePath || '',
       packageItems: packageData.items.map(item => ({
@@ -618,8 +602,27 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       selectedVariants: this.selectedVariantsByQuantity
     };
 
-    // Navigate to cart with encoded package data
-    this.packageUrlService.navigateToCartWithPackage(packageDataForUrl as any);
+    console.log('Adding package to cart:', packageDataForCart);
+
+    // Add package to cart using cart service
+    this.cartService.addPackageToCart(packageDataForCart).subscribe({
+      next: (cartState) => {
+        console.log('Package added to cart successfully:', cartState);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Package added to cart successfully!'
+        });
+      },
+      error: (error) => {
+        console.error('Error adding package to cart:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to add package to cart. Please try again.'
+        });
+      }
+    });
   }
 
   buyNow(): void {

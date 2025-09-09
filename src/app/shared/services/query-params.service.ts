@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QueryParamsService {
 
-  constructor() { }
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   /**
    * Encode data to base64 string for URL parameters
@@ -184,6 +187,8 @@ export class QueryParamsService {
    * @returns URL with encoded parameters
    */
   createUrlWithEncodedParams(baseUrl: string, params: { [key: string]: any }): string {
+    if (isPlatformBrowser(this.platformId)) {
+
     const url = new URL(baseUrl, window.location.origin);
     
     Object.keys(params).forEach(key => {
@@ -194,6 +199,8 @@ export class QueryParamsService {
     });
     
     return url.toString();
+    }
+    return '';
   }
 
   /**

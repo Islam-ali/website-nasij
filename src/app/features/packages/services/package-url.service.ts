@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, PLATFORM_ID, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { QueryParamsService } from '../../../shared/services/query-params.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class PackageUrlService {
 
   constructor(
     private router: Router,
-    private queryParamsService: QueryParamsService
+      private queryParamsService: QueryParamsService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   /**
@@ -254,6 +256,8 @@ export class PackageUrlService {
     discount?: number;
     selectedVariants?: any[];
   }, baseUrl?: string): string {
+    if (isPlatformBrowser(this.platformId)) {
+
     try {
       const encodedPackage = this.queryParamsService.encodePackage(packageData);
       const url = baseUrl || window.location.origin;
@@ -263,6 +267,8 @@ export class PackageUrlService {
       // Fallback to regular URL
       return `${baseUrl || window.location.origin}/packages/details/${packageData.packageId}`;
     }
+    }
+    return '';
   }
 
   /**
@@ -272,6 +278,8 @@ export class PackageUrlService {
    * @returns Shareable URL with encoded items
    */
   createShareableItemsUrl(items: any[], baseUrl?: string): string {
+    if (isPlatformBrowser(this.platformId)) {
+
     try {
       const encodedItems = this.queryParamsService.encodeItems(items);
       const url = baseUrl || window.location.origin;
@@ -281,6 +289,8 @@ export class PackageUrlService {
       // Fallback to regular checkout
       return `${baseUrl || window.location.origin}/checkout`;
     }
+    }
+    return '';
   }
 
   /**

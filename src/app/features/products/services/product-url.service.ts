@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { QueryParamsService } from '../../../shared/services/query-params.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class ProductUrlService {
 
   constructor(
     private router: Router,
-    private queryParamsService: QueryParamsService
+      private queryParamsService: QueryParamsService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   /**
@@ -145,6 +147,8 @@ export class ProductUrlService {
     size?: string;
     discount?: number;
   }, baseUrl?: string): string {
+    if (isPlatformBrowser(this.platformId)) {
+
     try {
       const encodedProduct = this.queryParamsService.encodeProduct(productData);
       const url = baseUrl || window.location.origin;
@@ -154,7 +158,9 @@ export class ProductUrlService {
       // Fallback to regular URL
       return `${baseUrl || window.location.origin}/products/details/${productData.productId}`;
     }
-  }
+    }
+    return '';
+    }
 
   /**
    * Check if URL contains encoded product data

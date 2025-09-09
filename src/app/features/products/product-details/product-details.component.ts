@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription, forkJoin, of } from 'rxjs';
@@ -97,7 +97,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     private productService: ProductService,
     private wishlistService: WishlistService,
     private cartService: CartService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     super();
     this.responsiveOptions = [
@@ -432,6 +433,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   scrollToTop(): void {
+    if (isPlatformBrowser(this.platformId)) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 }
