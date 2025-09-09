@@ -289,7 +289,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       this.messageService.add({
         severity: 'warn',
         summary: 'Warning',
-        detail: 'Please select a color and size',
+        detail: 'Please select a color',
         life: 1000
       });
       return;
@@ -317,11 +317,11 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   checkout(): void {
-    if (!this.product || !this.selectedColor || !this.selectedSize) {
+    if (this.checkCart()) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Warning',
-        detail: 'Please select a color and size',
+        detail: 'Please select a color',
         life: 1000
       });
       return;
@@ -329,7 +329,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     const queryParams: IQueryParamsBuyNow = {
       type: 'product',
       productId: this.product?._id, quantity: this.quantity,
-      color: this.selectedColor, size: this.selectedSize,
+      color: this.selectedColor || '', size: this.selectedSize || '',
       name: this.product?.name, price: this.product?.price,
       discount: this.product?.discountPrice,
       image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product?.images[0].filePath

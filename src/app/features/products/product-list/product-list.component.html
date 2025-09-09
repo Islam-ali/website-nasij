@@ -10,22 +10,22 @@
         <div class="space-y-4">
           <div class="flex items-center gap-3">
             <div
-              class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 dark:from-purple-400 dark:to-pink-400 rounded-2xl flex items-center justify-center shadow-lg">
+              class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-500 dark:from-primary-400 dark:to-primary-400 rounded-2xl flex items-center justify-center shadow-lg">
               <i class="pi pi-shopping-bag text-white text-xl"></i>
             </div>
             <div>
               <h1 data-aos="fade-down" data-aos-delay="100"
-                class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-purple-800 to-gray-900 dark:from-white dark:via-purple-300 dark:to-white bg-clip-text text-transparent transition-all duration-300">
+                class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary-900 via-primary-600 to-primary-400 dark:from-white dark:via-primary-300 dark:to-white bg-clip-text text-transparent transition-all duration-300">
                 Discover Products
               </h1>
               <div
-                class="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-400 dark:to-pink-400 rounded-full mt-2">
+                class="w-20 h-1 bg-gradient-to-r from-primary-500 to-primary-500 dark:from-primary-400 dark:to-primary-400 rounded-full mt-2">
               </div>
             </div>
           </div>
           <p data-aos="fade-down" data-aos-delay="200"
             class="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
-            Showing <span class="font-bold text-purple-600 dark:text-purple-400">{{ products.length }}</span> of
+            Showing <span class="font-bold text-primary-600 dark:text-primary-400">{{ products.length }}</span> of
             <span class="font-bold text-gray-900 dark:text-white">{{ totalRecords }}</span> amazing products
           </p>
         </div>
@@ -35,15 +35,15 @@
           <!-- <div class="relative group">
             <div class="absolute inset-0 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
             <span class="p-input-icon-left relative">
-              <i class="absolute left-3 top-1/2 -translate-y-1/2 pi pi-search text-gray-400 dark:text-gray-500 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors duration-300"></i>
+              <i class="absolute left-3 top-1/2 -translate-y-1/2 pi pi-search text-gray-400 dark:text-gray-500 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-300"></i>
               <input pInputText type="text" placeholder="Search for amazing products..." formControlName="searchQuery"
-                class="w-full sm:w-80 lg:w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 rounded-2xl transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
+                class="w-full sm:w-80 lg:w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-primary-500 dark:focus:border-primary-400 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 rounded-2xl transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
             </span>
           </div> -->
 
           <!-- Filter Button -->
-          <button type="button" (click)="isDrawerOpen = true"
-            class="relative bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          <!-- <button type="button" (click)="isDrawerOpen = true"
+            class="relative bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
             <i class="pi pi-filter"></i>
             Filters
             @if (activeFiltersCount > 0) {
@@ -52,7 +52,7 @@
               {{ activeFiltersCount }}
             </span>
             }
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
       <div class="p-4 h-full overflow-y-auto space-y-8">
         <!-- Clear All Button -->
         <div
-          class="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl border border-red-200 dark:border-red-800">
+          class="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-primary-50 dark:from-red-900/20 dark:to-primary-900/20 rounded-2xl border border-red-200 dark:border-red-800">
           <div class="flex items-center gap-3">
             <i class="pi pi-trash text-red-500 dark:text-red-400"></i>
             <span class="text-sm font-medium text-red-700 dark:text-red-300">Clear all filters</span>
@@ -76,13 +76,13 @@
         <!-- Sort Dropdown -->
         <div class="space-y-4">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-              <i class="pi pi-sort text-purple-600 dark:text-purple-400 text-sm"></i>
+            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <i class="pi pi-sort text-primary-600 dark:text-primary-400 text-sm"></i>
             </div>
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Sort by</h3>
           </div>
           <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Choose sorting option"
-            styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400 rounded-xl transition-all duration-300"
+            styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-primary-500 dark:focus:border-primary-400 rounded-xl transition-all duration-300"
             (onChange)="onSortChange()"></p-select>
         </div>
 
@@ -172,8 +172,8 @@
         <!-- Sizes -->
         <div class="space-y-4">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-              <i class="pi pi-th-large text-purple-600 dark:text-purple-400 text-sm"></i>
+            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <i class="pi pi-th-large text-primary-600 dark:text-primary-400 text-sm"></i>
             </div>
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Sizes</h3>
           </div>
@@ -181,9 +181,9 @@
             <div *ngFor="let size of sizes"
               class="flex items-center space-x-2 p-3 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
               <p-checkbox [value]="size" formControlName="selectedSizes" [inputId]="'size-' + size"
-                styleClass="text-purple-600 dark:text-purple-400"></p-checkbox>
+                styleClass="text-primary-600 dark:text-primary-400"></p-checkbox>
               <label [for]="'size-' + size"
-                class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
                 {{ size }}
               </label>
             </div>
@@ -195,8 +195,8 @@
         <!-- Colors -->
         <div class="space-y-4">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center">
-              <i class="pi pi-palette text-pink-600 dark:text-pink-400 text-sm"></i>
+            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <i class="pi pi-palette text-primary-600 dark:text-primary-400 text-sm"></i>
             </div>
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Colors</h3>
           </div>
@@ -204,13 +204,13 @@
             <div *ngFor="let color of colors"
               class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
               <p-checkbox [value]="color" formControlName="selectedColors" [inputId]="'color-' + color"
-                styleClass="text-pink-600 dark:text-pink-400"></p-checkbox>
+                styleClass="text-primary-600 dark:text-primary-400"></p-checkbox>
               <div class="flex items-center space-x-3">
                 <div
                   class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 shadow-sm group-hover:scale-110 transition-transform duration-300"
                   [ngStyle]="{ 'background-color': getColorStyle(color) }"></div>
                 <label [for]="'color-' + color"
-                  class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors duration-300">
+                  class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
                   {{ color }}
                 </label>
               </div>
@@ -274,7 +274,7 @@
           }
           @for (size of filterForm.get('selectedSizes')?.value || []; track size) {
           <p-chip (onRemove)="removeSizeFilter(size)"
-            styleClass="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 border-purple-200 dark:border-purple-800 rounded-xl font-medium">
+            styleClass="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 border-primary-200 dark:border-primary-800 rounded-xl font-medium">
             <i class="pi pi-th-large mr-2"></i>
             Size {{ size }}
           </p-chip>
@@ -320,7 +320,7 @@
     <div class="space-y-12">
       <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         @for (product of products; track product._id) {
-        <app-product-card data-aos="fade-up" [product]="product"></app-product-card>
+        <app-product-card data-aos="fade-up" [product]="product" (clicked)="navigateToProduct(product)"></app-product-card>
         }
       </div>
 
@@ -349,10 +349,10 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <button pButton pRipple type="button" label="Clear All Filters"
-            class="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            class="bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             (click)="clearAllFilters()"></button>
           <button pButton pRipple type="button" label="Browse All Products"
-            class="p-button-outlined border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-purple-500 dark:hover:border-purple-400 rounded-2xl px-6 py-3 font-semibold transition-all duration-300"
+            class="p-button-outlined border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-primary-500 dark:hover:border-primary-400 rounded-2xl px-6 py-3 font-semibold transition-all duration-300"
             routerLink="/products"></button>
         </div>
       </div>

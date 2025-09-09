@@ -1,6 +1,6 @@
 @if(bannar()) {
     @for(banner of bannar(); track banner._id; let i = $index) {
-        <section class="py-20 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-700 dark:to-pink-700 transition-colors duration-300">
+        <section class="py-20 bg-gradient-to-r from-primary-400 to-primary-900 dark:from-primary-500 dark:to-primary-900 transition-colors duration-300">
           <div class="max-w-7xl mx-auto px-4">
             <div class="grid lg:grid-cols-2 gap-12 items-center"
                  >
@@ -23,7 +23,7 @@
                 >
                   @for(button of banner?.buttons; track button.label) {
                     <button data-aos="fade-up" [routerLink]="button.url" [queryParams]="button.params"
-                      class="bg-white dark:bg-gray-100 text-purple-600 dark:text-purple-700 px-8 py-2 rounded-xl font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105">
+                      class="bg-white dark:bg-gray-100 text-primary-400 dark:text-primary-400 px-8 py-2 rounded-xl font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105">
                       {{button.label}}
                     </button>
                   }

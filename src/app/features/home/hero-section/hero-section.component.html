@@ -14,7 +14,7 @@
                     <div class="h-4 rounded mb-3 bg-gray-200 dark:bg-gray-600 transition-colors duration-300"></div>
                     <button class="text-transparent px-5 py-2 rounded-lg font-semibold bg-gray-200 dark:bg-gray-600 transition-colors duration-300"></button>
                 </div>
-                <div class="absolute inset-0 bg-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-primary-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button class="text-transparent px-6 py-3 rounded-lg font-semibold transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-gray-200 dark:bg-gray-600"></button>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                        [ngClass]="getSubtitleClasses(heroes.length, i)" 
                        data-aos="fade-up" data-aos-delay="250">{{hero.subTitle}}</p>
                     @if (hero.buttonName) {
-                    <button class="px-5 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 bg-white text-purple-600 dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-200"
+                    <button class="px-5 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 bg-white text-primary-400 dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-200"
                             (click)="navigateTo(hero.buttonLink)"
                             [ngClass]="getButtonClasses(heroes.length, i)"
                             data-aos="fade-up" data-aos-delay="300">
@@ -48,9 +48,9 @@
                 </div>
                 <!-- Hover Overlay CTA -->
                 @if (hero.buttonName) {
-                <div class="absolute inset-0 bg-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-primary-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button [routerLink]="hero.buttonLink || '/shop'"
-                            class="px-6 py-3 rounded-lg font-semibold transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:scale-105 bg-white text-purple-600 dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-200">
+                            class="px-6 py-3 rounded-lg font-semibold transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:scale-105 bg-white text-primary-400 dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-200">
                         {{hero.buttonName}}
                     </button>
                 </div>
@@ -62,10 +62,10 @@
 
         <!-- Floating Elements -->
         <div
-            class="absolute -top-4 -right-4 w-24 h-24 rounded-full opacity-20 animate-pulse transition-colors duration-300 bg-gradient-to-br from-pink-400 to-purple-500 dark:from-purple-500 dark:to-pink-500">
+            class="absolute -top-4 -right-4 w-24 h-24 rounded-full opacity-20 animate-pulse transition-colors duration-300 bg-gradient-to-br from-primary-400 to-primary-400 dark:from-primary-400 dark:to-primary-400">
         </div>
         <div
-            class="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-20 animate-pulse delay-1000 transition-colors duration-300 bg-gradient-to-br from-purple-400 to-blue-500 dark:from-blue-500 dark:to-purple-500">
+            class="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-20 animate-pulse delay-1000 transition-colors duration-300 bg-gradient-to-br from-primary-400 to-primary-400 dark:from-primary-400 dark:to-primary-400">
         </div>
 
         <!-- Fashion Badge -->
@@ -85,9 +85,9 @@
 
     <!-- Background Decorative Elements -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div class="absolute top-20 left-10 w-32 h-32 rounded-full opacity-20 animate-bounce transition-colors duration-300 bg-purple-200 dark:bg-purple-600"></div>
+        <div class="absolute top-20 left-10 w-32 h-32 rounded-full opacity-20 animate-bounce transition-colors duration-300 bg-primary-400 dark:bg-primary-400"></div>
         <div
-            class="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-20 animate-bounce delay-1000 transition-colors duration-300 bg-pink-200 dark:bg-pink-600">
+            class="absolute bottom-20 right-10 w-24 h-24 rounded-full opacity-20 animate-bounce delay-1000 transition-colors duration-300 bg-primary-400 dark:bg-primary-400">
         </div>
         <div class="absolute top-1/2 left-5 w-16 h-16 rounded-full opacity-20 animate-bounce delay-500 transition-colors duration-300 bg-blue-200 dark:bg-blue-600">
         </div>

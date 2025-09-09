@@ -9,7 +9,21 @@ module.exports = {
       colors: {
         // Primary colors - Black
         primary: {
-          DEFAULT: '#000000', // Pure black
+          DEFAULT: '#976735', // Pure black
+          50: '#CEAE8CFF',
+          100: '#CBA8811F',
+          200: '#BD976F3F',
+          300: '#A9865F',
+          400: '#97754F',
+          500: '#85643F',
+          600: '#73532F',
+          700: '#61421F',
+          800: '#4F310F',
+          900: '#3D2000',
+        },
+        // Secondary colors
+        secondary: {
+          DEFAULT: '#000000', // Emerald-500
           50: '#F3F4F6',
           100: '#E5E7EB',
           200: '#D1D5DB',
@@ -20,20 +34,6 @@ module.exports = {
           700: '#1F2937',
           800: '#111827',
           900: '#000000',
-        },
-        // Secondary colors
-        secondary: {
-          DEFAULT: '#10B981', // Emerald-500
-          50: '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#34D399',
-          500: '#10B981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065F46',
-          900: '#064E3B',
         },
         // Accent colors
         accent: {

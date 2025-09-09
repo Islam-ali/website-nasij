@@ -224,14 +224,16 @@
               </div>
             </div>
             <div class="grid grid-cols-1 gap-4 mt-8">
-                <button pButton pRipple type="button" label="Add Box to Cart" icon="pi pi-shopping-cart"
-                  class="flex-1 py-5 text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 text-white border-0 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                  [disabled]="!package().stock || package().stock === 0" (click)="addToCart()"  pTooltip="Add item to your shopping cart"
-                  tooltipPosition="top"></button>
+                <button type="button"
+                  class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  [disabled]="!package().stock || package().stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart" tooltipPosition="top">
+                  <i class="pi pi-shopping-cart mr-3"></i>
+                  Add to Cart
+                </button>
   
                 <!-- Buy Now Button -->
                 <button type="button"
-                  class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-600 dark:hover:to-emerald-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                   [disabled]="!package().stock || package().stock === 0" (click)="buyNow()" pTooltip="Checkout" tooltipPosition="top">
                   <i class="pi pi-shopping-cart mr-3"></i>
                   Buy Now

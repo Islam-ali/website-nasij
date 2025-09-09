@@ -450,4 +450,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       sortBy: params['sortBy'] || 'featured',
     });
   }
+
+  navigateToProduct(product: IProduct): void {
+    this.router.navigate(['/shop', product._id, product.name]);
+  }
 }
