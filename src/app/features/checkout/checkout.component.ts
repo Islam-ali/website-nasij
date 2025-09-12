@@ -54,7 +54,7 @@ export class CheckoutComponent implements OnInit {
 
   // Computed cart total
   cartTotal = computed(() => {
-    return this.cartItems().reduce((total, item) => total + (item.price * item.quantity), 0);
+    return this.cartItems().reduce((total, item) => total + ((item.price - (item.discount || 0)) * item.quantity), 0);
   });
 
   // Computed order total

@@ -327,7 +327,7 @@
 
                   <div class="text-right">
                     <p class="text-sm font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                      {{item.price | currency}}
+                      {{item.price - (item.discount || 0) | currency}}
                     </p>
                     <p class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                       Qty: {{item.quantity}}

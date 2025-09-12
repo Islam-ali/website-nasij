@@ -139,7 +139,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       next: (cartItems: ICartItem[]) => {
         this.cartItems.set(cartItems);
         this.cartItemCount.set(cartItems.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
-        this.cartTotal.set(cartItems.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
+        this.cartTotal.set(cartItems.reduce((total: number, item: ICartItem) => total + ((item.price - (item.discount || 0)) * (item.quantity || 1)), 0));
       },
       error: (error: Error) => {
         console.error('Error loading cart items:', error);

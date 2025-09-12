@@ -77,6 +77,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   selectedVariants: { [key: string]: { [key: string]: string } } = {};
   selectedQuantities: { [key: string]: number } = {};
   selectedVariantsByQuantity: { [key: string]: { [quantity: number]: { [key: string]: string } } } = {};
+  selectedColorsByQuantity: { [key: string]: { [quantity: number]: string } } = {};
+  selectedSizesByQuantity: { [key: string]: { [quantity: number]: string } } = {};
   
   // Image gallery
   images: PackageImage[] = [];
@@ -216,11 +218,24 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       
       // Initialize variants by quantity
       this.selectedVariantsByQuantity[productId] = {};
+      this.selectedColorsByQuantity[productId] = {};
+      this.selectedSizesByQuantity[productId] = {};
+      
       for (let i = 1; i <= item.quantity; i++) {
         this.selectedVariantsByQuantity[productId][i] = {};
+        this.selectedColorsByQuantity[productId][i] = '';
+        this.selectedSizesByQuantity[productId][i] = '';
+        
         if (item.requiredVariantAttributes && item.requiredVariantAttributes.length > 0) {
           item.requiredVariantAttributes.forEach(attr => {
             this.selectedVariantsByQuantity[productId][i][attr.variant] = attr.value;
+            
+            // Set default color and size if available
+            if (attr.variant === 'color') {
+              this.selectedColorsByQuantity[productId][i] = attr.value;
+            } else if (attr.variant === 'size') {
+              this.selectedSizesByQuantity[productId][i] = attr.value;
+            }
           });
         }
       }
@@ -339,6 +354,12 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (!this.selectedVariantsByQuantity[productId]) {
       this.selectedVariantsByQuantity[productId] = {};
     }
+    if (!this.selectedColorsByQuantity[productId]) {
+      this.selectedColorsByQuantity[productId] = {};
+    }
+    if (!this.selectedSizesByQuantity[productId]) {
+      this.selectedSizesByQuantity[productId] = {};
+    }
     
     // Add new quantity slots if quantity increased
     for (let i = 1; i <= quantity; i++) {
@@ -349,6 +370,12 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
           Object.assign(this.selectedVariantsByQuantity[productId][i], this.selectedVariantsByQuantity[productId][1]);
         }
       }
+      if (!this.selectedColorsByQuantity[productId][i]) {
+        this.selectedColorsByQuantity[productId][i] = this.selectedColorsByQuantity[productId][1] || '';
+      }
+      if (!this.selectedSizesByQuantity[productId][i]) {
+        this.selectedSizesByQuantity[productId][i] = this.selectedSizesByQuantity[productId][1] || '';
+      }
     }
     
     // Remove excess quantity slots if quantity decreased
@@ -356,6 +383,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       const qty = parseInt(key);
       if (qty > quantity) {
         delete this.selectedVariantsByQuantity[productId][qty];
+        delete this.selectedColorsByQuantity[productId][qty];
+        delete this.selectedSizesByQuantity[productId][qty];
       }
     });
   }
@@ -370,6 +399,142 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
   getVariantKeysLength(variants: any): number {
     return variants ? Object.keys(variants).length : 0;
+  }
+
+  // New functions for color and size selection
+  getAvailableColors(productId: string): string[] {
+    const packageData = this.package();
+    if (!packageData) return [];
+    
+    const item = packageData.items.find(i => i.productId._id === productId);
+    if (!item?.productId?.variants) return [];
+    
+    const colors = new Set<string>();
+    item.productId.variants.forEach(variant => {
+      if (variant.attributes) {
+        variant.attributes.forEach(attr => {
+          if (attr.variant === 'color') {
+            colors.add(attr.value);
+          }
+        });
+      }
+    });
+    
+    return Array.from(colors);
+  }
+
+  getAvailableSizes(productId: string): string[] {
+    const packageData = this.package();
+    if (!packageData) return [];
+    
+    const item = packageData.items.find(i => i.productId._id === productId);
+    if (!item?.productId?.variants) return [];
+    
+    const sizes = new Set<string>();
+    item.productId.variants.forEach(variant => {
+      if (variant.attributes) {
+        variant.attributes.forEach(attr => {
+          if (attr.variant === 'size') {
+            sizes.add(attr.value);
+          }
+        });
+      }
+    });
+    
+    return Array.from(sizes);
+  }
+
+  isColorSelectedForQuantity(productId: string, quantity: number, color: string): boolean {
+    return this.selectedColorsByQuantity[productId]?.[quantity] === color;
+  }
+
+  isSizeSelectedForQuantity(productId: string, quantity: number, size: string): boolean {
+    return this.selectedSizesByQuantity[productId]?.[quantity] === size;
+  }
+
+  onColorSelectForQuantity(productId: string, quantity: number, color: string, event?: any): void {
+    if (!this.selectedColorsByQuantity[productId]) {
+      this.selectedColorsByQuantity[productId] = {};
+    }
+    this.selectedColorsByQuantity[productId][quantity] = color;
+    
+    // Update the variant selection
+    if (!this.selectedVariantsByQuantity[productId]) {
+      this.selectedVariantsByQuantity[productId] = {};
+    }
+    if (!this.selectedVariantsByQuantity[productId][quantity]) {
+      this.selectedVariantsByQuantity[productId][quantity] = {};
+    }
+    this.selectedVariantsByQuantity[productId][quantity]['color'] = color;
+    
+    // Add ripple effect
+    if (event) {
+      this.createRippleEffect(event);
+    }
+  }
+
+  onSizeSelectForQuantity(productId: string, quantity: number, size: string, event?: any): void {
+    if (!this.selectedSizesByQuantity[productId]) {
+      this.selectedSizesByQuantity[productId] = {};
+    }
+    this.selectedSizesByQuantity[productId][quantity] = size;
+    
+    // Update the variant selection
+    if (!this.selectedVariantsByQuantity[productId]) {
+      this.selectedVariantsByQuantity[productId] = {};
+    }
+    if (!this.selectedVariantsByQuantity[productId][quantity]) {
+      this.selectedVariantsByQuantity[productId][quantity] = {};
+    }
+    this.selectedVariantsByQuantity[productId][quantity]['size'] = size;
+    
+    // Add ripple effect
+    if (event) {
+      this.createRippleEffect(event);
+    }
+  }
+
+  getColorImage(productId: string, color: string): string | null {
+    const packageData = this.package();
+    if (!packageData) return null;
+    
+    const item = packageData.items.find(i => i.productId._id === productId);
+    if (!item?.productId?.variants) return null;
+    
+    // Find the variant that has this color
+    for (const variant of item.productId.variants) {
+      if (variant.attributes) {
+        for (const attr of variant.attributes) {
+          if (attr.variant === 'color' && attr.value === color && attr.image?.filePath) {
+            return attr.image.filePath;
+          }
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  getVariantImageForQuantity(productId: string, quantity: number): string {
+    const packageData = this.package();
+    if (!packageData) return 'assets/images/placeholder.jpg';
+    
+    const item = packageData.items.find(i => i.productId._id === productId);
+    if (!item) return 'assets/images/placeholder.jpg';
+    
+    const selectedColor = this.selectedColorsByQuantity[productId]?.[quantity];
+    const selectedSize = this.selectedSizesByQuantity[productId]?.[quantity];
+    
+    // Try to find image based on selected color and size
+    if (selectedColor) {
+      const colorImage = this.getColorImage(productId, selectedColor);
+      if (colorImage) {
+        return colorImage;
+      }
+    }
+    
+    // Fallback to product main image
+    return item.productId.images?.[0]?.filePath || 'assets/images/placeholder.jpg';
   }
 
   increaseQuantity(): void {

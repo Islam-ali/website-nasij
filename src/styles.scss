@@ -156,17 +156,7 @@ a {
   @apply bg-gray-800 text-white border-gray-700;
 }
 
-.dark .p-toast {
-  @apply bg-gray-800 border-gray-700;
-}
 
-.dark .p-toast .p-toast-message {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.dark .p-toast .p-toast-message-content {
-  @apply text-white;
-}
 
 /* Essential theme transition */
 .theme-transition {

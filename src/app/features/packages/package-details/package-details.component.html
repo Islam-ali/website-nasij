@@ -49,7 +49,7 @@
           <div class="w-full max-w-xl sticky top-28">
             <div class="relative bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-box-border dark:border-gray-600 overflow-hidden">
               <div class="absolute top-4 right-4 z-10">
-                <span class="bg-[var(--primary-color)] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                <span class="bg-primary-500 dark:bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                   <i class="pi pi-images text-xs"></i>
                   {{ images.length || 1 }} Photos
                 </span>
@@ -57,7 +57,7 @@
               <div class="grid grid-cols-2 gap-4">
                 <img 
                   *ngFor="let image of images.slice(0, 4); let i = index"
-                  [alt]="'Selected ' + package()?.name + ' ' + (i + 1)" 
+                  [alt]="'Selected ' + (package()?.name || '') + ' ' + (i + 1)" 
                   class="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105" 
                   [src]="image.itemImageSrc"
                   (error)="onImageError($event)"
@@ -66,7 +66,7 @@
                 <img 
                   *ngIf="images.length === 0"
                   [src]="getMainImage()" 
-                  [alt]="package()?.name"
+                  [alt]="package()?.name || ''"
                   class="w-full h-auto object-cover rounded-lg col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
                   (error)="onImageError($event)"
                   (click)="openImageModal(getMainImage())"
@@ -80,18 +80,18 @@
         <div class="space-y-10">
           <!-- Package Header -->
           <div class="relative">
-            <div class="absolute -top-2 -left-2 w-4 h-4 bg-[var(--primary-color)] rounded-full opacity-20"></div>
-            <div class="absolute -top-1 -left-1 w-2 h-2 bg-[var(--primary-color)] rounded-full opacity-40"></div>
-            <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package()?.name }}</h1>
-            <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package()?.description }}</p>
+            <div class="absolute -top-2 -left-2 w-4 h-4 bg-primary rounded-full opacity-20"></div>
+            <div class="absolute -top-1 -left-1 w-2 h-2 bg-primary rounded-full opacity-40"></div>
+            <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package()?.name || '' }}</h1>
+            <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package()?.description || '' }}</p>
           </div>
 
           <!-- Package Items with Variants -->
           <div class="space-y-8">
-            <div *ngFor="let item of package()?.items" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-box-border dark:border-gray-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div *ngFor="let item of (package()?.items || [])" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-box-border dark:border-gray-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl font-bold text-primary flex items-center gap-2">
-                  <i class="pi pi-box text-lg text-[var(--primary-color)]"></i>
+                  <i class="pi pi-box text-lg text-primary"></i>
                   {{ item.productId.name || 'Product' }}
                   <span *ngIf="item.quantity > 1" class="text-base font-medium text-secondary">(Select {{ item.quantity }})</span>
                 </h3>
@@ -103,66 +103,103 @@
 
               <!-- Variants Selection by Quantity -->
               <div *ngIf="item.productId.variants && item.productId.variants.length > 0" class="space-y-6">
-                <div *ngFor="let qty of getQuantityArray(getSelectedQuantity(item.productId._id)); let qtyIndex = index" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                  <div *ngFor="let variant of item.productId.variants; let i = index">
+                <div *ngFor="let qty of getQuantityArray(getSelectedQuantity(item.productId._id)); let qtyIndex = index" class="space-y-6">
+                  <!-- Product Image for this quantity -->
+                  <div class="relative">
                     <img 
                       [alt]="item.productId.name + ' ' + (qtyIndex + 1)" 
                       class="w-full h-48 object-cover rounded-lg mb-4 border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
-                      [src]="getVariantImage(variant, item.productId, qtyIndex + 1)"
+                      [src]="getVariantImageForQuantity(item.productId._id, qtyIndex + 1)"
                       (error)="onImageError($event)"
                     />
-                    <label class="text-sm font-medium text-secondary mb-3 flex items-center gap-2">
-                      <i class="pi pi-palette text-sm text-[var(--primary-color)]"></i>
-                      {{ item.productId.name }} {{ qtyIndex + 1 }} {{ variant.attributes?.[0]?.variant || 'Option' }}
+                    <div class="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      {{ item.productId.name }} {{ qtyIndex + 1 }}
+                    </div>
+                  </div>
+
+                  <!-- Color Selection -->
+                  <div *ngIf="getAvailableColors(item.productId._id).length > 0" class="space-y-3">
+                    <label class="text-lg font-semibold text-primary dark:text-white flex items-center gap-2">
+                      <i class="pi pi-palette text-primary"></i>
+                      Color
                     </label>
-                    <div class="flex space-x-4 pb-6">
-                      <div *ngFor="let attr of variant.attributes" class="relative group">
-                        <!-- Image Swatch -->
+                    <div class="flex flex-wrap gap-3">
+                      <div *ngFor="let color of getAvailableColors(item.productId._id)" class="relative group">
                         <button 
                           type="button"
-                          class="w-16 h-16 rounded-lg border-2 border-box-border transition-all duration-300 relative overflow-hidden cursor-pointer"
-                          [class.border-[var(--primary-color)]!important]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.border-4!important]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.scale-110]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.shadow-2xl]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.animate-pulse]="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.hover:scale-105]="!isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.hover:shadow-lg]="!isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [class.hover:border-3]="!isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)"
-                          [title]="attr.value"
-                          (click)="onVariantChangeByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value, $event)"
-                          (mouseenter)="onColorHover(attr.value)"
-                          (mouseleave)="onColorLeave()"
+                          class="color-swatch w-12 h-12 rounded-lg border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
+                          [class.border-primary!important]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.border-4!important]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.scale-110]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.shadow-2xl]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.animate-pulse]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.selected]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.hover:scale-105]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.hover:shadow-lg]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [class.hover:border-3]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
+                          [title]="color"
+                          (click)="onColorSelectForQuantity(item.productId._id, qtyIndex + 1, color, $event)"
                         >
-                          <!-- Image -->
+                          <!-- Color Image or Color Swatch -->
                           <img 
-                            [src]="getAttributeImage(attr, variant, item.productId)"
-                            [alt]="attr.value"
+                            *ngIf="getColorImage(item.productId._id, color)"
+                            [src]="getColorImage(item.productId._id, color)"
+                            [alt]="color"
                             class="w-full h-full object-cover"
                             (error)="onImageError($event)"
                           />
-                          
-                          <!-- Shimmer Effect -->
-                          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600"></div>
-                          
-                          <!-- Gradient Overlays -->
-                          <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div 
+                            *ngIf="!getColorImage(item.productId._id, color)"
+                            class="w-full h-full rounded-lg"
+                            [ngStyle]="{'background-color': getColorValue(color)}"
+                          ></div>
                           
                           <!-- Checkmark for selected state -->
-                          <div *ngIf="isVariantSelectedByQuantity(item.productId._id, qtyIndex + 1, attr.variant, attr.value)" 
+                          <div *ngIf="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)" 
                                class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
                             <div class="bg-white rounded-full p-1">
-                              <i class="pi pi-check text-green-600 text-sm font-bold"></i>
+                              <i class="pi pi-check text-green-600 text-xs font-bold"></i>
                             </div>
                           </div>
                         </button>
                         
                         <!-- Tooltip -->
                         <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                          {{ attr.value }}
+                          {{ color }}
                         </div>
                       </div>
+                    </div>
+                  </div>
+
+                  <!-- Size Selection -->
+                  <div *ngIf="getAvailableSizes(item.productId._id).length > 0" class="space-y-3">
+                    <label class="text-lg font-semibold text-primary dark:text-white flex items-center gap-2">
+                      <i class="pi pi-th-large text-primary"></i>
+                      Size
+                    </label>
+                    <div class="flex flex-wrap gap-3">
+                      <button 
+                        *ngFor="let size of getAvailableSizes(item.productId._id)"
+                        type="button"
+                        class="size-button px-4 py-2 rounded-lg border-2 transition-all duration-300 font-semibold text-sm min-w-[60px] text-center"
+                        [class.border-primary!important]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.bg-primary!important]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.text-white!important]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.scale-110]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.shadow-2xl]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.animate-pulse]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.selected]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.hover:scale-105]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.hover:shadow-lg]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.hover:border-3]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.border-gray-300]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.text-gray-700]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [class.bg-white]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
+                        [title]="size"
+                        (click)="onSizeSelectForQuantity(item.productId._id, qtyIndex + 1, size, $event)"
+                      >
+                        {{ size }}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -173,7 +210,7 @@
                 <img 
                   [alt]="item.productId.name" 
                   class="w-full h-48 object-cover rounded-lg border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
-                  [src]="item.productId.images[0]?.filePath || 'assets/images/placeholder.jpg'"
+                  [src]="(item.productId.images?.[0]?.filePath) || 'assets/images/placeholder.jpg'"
                   (error)="onImageError($event)"
                 />
                 <div>
@@ -245,4 +282,102 @@
 
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+/* Color and Size Selection Styles */
+.color-swatch-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Enhanced hover effects for color swatches */
+.color-swatch:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.color-swatch.selected {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Size button enhancements */
+.size-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.size-button.selected {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Smooth transitions */
+.color-swatch,
+.size-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode enhancements */
+.dark .color-swatch {
+  border-color: #374151;
+}
+
+.dark .color-swatch:hover {
+  border-color: #6b7280;
+}
+
+.dark .size-button {
+  border-color: #374151;
+  background-color: #1f2937;
+  color: #d1d5db;
+}
+
+.dark .size-button:hover {
+  border-color: #6b7280;
+  background-color: #374151;
+}
+
+.dark .size-button.selected {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .color-swatch {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .size-button {
+    min-width: 50px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Animation for selection feedback */
+@keyframes selection-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.selection-feedback {
+  animation: selection-pulse 0.3s ease-in-out;
+}
+</style> 
