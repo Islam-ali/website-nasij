@@ -281,14 +281,14 @@
             <div class="space-y-4">
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-                <i class="pi pi-palette mr-3 text-primary-600 dark:text-primary-400"></i>
+                <i class="pi pi-palette me-3 text-primary-600 dark:text-primary-400"></i>
                 Color
               </label>
               <div class="flex flex-wrap gap-4">
                 @for (variantimgAndColor of variantToImageAndColor(); track $index) {
                 <label
                   [for]="'color-' + variantimgAndColor.color"
-                  class="relative cursor-pointer group rounded-full border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+                  class="relative cursor-pointer group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
                   [ngClass]="{ 
                     'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': selectedColor === variantimgAndColor.color,
                     'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': selectedColor !== variantimgAndColor.color 
@@ -298,14 +298,14 @@
                     class="sr-only" />
                   @if (variantimgAndColor.image) {
                   <div
-                    class="w-16 h-16 rounded-full overflow-hidden">
+                    class="w-16 h-16 rounded-xl overflow-hidden">
                     <img [src]="variantimgAndColor.image.filePath" [alt]="variantimgAndColor.color"
                       class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110"
                       (click)="selectImageForColor(variantimgAndColor.color)">
                   </div>
                   } @else {
                     <div
-                      class="w-16 h-16 rounded-full p-1 cursor-pointer transition-transform duration-300 hover:scale-110"
+                      class="w-16 h-16 rounded-xl p-1 cursor-pointer transition-transform duration-300 hover:scale-110"
                       [ngStyle]="{'background-color': variantimgAndColor.color}"
                       (click)="selectImageForColor(variantimgAndColor.color)"></div>
                   }
@@ -359,9 +359,6 @@
                   incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
                   decrementButtonIcon="pi pi-minus"
                   styleClass="w-40 max-w-max bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-2xl transition-all duration-300 shadow-lg"></p-inputNumber>
-                <span class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ product.stock }} available
-                </span>
               </div>
             </div>
           </form>
@@ -377,7 +374,7 @@
             </button>
               <!-- Buy Now Button -->
               <button type="button"
-                class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-emerald-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                 [disabled]="product.stock === 0" (click)="checkout()" pTooltip="Checkout" tooltipPosition="top">
                 <i class="pi pi-shopping-cart mr-3"></i>
                 Buy Now

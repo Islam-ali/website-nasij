@@ -47,7 +47,7 @@
         <!-- Package Images -->
         <div class="flex flex-col items-center">
           <div class="w-full max-w-xl sticky top-28">
-            <div class="relative bg-white shadow-xl rounded-2xl p-6 border border-box-border overflow-hidden">
+            <div class="relative bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-box-border dark:border-gray-600 overflow-hidden">
               <div class="absolute top-4 right-4 z-10">
                 <span class="bg-[var(--primary-color)] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                   <i class="pi pi-images text-xs"></i>
@@ -83,12 +83,12 @@
             <div class="absolute -top-2 -left-2 w-4 h-4 bg-[var(--primary-color)] rounded-full opacity-20"></div>
             <div class="absolute -top-1 -left-1 w-2 h-2 bg-[var(--primary-color)] rounded-full opacity-40"></div>
             <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package()?.name }}</h1>
-            <p class="text-lg text-secondary leading-relaxed relative z-10">{{ package()?.description }}</p>
+            <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package()?.description }}</p>
           </div>
 
           <!-- Package Items with Variants -->
           <div class="space-y-8">
-            <div *ngFor="let item of package()?.items" class="bg-white p-6 rounded-xl shadow-md border border-box-border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div *ngFor="let item of package()?.items" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-box-border dark:border-gray-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl font-bold text-primary flex items-center gap-2">
                   <i class="pi pi-box text-lg text-[var(--primary-color)]"></i>
@@ -184,12 +184,12 @@
           </div>
 
           <!-- Quantity and Actions -->
-          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg border border-box-border">
+          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 dark:border-gray-600 p-8 rounded-2xl shadow-lg border border-box-border">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-4">
-                <div class="flex items-center border border-gray-300 rounded-lg">
+                <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
                   <button 
-                    class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-l-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="px-3 py-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-l-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     (click)="decreaseQuantity()"
                     [disabled]="quantity <= 1"
                   >
@@ -197,7 +197,7 @@
                   </button>
                   <span class="px-4 py-2 font-semibold text-lg">{{ quantity }}</span>
                   <button 
-                    class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-r-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="px-3 py-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-r-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     (click)="increaseQuantity()"
                     [disabled]="quantity >= (package().stock || 1)"
                   >
@@ -205,18 +205,18 @@
                   </button>
                 </div>
                 <div *ngIf="getSavings() > 0" class="flex flex-col gap-1">
-                  <p class="text-sm text-green-600 font-semibold flex items-center gap-1">
+                  <p class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center gap-1">
                     <i class="pi pi-check-circle text-xs"></i>
                     You save ${{ getSavings().toFixed(2) }}!
                   </p>
-                  <p class="text-sm text-secondary flex items-center gap-1">
+                  <p class="text-sm text-secondary dark:text-gray-400 flex items-center gap-1">
                     <i class="pi pi-tag text-xs"></i>
-                    <span class="line-through">${{ getTotalValue().toFixed(2) }}</span> Box Discount
+                    <span class="line-through">${{ getTotalValue().toFixed(2) }}</span>
                   </p>
                 </div>
               </div>
               <div class="text-right">
-                <p class="text-sm text-secondary flex items-center justify-end gap-1">
+                <p class="text-sm text-secondary dark:text-gray-400 flex items-center justify-end gap-1">
                   <i class="pi pi-dollar text-xs"></i>
                   Total Price
                 </p>
