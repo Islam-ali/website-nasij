@@ -14,7 +14,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CartService } from '../cart/services/cart.service';
 import { WishlistService } from '../wishlist/services/wishlist.service';
 import { BaseResponse, pagination } from '../../core/models/baseResponse';
-import { GalleriaComponent } from "../../shared/components/galleria/galleria.component";
 import { CarouselComponent } from "../../shared/components/carousel/carousel.component";
 import { CategoryService } from '../products/services/category.service';
 import { ICategory } from '../../interfaces/category.interface';
@@ -26,6 +25,8 @@ import { BannarComponent } from "./bannar/bannar.component";
 import { FeatureComponent } from "./feature/feature.component";
 import { PackageService } from '../packages/services/package.service';
 import { IPackage } from '../../interfaces/package.interface';
+import { TranslationService } from '../../core/services/translate.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -40,12 +41,12 @@ import { IPackage } from '../../interfaces/package.interface';
     ProgressSpinnerModule,
     ToastModule,
     TooltipModule,
-    GalleriaComponent,
     CarouselComponent,
     HeroSectionComponent,
     FeaturedCollectionComponent,
     BannarComponent,
-    FeatureComponent
+    FeatureComponent,
+    TranslateModule
 ],
   providers: [
     MessageService,
@@ -70,7 +71,8 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private wishlistService: WishlistService,
     private messageService: MessageService,
     private categoryService: CategoryService,
-    private packageService: PackageService
+    private packageService: PackageService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit() {

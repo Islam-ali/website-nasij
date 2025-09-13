@@ -6,11 +6,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { BusinessProfileService } from '../../services/business-profile.service';
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { ThemeService } from '../../core/services/theme.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, InputTextModule],
+  imports: [CommonModule, RouterModule, ButtonModule, InputTextModule, TranslateModule],
   template: `
   <!-- Enhanced Footer -->
   <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
@@ -20,7 +21,7 @@ import { ThemeService } from '../../core/services/theme.service';
         
         <!-- Company Info -->
         <div class="space-y-6">
-          <div class="flex items-center space-x-3">
+          <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-gradient-to-br from-primary-300 to-primary-200 rounded-lg flex items-center justify-center">
               @if(isDarkTheme()) {
                 <img [src]="businessProfile?.logo_dark?.filePath" alt="pledge Logo" class="w-10 h-10">
@@ -31,20 +32,20 @@ import { ThemeService } from '../../core/services/theme.service';
             <span class="text-2xl font-bold bg-gradient-to-r from-primary-400 to-primary-400 bg-clip-text text-transparent">pledge</span>
           </div>
           <p class="text-gray-300 leading-relaxed">
-            {{ businessProfile?.description || 'Your premier destination for fashion and lifestyle. Discover the latest trends, quality products, and exceptional shopping experience.' }}
+            {{ businessProfile?.description || ('footer.default_description' | translate) }}
           </p>
           
           <!-- Contact Info -->
           <!-- <div class="space-y-3">
-            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-primary-400"></i>
               <span>{{'info@pledge.com'}}</span>
             </div>
-            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-phone text-primary-400"></i>
               <span>+1 (555) 123-4567</span>
             </div>
-            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-map-marker text-primary-400"></i>
               <span>123 Fashion Street, Style City, SC 12345</span>
             </div>
@@ -53,36 +54,42 @@ import { ThemeService } from '../../core/services/theme.service';
 
         <!-- Quick Links -->
         <div class="space-y-6">
-          <h4 class="text-xl font-bold text-white mb-4">Quick Links</h4>
+          <h4 class="text-xl font-bold text-white mb-4">{{ 'footer.quick_links' | translate }}</h4>
           <ul class="space-y-3">
             <li>
               <a routerLink="/" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-home text-sm group-hover:translate-x-1 transition-transform"></i>
-                <span>Home</span>
+                <i class="pi pi-home text-sm group-hover:translate-x-1 transition-transform me-2"></i>
+                <span>{{ 'navigation.home' | translate }}</span>
               </a>
             </li>
             <li>
               <a routerLink="/shop" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-shopping-bag text-sm group-hover:translate-x-1 transition-transform"></i>
-                <span>Shop</span>
+                <i class="pi pi-shopping-bag text-sm group-hover:translate-x-1 transition-transform me-2"></i>
+                <span>{{ 'navigation.shop' | translate }}</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/packages" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
+                <i class="pi pi-box text-sm group-hover:translate-x-1 transition-transform me-2"></i>
+                <span>{{ 'navigation.packages' | translate }}</span>
               </a>
             </li>
             <!-- <li>
               <a routerLink="/about" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-info-circle text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-info-circle text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>About Us</span>
               </a>
             </li> -->
             <!-- <li>
               <a routerLink="/contact" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-envelope text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-envelope text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>Contact</span>
               </a>
             </li> -->
             <li>
               <a routerLink="/faq" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-question-circle text-sm group-hover:translate-x-1 transition-transform"></i>
-                <span>FAQ</span>
+                <i class="pi pi-question-circle text-sm group-hover:translate-x-1 transition-transform me-2"></i>
+                <span>{{ 'navigation.faq' | translate }}</span>
               </a>
             </li>
           </ul>
@@ -94,48 +101,48 @@ import { ThemeService } from '../../core/services/theme.service';
           <ul class="space-y-3">
             <li>
               <a routerLink="/account/profile" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-user text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-user text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>My Profile</span>
               </a>
             </li>
             <li>
               <a routerLink="/orders" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-list text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-list text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>Order History</span>
               </a>
             </li>
             <li>
               <a routerLink="/wishlist" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-heart text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-heart text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>Wishlist</span>
               </a>
             </li>
             <li>
               <a routerLink="/track-order" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-search text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-search text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>Track Order</span>
               </a>
             </li>
             <li>
               <a routerLink="/support" class="text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center space-x-2 group">
-                <i class="pi pi-headset text-sm group-hover:translate-x-1 transition-transform"></i>
+                <i class="pi pi-headset text-sm group-hover:translate-x-1 transition-transform me-2"></i>
                 <span>Support</span>
               </a>
             </li>
           </ul>
         </div> -->
         <div class="space-y-6">
-          <h4 class="text-xl font-bold text-white mb-4">Contact Info</h4>
+          <h4 class="text-xl font-bold text-white mb-4">{{ 'footer.contact_info' | translate }}</h4>
           <div class="space-y-4">
-            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-primary-400"></i>
               <span>{{ businessProfile?.contactInfo?.email || 'info@pledge.com' }}</span>
             </div>
-            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-phone text-primary-400"></i>
               <span>{{ businessProfile?.contactInfo?.phone || '+1 (555) 123-4567' }}</span>
             </div>
-            <div class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
+            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-map-marker text-primary-400"></i>
               <span>{{ businessProfile?.contactInfo?.address || '123 Fashion Street, Style City, SC 12345' }}</span>
             </div>
@@ -143,11 +150,11 @@ import { ThemeService } from '../../core/services/theme.service';
         </div>
         <!-- Newsletter & Social -->
         <div class="space-y-6">
-          <h4 class="text-xl font-bold text-white mb-4">Follow Us</h4>
+          <h4 class="text-xl font-bold text-white mb-4">{{ 'footer.follow_us' | translate }}</h4>
 
           <!-- Social Media -->
           <div class="space-y-4">
-            <div class="flex space-x-4">
+            <div class="flex gap-4">
               <a *ngIf="businessProfile?.socialMedia?.facebook" 
                  [href]="businessProfile!.socialMedia!.facebook!" 
                  target="_blank" rel="noopener noreferrer" 
@@ -184,13 +191,13 @@ import { ThemeService } from '../../core/services/theme.service';
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           
           <!-- Copyright -->
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center gap-4">
             <p class="text-gray-400 text-sm">
-              © {{ currentYear }} pledge. All rights reserved.
+              {{ 'footer.copyright' | translate: {year: currentYear} }}
             </p>
-            <div class="flex space-x-4 text-sm">
-              <a routerLink="/privacy-policy" class="text-gray-400 hover:text-primary-400 transition-colors">Privacy Policy</a>
-              <a routerLink="/terms-of-service" class="text-gray-400 hover:text-primary-400 transition-colors">Terms of Service</a>
+            <div class="flex gap-4 text-sm">
+              <a routerLink="/privacy-policy" class="text-gray-400 hover:text-primary-400 transition-colors">{{ 'footer.privacy_policy' | translate }}</a>
+              <a routerLink="/terms-of-service" class="text-gray-400 hover:text-primary-400 transition-colors">{{ 'footer.terms_of_service' | translate }}</a>
             </div>
           </div>
         </div>

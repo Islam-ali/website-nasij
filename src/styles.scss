@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html[dir="ltr"] {
+  font-family: 'Inter', 'sans-serif' !important;
+}
+
+html[dir="rtl"] {
+  font-family: 'Cairo' !important;
+}
+
 /* Essential base styles using Tailwind */
 @layer base {
   html {

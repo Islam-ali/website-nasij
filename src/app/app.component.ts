@@ -2,10 +2,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BusinessProfileService } from './services/business-profile.service';
+import { TranslationService } from './core/services/translate.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, TranslateModule],
   templateUrl: './app.component.html',
   providers: [BusinessProfileService]
 })
@@ -15,7 +17,8 @@ export class AppComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private businessProfileService: BusinessProfileService
+    private businessProfileService: BusinessProfileService,
+    private translationService: TranslationService
   ) { }
   ngOnInit(): void {
     this.loadBusinessProfile();
@@ -30,6 +33,9 @@ export class AppComponent implements OnInit {
         this.renderer.setStyle(document.body, 'overflow', 'auto');
         this.isLoading = false;
       }
+
+      // Initialize browser features after app is loaded
+      this.translationService.initBrowserFeatures();
     }
   }
 

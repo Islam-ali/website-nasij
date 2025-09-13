@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pledge-website",
+            "outputPath": "dist/pledge-website/browser",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -26,14 +26,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/assets"
-              }
+              { "glob": "**/*", "input": "public" },
+              { "glob": "**/*", "input": "src/assets" }
             ],
             "styles": [
               "node_modules/quill/dist/quill.snow.css",
@@ -42,26 +36,13 @@
               "node_modules/aos/dist/aos.css",
               "src/styles.scss"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "1MB",
-                  "maximumError": "3MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "1MB",
-                  "maximumError": "6MB"
-                }
+                { "type": "initial", "maximumWarning": "1MB", "maximumError": "3MB" },
+                { "type": "anyComponentStyle", "maximumWarning": "1MB", "maximumError": "6MB" }
               ],
               "outputHashing": "all",
               "fileReplacements": [
@@ -97,6 +78,36 @@
           },
           "defaultConfiguration": "development"
         },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/pledge-website/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "sourceMap": true
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "browserTarget": "pledge-website:build:production",
+            "serverTarget": "pledge-website:server:production",
+            "routesFile": "src/routes.ts"
+          }
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
@@ -110,10 +121,7 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              { "glob": "**/*", "input": "public" }
             ],
             "styles": [
               "src/styles.scss"

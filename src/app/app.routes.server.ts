@@ -64,10 +64,5 @@ export const serverRoutes: ServerRoute[] = [
   {
     path: 'packages/:id',
     renderMode: RenderMode.Server
-  },
-  // Add catch-all route to handle any other routes including dynamic ones
-  {
-    path: '**',
-    renderMode: RenderMode.Prerender
   }
 ];

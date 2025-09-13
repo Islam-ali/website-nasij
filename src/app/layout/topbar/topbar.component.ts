@@ -31,6 +31,8 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { BusinessProfileService } from '../../services/business-profile.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
+import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-topbar',
@@ -50,7 +52,9 @@ import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme
     FormsModule,
     ButtonModule,
     DrawerModule,
-    ThemeToggleComponent
+    ThemeToggleComponent,
+    LanguageSwitcherComponent,
+    TranslateModule
   ],
   providers: [MessageService],
   templateUrl: './topbar.component.html',

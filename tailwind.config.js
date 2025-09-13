@@ -108,6 +108,10 @@ module.exports = {
         'slide-up': 'slideUp 0.3s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',
       },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        arabic: ['Cairo', 'sans-serif'],
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
