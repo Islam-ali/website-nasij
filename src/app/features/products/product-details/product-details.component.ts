@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal, Inject, PL
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription, forkJoin, of } from 'rxjs';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 // PrimeNG Modules
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -22,19 +21,16 @@ import { EnumProductVariant, IProduct, ProductVariant } from '../models/product.
 import { ProductService } from '../services/product.service';
 import { WishlistService } from '../../wishlist/services/wishlist.service';
 import { CartService } from '../../cart/services/cart.service';
-import { environment } from '../../../../environments/environment';
-import { IVariant } from '../models/variant.interface';
 import { TabsModule } from 'primeng/tabs';
-import { Card } from "primeng/card";
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
 import { AccordionModule } from 'primeng/accordion';
-import { BaseComponent } from 'primeng/basecomponent';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 import { IArchived } from '../../../interfaces/archive.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
 import { IQueryParamsBuyNow } from '../../../interfaces/package.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -63,10 +59,10 @@ interface ProductImage {
     TooltipModule,
     ProgressSpinnerModule,
     TabsModule,
-    Card,
     AccordionModule,
     ProductCardComponent,
-    SafePipe
+    SafePipe,
+    TranslateModule
   ],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']

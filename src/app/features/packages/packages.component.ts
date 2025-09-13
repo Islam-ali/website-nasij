@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 // PrimeNG Modules
@@ -23,10 +22,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { IPackage } from '../../interfaces/package.interface';
 import { PackageService } from './services/package.service';
 import { ComponentBase } from '../../core/directives/component-base.directive';
-import { environment } from '../../../environments/environment';
 import { BaseResponse } from '../../core/models/baseResponse';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-packages',
@@ -49,7 +48,8 @@ import { InputIconModule } from 'primeng/inputicon';
     InputTextModule,
     DropdownModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    TranslateModule
   ],
   templateUrl: './packages.component.html',
   styleUrls: ['./packages.component.scss']

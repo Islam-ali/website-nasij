@@ -81,17 +81,16 @@
           class="w-32 h-32 bg-gradient-to-br from-red-200 to-red-300 dark:from-red-700 dark:to-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
           <i class="pi pi-exclamation-triangle text-5xl text-red-500 dark:text-red-400"></i>
         </div>
-        <h3 class="text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">Product Not
-          Found</h3>
+        <h3 class="text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.product_not_found' | translate }}</h3>
         <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed text-lg transition-colors duration-300">
-          The product you are looking for might have been removed or doesn't exist.
+          {{ 'products.product_removed' | translate }}
         </p>
       </div>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button pButton pRipple label="Continue Shopping" icon="pi pi-arrow-left"
+        <button pButton pRipple [label]="'products.continue_shopping' | translate" icon="pi pi-arrow-left"
           class="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500 hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 text-white border-0 rounded-2xl px-8 py-4 font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
           routerLink="/shop"></button>
-        <button pButton pRipple label="Go Home" icon="pi pi-home"
+        <button pButton pRipple [label]="'products.go_home' | translate" icon="pi pi-home"
           class="bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 text-white border-0 rounded-2xl px-8 py-4 font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
           routerLink="/"></button>
       </div>
@@ -106,7 +105,7 @@
         <li>
           <a routerLink="/"
             class="text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
-            <i class="pi pi-home mr-1"></i>Home
+            <i class="pi pi-home mr-1"></i>{{ 'products.home' | translate }}
           </a>
         </li>
         <li class="text-gray-400 dark:text-gray-500">
@@ -115,7 +114,7 @@
         <li>
           <a routerLink="/shop"
             class="text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
-            Products
+            {{ 'products.products' | translate }}
           </a>
         </li>
         <li class="text-gray-400 dark:text-gray-500">
@@ -176,7 +175,7 @@
         <!-- Image Counter -->
         <div class="mt-4 text-center">
           <span class="text-sm text-gray-600 dark:text-gray-400">
-            Image {{ activeIndex + 1 }} of {{ images.length }}
+            {{ 'products.image_counter' | translate: {current: activeIndex + 1, total: images.length} }}
           </span>
         </div>
       </div>
@@ -269,7 +268,7 @@
               <p *ngIf="product.discountPrice"
                 class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center transition-colors duration-300">
                 <i class="pi pi-check-circle mr-3 text-lg"></i>
-                You save {{ (product.price - (product.discountPrice || 0)) | currency }}!
+                You save {{ - (product.discountPrice) | currency }}!
               </p>
             </div>
           </div>
@@ -282,7 +281,7 @@
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
                 <i class="pi pi-palette me-3 text-primary-600 dark:text-primary-400"></i>
-                Color
+                {{ 'products.color' | translate }}
               </label>
               <div class="flex flex-wrap gap-4">
                 @for (variantimgAndColor of variantToImageAndColor(); track $index) {
@@ -325,7 +324,7 @@
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
                   <i class="pi pi-th-large mr-3 text-primary-600 dark:text-primary-400"></i>
-                Size
+                {{ 'products.size' | translate }}
               </label>
               <div class="flex flex-wrap gap-4">
                 @for (size of product.sizes; track $index) {
@@ -350,7 +349,7 @@
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
                 <i class="pi pi-sort-numeric-up mr-3 text-primary-600 dark:text-primary-400"></i>
-                Quantity
+                {{ 'products.quantity' | translate }}
               </label>
               <div class="flex items-center space-x-6">
                 <p-inputNumber inputId="quantity" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
@@ -370,14 +369,14 @@
               class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart" tooltipPosition="top">
               <i class="pi pi-shopping-cart mr-3"></i>
-              Add to Cart
+              {{ 'products.add_to_cart' | translate }}
             </button>
               <!-- Buy Now Button -->
               <button type="button"
                 class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                 [disabled]="product.stock === 0" (click)="checkout()" pTooltip="Checkout" tooltipPosition="top">
                 <i class="pi pi-shopping-cart mr-3"></i>
-                Buy Now
+                {{ 'products.buy_now' | translate }}
               </button>
             </div>
 
@@ -391,7 +390,7 @@
               <button type="button"
                 class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
                 <i class="pi pi-share-alt text-xl"></i>
-                <span class="text-sm font-medium">Share</span>
+                <span class="text-sm font-medium">{{ 'products.share' | translate }}</span>
               </button>
               <!-- <button type="button"
                 class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
@@ -430,9 +429,9 @@
   @if (relatedProducts.length > 0) {
   <div class="mt-24 max-w-7xl mx-auto px-4 relative z-10 overflow-hidden">
     <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">You May Also Like
+      <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{{ 'products.you_may_also_like' | translate }}
       </h2>
-      <p class="text-gray-600 dark:text-gray-300 text-xl transition-colors duration-300">Discover more amazing products
+      <p class="text-gray-600 dark:text-gray-300 text-xl transition-colors duration-300">{{ 'products.discover_more_products' | translate }}
       </p>
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full overflow-hidden">

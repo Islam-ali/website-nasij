@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, signal, ViewChild, ElementRef, inject } f
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 
 // PrimeNG Modules
@@ -23,15 +22,13 @@ import { CardModule } from 'primeng/card';
 import { AccordionModule } from 'primeng/accordion';
 import { DividerModule } from 'primeng/divider';
 
-import { IPackage, IPackageItem, ValidatePackageOrderDto } from '../../../interfaces/package.interface';
-import { IProduct } from '../../products/models/product.interface';
-import { IArchived } from '../../../interfaces/archive.interface';
+import { IPackage } from '../../../interfaces/package.interface';
 import { PackageService } from '../services/package.service';
 import { PackageUrlService } from '../services/package-url.service';
 import { CartService } from '../../cart/services/cart.service';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { BaseResponse } from '../../../core/models/baseResponse';
-import { environment } from '../../../../environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface PackageImage {
   itemImageSrc: string;
@@ -62,7 +59,8 @@ interface PackageImage {
     TabsModule,
     CardModule,
     AccordionModule,
-    DividerModule
+    DividerModule,
+    TranslateModule
   ],
   templateUrl: './package-details.component.html',
 })

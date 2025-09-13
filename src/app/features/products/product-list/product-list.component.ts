@@ -25,13 +25,13 @@ import { DividerModule } from "primeng/divider";
 import { ChipModule } from "primeng/chip";
 import { MessagesModule } from 'primeng/messages';
 import { InputTextModule } from 'primeng/inputtext';
-import { environment } from '../../../../environments/environment.development';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 import { DrawerModule } from 'primeng/drawer';
 import { IProductQueryParams } from '../models/product.interface';
 import { ICategory } from '../../../interfaces/category.interface';
 import { IProduct } from '../models/product.interface';
 import AOS from 'aos';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-list',
@@ -58,9 +58,10 @@ import AOS from 'aos';
     DividerModule,
     MessagesModule,
     ProductCardComponent,
-    DrawerModule  
+    DrawerModule,
+    TranslateModule
 ],
-  providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder],
+  providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder, TranslateModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
@@ -120,7 +121,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     AOS.init({
       duration: 1000,
       easing: 'ease-out-cubic',
-      once: false,
+      once: true,
       offset: 60,
       delay: 200,
     });

@@ -16,7 +16,7 @@
             <div>
               <h1 data-aos="fade-down" data-aos-delay="100"
                 class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary-900 via-primary-600 to-primary-400 dark:from-white dark:via-primary-300 dark:to-white bg-clip-text text-transparent transition-all duration-300">
-                Discover Products
+                {{ 'products.discover_products' | translate }}
               </h1>
               <div
                 class="w-20 h-1 bg-gradient-to-r from-primary-500 to-primary-500 dark:from-primary-400 dark:to-primary-400 rounded-full mt-2">
@@ -25,8 +25,7 @@
           </div>
           <p data-aos="fade-down" data-aos-delay="200"
             class="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
-            Showing <span class="font-bold text-primary-600 dark:text-primary-400">{{ products.length }}</span> of
-            <span class="font-bold text-gray-900 dark:text-white">{{ totalRecords }}</span> amazing products
+            {{ 'products.showing_products' | translate: {current: products.length, total: totalRecords} }}
           </p>
         </div>
 
@@ -60,16 +59,16 @@
     <!-- Filter Sidebar -->
     <p-drawer [(visible)]="isDrawerOpen" position="right"
       styleClass="!w-96 sm:!w-[30rem] p-4 bg-white/95 dark:!bg-gray-800/95 backdrop-blur-xl border-l border-gray-200/50 dark:border-gray-700/50 shadow-2xl"
-      [dismissible]="false" [showCloseIcon]="true" header="Advanced Filters">
+      [dismissible]="false" [showCloseIcon]="true" [header]="'products.advanced_filters' | translate">
       <div class="p-4 h-full overflow-y-auto space-y-8">
         <!-- Clear All Button -->
         <div
           class="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-primary-50 dark:from-red-900/20 dark:to-primary-900/20 rounded-2xl border border-red-200 dark:border-red-800">
           <div class="flex items-center gap-3">
             <i class="pi pi-trash text-red-500 dark:text-red-400"></i>
-            <span class="text-sm font-medium text-red-700 dark:text-red-300">Clear all filters</span>
+            <span class="text-sm font-medium text-red-700 dark:text-red-300">{{ 'products.clear_all_filters' | translate }}</span>
           </div>
-          <p-button pRipple type="button" icon="pi pi-times" label="Clear All" (click)="clearAllFilters()"
+          <p-button pRipple type="button" icon="pi pi-times" [label]="'products.clear_all' | translate" (click)="clearAllFilters()"
             styleClass="p-button-text p-button-danger p-button-sm bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-800/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"></p-button>
         </div>
 
@@ -79,9 +78,9 @@
             <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-sort text-primary-600 dark:text-primary-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Sort by</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.sort_by_label' | translate }}</h3>
           </div>
-          <p-select [options]="sortOptions" formControlName="sortBy" placeholder="Choose sorting option"
+          <p-select [options]="sortOptions" formControlName="sortBy" [placeholder]="'products.choose_sorting' | translate"
             styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-primary-500 dark:focus:border-primary-400 rounded-xl transition-all duration-300"
             (onChange)="onSortChange()"></p-select>
         </div>
@@ -92,22 +91,20 @@
             <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-dollar text-green-600 dark:text-green-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Price Range
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.price_range' | translate }}
             </h3>
           </div>
           <div
             class="space-y-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-2xl border border-green-200 dark:border-green-800">
             <div class="grid grid-cols-2 gap-4">
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Min
-                  Price</label>
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">{{ 'products.min_price' | translate }}</label>
                 <p-inputNumber formControlName="minPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
                   [showButtons]="false" [step]="5"
                   styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-green-500 dark:focus:border-green-400 rounded-xl transition-all duration-300"></p-inputNumber>
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Max
-                  Price</label>
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">{{ 'products.max_price' | translate }}</label>
                 <p-inputNumber formControlName="maxPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
                   [showButtons]="false" [step]="5"
                   styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-green-500 dark:focus:border-green-400 rounded-xl transition-all duration-300"></p-inputNumber>
@@ -128,7 +125,7 @@
             <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-tag text-blue-600 dark:text-blue-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Categories
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.categories' | translate }}
             </h3>
           </div>
           <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
@@ -152,7 +149,7 @@
             <div class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-star text-indigo-600 dark:text-indigo-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Brands</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.brands' | translate }}</h3>
           </div>
           <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let brand of brands"
@@ -175,7 +172,7 @@
             <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-th-large text-primary-600 dark:text-primary-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Sizes</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.sizes' | translate }}</h3>
           </div>
           <div class="grid grid-cols-3 gap-3 p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let size of sizes"
@@ -198,7 +195,7 @@
             <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-palette text-primary-600 dark:text-primary-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Colors</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.colors' | translate }}</h3>
           </div>
           <div class="space-y-2 p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let color of colors"
@@ -229,7 +226,7 @@
             class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white transition-colors duration-300">
             <span class="flex items-center gap-2">
               <i class="pi pi-tag text-red-500 dark:text-red-400"></i>
-              On Sale Only
+              {{ 'products.on_sale_only' | translate }}
             </span>
           </label>
         </div>
@@ -246,14 +243,13 @@
             <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-filter text-blue-600 dark:text-blue-400 text-sm"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Active
-              Filters</h3>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.active_filters' | translate }}</h3>
             <span
               class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-sm font-medium rounded-full">
               {{ activeFiltersCount }}
             </span>
           </div>
-          <button pButton type="button" label="Clear All"
+          <button pButton type="button" [label]="'products.clear_all' | translate"
             class="p-button-text text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium transition-colors duration-300 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-800/30 px-4 py-2 rounded-xl"
             (click)="clearAllFilters()"></button>
         </div>
@@ -276,7 +272,7 @@
           <p-chip (onRemove)="removeSizeFilter(size)"
             styleClass="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 border-primary-200 dark:border-primary-800 rounded-xl font-medium">
             <i class="pi pi-th-large mr-2"></i>
-            Size {{ size }}
+            {{ 'products.size_label' | translate: {size: size} }}
           </p-chip>
           }
           @for (color of filterForm.get('selectedColors')?.value || []; track color) {
@@ -341,17 +337,16 @@
             class="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="pi pi-search text-4xl text-gray-400 dark:text-gray-500"></i>
           </div>
-          <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">No products
-            found</h3>
+          <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{{ 'products.no_products' | translate }}</h3>
           <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed transition-colors duration-300">
-            Try adjusting your filters or search terms to find what you're looking for.
+            {{ 'products.try_adjusting_filters' | translate }}
           </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button pButton pRipple type="button" label="Clear All Filters"
+          <button pButton pRipple type="button" [label]="'products.clear_all' | translate"
             class="bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             (click)="clearAllFilters()"></button>
-          <button pButton pRipple type="button" label="Browse All Products"
+          <button pButton pRipple type="button" [label]="'products.browse_all_products' | translate"
             class="p-button-outlined border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-primary-500 dark:hover:border-primary-400 rounded-2xl px-6 py-3 font-semibold transition-all duration-300"
             routerLink="/products"></button>
         </div>
@@ -367,13 +362,12 @@
             class="w-24 h-24 bg-gradient-to-br from-red-200 to-red-300 dark:from-red-700 dark:to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="pi pi-exclamation-triangle text-4xl text-red-500 dark:text-red-400"></i>
           </div>
-          <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Something
-            went wrong</h3>
+          <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">{{ 'products.something_went_wrong' | translate }}</h3>
           <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed transition-colors duration-300">
             {{ error }}
           </p>
         </div>
-        <button pButton pRipple type="button" label="Try Again"
+        <button pButton pRipple type="button" [label]="'products.try_again' | translate"
           class="bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-500 dark:to-orange-500 hover:from-red-700 hover:to-orange-700 dark:hover:from-red-600 dark:hover:to-orange-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           (click)="loadProducts()"></button>
       </div>

@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     AOS.init({
       duration: 800,
       easing: 'ease-out-cubic',
-      once: false,
+      once: true,
       offset: 60,
       delay: 200,
     });
