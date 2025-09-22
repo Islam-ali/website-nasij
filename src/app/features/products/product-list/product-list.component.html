@@ -135,7 +135,7 @@
                 [inputId]="'category-' + category._id" styleClass="text-blue-600 dark:text-blue-400"></p-checkbox>
               <label [for]="'category-' + category._id"
                 class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                {{ category.name }}
+                {{ category.name | multiLanguage }}
               </label>
             </div>
           </div>

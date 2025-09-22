@@ -1,3 +1,4 @@
+import { MultilingualText } from "../../../core/models/multi-language";
 import { IProduct } from "../../products/models/product.interface";
 
 export interface IWishlistItem {
@@ -6,10 +7,10 @@ export interface IWishlistItem {
   addedAt: Date;
   product: IProduct; // Full product details (optional, can be loaded when needed)
   price?: number; // Added to match cart item structure
-  productName?: string; // Added to match cart item structure
+  productName?: MultilingualText; // Added to match cart item structure
   image?: string; // Added to match cart item structure
-  color?: string;
-  size?: string;
+  color?: MultilingualText | null;
+  size?: MultilingualText | null;
 }
 
 export interface IWishlistSummary {

@@ -121,7 +121,7 @@
           <i class="pi pi-chevron-right"></i>
         </li>
         <li class="text-gray-900 dark:text-white font-medium">
-          {{ product.name }}
+          {{ product.name | multiLanguage }}
         </li>
       </ol>
     </nav>
@@ -191,7 +191,7 @@
               <div *ngIf="product.brand">
                 <span
                   class="inline-flex items-center px-6 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200 border-2 border-blue-200 dark:border-blue-800 transition-all duration-300 hover:scale-105 shadow-lg">
-                  <i class="pi pi-tag mr-3 text-lg"></i>
+                  <i class="pi pi-tag me-2 text-lg"></i>
                   {{ product.brand.name }}
                 </span>
               </div>
@@ -211,14 +211,14 @@
             <!-- Product Title -->
             <h1
               class="text-4xl lg:text-5xl font-bold mb-6 text-gray-900 dark:text-white leading-tight transition-colors duration-300">
-              {{ product.name }}
+              {{ product.name | multiLanguage }}
             </h1>
 
             <!-- Product Description -->
             <div *ngIf="product.description"
               class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed text-lg transition-colors duration-300">
               <p class="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">{{
-                product.description }}</p>
+                product.description | multiLanguage }}</p>
             </div>
 
             <!-- Rating and Stock Status -->
@@ -267,7 +267,7 @@
               </div>
               <p *ngIf="product.discountPrice"
                 class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center transition-colors duration-300">
-                <i class="pi pi-check-circle mr-3 text-lg"></i>
+                <i class="pi pi-check-circle me-2 text-lg"></i>
                 You save {{ - (product.discountPrice) | currency }}!
               </p>
             </div>
@@ -280,7 +280,7 @@
             <div class="space-y-4">
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-                <i class="pi pi-palette me-3 text-primary-600 dark:text-primary-400"></i>
+                <i class="pi pi-palette me-2 text-primary-600 dark:text-primary-400"></i>
                 {{ 'products.color' | translate }}
               </label>
               <div class="flex flex-wrap gap-4">
@@ -311,7 +311,7 @@
                   <!-- Color Name Tooltip -->
                   <div
                     class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                    {{ variantimgAndColor.color }}
+                    {{ variantimgAndColor.color | multiLanguage }}
                   </div>
                 </label>
                 }
@@ -323,7 +323,7 @@
             <div class="space-y-4">
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-                  <i class="pi pi-th-large mr-3 text-primary-600 dark:text-primary-400"></i>
+                  <i class="pi pi-th-large me-2 text-primary-600 dark:text-primary-400"></i>
                 {{ 'products.size' | translate }}
               </label>
               <div class="flex flex-wrap gap-4">
@@ -337,7 +337,7 @@
                       'border-primary-500 dark:border-primary-400 bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-800': selectedSize === size,
                       'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800': selectedSize !== size 
                     }">
-                    <span class="font-bold px-2 py-1 block text-lg">{{ size }}</span>
+                    <span class="font-bold px-2 py-1 block text-lg">{{ size | multiLanguage }}</span>
                   </div>
                     </label>
                 }
@@ -348,7 +348,7 @@
             <div class="space-y-4 w-full">
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-                <i class="pi pi-sort-numeric-up mr-3 text-primary-600 dark:text-primary-400"></i>
+                <i class="pi pi-sort-numeric-up me-2 text-primary-600 dark:text-primary-400"></i>
                 {{ 'products.quantity' | translate }}
               </label>
               <div class="flex items-center space-x-6">
@@ -368,14 +368,14 @@
               <button type="button"
               class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart" tooltipPosition="top">
-              <i class="pi pi-shopping-cart mr-3"></i>
+              <i class="pi pi-shopping-cart me-2"></i>
               {{ 'products.add_to_cart' | translate }}
             </button>
               <!-- Buy Now Button -->
               <button type="button"
                 class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                 [disabled]="product.stock === 0" (click)="checkout()" pTooltip="Checkout" tooltipPosition="top">
-                <i class="pi pi-shopping-cart mr-3"></i>
+                <i class="pi pi-shopping-cart me-2"></i>
                 {{ 'products.buy_now' | translate }}
               </button>
             </div>

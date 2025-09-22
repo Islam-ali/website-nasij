@@ -1,5 +1,7 @@
+import { MultilingualText } from "../../../core/models/multi-language";
 import { OrderStatus } from "../../../interfaces/product.interface";
 import { PaymentMethod, PaymentStatus, OrderItemType } from "./order.enum"
+import { EnumProductVariant } from '../../products/models/product.interface';
 
 // Backend-compatible interfaces - matches CreateOrderDto
 export interface ICreateOrder {
@@ -45,8 +47,8 @@ export interface IOrderItem {
   quantity: number;
   price?: number;
   discountPrice?: number;
-  color?: string;
-  size?: string;
+    color?: MultilingualText;
+  size?: MultilingualText;
   packageItems?: IPackageItem[];
   selectedVariants?: IProductVariantAttribute[];
 }
@@ -61,8 +63,8 @@ export interface IPackageItem {
 }
 
 export interface IProductVariantAttribute {
-  variant: string;
-  value: string;
+  variant: EnumProductVariant;
+  value: MultilingualText;
   image?: string;
 }
 

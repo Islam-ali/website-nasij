@@ -31,6 +31,9 @@ import { IArchived } from '../../../interfaces/archive.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
 import { IQueryParamsBuyNow } from '../../../interfaces/package.interface';
 import { TranslateModule } from '@ngx-translate/core';
+import { TranslationService } from '../../../core/services/translate.service';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { MultilingualText } from '../../../core/models/multi-language';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -62,7 +65,8 @@ interface ProductImage {
     AccordionModule,
     ProductCardComponent,
     SafePipe,
-    TranslateModule
+    TranslateModule,
+    MultiLanguagePipe
   ],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
@@ -70,8 +74,8 @@ interface ProductImage {
 export class ProductDetailsComponent extends ComponentBase implements OnInit {
   @ViewChild('galleryImage') galleryImage!: ElementRef;
   currentImageIndex: number = 0;
-  selectedColor: string | null = null;
-  selectedSize: string | null = null;
+  selectedColor: MultilingualText | null = null;
+  selectedSize: MultilingualText | null = null;
   selectedVariant: ProductVariant | null = null;
   product: IProduct | null = null;
   loading = true;
@@ -86,7 +90,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   // Image gallery
   images: ProductImage[] = [];
   responsiveOptions: any[];
-  variantToImageAndColor = signal<{ image: IArchived | null, color: string }[]>([]);
+  variantToImageAndColor = signal<{ image: IArchived | null, color: MultilingualText }[]>([]);
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -94,6 +98,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     private wishlistService: WishlistService,
     private cartService: CartService,
     private messageService: MessageService,
+    private translationService: TranslationService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     super();
@@ -174,17 +179,20 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   private extractColorsAndSizes(): void {
     if (!this.product || !this.product.variants) return;
 
-    const colors = new Set<string>();
-    const sizes = new Set<string>();
+    const colors = new Set<MultilingualText>();
+    const sizes = new Set<MultilingualText>();
     // map variant to image
-    const variantImageMap = new Map<string, { image: IArchived | null, color: string }>();
+    const variantImageMap = new Map<string, { image: IArchived | null, color: MultilingualText }>();
     this.product.variants.forEach(variant => {
       if (variant.attributes) {
         variant.attributes.forEach(attr => {
           if (attr.variant === EnumProductVariant.COLOR) {
-            variantImageMap.set(attr.value, { image: attr.image || null, color: attr.value });
+            const colorValue: MultilingualText = typeof attr.value === 'string' ? { en: attr.value, ar: attr.value } : ((attr.value as any) as MultilingualText);
+            colors.add(colorValue);
+            variantImageMap.set(colorValue.en, { image: attr.image || null, color: colorValue });
           } else if (attr.variant === EnumProductVariant.SIZE) {
-            sizes.add(attr.value);
+            const sizeValue: MultilingualText = typeof attr.value === 'string' ? { en: attr.value, ar: attr.value } : ((attr.value as any) as MultilingualText);
+            sizes.add(sizeValue);
           }
         });
       }
@@ -232,8 +240,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
         this.images.push({
           itemImageSrc: this.getImageUrl(image.filePath),
           thumbnailImageSrc: this.getImageUrl(image.filePath, 'thumbnail'),
-          alt: this.product?.name || '',
-          title: this.product?.name || ''
+          alt: this.product?.name[this.currentLanguage] || '',
+          title: this.product?.name[this.currentLanguage] || ''
         });
       });
     }
@@ -296,8 +304,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       productId: this.product._id,
       price: this.product.price,
       quantity: this.quantity,
-      color: this.selectedColor || '',
-      size: this.selectedSize || '',
+      color: this.selectedColor || null,
+      size: this.selectedSize || null,
       image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product.images[0].filePath,
       productName: this.product.name,
       discount: this.product.discountPrice || 0,
@@ -326,7 +334,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     const queryParams: IQueryParamsBuyNow = {
       type: 'product',
       productId: this.product?._id, quantity: this.quantity,
-      color: this.selectedColor || '', size: this.selectedSize || '',
+      color: this.selectedColor || null, size: this.selectedSize || null,
       name: this.product?.name, price: this.product?.price,
       discount: this.product?.discountPrice,
       image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product?.images[0].filePath
@@ -387,13 +395,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     return { text: 'In Stock', severity: 'success' };
   }
 
-  onColorSelect(color: string): void {
+  onColorSelect(color: MultilingualText): void {
     this.selectedColor = color;
     this.selectImageForColor(color);
     this.findSelectedVariant();
   }
 
-  selectImageForColor(color: string): void {
+  selectImageForColor(color: MultilingualText): void {
     // Find the variant image for the selected color
     const variantData = this.variantToImageAndColor().find(item => item.color === color);
     if (variantData && variantData.image) {
@@ -407,7 +415,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     }
   }
 
-  onSizeSelect(size: string): void {
+  onSizeSelect(size: MultilingualText): void {
     this.selectedSize = size;
     this.findSelectedVariant();
   }
@@ -419,13 +427,17 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       if (!variant.attributes) return false;
 
       const hasSelectedColor = !this.selectedColor ||
-        variant.attributes.some(attr => attr.variant === 'color' && attr.value === this.selectedColor);
+        variant.attributes.some(attr => attr.variant === 'color' && (typeof attr.value === 'string' ? attr.value : ((attr.value as any) as MultilingualText)) === this.selectedColor);
 
       const hasSelectedSize = !this.selectedSize ||
-        variant.attributes.some(attr => attr.variant === 'size' && attr.value === this.selectedSize);
+        variant.attributes.some(attr => attr.variant === 'size' && (typeof attr.value === 'string' ? attr.value : ((attr.value as any) as MultilingualText)) === this.selectedSize);
 
       return hasSelectedColor && hasSelectedSize;
     }) || null;
+  }
+
+  get currentLanguage(): 'en' | 'ar' {
+    return this.translationService.getCurrentLanguage() as 'en' | 'ar';
   }
 
   scrollToTop(): void {

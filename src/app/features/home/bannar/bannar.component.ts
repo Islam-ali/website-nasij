@@ -4,10 +4,11 @@ import { BannarService } from './bannar.service';
 import { BaseResponse } from '../../../core/models/baseResponse';
 import { Banner } from '../../../interfaces/banner.interface';
 import { RouterModule } from '@angular/router';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-bannar',
-  imports: [CommonModule , RouterModule],
+  imports: [CommonModule , RouterModule, MultiLanguagePipe],
   templateUrl: './bannar.component.html',
 })
 export class BannarComponent {

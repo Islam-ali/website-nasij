@@ -33,6 +33,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-topbar',
@@ -54,7 +55,8 @@ import { TranslateModule } from '@ngx-translate/core';
     DrawerModule,
     ThemeToggleComponent,
     LanguageSwitcherComponent,
-    TranslateModule
+    TranslateModule,
+    MultiLanguagePipe
   ],
   providers: [MessageService],
   templateUrl: './topbar.component.html',

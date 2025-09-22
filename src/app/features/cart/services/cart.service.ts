@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { ICartItem, ICartState, ICartSummary, IAddToCartRequest } from '../models/cart.interface';
 import { MessageService } from 'primeng/api';
+import { MultilingualText } from '../../../core/models/multi-language';
 
 @Injectable({
   providedIn: 'root'
@@ -111,8 +112,8 @@ export class CartService implements OnDestroy {
   updateQuantity(
     productId?: string, 
     quantity: number = 1, 
-    color?: string, 
-    size?: string,
+    color?: MultilingualText | null, 
+    size?: MultilingualText | null,
     packageId?: string
   ): Observable<ICartState> {
     console.log('🔄 Updating quantity:', { productId, quantity, color, size, packageId });
@@ -150,8 +151,8 @@ export class CartService implements OnDestroy {
   // Remove item from cart by productId, color, size, or packageId
   removeItem(
     productId?: string, 
-    color?: string, 
-    size?: string,
+    color?: MultilingualText | null, 
+    size?: MultilingualText | null,
     packageId?: string
   ): Observable<ICartState> {
     console.log('🗑️ Removing item:', { productId, color, size, packageId });
@@ -166,8 +167,8 @@ export class CartService implements OnDestroy {
       } else if (productId) {
         // Remove product
         const matchesProduct = item.productId === productId;
-        const matchesColor = !color || item.color === color;
-        const matchesSize = !size || item.size === size;
+        const matchesColor = !color || item.color?.en === color?.en;
+        const matchesSize = !size || item.size?.en === size?.en;
         const shouldKeep = !(matchesProduct && matchesColor && matchesSize);
         console.log('🛍️ Product filter:', { itemProductId: item.productId, targetProductId: productId, matchesProduct, matchesColor, matchesSize, shouldKeep });
         return shouldKeep;
@@ -184,7 +185,7 @@ export class CartService implements OnDestroy {
     packageId: string;
     quantity: number;
     price: number;
-    productName: string;
+    productName: MultilingualText;
     image: string;
     packageItems?: any[];
     discount?: number;
@@ -259,8 +260,8 @@ export class CartService implements OnDestroy {
   private findCartItemIndex(
     items: ICartItem[], 
     productId?: string, 
-    color?: string, 
-    size?: string,
+    color?: MultilingualText | null, 
+    size?: MultilingualText | null,
     packageId?: string
   ): number {
     return items.findIndex(item => {
@@ -270,8 +271,8 @@ export class CartService implements OnDestroy {
       } else if (productId) {
         // Looking for a product
         return item.productId === productId &&
-               (!color || item.color === color) &&
-               (!size || item.size === size);
+               (!color || item.color?.en === color?.en) &&
+               (!size || item.size?.en === size?.en);
       }
       return false;
     });

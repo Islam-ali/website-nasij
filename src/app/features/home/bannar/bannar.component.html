@@ -10,13 +10,13 @@
                    [ngClass]="{ 'md:order-2': i % 2 === 1 }">
                 <span data-aos="fade-up" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/20 dark:bg-white/10 text-white transition-colors duration-300">
                   <i class="pi pi-tag me-2"></i>
-                  {{banner?.tag}}
+                  {{banner.tag | multiLanguage}}
                 </span>
-                <h2 data-aos="fade-up" class="text-4xl lg:text-5xl font-bold text-white leading-tight transition-colors duration-300">
-                  {{banner?.title}}
+                <h2 data-aos="fade-up" class="text-4xl lg:text-5xl font-bold text-white transition-colors duration-300 leading-tight">
+                  {{banner.title | multiLanguage}}
                 </h2>
                 <p data-aos="fade-up" class="text-white/90 dark:text-white/80 text-lg leading-relaxed transition-colors duration-300">
-                  {{banner?.description}}
+                  {{banner.description | multiLanguage}}
                 </p>
         
                 <div class="flex flex-col sm:flex-row gap-4"
@@ -24,7 +24,7 @@
                   @for(button of banner?.buttons; track button.label) {
                     <button data-aos="fade-up" [routerLink]="button.url" [queryParams]="button.params"
                       class="bg-white dark:bg-gray-100 text-primary-400 dark:text-primary-400 px-8 py-2 rounded-xl font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105">
-                      {{button.label}}
+                      {{button.label | multiLanguage}}
                     </button>
                   }
                 </div>

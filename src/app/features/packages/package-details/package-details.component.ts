@@ -29,6 +29,9 @@ import { CartService } from '../../cart/services/cart.service';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { BaseResponse } from '../../../core/models/baseResponse';
 import { TranslateModule } from '@ngx-translate/core';
+import { TranslationService } from '../../../core/services/translate.service';
+import { MultilingualText } from '../../../core/models/multi-language';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 interface PackageImage {
   itemImageSrc: string;
@@ -60,7 +63,8 @@ interface PackageImage {
     CardModule,
     AccordionModule,
     DividerModule,
-    TranslateModule
+    TranslateModule,
+    MultiLanguagePipe
   ],
   templateUrl: './package-details.component.html',
 })
@@ -101,9 +105,41 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   private messageService = inject(MessageService);
   private packageUrlService = inject(PackageUrlService);
   private cartService = inject(CartService);
-
+  private translationService = inject(TranslationService);
   constructor() {
     super();
+  }
+
+  // Helper methods for MultilingualText
+  getMultilingualValue(value: any): string {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (value && typeof value === 'object' && (value.en || value.ar)) {
+      return value[this.currentLanguage] || value.en;
+    }
+    return value?.toString() || '';
+  }
+
+  findMultilingualVariant(product: any, variantType: string, value: string): any {
+    return product.variants?.find((variant: any) =>
+      variant.attributes?.some((attr: any) =>
+        attr.variant === variantType && this.getMultilingualValue(attr.value) === value
+      )
+    );
+  }
+
+  findMultilingualAttribute(product: any, variantType: string, value: string): any {
+    for (const variant of product.variants || []) {
+      if (variant.attributes) {
+        for (const attr of variant.attributes) {
+          if (attr.variant === variantType && this.getMultilingualValue(attr.value) === value) {
+            return attr;
+          }
+        }
+      }
+    }
+    return null;
   }
 
   ngOnInit(): void {
@@ -210,7 +246,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       if (item.requiredVariantAttributes && item.requiredVariantAttributes.length > 0) {
         this.selectedVariants[productId] = {};
         item.requiredVariantAttributes.forEach(attr => {
-          this.selectedVariants[productId][attr.variant] = attr.value;
+          this.selectedVariants[productId][attr.variant] = this.getMultilingualValue(attr.value);
         });
       }
       
@@ -226,13 +262,13 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         
         if (item.requiredVariantAttributes && item.requiredVariantAttributes.length > 0) {
           item.requiredVariantAttributes.forEach(attr => {
-            this.selectedVariantsByQuantity[productId][i][attr.variant] = attr.value;
+            this.selectedVariantsByQuantity[productId][i][attr.variant] = this.getMultilingualValue(attr.value);
             
             // Set default color and size if available
             if (attr.variant === 'color') {
-              this.selectedColorsByQuantity[productId][i] = attr.value;
+              this.selectedColorsByQuantity[productId][i] = this.getMultilingualValue(attr.value);
             } else if (attr.variant === 'size') {
-              this.selectedSizesByQuantity[productId][i] = attr.value;
+              this.selectedSizesByQuantity[productId][i] = this.getMultilingualValue(attr.value);
             }
           });
         }
@@ -412,7 +448,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       if (variant.attributes) {
         variant.attributes.forEach(attr => {
           if (attr.variant === 'color') {
-            colors.add(attr.value);
+            colors.add(this.getMultilingualValue(attr.value));
           }
         });
       }
@@ -431,26 +467,40 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     const sizes = new Set<string>();
     item.productId.variants.forEach(variant => {
       if (variant.attributes) {
-        variant.attributes.forEach(attr => {
-          if (attr.variant === 'size') {
-            sizes.add(attr.value);
-          }
-        });
+          variant.attributes.forEach(attr => {
+            if (attr.variant === 'size') {
+              sizes.add(this.getMultilingualValue(attr.value));
+            }
+          });
       }
     });
     
     return Array.from(sizes);
   }
 
-  isColorSelectedForQuantity(productId: string, quantity: number, color: string): boolean {
-    return this.selectedColorsByQuantity[productId]?.[quantity] === color;
+  isColorSelectedForQuantity(productId: string, quantity: number, color: any): boolean {
+    const selectedColor = this.selectedColorsByQuantity[productId]?.[quantity];
+    if (typeof selectedColor === 'string' && typeof color === 'string') {
+      return selectedColor === color;
+    }
+    if (typeof selectedColor === 'object' && typeof color === 'object') {
+      return this.getMultilingualValue(selectedColor) === this.getMultilingualValue(color);
+    }
+    return this.getDisplayText(selectedColor) === this.getDisplayText(color);
   }
 
-  isSizeSelectedForQuantity(productId: string, quantity: number, size: string): boolean {
-    return this.selectedSizesByQuantity[productId]?.[quantity] === size;
+  isSizeSelectedForQuantity(productId: string, quantity: number, size: any): boolean {
+    const selectedSize = this.selectedSizesByQuantity[productId]?.[quantity];
+    if (typeof selectedSize === 'string' && typeof size === 'string') {
+      return selectedSize === size;
+    }
+    if (typeof selectedSize === 'object' && typeof size === 'object') {
+      return this.getMultilingualValue(selectedSize) === this.getMultilingualValue(size);
+    }
+    return this.getDisplayText(selectedSize) === this.getDisplayText(size);
   }
 
-  onColorSelectForQuantity(productId: string, quantity: number, color: string, event?: any): void {
+  onColorSelectForQuantity(productId: string, quantity: number, color: any, event?: any): void {
     if (!this.selectedColorsByQuantity[productId]) {
       this.selectedColorsByQuantity[productId] = {};
     }
@@ -471,7 +521,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     }
   }
 
-  onSizeSelectForQuantity(productId: string, quantity: number, size: string, event?: any): void {
+  onSizeSelectForQuantity(productId: string, quantity: number, size: any, event?: any): void {
     if (!this.selectedSizesByQuantity[productId]) {
       this.selectedSizesByQuantity[productId] = {};
     }
@@ -492,7 +542,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     }
   }
 
-  getColorImage(productId: string, color: string): string | null {
+  getColorImage(productId: string, color: any): string | null {
     const packageData = this.package();
     if (!packageData) return null;
     
@@ -503,7 +553,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     for (const variant of item.productId.variants) {
       if (variant.attributes) {
         for (const attr of variant.attributes) {
-          if (attr.variant === 'color' && attr.value === color && attr.image?.filePath) {
+          if (attr.variant === 'color' && this.getMultilingualValue(attr.value) === this.getDisplayText(color) && attr.image?.filePath) {
             return attr.image.filePath;
           }
         }
@@ -547,7 +597,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     }
   }
 
-  getColorValue(colorName: string): string {
+  getColorValue(colorName: any): string {
     const colorMap: { [key: string]: string } = {
       'white': '#ffffff',
       'black': '#000000',
@@ -579,7 +629,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       'tan': '#d2b48c'
     };
     
-    return colorMap[colorName.toLowerCase()] || colorName;
+    const colorText = this.getDisplayText(colorName);
+    return colorMap[colorText.toLowerCase()] || colorText;
   }
 
   openImageModal(imageSrc: string): void {
@@ -587,7 +638,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     console.log('Opening image modal for:', imageSrc);
   }
 
-  onColorHover(colorName: string): void {
+  onColorHover(colorName: any): void {
     // يمكن إضافة تأثيرات إضافية عند hover
     console.log('Hovering over color:', colorName);
   }
@@ -637,7 +688,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     for (let variant of packageItem.productId.variants) {
       if (variant.attributes && variant.attributes.length > 0) {
         const hasSelectedAttributes = variant.attributes.some(attr => 
-          this.selectedVariantsByQuantity[productId]?.[quantity]?.[attr.variant] === attr.value
+          this.selectedVariantsByQuantity[productId]?.[quantity]?.[attr.variant] === this.getMultilingualValue(attr.value)
         );
         if (hasSelectedAttributes) {
           return variant;
@@ -660,7 +711,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     for (let variant of packageItem.productId.variants) {
       if (variant.attributes && variant.attributes.length > 0) {
         for (let attr of variant.attributes) {
-          if (selectedVariants[attr.variant] === attr.value) {
+          if (selectedVariants[attr.variant] === this.getMultilingualValue(attr.value)) {
             return attr;
           }
         }
@@ -768,7 +819,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     console.log('Adding package to cart:', packageDataForCart);
 
     // Add package to cart using cart service
-    this.cartService.addPackageToCart(packageDataForCart).subscribe({
+    this.cartService.addPackageToCart(packageDataForCart as any).subscribe({
       next: (cartState) => {
         console.log('Package added to cart successfully:', cartState);
         this.messageService.add({
@@ -892,8 +943,9 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         const item = packageData.items.find(i => i.productId._id === productId);
         if (item && item.requiredVariantAttributes) {
           item.requiredVariantAttributes.forEach(attr => {
-            const variantImage = this.getVariantImageForItem(productId, attr.variant, attr.value);
-            const fallbackImage = this.getFallbackVariantImage(productId, attr.variant, attr.value);
+            const variantValue = this.getMultilingualValue(attr.value);
+            const variantImage = this.getVariantImageForItem(productId, attr.variant, variantValue);
+            const fallbackImage = this.getFallbackVariantImage(productId, attr.variant, variantValue);
             
             variants.push({
               variant: attr.variant,
@@ -907,6 +959,21 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     
     console.log(`Final variants for product ${productId}:`, variants);
     return variants;
+  }
+
+  get currentLanguage(): 'en' | 'ar' {
+    return this.translationService.getCurrentLanguage() as 'en' | 'ar';
+  }
+
+  // Method to get display text for color/size from MultilingualText
+  getDisplayText(value: any): string {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (value && typeof value === 'object' && (value.en || value.ar)) {
+      return this.getMultilingualValue(value);
+    }
+    return value?.toString() || '';
   }
 
   getProductMainImage(productId: string): string | undefined {
@@ -945,7 +1012,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         // Check attributes within variant object
         if (variantObj.attributes && variantObj.attributes.length > 0) {
           const matchingAttr = variantObj.attributes.find((attr: any) => 
-            attr.variant === variant && attr.value === value
+            attr.variant === variant && this.getMultilingualValue(attr.value) === value
           );
           if (matchingAttr?.image?.filePath) {
             console.log(`Found variant image in variant attributes:`, matchingAttr.image.filePath);
@@ -957,7 +1024,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     
     // 2. Find variant image from product attributes
     const attribute = (item.productId as any).attributes?.find((attr: any) => 
-      attr.variant === variant && attr.value === value
+      attr.variant === variant && this.getMultilingualValue(attr.value) === value
     );
     
     if (attribute?.image?.filePath) {
@@ -1002,7 +1069,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         // Check attributes within variant object
         if (variantObj.attributes && variantObj.attributes.length > 0) {
           const matchingAttr = variantObj.attributes.find((attr: any) => 
-            attr.variant === variant && attr.value === value
+            attr.variant === variant && this.getMultilingualValue(attr.value) === value
           );
           if (matchingAttr?.image?.filePath) {
             console.log(`Found fallback variant image in variant attributes:`, matchingAttr.image.filePath);

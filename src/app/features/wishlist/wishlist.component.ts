@@ -16,6 +16,7 @@ import { ProductService } from '../products/services/product.service';
 import { WishlistService } from './services/wishlist.service';
 import { IAddToCartRequest } from '../cart/models/cart.interface';
 import { environment } from '../../../environments/environment';
+import { MultilingualText } from '../../core/models/multi-language';
 
 @Component({  
   selector: 'app-wishlist',
@@ -100,8 +101,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
       price: item.product.price || 0,
       image: item.product.images?.[0]?.filePath || '',
       quantity: 1,
-      color: item.color || '', // Using variantId as color for simplicity
-      size: item.size || '', // Add size if available
+      color: item.color || null,
+      size: item.size || null,
       productName: item.product.name || 'Product',
       discount: item.product.discountPrice || 0,
     };
@@ -137,7 +138,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   // select color and size
-  selectedSize(item: IWishlistItem, size: string): void {
+  selectedSize(item: IWishlistItem, size: MultilingualText): void {
     const newItem = this.wishlistItems.find((i) => i.productId === item.productId)
     if(newItem){
       newItem.size = size;
@@ -145,7 +146,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectedColor(item: IWishlistItem, color: string): void {
+    selectedColor(item: IWishlistItem, color: MultilingualText): void {
     const newItem = this.wishlistItems.find((i) => i.productId === item.productId)
     if(newItem){
       newItem.color = color;

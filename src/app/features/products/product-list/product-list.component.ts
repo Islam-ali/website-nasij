@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -32,6 +32,9 @@ import { ICategory } from '../../../interfaces/category.interface';
 import { IProduct } from '../models/product.interface';
 import AOS from 'aos';
 import { TranslateModule } from '@ngx-translate/core';
+import { TranslationService } from '../../../core/services/translate.service';
+import { MultilingualText } from '../../../core/models/multi-language';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-product-list',
@@ -59,7 +62,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MessagesModule,
     ProductCardComponent,
     DrawerModule,
-    TranslateModule
+    TranslateModule,
+    MultiLanguagePipe
 ],
   providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder, TranslateModule],
   templateUrl: './product-list.component.html',
@@ -102,6 +106,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     private fb: FormBuilder,
     private messageService: MessageService,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private translationService: TranslationService
   ) {
     this.filterForm = this.fb.group({
       searchQuery: [''],
@@ -230,8 +235,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     this.subscriptions.add(
       this.productService.getProducts({ limit: 100 }).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
-          this.sizes = [...new Set(response.data.products.flatMap((p) => p.sizes || []))];
-          this.colors = [...new Set(response.data.products.flatMap((p) => p.colors || []))];
+          this.sizes = [...new Set(response.data.products.flatMap((p) => p.sizes?.map((s) => s.en) || []))];
+          this.colors = [...new Set(response.data.products.flatMap((p) => p.colors?.map((c) => c.en) || []))];
         },
         error: (err) => {
           console.error('Error loading sizes and colors:', err);
@@ -371,7 +376,11 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   getCategoryName(categoryId: string): string {
     if (!this.categories) return 'Unknown Category';
     const category = this.categories.find(c => c._id === categoryId);
-    return category?.name || 'Unknown Category';
+    return category?.name[this.currentLanguage] || category?.name.en || 'Unknown Category';
+  }
+
+  get currentLanguage(): 'en' | 'ar' {
+    return this.translationService.getCurrentLanguage() as 'en' | 'ar';
   }
 
   getBrandName(brandId: string): string {

@@ -82,8 +82,8 @@
           <div class="relative">
             <div class="absolute -top-2 -left-2 w-4 h-4 bg-primary rounded-full opacity-20"></div>
             <div class="absolute -top-1 -left-1 w-2 h-2 bg-primary rounded-full opacity-40"></div>
-            <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package()?.name || '' }}</h1>
-            <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package()?.description || '' }}</p>
+            <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package().name | multiLanguage }}</h1>
+            <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package().description | multiLanguage }}</p>
           </div>
 
           <!-- Package Items with Variants -->
@@ -92,7 +92,7 @@
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl font-bold text-primary flex items-center gap-2">
                   <i class="pi pi-box text-lg text-primary"></i>
-                  {{ item.productId.name || 'Product' }}
+                  {{ item.productId.name | multiLanguage }}
                   <span *ngIf="item.quantity > 1" class="text-base font-medium text-secondary">({{ 'packages.select_quantity' | translate: {quantity: item.quantity} }})</span>
                 </h3>
                 <span class=" text-gray-600 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
@@ -113,7 +113,7 @@
                       (error)="onImageError($event)"
                     />
                     <div class="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-semibold">
-                      {{ item.productId.name }} {{ qtyIndex + 1 }}
+                      {{ item.productId.name | multiLanguage }} {{ qtyIndex + 1 }}
                     </div>
                   </div>
 
@@ -127,7 +127,7 @@
                       <div *ngFor="let color of getAvailableColors(item.productId._id)" class="relative group">
                         <button 
                           type="button"
-                          class="color-swatch w-12 h-12 rounded-lg border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
+                          class="color-swatch w-24 h-24 rounded-lg border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
                           [class.border-primary!important]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
                           [class.border-4!important]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
                           [class.scale-110]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
@@ -137,21 +137,21 @@
                           [class.hover:scale-105]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
                           [class.hover:shadow-lg]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
                           [class.hover:border-3]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [title]="color"
+                          [title]="getDisplayText(color)"
                           (click)="onColorSelectForQuantity(item.productId._id, qtyIndex + 1, color, $event)"
                         >
                           <!-- Color Image or Color Swatch -->
                           <img 
                             *ngIf="getColorImage(item.productId._id, color)"
                             [src]="getColorImage(item.productId._id, color)"
-                            [alt]="color"
+                            [alt]="getDisplayText(color)"
                             class="w-full h-full object-cover"
                             (error)="onImageError($event)"
                           />
                           <div 
                             *ngIf="!getColorImage(item.productId._id, color)"
                             class="w-full h-full rounded-lg"
-                            [ngStyle]="{'background-color': getColorValue(color)}"
+                            [ngStyle]="{'background-color': getColorValue(getDisplayText(color))}"
                           ></div>
                           
                           <!-- Checkmark for selected state -->
@@ -165,7 +165,7 @@
                         
                         <!-- Tooltip -->
                         <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                          {{ color }}
+                          {{ getDisplayText(color) }}
                         </div>
                       </div>
                     </div>
@@ -195,10 +195,10 @@
                         [class.border-gray-300]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
                         [class.text-gray-700]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
                         [class.bg-white]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [title]="size"
+                        [title]="getDisplayText(size)"
                         (click)="onSizeSelectForQuantity(item.productId._id, qtyIndex + 1, size, $event)"
                       >
-                        {{ size }}
+                        {{ getDisplayText(size) }}
                       </button>
                     </div>
                   </div>
@@ -210,7 +210,7 @@
                 <img 
                   [alt]="item.productId.name" 
                   class="w-full h-48 object-cover rounded-lg border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
-                  [src]="(item.productId.images?.[0]?.filePath) || 'assets/images/placeholder.jpg'"
+                  [src]="(item.productId.images[0].filePath) || 'assets/images/placeholder.jpg'"
                   (error)="onImageError($event)"
                 />
                 <div>
@@ -357,12 +357,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .color-swatch {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  
+@media (max-width: 768px) {  
   .size-button {
     min-width: 50px;
     padding: 0.5rem 0.75rem;

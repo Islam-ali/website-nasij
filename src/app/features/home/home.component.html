@@ -38,7 +38,7 @@
             class="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 transition-all duration-300"
             [ngClass]="getCategoryGridClass(i)">
             <div class="w-full h-full relative overflow-hidden">
-              <img [src]="category.image ? category.image.filePath : null" alt="{{category.name}}"
+              <img [src]="category.image ? category.image.filePath : null" alt="{{category.name | multiLanguage}}"
                 class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700">
 
               <!-- Gradient Overlay -->
@@ -50,7 +50,7 @@
                 <div class="mb-3">
                   <h3 data-aos="fade-down"
                     class="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 leading-tight drop-shadow-lg transition-colors duration-300">
-                    {{category.name}}
+                    {{category.name | multiLanguage}}
                   </h3>
                   <div data-aos="fade-up" class="flex items-center gap-2">
                     <div
@@ -134,7 +134,7 @@
   }
 
   <!-- Featured Products -->
-  @if (featuredProducts.length > 0) {
+  @if (featuredProducts && featuredProducts.length > 0) {
   <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">

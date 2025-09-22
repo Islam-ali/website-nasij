@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ProductService } from '../products/services/product.service';
-import { IProduct } from '../products/models/product.interface';
+import { EnumProductVariant, IProduct } from '../products/models/product.interface';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RatingModule } from 'primeng/rating';
@@ -27,6 +27,8 @@ import { PackageService } from '../packages/services/package.service';
 import { IPackage } from '../../interfaces/package.interface';
 import { TranslationService } from '../../core/services/translate.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
+import { MultilingualText } from '../../core/models/multi-language';
 
 @Component({
   selector: 'app-home',
@@ -46,7 +48,8 @@ import { TranslateModule } from '@ngx-translate/core';
     FeaturedCollectionComponent,
     BannarComponent,
     FeatureComponent,
-    TranslateModule
+    TranslateModule,
+    MultiLanguagePipe
 ],
   providers: [
     MessageService,
@@ -201,8 +204,8 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       productId: product._id,
       quantity: 1,
       price: product.price,
-      color: product.variants?.[0]?.attributes?.[0]?.variant === 'color' ? product.variants?.[0]?.attributes?.[0]?.value : '',
-      size: product.variants?.[0]?.attributes?.[0]?.variant === 'size' ? product.variants?.[0]?.attributes?.[0]?.value : '',
+      color: product.variants?.[0]?.attributes?.[0]?.variant === EnumProductVariant.COLOR ? (product.variants?.[0]?.attributes?.[0]?.value as unknown as MultilingualText) : null,
+      size: product.variants?.[0]?.attributes?.[0]?.variant === EnumProductVariant.SIZE ? (product.variants?.[0]?.attributes?.[0]?.value as unknown as MultilingualText) : null,
       image: product.images[0].filePath,
       productName: product.name,
       discount: product.discountPrice || 0,

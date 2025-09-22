@@ -1,6 +1,7 @@
 import { IArchived } from "../../../interfaces/archive.interface";
 import { IBrand } from "../models/brand.interface";
 import { ICategory } from "../../../interfaces/category.interface";
+import { MultilingualText } from "../../../core/models/multi-language";
 
 export enum EnumProductVariant {
   SIZE = 'size',
@@ -16,8 +17,8 @@ export interface ProductVariant {
 }
 
 export interface ProductVariantAttribute {
-  variant: string;
-  value: string;
+  variant: EnumProductVariant;
+  value: MultilingualText;
   image?: IArchived;
 }
 
@@ -29,8 +30,8 @@ export enum ProductStatus {
 
 export interface IProduct {
   _id: string;
-  name: string;
-  description: string;
+  name: MultilingualText;
+  description: MultilingualText;
   price: number;
   discountPrice?: number;
   factoryPrice?: number;
@@ -41,8 +42,8 @@ export interface IProduct {
   stock: number;
   status: ProductStatus;
   tags: string[];
-  colors: string[];
-  sizes: string[];
+  colors: MultilingualText[];
+  sizes: MultilingualText[];
   gender?: string;
   season?: string;
   details: { name: string; value: string }[];

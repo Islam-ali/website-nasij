@@ -1,15 +1,16 @@
+import { MultilingualText } from '../../../core/models/multi-language';
 import { IArchived } from '../../../interfaces/archive.interface';
 import { IPackageItem, IProductVariantAttribute } from '../../checkout/models/checkout';
 
 export interface ICartItem {
   // Product fields
   productId?: string;
-  color?: string;
-  size?: string;
+  color?: MultilingualText | null;
+  size?: MultilingualText | null;
   quantity: number;
   price: number;
   image: string;
-  productName: string;
+  productName: MultilingualText;
   discount?: number;
   variantImage?: IArchived | null;
   

@@ -94,7 +94,7 @@
                 [class.dark:hover:bg-dark-surfaceHover]="isDarkTheme()"
                 [class.dark:hover:text-primary-500]="isDarkTheme()">
                 <i class="pi pi-circle-fill text-xs me-2 text-primary-500"></i>
-                {{ category.name }}
+                {{ category.name | multiLanguage}}
               </a>
               }
             </div>
@@ -262,7 +262,7 @@
         <img [src]="item.image" [alt]="item.productName" class="w-16 h-16 object-cover rounded-lg">
         <div class="flex-1">
           <h4 class="font-medium text-gray-900 text-sm mb-0 transition-colors duration-300"
-            [class.dark:text-dark-text]="isDarkTheme()">{{ item.productName }}</h4>
+            [class.dark:text-dark-text]="isDarkTheme()">{{ item.productName | multiLanguage }}</h4>
           <p class="text-sm text-gray-500 transition-colors duration-300"
             [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.quantity' | translate }}: {{ item.quantity }}</p>
           <p class="text-lg font-bold text-primary-500">${{ (item.price - (item.discount || 0)) * item.quantity! }}</p>

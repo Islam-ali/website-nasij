@@ -16,6 +16,8 @@ import { WishlistService } from '../../../features/wishlist/services/wishlist.se
 import { MessageService } from 'primeng/api';
 import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlist.interface';
 import { EnumProductVariant } from '../../../features/products/models/product.interface';
+import { TranslationService } from '../../../core/services/translate.service';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -28,9 +30,11 @@ import { EnumProductVariant } from '../../../features/products/models/product.in
     RippleModule,
     RatingModule,
     MessageModule,
+    MultiLanguagePipe
 ],
   providers: [
-    { provide: Window, useValue: window }
+    { provide: Window, useValue: window },
+    TranslationService
   ],
   templateUrl: './product-card.component.html',
 })
@@ -59,6 +63,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
     private router: Router,
     private wishlistService: WishlistService,
     private messageService: MessageService,
+    private translationService: TranslationService,
   ) {}
 
   // Get product image with fallback to placeholder
@@ -123,9 +128,11 @@ export class ProductCardComponent implements OnInit, OnChanges {
       if (variant.attributes) {
         variant.attributes.forEach((attr: any) => {
           if (attr.variant === EnumProductVariant.COLOR) {
-            colors.add(attr.value);
+            const colorValue = typeof attr.value === 'string' ? attr.value : ((attr.value as any)[this.currentLanguage] || (attr.value as any).en);
+            colors.add(colorValue);
           } else if (attr.variant === EnumProductVariant.SIZE) {
-            sizes.add(attr.value);
+            const sizeValue = typeof attr.value === 'string' ? attr.value : ((attr.value as any)[this.currentLanguage] || (attr.value as any).en);
+            sizes.add(sizeValue);
           }
         });
       }
@@ -134,5 +141,9 @@ export class ProductCardComponent implements OnInit, OnChanges {
     this.product.colors = Array.from(colors);
     this.product.sizes = Array.from(sizes);
     console.log(this.product.colors, this.product.sizes);
+  }
+
+  get currentLanguage(): 'en' | 'ar' {
+    return this.translationService.getCurrentLanguage() as 'en' | 'ar';
   }
 }

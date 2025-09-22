@@ -5,6 +5,8 @@ import { environment } from '../../../../environments/environment';
 import { ICheckout, ICreateOrder, IOrderItem, IPaymentInfo, IPackageItem, IProductVariantAttribute } from '../models/checkout';
 import { OrderItemType, PaymentStatus, PaymentMethod } from '../models/order.enum';
 import { ICartItem } from '../../cart/models/cart.interface';
+import { EnumProductVariant } from '../../products/models/product.interface';
+import { MultilingualText } from '../../../core/models/multi-language';
 
 @Injectable({
   providedIn: 'root'
@@ -47,8 +49,8 @@ export class CheckoutService {
           quantity: item.quantity,
           price: item.price,
           discountPrice: item.discount || item.price,
-          color: item.color,
-          size: item.size,
+          color: item.color as MultilingualText,
+          size: item.size as MultilingualText,
           selectedVariants: this.buildSelectedVariants(item)
         };
       } else {
@@ -82,14 +84,14 @@ export class CheckoutService {
     
     if (cartItem.color) {
       variants.push({
-        variant: 'color',
+        variant: EnumProductVariant.COLOR,
         value: cartItem.color
       });
     }
     
     if (cartItem.size) {
       variants.push({
-        variant: 'size',
+        variant: EnumProductVariant.SIZE,
         value: cartItem.size
       });
     }

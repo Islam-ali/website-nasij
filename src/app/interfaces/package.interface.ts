@@ -1,5 +1,6 @@
 import { IProduct } from "../features/products/models/product.interface";
 import { IArchived } from "./archive.interface";
+import { MultilingualText } from "../core/models/multi-language";
 
 
 export interface IQueryParamsBuyNow {
@@ -7,9 +8,9 @@ export interface IQueryParamsBuyNow {
   productId?: string;
   packageId?: string;
   quantity: number;
-  color?: string;
-  size?: string;
-  name?: string;
+  color?: MultilingualText | null;
+  size?: MultilingualText | null;
+  name?: MultilingualText;
   price?: number;
   discount?: number;
   image?: string;
@@ -17,7 +18,7 @@ export interface IQueryParamsBuyNow {
 
 export interface IRequiredVariantAttribute {
   variant: string;
-  value: string;
+  value: MultilingualText;
 }
 
 export interface IPackageItem {
@@ -31,8 +32,8 @@ export interface IPackageItem {
 export interface IPackage {
   _id?: string;
   id?: string;
-  name: string;
-  description: string;
+  name: MultilingualText;
+  description: MultilingualText;
   price: number;
   discountPrice?: number;
   stock: number;
