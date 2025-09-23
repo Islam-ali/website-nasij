@@ -54,7 +54,7 @@
             <p-accordion [multiple]="true" styleClass="custom-faq-accordion">
               <p-accordionTab 
                 *ngFor="let faq of businessProfile!.faq; let i = index" 
-                [header]="faq.question"
+                [header]="faq.question.en"
                 [disabled]="!faq.question"
               >
                 <div class="prose prose-lg max-w-none">

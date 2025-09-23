@@ -48,7 +48,7 @@
 
         <div class="p-8">
           <div *ngIf="businessProfile?.termsOfService; else noContent" class="prose prose-lg max-w-none">
-            <div class="ql-editor" [innerHTML]="businessProfile!.termsOfService | safe:'html'"></div>
+            <div class="ql-editor" [innerHTML]="(businessProfile!.termsOfService.en) | safe:'html'"></div>
 
           </div>
           

@@ -105,8 +105,8 @@
             </div>
 
             <!-- Description -->
-            <p class="package-description mb-3">
-              {{ package.description.length > 100 ? package.description.substring(0, 100) + '...' : package.description }}
+            <p class="package-description mb-3 line-clamp-3 ">
+              {{ package.description | multiLanguage}}
             </p>
 
             <!-- Items Count -->

@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HeroSectionService } from './hero-section.service';
 import { HeroSection } from './hero-section';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-hero-section',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MultiLanguagePipe],
   templateUrl: './hero-section.component.html',
 })
 export class HeroSectionComponent implements OnInit {

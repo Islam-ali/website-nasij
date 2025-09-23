@@ -26,6 +26,7 @@ import { BaseResponse } from '../../core/models/baseResponse';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-packages',
@@ -49,7 +50,8 @@ import { TranslateModule } from '@ngx-translate/core';
     DropdownModule,
     IconFieldModule,
     InputIconModule,
-    TranslateModule
+    TranslateModule,
+    MultiLanguagePipe
   ],
   templateUrl: './packages.component.html',
   styleUrls: ['./packages.component.scss']

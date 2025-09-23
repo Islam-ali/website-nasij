@@ -11,6 +11,7 @@ import { DividerModule } from 'primeng/divider';
 
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-faq',
@@ -22,7 +23,8 @@ import { IBusinessProfile } from '../../../interfaces/business-profile.interface
     CardModule,
     ProgressSpinnerModule,
     AccordionModule,
-    DividerModule
+    DividerModule,
+    MultiLanguagePipe
   ],
   providers: [MessageService],
   templateUrl: './faq.component.html',
