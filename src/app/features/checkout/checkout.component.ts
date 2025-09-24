@@ -22,6 +22,10 @@ import { ButtonModule } from 'primeng/button';
 import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
 import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
 import { OrderStatus } from '../../interfaces/product.interface';
+import { ICountry } from '../../core/models/location.interface';
+import { IState } from '../../core/models/location.interface';
+import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout',
@@ -37,7 +41,9 @@ import { OrderStatus } from '../../interfaces/product.interface';
     InputTextModule,
     RadioButtonModule,
     CheckboxModule,
-    ButtonModule
+    ButtonModule,
+    MultiLanguagePipe,
+    TranslateModule
   ],
   providers: [MessageService, CheckoutService],
   templateUrl: './checkout.component.html',
@@ -57,38 +63,19 @@ export class CheckoutComponent implements OnInit {
     return this.cartItems().reduce((total, item) => total + ((item.price - (item.discount || 0)) * item.quantity), 0);
   });
 
+  // Shipping cost as signal
+  shippingCost = signal(0);
+
   // Computed order total
   orderTotal = computed(() => {
-    return this.cartTotal() + this.shippingCost;
+    return this.cartTotal() + this.shippingCost();
   });
-
-  shippingCost = 0;
   private destroy$ = new Subject<void>();
 
   // Form options
-  countries = [
-    { label: 'Select Country', value: null },
-    { label: 'Egypt', value: 'EG' }
-  ];
+  countries = signal<ICountry[]>([]);
 
-  states = [
-    { label: 'Select State', value: null },
-    { label: 'Cairo', value: 'Cairo' },
-    { label: 'Giza', value: 'Giza' },
-    { label: 'Alexandria', value: 'Alexandria' },
-    { label: 'Mansoura', value: 'Mansoura' },
-    { label: 'Port Said', value: 'Port Said' },
-    { label: 'Tanta', value: 'Tanta' },
-    { label: 'Ismailia', value: 'Ismailia' },
-    { label: 'Sohag', value: 'Sohag' },
-    { label: 'Qena', value: 'Qena' },
-    { label: 'Asyut', value: 'Asyut' },
-    { label: 'Beni Suef', value: 'Beni Suef' },
-    { label: 'Fayoum', value: 'Fayoum' },
-    { label: 'Minya', value: 'Minya' },
-    { label: 'Suez', value: 'Suez' },
-    { label: 'Luxor', value: 'Luxor' },
-  ];
+  states = signal<IState[]>([]);
 
   paymentMethods = [
     { label: 'Cash', value: PaymentMethod.CASH },
@@ -106,11 +93,13 @@ export class CheckoutComponent implements OnInit {
     private packageUrlService: PackageUrlService,
     private productUrlService: ProductUrlService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.checkoutForm = this.createCheckoutForm();
+    this.loadCountries();
     this.route.queryParams.subscribe(params => {
       // Check for encoded data first
       if (this.handleEncodedData(params)) {
@@ -148,6 +137,62 @@ export class CheckoutComponent implements OnInit {
         });
         this.isBuyNow = false;
       }
+    });
+  }
+  loadCountries(): void {
+    this.checkoutService.getCountries().subscribe({
+      next: (countries: any) => {
+        this.countries.set(countries.data);
+        if (countries.data && countries.data.length > 0) {
+          const firstCountry = countries.data[0];
+          
+          // Set first country as default in form
+          this.checkoutForm.patchValue({
+            shippingAddress: {
+              ...this.checkoutForm.value.shippingAddress,
+              country: firstCountry._id
+            }
+          });
+          
+          // Set shipping cost from first country
+          this.shippingCost.set(firstCountry.defaultShippingCost || 0);
+          
+          // Load states for the first country
+          this.loadStates();
+          
+          console.log('First country set:', firstCountry, 'Cost:', this.shippingCost(), 'Total:', this.orderTotal());
+        } else {
+          this.shippingCost.set(0);
+          console.log('No countries available');
+        }
+      },
+      error: (error) => {
+        console.error('Error loading countries:', error);
+        this.shippingCost.set(0);
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('common.error'),
+          detail: this.translate.instant('checkout.validationErrors.fillAllFields')
+        });
+      }
+    });
+  }
+
+  loadStates(): void {
+    const countryId = this.checkoutForm.value.shippingAddress.country;
+    this.checkoutService.getStates(countryId).subscribe((states: any) => {
+      this.states.set(states.data);
+      
+      // // Reset shipping cost when country changes
+      // this.shippingCost.set(0);
+      
+      // Clear state selection when country changes
+      this.checkoutForm.patchValue({
+        shippingAddress: {
+          ...this.checkoutForm.value.shippingAddress,
+          state: ''
+        }
+      });
     });
   }
 
@@ -261,7 +306,7 @@ export class CheckoutComponent implements OnInit {
         address: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
-        country: ['EG', [Validators.required]]
+        country: ['', [Validators.required]]
       }),
 
       // Payment Details
@@ -277,10 +322,10 @@ export class CheckoutComponent implements OnInit {
   }
 
 
-  onShippingMethodChange(method: any): void {
-    this.shippingCost = method.price || 0;
-    // Recalculate order total when shipping method changes
-  }
+  // onShippingMethodChange(method: any): void {
+  //   this.shippingCost = method.price || 0;
+  //   // Recalculate order total when shipping method changes
+  // }
 
   onSubmit(): void {
     if (this.checkoutForm.invalid || this.loading) {
@@ -299,8 +344,8 @@ export class CheckoutComponent implements OnInit {
         !formValue.shippingAddress.city || !formValue.shippingAddress.state || !formValue.shippingAddress.country) {
       this.messageService.add({ 
         severity: 'error', 
-        summary: 'Validation Error', 
-        detail: 'Please fill in all required fields.' 
+        summary: this.translate.instant('common.error'), 
+        detail: this.translate.instant('checkout.validationErrors.fillAllFields') 
       });
       this.loading = false;
       return;
@@ -310,8 +355,8 @@ export class CheckoutComponent implements OnInit {
     if (this.cartItems().length === 0) {
       this.messageService.add({ 
         severity: 'error', 
-        summary: 'Cart Empty', 
-        detail: 'Your cart is empty. Please add items before checkout.' 
+        summary: this.translate.instant('common.error'), 
+        detail: this.translate.instant('checkout.validationErrors.cartEmpty') 
       });
       this.loading = false;
       return;
@@ -334,7 +379,7 @@ export class CheckoutComponent implements OnInit {
       // Additional fields from backend DTO
       subtotal: Number(this.cartTotal()),
       tax: this.calculateTax(),
-      shippingCost: this.shippingCost,
+      shippingCost: this.shippingCost(),
       discount: 0, // Can be calculated from coupons
       total: Number(this.orderTotal()),
       paymentStatus: PaymentStatus.PENDING,
@@ -351,7 +396,6 @@ export class CheckoutComponent implements OnInit {
       notes: formValue.notes || ''
     };
 
-    
     console.log('Order data being sent:', JSON.stringify(orderData, null, 2));
 
     this.checkoutService.createOrder(orderData).subscribe({
@@ -366,7 +410,11 @@ export class CheckoutComponent implements OnInit {
         if (isPlatformBrowser(this.platformId)) {
           window.scrollTo(0, 0);
         }
-        this.messageService.add({ severity: 'success', summary: 'Order Successful', detail: `Thank you for your purchase. Your order has been placed successfully.` });
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: this.translate.instant('common.success'), 
+          detail: this.translate.instant('checkout.thankYou') 
+        });
         // Optionally redirect to order confirmation page
         // this.router.navigate(['/order-confirmation', response.orderId]);
       },
@@ -390,11 +438,33 @@ export class CheckoutComponent implements OnInit {
         this.loading = false;
         this.messageService.add({ 
           severity: 'error', 
-          summary: 'Order Failed', 
+          summary: this.translate.instant('common.error'), 
           detail: errorMessage 
         });
       }
     });
+  }
+  setShippingCost(): void {
+   const stateId = this.checkoutForm.value.shippingAddress.state;
+   const countryId = this.checkoutForm.value.shippingAddress.country;
+   
+   if (stateId) {
+     // Get shipping cost from state
+     const state = this.states().find(state => state._id === stateId);
+     if (state) {
+       this.shippingCost.set(state.shippingCost || 0);
+       console.log('Shipping cost updated from state:', state, 'Cost:', this.shippingCost(), 'Total:', this.orderTotal());
+     }
+   } else if (countryId) {
+     // Get default shipping cost from country
+     const country = this.countries().find(country => country._id === countryId);
+     if (country) {
+       this.shippingCost.set(country.defaultShippingCost || 0);
+       console.log('Shipping cost updated from country:', country, 'Cost:', this.shippingCost(), 'Total:', this.orderTotal());
+     }
+   } else {
+     this.shippingCost.set(0);
+   }
   }
 
   public calculateTax(): number {
@@ -411,5 +481,10 @@ export class CheckoutComponent implements OnInit {
   // Helper method to get shipping address form group
   get shippingAddress() {
     return (this.checkoutForm.get('shippingAddress') as FormGroup).controls;
+  }
+
+  // Helper method to get item text for cart
+  getItemText(count: number): string {
+    return count === 1 ? this.translate.instant('checkout.item') : this.translate.instant('checkout.items');
   }
 }

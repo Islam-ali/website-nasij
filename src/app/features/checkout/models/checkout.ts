@@ -47,15 +47,15 @@ export interface IOrderItem {
   quantity: number;
   price?: number;
   discountPrice?: number;
-    color?: MultilingualText;
-  size?: MultilingualText;
+  // color?: MultilingualText;
+  // size?: MultilingualText;
   packageItems?: IPackageItem[];
   selectedVariants?: IProductVariantAttribute[];
 }
 
 export interface IPackageItem {
   productId: string;
-  productName?: string;
+  productName?: MultilingualText;
   quantity: number;
   price?: number;
   image?: string;

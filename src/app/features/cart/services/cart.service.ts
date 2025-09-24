@@ -6,6 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ICartItem, ICartState, ICartSummary, IAddToCartRequest } from '../models/cart.interface';
 import { MessageService } from 'primeng/api';
 import { MultilingualText } from '../../../core/models/multi-language';
+import { ICountry, IState } from '../../../core/models/location.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,8 @@ export class CartService implements OnDestroy {
     // Check if it's a package or product
     if (item.packageId) {
       console.log('🔄 Adding package to cart:', item);
+      console.log('🔄 Package ID:', item.packageId);
+      console.log('🔄 Item type:', item.itemType);
       // Handle package
       const existingItemIndex = this.findCartItemIndex(
         currentState.items, 
@@ -71,6 +74,8 @@ export class CartService implements OnDestroy {
           quantity: item.quantity,
           itemType: 'package'
         };
+        console.log('📦 New package item:', newItem);
+        console.log('📦 New package packageId:', newItem.packageId);
         updatedItems = [...currentState.items, newItem];
       }
       
@@ -116,7 +121,8 @@ export class CartService implements OnDestroy {
     size?: MultilingualText | null,
     packageId?: string
   ): Observable<ICartState> {
-    console.log('🔄 Updating quantity:', { productId, quantity, color, size, packageId });
+    console.log('🔄 CART SERVICE updateQuantity called:', { productId, quantity, color, size, packageId });
+    console.log('🔄 Current cart state:', this.cartState.value);
     
     if (quantity < 1) {
       if (packageId) {
@@ -132,6 +138,9 @@ export class CartService implements OnDestroy {
     const itemIndex = this.findCartItemIndex(currentState.items, productId, color, size, packageId);
     
     console.log('🔍 Found item at index:', itemIndex);
+    if (itemIndex !== -1) {
+      console.log('🔍 Item found:', currentState.items[itemIndex]);
+    }
     
     if (itemIndex === -1) {
       console.log('❌ Item not found in cart');
@@ -145,6 +154,7 @@ export class CartService implements OnDestroy {
     };
     
     console.log('✅ Updated item quantity:', updatedItems[itemIndex]);
+    console.log('✅ All updated items:', updatedItems);
     return this.updateCartState(updatedItems);
   }
 
@@ -156,13 +166,31 @@ export class CartService implements OnDestroy {
     packageId?: string
   ): Observable<ICartState> {
     console.log('🗑️ Removing item:', { productId, color, size, packageId });
+    console.log('🗑️ PackageId parameter:', packageId);
+    console.log('🗑️ PackageId type:', typeof packageId);
     
     const currentState = this.cartState.value;
-    const updatedItems = currentState.items.filter(item => {
+    console.log('📋 Current cart items before removal:', currentState.items);
+    
+    const updatedItems = currentState.items.filter((item, index) => {
+      console.log(`🔍 Filtering item ${index}:`, {
+        packageId: item.packageId,
+        productId: item.productId,
+        itemType: item.itemType,
+        productName: item.productName,
+        fullItem: item
+      });
+      
       if (packageId) {
         // Remove package
         const shouldKeep = item.packageId !== packageId;
-        console.log('📦 Package filter:', { itemPackageId: item.packageId, targetPackageId: packageId, shouldKeep });
+        console.log('📦 Package filter:', { 
+          itemPackageId: item.packageId, 
+          targetPackageId: packageId, 
+          shouldKeep,
+          itemType: item.itemType,
+          comparison: `${item.packageId} !== ${packageId} = ${shouldKeep}`
+        });
         return shouldKeep;
       } else if (productId) {
         // Remove product
@@ -173,10 +201,37 @@ export class CartService implements OnDestroy {
         console.log('🛍️ Product filter:', { itemProductId: item.productId, targetProductId: productId, matchesProduct, matchesColor, matchesSize, shouldKeep });
         return shouldKeep;
       }
+      console.log('⚠️ No criteria match, keeping item');
       return true; // Keep item if no criteria match
     });
     
     console.log('✅ Items after removal:', updatedItems);
+    console.log('📊 Items removed:', currentState.items.length - updatedItems.length);
+    return this.updateCartState(updatedItems);
+  }
+
+  // Remove item from cart by index (for cases where IDs are missing)
+  removeItemByIndex(index: number): Observable<ICartState> {
+    console.log('🗑️ Removing item by index:', index);
+    
+    const currentState = this.cartState.value;
+    console.log('📋 Current cart items before removal:', currentState.items);
+    
+    if (index < 0 || index >= currentState.items.length) {
+      console.error('Invalid index for removal:', index);
+      return of(currentState);
+    }
+    
+    const itemToRemove = currentState.items[index];
+    console.log('🗑️ Item to remove:', itemToRemove);
+    console.log('🗑️ Item packageId:', itemToRemove.packageId);
+    console.log('🗑️ Item productId:', itemToRemove.productId);
+    console.log('🗑️ Item type:', itemToRemove.itemType);
+    
+    const updatedItems = currentState.items.filter((_, i) => i !== index);
+    
+    console.log('✅ Items after removal by index:', updatedItems);
+    console.log('📊 Items removed:', currentState.items.length - updatedItems.length);
     return this.updateCartState(updatedItems);
   }
 
@@ -189,7 +244,10 @@ export class CartService implements OnDestroy {
     image: string;
     packageItems?: any[];
     discount?: number;
+    selectedVariants?: any;
   }): Observable<ICartState> {
+    console.log('📦 Adding package to cart with data:', packageData);
+    
     const packageItem: IAddToCartRequest = {
       packageId: packageData.packageId,
       quantity: packageData.quantity,
@@ -198,8 +256,11 @@ export class CartService implements OnDestroy {
       image: packageData.image,
       packageItems: packageData.packageItems,
       discount: packageData.discount,
+      selectedVariants: packageData.selectedVariants,
       itemType: 'package'
     };
+    
+    console.log('📦 Package item to add:', packageItem);
     
     return this.addToCart(packageItem);
   }
@@ -209,6 +270,14 @@ export class CartService implements OnDestroy {
     return this.updateCartState([]);
   }
 
+  // Update shipping location and recalculate costs
+  updateShippingLocation(country: ICountry, state?: IState): Observable<ICartState> {
+    console.log('🌍 Updating shipping location:', { country: country.name, state: state?.name });
+    
+    const currentState = this.cartState.value;
+    return this.updateCartState(currentState.items, country, state);
+  }
+
   // Get current cart state
   getCart(): Observable<ICartState> {
     return this.cartState$;
@@ -216,8 +285,15 @@ export class CartService implements OnDestroy {
 
   // Get cart items
   getCartItems(): Observable<ICartItem[]> {
+    console.log('🔄 getCartItems() called');
+    console.log('🔄 getCartItems() - current cartState$:', this.cartState$);
+    console.log('🔄 getCartItems() - current cartState value:', this.cartState.value);
+    
     return this.cartState$.pipe(
-      map(state => state.items)
+      map(state => {
+        console.log('🔄 getCartItems() - mapping state to items:', state.items);
+        return state.items;
+      })
     );
   }
 
@@ -227,31 +303,60 @@ export class CartService implements OnDestroy {
   }
 
   // Calculate cart summary
-  private calculateSummary(items: ICartItem[]): ICartSummary {
-    const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  private calculateSummary(items: ICartItem[], selectedCountry?: ICountry, selectedState?: IState): ICartSummary {
+    const subtotal = items.reduce((sum, item) => sum + ((item.price - (item.discount || 0)) * item.quantity), 0);
     const taxRate = 0.1; // 10% tax rate - should come from config
     const tax = subtotal * taxRate;
-    const shipping = subtotal > 0 ? (subtotal > 50 ? 0 : 5.99) : 0; // Free shipping over $50
+    
+    // Calculate shipping cost based on location
+    let shippingCost = 0;
+    if (selectedCountry) {
+      if (selectedState) {
+        shippingCost = selectedState.shippingCost;
+      } else {
+        shippingCost = selectedCountry.defaultShippingCost;
+      }
+    } else {
+      // Default shipping logic if no location selected
+      shippingCost = subtotal > 0 ? (subtotal > 50 ? 0 : 5.99) : 0; // Free shipping over $50
+    }
+    
     const discount = 0; // Can be calculated based on coupons/discounts
     
     return {
       subtotal: this.roundToTwoDecimals(subtotal),
-      shipping: this.roundToTwoDecimals(shipping),
       discount: this.roundToTwoDecimals(discount),
-      total: this.roundToTwoDecimals(subtotal + tax + shipping - discount),
-      itemsCount: items.reduce((count, item) => count + item.quantity, 0)
+      total: this.roundToTwoDecimals(subtotal + tax + shippingCost - discount),
+      itemsCount: items.reduce((count, item) => count + item.quantity, 0),
+      selectedCountry,
+      selectedState,
+      shippingCost: this.roundToTwoDecimals(shippingCost)
     };
   }
 
   // Update cart state and notify subscribers
-  private updateCartState(items: ICartItem[]): Observable<ICartState> {    
+  private updateCartState(items: ICartItem[], selectedCountry?: ICountry, selectedState?: IState): Observable<ICartState> {    
+    console.log('🔄 Updating cart state with items:', items);
+    console.log('🔄 Items count:', items.length);
+    items.forEach((item, index) => {
+      console.log(`🔄 Item ${index}:`, {
+        packageId: item.packageId,
+        productId: item.productId,
+        itemType: item.itemType,
+        productName: item.productName
+      });
+    });
     
-    const summary = this.calculateSummary(items);
+    const summary = this.calculateSummary(items, selectedCountry, selectedState);
     const newState: ICartState = { items, summary };
+    
+    console.log('📊 New cart state:', newState);
     
     // In a real app, you would make an API call here to sync with the server
     // For now, we'll just update the local state
+    console.log('🔄 Calling cartState.next() with new state');
     this.cartState.next(newState);
+    console.log('🔄 cartState.next() completed');
     
     return of(newState);
   }
@@ -326,10 +431,10 @@ export class CartService implements OnDestroy {
       items: [],
       summary: {
         subtotal: 0,
-        shipping: 0,
         discount: 0,
         total: 0,
-        itemsCount: 0
+        itemsCount: 0,
+        shippingCost: 0
       }
     };
   }

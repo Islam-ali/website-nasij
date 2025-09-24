@@ -354,8 +354,16 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       pink: '#FFC0CB',
       'light blue': '#ADD8E6',
       'rose gold': '#E8B4B8',
+      'أسود': '#000000',
+      'أبيض': '#ffffff',
+      'أحمر': '#cc0000',
+      'أزرق': '#0066cc',
+      'أخضر': '#008000',
+      'أصفر': '#ffff00',
+      'أرجواني': '#800080',
+      'بيج': '#f5f5f5',
     };
-    return colorMap[color.toLowerCase()] || color.toLowerCase();
+    return colorMap[color] || color;
   }
 
   addToCart(product: IProduct, event: Event): void {
@@ -462,6 +470,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/shop', product._id, product.name]);
+    this.router.navigate(['/shop', product._id, product.name.en]);
   }
 }

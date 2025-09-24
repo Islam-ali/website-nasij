@@ -4,10 +4,11 @@ import { BaseResponse } from '../../../core/models/baseResponse';
 import { FeaturedCollectionsService } from './featured-collection.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-featured-collection',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MultiLanguagePipe],
   templateUrl: './featured-collection.component.html',
 })
 export class FeaturedCollectionComponent {

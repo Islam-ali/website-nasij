@@ -13,7 +13,7 @@ import { MultilingualText } from '../../../core/models/multi-language';
 })
 export class CheckoutService {
   private apiUrl = `${environment.apiUrl}/orders`;
-
+ 
   constructor(private http: HttpClient) { }
 
   // Create a new order using new backend structure
@@ -26,6 +26,12 @@ export class CheckoutService {
   createOrderLegacy(checkoutData: ICheckout): Observable<any> {
     console.log('🔄 Using legacy checkout method:', checkoutData);
     return this.http.post(this.apiUrl, checkoutData);
+  }
+  getCountries(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/countries`);
+  }
+  getStates(countryId: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/states/country/${countryId}`);
   }
 
   // Convert cart items to order items (including packages)
@@ -49,8 +55,8 @@ export class CheckoutService {
           quantity: item.quantity,
           price: item.price,
           discountPrice: item.discount || item.price,
-          color: item.color as MultilingualText,
-          size: item.size as MultilingualText,
+          // color: item.color as MultilingualText,
+          // size: item.size as MultilingualText,
           selectedVariants: this.buildSelectedVariants(item)
         };
       } else {

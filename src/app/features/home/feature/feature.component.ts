@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FeatureService } from './feature.service';
 import { Feature } from '../../../interfaces/feature.interface';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-feature',
-  imports: [],
+  imports: [MultiLanguagePipe],
   templateUrl: './feature.component.html',
 })
 export class FeatureComponent {

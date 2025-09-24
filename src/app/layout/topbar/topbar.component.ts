@@ -141,20 +141,26 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   loadCart(): void {
-    this.cartService.getCartItems().subscribe({
-      next: (cartItems: ICartItem[]) => {
-        this.cartItems.set(cartItems);
-        this.cartItemCount.set(cartItems.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
-        this.cartTotal.set(cartItems.reduce((total: number, item: ICartItem) => total + ((item.price - (item.discount || 0)) * (item.quantity || 1)), 0));
+    
+    const subscription = this.cartService.cartState$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (cartItems: ICartState) => {
+        this.cartItems.set(cartItems.items);
+        this.cartItemCount.set(cartItems.items.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
+        this.cartTotal.set(cartItems.items.reduce((total: number, item: ICartItem) => total + ((item.price - (item.discount || 0)) * (item.quantity || 1)), 0));
       },
       error: (error: Error) => {
         console.error('Error loading cart items:', error);
       }
     });
+    
   }
 
   loadWishlist(): void {
-    this.wishlistService.wishlistState$.subscribe({
+    this.wishlistService.wishlistState$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
       next: (state: IWishlistState) => {
         this.wishlistItems.set(state.items);
         this.wishlistCount.set(state.summary.itemsCount);
@@ -202,39 +208,108 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   removeFromCart(item: ICartItem): void {
-    this.cartService.removeItem(item.productId!, item.color, item.size).pipe(
-          takeUntil(this.destroy$),
-          tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Removed',
-              detail: 'Item removed from cart',
-              life: 1000,
-            });
-          }),
-          catchError((error: any) => {
-            console.error('Error removing item:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Failed to remove item. Please try again.',
-              life: 1000,
-            });
-            return of(null);
-          }),
-          finalize(() => {
-          })
-        ).subscribe();
+    console.log('🚨 TOPBAR removeFromCart CALLED!');
+    console.log('🗑️ Topbar - removing item:', item);
+    console.log('🗑️ Item has packageId:', !!item.packageId);
+    console.log('🗑️ Item has productId:', !!item.productId);
+    console.log('🗑️ Item type:', item.itemType);
+    
+    // Check if it's a package or product
+    if (item.packageId) {
+      console.log('📦 Removing package with ID:', item.packageId);
+      // Handle package removal
+      this.cartService.removeItem(undefined, undefined, undefined, item.packageId).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Removed',
+            detail: 'Package removed from cart',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error removing package:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to remove package. Please try again.',
+            life: 1000,
+          });
+          return of(null);
+        })
+      ).subscribe();
+    } else if (item.productId) {
+      console.log('🛍️ Removing product with ID:', item.productId);
+      // Handle product removal
+      this.cartService.removeItem(item.productId!, item.color, item.size).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Removed',
+            detail: 'Product removed from cart',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error removing product:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to remove product. Please try again.',
+            life: 1000,
+          });
+          return of(null);
+        }),
+        finalize(() => {
+        })
+      ).subscribe();
+    } else {
+      console.error('Invalid item type for removal:', item);
+    }
   }
 
   updateQuantity(item: ICartItem, quantity: number): void {
     const newQuantity = Math.max(1, Math.floor(quantity));
-    const updatedCart = this.cartItems().map(cartItem =>
-      cartItem.productId === item.productId ? { ...cartItem, quantity: newQuantity } : cartItem
-    );
-    this.cartItems.set(updatedCart);
-    this.cartItemCount.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
-    this.cartTotal.set(updatedCart.reduce((total: number, item: ICartItem) => total + (item.price * (item.quantity || 1)), 0));
+    
+    console.log('🚨 TOPBAR updateQuantity CALLED!');
+    console.log('📦 Updating quantity for item:', item);
+    console.log('📦 New quantity:', newQuantity);
+    console.log('📦 Item has packageId:', !!item.packageId);
+    console.log('📦 Item has productId:', !!item.productId);
+    console.log('📦 Item type:', item.itemType);
+    
+    // Check if it's a package or product
+    if (item.packageId && item.itemType === 'package') {
+      console.log('📦 Updating package quantity in topbar');
+      // Handle package update
+      this.cartService.updateQuantity(undefined, newQuantity, undefined, undefined, item.packageId).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          console.log('📦 Package quantity updated successfully in topbar');
+        }),
+        catchError((error: any) => {
+          console.error('Error updating package quantity in topbar:', error);
+          return of(null);
+        })
+      ).subscribe();
+    } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+      console.log('🛍️ Updating product quantity in topbar');
+      // Handle product update
+      this.cartService.updateQuantity(item.productId, newQuantity, item.color, item.size).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          console.log('🛍️ Product quantity updated successfully in topbar');
+        }),
+        catchError((error: any) => {
+          console.error('Error updating product quantity in topbar:', error);
+          return of(null);
+        })
+      ).subscribe();
+    } else {
+      console.error('Invalid item type for quantity update in topbar:', item);
+    }
   }
 
   addToWishlist(item: any): void {

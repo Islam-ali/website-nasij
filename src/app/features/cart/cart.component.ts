@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
-import { catchError, delay, finalize, map, takeUntil, tap } from 'rxjs/operators';
+import { catchError, delay, finalize, map, take, takeUntil, tap } from 'rxjs/operators';
 
 // PrimeNG Modules
 import { ButtonModule } from 'primeng/button';
@@ -21,6 +21,9 @@ import { PackageUrlService } from '../packages/services/package-url.service';
 import { ProductUrlService } from '../products/services/product-url.service';
 import { ICartItem, ICartState, ICartSummary } from './models/cart.interface';
 import { environment } from '../../../environments/environment';
+import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
+import { TranslateModule } from '@ngx-translate/core';
+import { ICountry, IState } from '../../core/models/location.interface';
 
 @Component({
   selector: 'app-cart',
@@ -36,6 +39,8 @@ import { environment } from '../../../environments/environment';
     ToastModule,
     MessageModule,
     MessagesModule,
+    MultiLanguagePipe,
+    TranslateModule,
   ],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
@@ -52,6 +57,7 @@ export class CartComponent implements OnInit, OnDestroy {
   cartState$: Observable<ICartState>;
   cartSummary$: Observable<ICartSummary>;
   cartItems$: Observable<ICartItem[]>;
+  cartItems = signal<ICartItem[]>([]);
 
   // Helper methods for display properties
   // private getProductImageUrl(item: ICartItem): string {
@@ -68,8 +74,8 @@ export class CartComponent implements OnInit, OnDestroy {
   private getVariantName(item: ICartItem): string {
     // Combine color and size if available
     const parts = [];
-    if (item.color) parts.push(`Color: ${item.color}`);
-    if (item.size) parts.push(`Size: ${item.size}`);
+    if (item.color) parts.push(`Color: ${item.color.en || item.color}`);
+    if (item.size) parts.push(`Size: ${item.size.en || item.size}`);
     return parts.join(' | ');
   }
   
@@ -80,7 +86,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   // Track items in ngFor for better performance
   trackByFn(index: number, item: ICartItem): string {
-    return `${item.productId}-${'color' in item ? item.color : ''}-${'size' in item ? item.size : ''}`;
+    return `${item.productId || item.packageId}-${index}`;
   }
 
   // Helper to safely cast ICartItem to CartItemDisplay
@@ -111,10 +117,10 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cartSummary$ = this.cartState$.pipe(
       map(state => ({
         subtotal: state.summary?.subtotal || 0,
-        shipping: state.summary?.shipping || 0,
+        shippingCost: state.summary?.shippingCost || 0,
         discount: state.summary?.discount || 0,
         itemsCount: state.summary?.itemsCount || 0,
-        total: (state.summary?.subtotal || 0) + (state.summary?.shipping || 0) - (state.summary?.discount || 0)
+        total: (state.summary?.subtotal || 0) + (state.summary?.shippingCost || 0) - (state.summary?.discount || 0)
       } as ICartSummary))
     );
 
@@ -131,6 +137,11 @@ export class CartComponent implements OnInit, OnDestroy {
 
     // Load cart data when component initializes
     this.loadCart();
+    
+    // Subscribe to cart items to update signal
+    this.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
+      this.cartItems.set(items);
+    });
   }
 
   private handleEncodedData(queryParams: any): void {
@@ -290,6 +301,35 @@ export class CartComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // Handle location change
+  onLocationChange(event: { country: ICountry | null; state: IState | null; shippingCost: number }): void {
+    console.log('🌍 Location changed:', event);
+    
+    if (event.country) {
+      this.cartService.updateShippingLocation(event.country, event.state!).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: 'Shipping cost updated',
+            life: 1000,
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error updating shipping location:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update shipping cost',
+            life: 1000,
+          });
+          return of(null);
+        })
+      ).subscribe();
+    }
+  }
+
   // Update item quantity
   updateQuantity(item: ICartItem, newQuantity: number): void {
     if (newQuantity < 1) return;
@@ -356,7 +396,16 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   // Remove item from cart
-  removeItem(item: ICartItem): void {
+  removeItem(item: ICartItem, index?: number): void {
+    console.log('🚨 CART COMPONENT removeItem CALLED!');
+    console.log('🗑️ Cart component - removing item:', item);
+    console.log('🗑️ Item has packageId:', !!item.packageId);
+    console.log('🗑️ Item has productId:', !!item.productId);
+    console.log('🗑️ Item type:', item.itemType);
+    console.log('🗑️ Index:', index);
+    console.log('🗑️ Item.packageId value:', item.packageId);
+    console.log('🗑️ Item.packageId type:', typeof item.packageId);
+    
     if (!confirm('Are you sure you want to remove this item from your cart?')) {
       return;
     }
@@ -364,7 +413,10 @@ export class CartComponent implements OnInit, OnDestroy {
     this.loading = true;
     
     // Check if it's a package or product
-    if (item.packageId && item.itemType === 'package') {
+    if (item.packageId) {
+      console.log('📦 Removing package with ID:', item.packageId);
+      console.log('📦 Item type:', item.itemType);
+      console.log('📦 Full item data:', item);
       // Handle package removal
       this.cartService.removeItem(undefined, undefined, undefined, item.packageId).pipe(
         takeUntil(this.destroy$),
@@ -391,6 +443,7 @@ export class CartComponent implements OnInit, OnDestroy {
         })
       ).subscribe();
     } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+      console.log('🛍️ Removing product with ID:', item.productId);
       // Handle product removal
       this.cartService.removeItem(item.productId, item.color, item.size).pipe(
         takeUntil(this.destroy$),
@@ -417,42 +470,121 @@ export class CartComponent implements OnInit, OnDestroy {
         })
       ).subscribe();
     } else {
-      console.error('Invalid item type for removal:', item);
-      this.loading = false;
+      // Fallback: remove by index if provided, otherwise find by matching properties
+      if (index !== undefined && index >= 0) {
+        console.log('🔍 Removing by index:', index);
+        this.cartService.removeItemByIndex(index).pipe(
+          takeUntil(this.destroy$),
+          tap(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Removed',
+              detail: 'Item removed from cart',
+              life: 1000,
+            });
+          }),
+          catchError((error: any) => {
+            console.error('Error removing item by index:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to remove item. Please try again.',
+              life: 1000,
+            });
+            return of(null);
+          }),
+          finalize(() => {
+            this.loading = false;
+          })
+        ).subscribe();
+      } else {
+        console.log('⚠️ IDs missing, removing by finding item in array');
+        this.cartItems$.pipe(take(1)).subscribe(items => {
+          const itemIndex = items.findIndex(cartItem => 
+            cartItem === item || 
+            (cartItem.productName?.en === item.productName?.en && 
+             cartItem.price === item.price && 
+             cartItem.quantity === item.quantity)
+          );
+          if (itemIndex !== -1) {
+            console.log('🔍 Found item at index:', itemIndex);
+            this.cartService.removeItemByIndex(itemIndex).pipe(
+              takeUntil(this.destroy$),
+              tap(() => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Removed',
+                  detail: 'Item removed from cart',
+                  life: 1000,
+                });
+              }),
+              catchError((error: any) => {
+                console.error('Error removing item by index:', error);
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'Failed to remove item. Please try again.',
+                  life: 1000,
+                });
+                return of(null);
+              }),
+              finalize(() => {
+                this.loading = false;
+              })
+            ).subscribe();
+          } else {
+            console.error('Could not find item to remove:', item);
+            this.loading = false;
+          }
+        });
+      }
     }
   }
 
+
   // Clear entire cart
   clearCart(): void {
-    if (!confirm('Are you sure you want to clear your cart?')) {
-      return;
-    }
+    this.cartItems$.pipe(take(1)).subscribe(items => {
+      if (items.length === 0) {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Info',
+          detail: 'Your cart is already empty',
+          life: 1000,
+        });
+        return;
+      }
 
-    this.loading = true;
-    this.cartService.clearCart().pipe(
-      takeUntil(this.destroy$),
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Cleared',
-          detail: 'Your cart has been cleared',
-          life: 1000
-        });
-      }),
-      catchError((error: any) => {
-        console.error('Error clearing cart:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to clear cart. Please try again.',
-          life: 1000
-        });
-        return of(null);
-      }),
-      finalize(() => {
-        this.loading = false;
-      })
-    ).subscribe();
+      if (!confirm('Are you sure you want to clear your cart?')) {
+        return;
+      }
+
+      this.loading = true;
+      this.cartService.clearCart().pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Cleared',
+            detail: 'Your cart has been cleared',
+            life: 1000
+          });
+        }),
+        catchError((error: any) => {
+          console.error('Error clearing cart:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to clear cart. Please try again.',
+            life: 1000
+          });
+          return of(null);
+        }),
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe();
+    });
   }
 
   applyVoucher(): void {

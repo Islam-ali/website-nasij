@@ -200,6 +200,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     this.product.colors = Array.from(colors);
     this.product.sizes = Array.from(sizes);
+    this.selectedSize = this.product.sizes[0];
+    this.selectedColor = this.product.colors[0];
     this.variantToImageAndColor.set(Array.from(variantImageMap.values()));
     console.log(this.variantToImageAndColor());
   }
@@ -304,8 +306,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       productId: this.product._id,
       price: this.product.price,
       quantity: this.quantity,
-      color: this.selectedColor || null,
-      size: this.selectedSize || null,
+      color: this.selectedColor,
+      size: this.selectedSize,
       image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product.images[0].filePath,
       productName: this.product.name,
       discount: this.product.discountPrice || 0,
@@ -444,5 +446,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  share(): void {
+    if (!this.product) return;
+    const url = window.location.href;
+    navigator.share({
+      url: url
+    });
   }
 }

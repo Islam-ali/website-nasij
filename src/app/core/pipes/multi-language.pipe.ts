@@ -1,19 +1,31 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { MultilingualText } from '../models/multi-language';
-import { TranslationService } from '../services/translate.service';
+import { Subject } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Pipe({
   name: 'multiLanguage',
   standalone: true,
   pure: false
   })
-export class MultiLanguagePipe implements PipeTransform {
+export class MultiLanguagePipe implements PipeTransform, OnDestroy {
+  private destroy$ = new Subject<void>();
 
-  constructor(private translationService: TranslationService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
   }
 
-  transform(value: MultilingualText, ...args: unknown[]): unknown {
-     return value[this.translationService.getCurrentLanguage() as keyof MultilingualText] || value.en || '';
+  transform(value: MultilingualText | null | undefined): string {
+    if (!value) return '';
+    // platform browser
+    if (isPlatformBrowser(this.platformId)) {
+      const currentLang = localStorage.getItem('pledge-language') || 'en';
+      return value[currentLang as keyof MultilingualText] || value.en || '';
     }
+    return value.en || '';
+  }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

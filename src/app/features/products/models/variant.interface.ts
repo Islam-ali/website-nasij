@@ -1,6 +1,8 @@
+import { MultilingualText } from "../../../core/models/multi-language";
+
 export interface IVariantOption {
   name: string;
-  value: string;
+  value: MultilingualText;
 }
 
 export interface IVariant {
@@ -26,7 +28,7 @@ export interface IProductVariant {
   variantId: string;
   options: {
     name: string;
-    value: string;
+    value: MultilingualText;
   }[];
   price: number;
   stock: number;

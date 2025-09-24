@@ -7,11 +7,12 @@ import { BusinessProfileService } from '../../services/business-profile.service'
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { ThemeService } from '../../core/services/theme.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, InputTextModule, TranslateModule],
+  imports: [CommonModule, RouterModule, ButtonModule, InputTextModule, TranslateModule, MultiLanguagePipe],
   template: `
   <!-- Enhanced Footer -->
   <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
@@ -32,7 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
             <span class="text-2xl font-bold bg-gradient-to-r from-primary-400 to-primary-400 bg-clip-text text-transparent">pledge</span>
           </div>
           <p class="text-gray-300 leading-relaxed">
-            {{ businessProfile?.description || ('footer.default_description' | translate) }}
+            {{ businessProfile?.description | multiLanguage }}
           </p>
           
           <!-- Contact Info -->

@@ -1,6 +1,7 @@
 import { MultilingualText } from '../../../core/models/multi-language';
 import { IArchived } from '../../../interfaces/archive.interface';
 import { IPackageItem, IProductVariantAttribute } from '../../checkout/models/checkout';
+import { ICountry, IState } from '../../../core/models/location.interface';
 
 export interface ICartItem {
   // Product fields
@@ -25,10 +26,12 @@ export interface ICartItem {
 
 export interface ICartSummary {
   subtotal: number;
-  shipping: number;
   discount: number;
   total: number;
   itemsCount: number;
+  selectedCountry?: ICountry;
+  selectedState?: IState;
+  shippingCost: number;
 }
 
 export interface ICartState {

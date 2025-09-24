@@ -84,6 +84,12 @@
             <div class="absolute -top-1 -left-1 w-2 h-2 bg-primary rounded-full opacity-40"></div>
             <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package().name | multiLanguage }}</h1>
             <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package().description | multiLanguage }}</p>
+            <div class="my-4">
+              <button type="button" (click)="share()" class="bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                <i class="pi pi-share-alt text-xs me-2"></i>
+                {{ 'products.share' | translate }}
+              </button>
+            </div>
           </div>
 
           <!-- Package Items with Variants -->
