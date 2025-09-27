@@ -108,6 +108,13 @@
           <span>{{ 'navigation.boxs' | translate }}</span>
         </a>
 
+        <a routerLink="/track-order" routerLinkActive="text-primary-500"
+          class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
+          <i class="pi pi-search text-sm me-2"></i>
+          <span>{{ 'navigation.trackOrder' | translate }}</span>
+        </a>
+
         <!-- <a routerLink="/about" routerLinkActive="text-primary-500"
            class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1">
           <i class="pi pi-info-circle text-sm me-2"></i>
@@ -219,6 +226,12 @@
           [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
           <i class="pi pi-box me-2"></i>
           <span>{{ 'navigation.boxs' | translate }}</span>
+        </a>
+        <a routerLink="/track-order" (click)="toggleNavbar()" routerLinkActive="text-primary-500"
+          class="block text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-2"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
+          <i class="pi pi-search me-2"></i>
+          <span>{{ 'navigation.trackOrder' | translate }}</span>
         </a>
       </div>
     </div>

@@ -93,8 +93,7 @@ export const routes: Routes = [
           .catch(() => ErrorComponent),
         title: 'FAQ',
         data: { breadcrumb: 'FAQ' }
-      },
-      
+      },      
       // Protected routes
       {
         path: 'checkout',

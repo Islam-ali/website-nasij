@@ -1,6 +1,7 @@
 import { IProduct } from "../features/products/models/product.interface";
 import { IArchived } from "./archive.interface";
 import { MultilingualText } from "../core/models/multi-language";
+import { ProductVariantAttribute } from "../features/products/models/product.interface";
 
 
 export interface IQueryParamsBuyNow {
@@ -8,8 +9,7 @@ export interface IQueryParamsBuyNow {
   productId?: string;
   packageId?: string;
   quantity: number;
-  color?: MultilingualText | null;
-  size?: MultilingualText | null;
+  selectedVariants?: ProductVariantAttribute[];
   name?: MultilingualText;
   price?: number;
   discount?: number;

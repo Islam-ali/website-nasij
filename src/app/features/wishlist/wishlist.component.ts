@@ -85,11 +85,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   // Move item to cart
   moveToCart(item: IWishlistItem): void {
-    if (!item.product || !item.color || !item.size) {
+    if (!item.product || !item.selectedVariants) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'must select color and size'
+        detail: 'must select variants'
       });
       return;
     }
@@ -101,8 +101,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       price: item.product.price || 0,
       image: item.product.images?.[0]?.filePath || '',
       quantity: 1,
-      color: item.color || null,
-      size: item.size || null,
+      selectedVariants: item.selectedVariants || [],
       productName: item.product.name || 'Product',
       discount: item.product.discountPrice || 0,
     };
@@ -138,21 +137,21 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   // select color and size
-  selectedSize(item: IWishlistItem, size: MultilingualText): void {
-    const newItem = this.wishlistItems.find((i) => i.productId === item.productId)
-    if(newItem){
-      newItem.size = size;
-      this.wishlistItems = [...this.wishlistItems];
-    }
-  }
+  // selectedSize(item: IWishlistItem, size: MultilingualText): void {
+  //   const newItem = this.wishlistItems.find((i) => i.productId === item.productId)
+  //   if(newItem){
+  //       newItem.selectedVariants = [...newItem.selectedVariants, {variant: 'size', value: size}];
+  //     this.wishlistItems = [...this.wishlistItems];
+  //   }
+  // }
 
-    selectedColor(item: IWishlistItem, color: MultilingualText): void {
-    const newItem = this.wishlistItems.find((i) => i.productId === item.productId)
-    if(newItem){
-      newItem.color = color;
-      this.wishlistItems = [...this.wishlistItems];
-    }
-  }
+  //   selectedColor(item: IWishlistItem, color: MultilingualText): void {
+  //   const newItem = this.wishlistItems.find((i) => i.productId === item.productId)
+  //   if(newItem){
+  //     newItem.selectedVariants = [...newItem.selectedVariants, {variant: 'color', value: color}];
+  //     this.wishlistItems = [...this.wishlistItems];
+  //   }
+  // }
 
   // View product details
   viewProduct(item: IWishlistItem): void {

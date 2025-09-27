@@ -1,13 +1,12 @@
 import { MultilingualText } from '../../../core/models/multi-language';
 import { IArchived } from '../../../interfaces/archive.interface';
-import { IPackageItem, IProductVariantAttribute } from '../../checkout/models/checkout';
+import { IPackageItem } from '../../checkout/models/checkout';
 import { ICountry, IState } from '../../../core/models/location.interface';
+import { ProductVariantAttribute } from '../../products/models/product.interface';
 
 export interface ICartItem {
   // Product fields
   productId?: string;
-  color?: MultilingualText | null;
-  size?: MultilingualText | null;
   quantity: number;
   price: number;
   image: string;
@@ -18,7 +17,7 @@ export interface ICartItem {
   // Package fields
   packageId?: string;
   packageItems?: IPackageItem[];
-  selectedVariants?: any;
+  selectedVariants?: ProductVariantAttribute[];
   
   // Common fields
   itemType?: 'product' | 'package';

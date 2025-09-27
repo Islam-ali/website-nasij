@@ -58,8 +58,7 @@ export class WishlistService implements OnDestroy {
       price: item.product.price,
       productName: item.product.name,
       image: item.product.images[0].filePath,
-      color: item.color || null,
-      size: item.size || null
+      selectedVariants: item.selectedVariants || []
     };
     
     const updatedItems = [...currentState.items, newItem];

@@ -15,7 +15,8 @@ export enum PaymentMethod {
   BANK_TRANSFER = 'bank_transfer',
   PAYPAL = 'paypal',
   STRIPE = 'stripe',
-  WALLET = 'wallet'
+  WALLET = 'wallet',
+  VODAFONE_CASH = 'vodafone_cash'
 }
 
 export enum OrderItemType {

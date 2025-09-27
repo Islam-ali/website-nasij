@@ -77,6 +77,7 @@
     "notesPlaceholder": "Add any special instructions or notes for your order...",
     "paymentMethod": "Payment Method",
     "cash": "Cash",
+    "vodafone_cash": "Vodafone Cash",
     "creditCard": "Credit Card",
     "bankTransfer": "Bank Transfer",
     "payPal": "PayPal",
@@ -98,6 +99,10 @@
     "save": "Save",
     "basedOnLocation": "Based on selected state",
     "required": "required",
+    "paymentScreenshot": "Payment Screenshot",
+    "paymentScreenshotDescription": "Please upload a screenshot of your Vodafone Cash transfer as proof of payment.",
+    "uploadScreenshot": "Upload Screenshot",
+    "supportedFormats": "Supported formats: JPG, PNG, GIF (Max 5MB)",
     "validationErrors": {
       "fullNameRequired": "Full name is required",
       "phoneRequired": "Phone number is required",
@@ -107,7 +112,11 @@
       "addressRequired": "Address is required",
       "acceptTermsRequired": "You must accept the terms and conditions",
       "fillAllFields": "Please fill in all required fields.",
-      "cartEmpty": "Your cart is empty. Please add items before checkout."
+      "cartEmpty": "Your cart is empty. Please add items before checkout.",
+      "paymentImageRequired": "Payment screenshot is required for Vodafone Cash payment method.",
+      "invalidFileType": "Please select a valid image file.",
+      "fileTooLarge": "File size must be less than 5MB.",
+      "uploadFailed": "Failed to upload payment image. Please try again."
     }
   },
   "navigation": {
@@ -117,6 +126,7 @@
     "contact": "Contact",
     "packages": "Packages",
     "boxs": "Boxs",
+    "trackOrder": "Track Order",
     "categories": "Categories",
     "cart": "Cart",
     "checkout": "Checkout",
@@ -399,5 +409,36 @@
       "cart_empty": "Your cart is empty",
       "wishlist_empty": "Your wishlist is empty"
     }
+  },
+  "orderTracking": {
+    "title": "Track Your Order",
+    "description": "Enter your order number to track the status of your order and view its timeline",
+    "enterOrderNumber": "Enter your order number",
+    "search": "Track Order",
+    "searching": "Searching...",
+    "orderNumberRequired": "Order number is required",
+    "orderNotFound": "Order Not Found",
+    "tryAgain": "Try Again",
+    "orderDetails": "Order Details",
+    "orderNumber": "Order Number",
+    "orderDate": "Order Date",
+    "customer": "Customer",
+    "paymentMethod": "Payment Method",
+    "totalAmount": "Total Amount",
+    "shippingAddress": "Shipping Address",
+    "orderItems": "Order Items",
+    "quantity": "Quantity",
+    "price": "Price",
+    "orderTimeline": "Order Timeline",
+    "of": "of",
+    "stepsCompleted": "steps completed",
+    "trackingNumber": "Tracking Number",
+    "location": "Location",
+    "estimatedDelivery": "Estimated Delivery",
+    "completedAt": "Completed At",
+    "inProgress": "In Progress",
+    "pending": "Pending",
+    "loadingTimeline": "Loading timeline...",
+    "noTimeline": "No timeline available for this order"
   }
 }

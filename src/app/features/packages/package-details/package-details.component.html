@@ -57,7 +57,7 @@
               <div class="grid grid-cols-2 gap-4">
                 <img 
                   *ngFor="let image of images.slice(0, 4); let i = index"
-                  [alt]="'Selected ' + (package()?.name || '') + ' ' + (i + 1)" 
+                  [alt]="'Selected ' + (package().name || '') + ' ' + (i + 1)" 
                   class="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105" 
                   [src]="image.itemImageSrc"
                   (error)="onImageError($event)"
@@ -66,7 +66,7 @@
                 <img 
                   *ngIf="images.length === 0"
                   [src]="getMainImage()" 
-                  [alt]="package()?.name || ''"
+                  [alt]="package().name || ''"
                   class="w-full h-auto object-cover rounded-lg col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
                   (error)="onImageError($event)"
                   (click)="openImageModal(getMainImage())"

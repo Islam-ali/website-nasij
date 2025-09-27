@@ -205,33 +205,54 @@
                 </label>
               </div>
 
-              <!-- Credit Card Details (shown when credit card is selected) -->
-              <div *ngIf="checkoutForm.get('paymentMethod')?.value === 'credit_card'"
+
+              <!-- Payment Image Upload (shown when Vodafone Cash is selected) -->
+               @if(isPaymentImageRequired()) {  
+              <div
                 class="mt-8 space-y-6 border-t-2 border-gray-200 dark:border-gray-600 pt-8">
                 <div>
-                  <label for="cardNumber"
-                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.cardNumber' | translate}}</label>
-                  <input type="text" id="cardNumber" formControlName="cardNumber"
-                    class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
-                    placeholder="1234 1234 1234 1234" />
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                  <div>
-                    <label for="cardExpiry"
-                      class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.expirationDate' | translate}}</label>
-                    <input type="text" id="cardExpiry" formControlName="cardExpiry"
-                      class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
-                      placeholder="MM/YY" />
+                  <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                    {{'checkout.paymentScreenshot' | translate}} <span class="text-red-500">*</span>
+                  </label>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    {{'checkout.paymentScreenshotDescription' | translate}}
+                  </p>
+                  
+                  <!-- File Upload Area -->
+                  <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-gray-50 dark:bg-gray-800">
+                    <input type="file" 
+                           id="paymentImage" 
+                           accept="image/*" 
+                           (change)="onFileSelected($event)"
+                           class="hidden">
+                    <label for="paymentImage" 
+                           class="cursor-pointer flex flex-col items-center">
+                      <i class="pi pi-cloud-upload text-4xl text-gray-400 dark:text-gray-500 mb-4"></i>
+                      <span class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        {{'checkout.uploadScreenshot' | translate}}
+                      </span>
+                      <span class="text-sm text-gray-500 dark:text-gray-400">
+                        {{'checkout.supportedFormats' | translate}}
+                      </span>
+                    </label>
                   </div>
-                  <div>
-                    <label for="cardCvc"
-                      class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.cvc' | translate}}</label>
-                    <input type="text" id="cardCvc" formControlName="cardCvc"
-                      class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
-                      placeholder="CVC" />
+
+                  <!-- Image Preview -->
+                  <div *ngIf="paymentImagePreview" class="mt-4">
+                    <div class="relative inline-block">
+                      <img [src]="paymentImagePreview" 
+                           alt="Payment Screenshot Preview" 
+                           class="max-w-full h-48 object-contain rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                      <button type="button" 
+                              (click)="removeSelectedFile()"
+                              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors duration-200">
+                        <i class="pi pi-times text-xs"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
+              }
             </div>
 
             <!-- Terms and Conditions -->
@@ -305,16 +326,15 @@
 
                     <!-- Product Variants (for regular products) -->
                     <div *ngIf="item.itemType === 'product' || !item.itemType">
-                      <p *ngIf="item.size"
+                      @if(item.selectedVariants && item.selectedVariants.length > 0) {
+                        @for(variant of item.selectedVariants; track variant._id) {
+                      <p
                         class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                        {{'checkout.size' | translate}}:
-                        <span class="text-xs font-semibold">{{item.size | multiLanguage}}</span>
-                      </p>
-                      <p *ngIf="item.color"
-                        class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                        {{'checkout.color' | translate}}:
-                        <span class="text-xs font-semibold">{{item.color | multiLanguage}}</span>
-                      </p>
+                        {{'products.' + variant.variant | translate}}:
+                          <span class="text-xs font-semibold">{{variant.value | multiLanguage}}</span>
+                        </p>
+                      }
+                    }
                     </div>
 
                   </div>

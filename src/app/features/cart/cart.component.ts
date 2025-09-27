@@ -74,8 +74,7 @@ export class CartComponent implements OnInit, OnDestroy {
   private getVariantName(item: ICartItem): string {
     // Combine color and size if available
     const parts = [];
-    if (item.color) parts.push(`Color: ${item.color.en || item.color}`);
-    if (item.size) parts.push(`Size: ${item.size.en || item.size}`);
+    if (item.selectedVariants) parts.push(`Variant: ${item.selectedVariants.map(v => v.value.en || v.value).join(', ')}`);
     return parts.join(' | ');
   }
   
@@ -215,8 +214,7 @@ export class CartComponent implements OnInit, OnDestroy {
       price: productData.price,
       productName: productData.productName,
       image: productData.image,
-      color: productData.color,
-      size: productData.size,
+      selectedVariants: productData.selectedVariants || [],
       discount: productData.discount || 0,
       itemType: 'product' as const
     };
@@ -339,7 +337,7 @@ export class CartComponent implements OnInit, OnDestroy {
     // Check if it's a package or product
     if (item.packageId && item.itemType === 'package') {
       // Handle package update
-      this.cartService.updateQuantity(undefined, newQuantity, undefined, undefined, item.packageId).pipe(
+      this.cartService.updateQuantity(undefined, newQuantity, item.packageId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           this.messageService.add({
@@ -365,7 +363,7 @@ export class CartComponent implements OnInit, OnDestroy {
       ).subscribe();
     } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
       // Handle product update
-      this.cartService.updateQuantity(item.productId, newQuantity, item.color, item.size).pipe(
+      this.cartService.updateQuantity(item.productId, newQuantity, item.packageId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           this.messageService.add({
@@ -418,7 +416,7 @@ export class CartComponent implements OnInit, OnDestroy {
       console.log('📦 Item type:', item.itemType);
       console.log('📦 Full item data:', item);
       // Handle package removal
-      this.cartService.removeItem(undefined, undefined, undefined, item.packageId).pipe(
+      this.cartService.removeItem(item.productId, item.selectedVariants, item.packageId).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           this.messageService.add({
@@ -445,7 +443,7 @@ export class CartComponent implements OnInit, OnDestroy {
     } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
       console.log('🛍️ Removing product with ID:', item.productId);
       // Handle product removal
-      this.cartService.removeItem(item.productId, item.color, item.size).pipe(
+      this.cartService.removeItem(item.productId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           this.messageService.add({

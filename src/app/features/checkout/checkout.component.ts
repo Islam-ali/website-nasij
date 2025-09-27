@@ -21,7 +21,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
 import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
-import { OrderStatus } from '../../interfaces/product.interface';
+import { IArchived, OrderStatus } from '../../interfaces/product.interface';
 import { ICountry } from '../../core/models/location.interface';
 import { IState } from '../../core/models/location.interface';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
@@ -53,7 +53,7 @@ export class CheckoutComponent implements OnInit {
   checkoutForm!: FormGroup;
   loading = false;
   success = false;
-  domain = environment.domain;
+  apiUrl = environment.apiUrl;
 
   // Cart items using signals
   cartItems = signal<ICartItem[]>([]);
@@ -70,6 +70,21 @@ export class CheckoutComponent implements OnInit {
   orderTotal = computed(() => {
     return this.cartTotal() + this.shippingCost();
   });
+
+  // Signal to track payment method changes
+  paymentMethod = signal<PaymentMethod>(PaymentMethod.CASH);
+
+  // Computed property to check if payment image is required
+  isPaymentImageRequired = computed(() => {
+    const currentPaymentMethod = this.paymentMethod();
+    console.log('Payment method:', currentPaymentMethod , 'Vodafone Cash:', PaymentMethod.VODAFONE_CASH);
+    return currentPaymentMethod === PaymentMethod.VODAFONE_CASH;
+  });
+
+  // File upload properties
+  selectedFile: File | null = null;
+  paymentImagePreview: string | null = null;
+
   private destroy$ = new Subject<void>();
 
   // Form options
@@ -79,6 +94,7 @@ export class CheckoutComponent implements OnInit {
 
   paymentMethods = [
     { label: 'Cash', value: PaymentMethod.CASH },
+    { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
     // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
     // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
     // { label: 'PayPal', value: PaymentMethod.PAYPAL }
@@ -99,6 +115,14 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkoutForm = this.createCheckoutForm();
+    
+    // Subscribe to payment method changes
+    this.checkoutForm.get('paymentMethod')?.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
+      this.paymentMethod.set(value);
+    });
+    
     this.loadCountries();
     this.route.queryParams.subscribe(params => {
       // Check for encoded data first
@@ -111,8 +135,6 @@ export class CheckoutComponent implements OnInit {
         this.isBuyNow = true;
         const productId = params['productId'];
         const quantity = params['quantity'];
-        const color = params['color'];
-        const size = params['size'];
         const productName = params['productName'];
         const price = params['price'];
         const discount = params['discount'];
@@ -120,8 +142,7 @@ export class CheckoutComponent implements OnInit {
         this.cartItems.set([{
           productId: productId,
           quantity: quantity,
-          color: color,
-          size: size,
+          selectedVariants: params['selectedVariants'] || [],
           productName: productName,
           price: price,
           discount: discount,
@@ -272,10 +293,9 @@ export class CheckoutComponent implements OnInit {
       price: productData.price,
       productName: productData.productName,
       image: productData.image,
-      color: productData.color,
-      size: productData.size,
       discount: productData.discount || 0,
-      itemType: 'product' as const
+      itemType: 'product' as const,
+      selectedVariants: productData.selectedVariants || []
     };
     this.cartItems.set([productItem]);
   }
@@ -311,7 +331,7 @@ export class CheckoutComponent implements OnInit {
 
       // Payment Details
       paymentMethod: [PaymentMethod.CASH],
-
+      paymentImage: [''], // For Vodafone Cash screenshot
 
       // Order Notes
       notes: [''],
@@ -327,7 +347,7 @@ export class CheckoutComponent implements OnInit {
   //   // Recalculate order total when shipping method changes
   // }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.checkoutForm.invalid || this.loading) {
       console.log('Form is invalid:', this.checkoutForm.errors);
       console.log('Form values:', this.checkoutForm.value);
@@ -351,6 +371,17 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
+    // Validate payment image for Vodafone Cash
+    if (formValue.paymentMethod === PaymentMethod.VODAFONE_CASH && !this.selectedFile) {
+      this.messageService.add({ 
+        severity: 'error', 
+        summary: this.translate.instant('common.error'), 
+        detail: this.translate.instant('checkout.validationErrors.paymentImageRequired') 
+      });
+      this.loading = false;
+      return;
+    }
+
     // Validate cart items
     if (this.cartItems().length === 0) {
       this.messageService.add({ 
@@ -362,13 +393,37 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
+    // Upload payment image if required
+    let paymentImageUrl: string | null = null;
+    if (formValue.paymentMethod === PaymentMethod.VODAFONE_CASH && this.selectedFile) {
+      try {
+        paymentImageUrl = await this.uploadPaymentImage();
+        console.log('Payment image URL:', paymentImageUrl);
+        debugger
+        if (!paymentImageUrl) {
+          this.loading = false;
+          return;
+        }
+      } catch (error) {
+        console.error('Payment image upload failed:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('common.error'),
+          detail: this.translate.instant('checkout.validationErrors.uploadFailed')
+        });
+        this.loading = false;
+        return;
+      }
+    }
+
     // Create order items using new structure
     const orderItems: IOrderItem[] = this.checkoutService.convertCartItemsToOrderItems(this.cartItems());
 
     // Get customer ID from auth service (optional)
     const currentUser = this.authService.currentUserValue;
     const customerId = currentUser?._id || undefined; // Don't use fallback, let it be undefined for guest orders
-
+    console.log('Customer ID:', orderItems);
+    debugger;
     // Create order data using backend DTO structure
     const orderData: ICreateOrder = {
       customerId: customerId, // This can be undefined for guest orders
@@ -385,6 +440,11 @@ export class CheckoutComponent implements OnInit {
       paymentStatus: PaymentStatus.PENDING,
       orderStatus: OrderStatus.PENDING,
       paymentMethod: formValue.paymentMethod,
+      cashPayment: {
+        amountPaid: Number(this.shippingCost()),
+        changeDue: Number(this.orderTotal()) - Number(this.shippingCost()),
+        paymentImage: paymentImageUrl || '',
+      },
       shippingAddress: {
         fullName: formValue.fullName,
         address: formValue.shippingAddress.address,
@@ -476,6 +536,88 @@ export class CheckoutComponent implements OnInit {
   // Helper method to get form control
   get f() {
     return this.checkoutForm.controls;
+  }
+
+  // File upload methods
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('common.error'),
+          detail: this.translate.instant('checkout.validationErrors.invalidFileType')
+        });
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('common.error'),
+          detail: this.translate.instant('checkout.validationErrors.fileTooLarge')
+        });
+        return;
+      }
+
+      this.selectedFile = file;
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.paymentImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeSelectedFile(): void {
+    this.selectedFile = null;
+    this.paymentImagePreview = null;
+    this.checkoutForm.patchValue({ paymentImage: '' });
+  }
+
+  onPaymentMethodChange(paymentMethod: PaymentMethod): void {
+    this.paymentMethod.set(paymentMethod);
+    // Clear payment image when switching away from Vodafone Cash
+    if (paymentMethod !== PaymentMethod.VODAFONE_CASH) {
+      this.removeSelectedFile();
+    }
+  }
+
+  async uploadPaymentImage(): Promise<string | null> {
+    if (!this.selectedFile) return null;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      formData.append('folderName', 'Uploads');
+      formData.append('useCloudinary', 'true'); 
+      
+      // Upload to your file upload service
+      const response = await fetch(`${this.apiUrl}/file-upload`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const result = await response.json();
+      console.log('Upload result:', result);
+      return result.data.filePath;
+    } catch (error) {
+      console.error('Upload error:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: this.translate.instant('common.error'),
+        detail: this.translate.instant('checkout.validationErrors.uploadFailed')
+      });
+      return null;
+    }
   }
 
   // Helper method to get shipping address form group

@@ -7,6 +7,7 @@ import { ICartItem, ICartState, ICartSummary, IAddToCartRequest } from '../model
 import { MessageService } from 'primeng/api';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { ICountry, IState } from '../../../core/models/location.interface';
+import { ProductVariantAttribute } from '../../products/models/product.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,6 @@ export class CartService implements OnDestroy {
       const existingItemIndex = this.findCartItemIndex(
         currentState.items, 
         undefined, 
-        undefined, 
         undefined,
         item.packageId
       );
@@ -86,8 +86,7 @@ export class CartService implements OnDestroy {
       const existingItemIndex = this.findCartItemIndex(
         currentState.items, 
         item.productId!, 
-        item.color, 
-        item.size
+        item.selectedVariants
       );
       
       let updatedItems: ICartItem[];
@@ -117,25 +116,24 @@ export class CartService implements OnDestroy {
   updateQuantity(
     productId?: string, 
     quantity: number = 1, 
-    color?: MultilingualText | null, 
-    size?: MultilingualText | null,
-    packageId?: string
+    packageId?: string,
+    selectedVariants?: ProductVariantAttribute[]
   ): Observable<ICartState> {
-    console.log('🔄 CART SERVICE updateQuantity called:', { productId, quantity, color, size, packageId });
+    console.log('🔄 CART SERVICE updateQuantity called:', { productId, quantity, packageId, selectedVariants });
     console.log('🔄 Current cart state:', this.cartState.value);
     
     if (quantity < 1) {
       if (packageId) {
         console.log('📦 Removing package due to quantity < 1');
-        return this.removeItem(undefined, undefined, undefined, packageId);
+        return this.removeItem(undefined, undefined, packageId);
       } else {
         console.log('🛍️ Removing product due to quantity < 1');
-        return this.removeItem(productId, color, size);
+        return this.removeItem(productId, selectedVariants);
       }
     }
     
     const currentState = this.cartState.value;
-    const itemIndex = this.findCartItemIndex(currentState.items, productId, color, size, packageId);
+    const itemIndex = this.findCartItemIndex(currentState.items, productId, selectedVariants, packageId);
     
     console.log('🔍 Found item at index:', itemIndex);
     if (itemIndex !== -1) {
@@ -161,11 +159,10 @@ export class CartService implements OnDestroy {
   // Remove item from cart by productId, color, size, or packageId
   removeItem(
     productId?: string, 
-    color?: MultilingualText | null, 
-    size?: MultilingualText | null,
+    selectedVariants?: ProductVariantAttribute[],
     packageId?: string
   ): Observable<ICartState> {
-    console.log('🗑️ Removing item:', { productId, color, size, packageId });
+    console.log('🗑️ Removing item:', { productId, selectedVariants, packageId });
     console.log('🗑️ PackageId parameter:', packageId);
     console.log('🗑️ PackageId type:', typeof packageId);
     
@@ -195,10 +192,9 @@ export class CartService implements OnDestroy {
       } else if (productId) {
         // Remove product
         const matchesProduct = item.productId === productId;
-        const matchesColor = !color || item.color?.en === color?.en;
-        const matchesSize = !size || item.size?.en === size?.en;
-        const shouldKeep = !(matchesProduct && matchesColor && matchesSize);
-        console.log('🛍️ Product filter:', { itemProductId: item.productId, targetProductId: productId, matchesProduct, matchesColor, matchesSize, shouldKeep });
+        const matchesVariants = !selectedVariants || item.selectedVariants?.every(variant => selectedVariants.some(v => v.variant === variant.variant && v.value === variant.value));
+        const shouldKeep = !(matchesProduct && matchesVariants);
+        console.log('🛍️ Product filter:', { itemProductId: item.productId, targetProductId: productId, matchesProduct, matchesVariants, shouldKeep });
         return shouldKeep;
       }
       console.log('⚠️ No criteria match, keeping item');
@@ -365,8 +361,7 @@ export class CartService implements OnDestroy {
   private findCartItemIndex(
     items: ICartItem[], 
     productId?: string, 
-    color?: MultilingualText | null, 
-    size?: MultilingualText | null,
+    selectedVariants?: ProductVariantAttribute[],
     packageId?: string
   ): number {
     return items.findIndex(item => {
@@ -376,8 +371,7 @@ export class CartService implements OnDestroy {
       } else if (productId) {
         // Looking for a product
         return item.productId === productId &&
-               (!color || item.color?.en === color?.en) &&
-               (!size || item.size?.en === size?.en);
+               (!selectedVariants || item.selectedVariants?.every(variant => selectedVariants.some(v => v.variant === variant.variant && v.value === variant.value)));
       }
       return false;
     });

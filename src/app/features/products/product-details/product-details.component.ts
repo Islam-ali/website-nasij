@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal, Inject, PLATFORM_ID, Attribute } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -17,9 +17,8 @@ import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { EnumProductVariant, IProduct, ProductVariant } from '../models/product.interface';
+import { IProduct, ProductVariant, ProductVariantAttribute } from '../models/product.interface';
 import { ProductService } from '../services/product.service';
-import { WishlistService } from '../../wishlist/services/wishlist.service';
 import { CartService } from '../../cart/services/cart.service';
 import { TabsModule } from 'primeng/tabs';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
@@ -27,7 +26,6 @@ import { AccordionModule } from 'primeng/accordion';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
-import { IArchived } from '../../../interfaces/archive.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
 import { IQueryParamsBuyNow } from '../../../interfaces/package.interface';
 import { TranslateModule } from '@ngx-translate/core';
@@ -76,7 +74,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   currentImageIndex: number = 0;
   selectedColor: MultilingualText | null = null;
   selectedSize: MultilingualText | null = null;
-  selectedVariant: ProductVariant | null = null;
+  selectedVariantAttributes: ProductVariantAttribute[] = [];
   product: IProduct | null = null;
   loading = true;
   error: string | null = null;
@@ -90,12 +88,11 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   // Image gallery
   images: ProductImage[] = [];
   responsiveOptions: any[];
-  variantToImageAndColor = signal<{ image: IArchived | null, color: MultilingualText }[]>([]);
+  mappedVariants: {variant:string, attributes:ProductVariantAttribute[]}[] = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private wishlistService: WishlistService,
     private cartService: CartService,
     private messageService: MessageService,
     private translationService: TranslationService,
@@ -130,10 +127,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     });
   }
 
-
-  isVariantSelected(variant: ProductVariant): boolean {
-    return variant === this.selectedVariant;
-  }
   toggleWishlist(): void {
     if (!this.product) return;
     this.wishlistLoading = true;
@@ -162,10 +155,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       .subscribe({
         next: (response: BaseResponse<IProduct>) => {
           this.product = response.data;
-          this.extractColorsAndSizes();
           this.prepareImages();
           this.loadRelatedProducts(this.product._id);
-          this.checkWishlistStatus();
+          this.mappedVariants = this.mapVariants(this.product.variants);
           this.loading = false;
         },
         error: (err) => {
@@ -174,36 +166,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.loading = false;
         }
       })
-  }
-
-  private extractColorsAndSizes(): void {
-    if (!this.product || !this.product.variants) return;
-
-    const colors = new Set<MultilingualText>();
-    const sizes = new Set<MultilingualText>();
-    // map variant to image
-    const variantImageMap = new Map<string, { image: IArchived | null, color: MultilingualText }>();
-    this.product.variants.forEach(variant => {
-      if (variant.attributes) {
-        variant.attributes.forEach(attr => {
-          if (attr.variant === EnumProductVariant.COLOR) {
-            const colorValue: MultilingualText = typeof attr.value === 'string' ? { en: attr.value, ar: attr.value } : ((attr.value as any) as MultilingualText);
-            colors.add(colorValue);
-            variantImageMap.set(colorValue.en, { image: attr.image || null, color: colorValue });
-          } else if (attr.variant === EnumProductVariant.SIZE) {
-            const sizeValue: MultilingualText = typeof attr.value === 'string' ? { en: attr.value, ar: attr.value } : ((attr.value as any) as MultilingualText);
-            sizes.add(sizeValue);
-          }
-        });
-      }
-    });
-
-    this.product.colors = Array.from(colors);
-    this.product.sizes = Array.from(sizes);
-    this.selectedSize = this.product.sizes[0];
-    this.selectedColor = this.product.colors[0];
-    this.variantToImageAndColor.set(Array.from(variantImageMap.values()));
-    console.log(this.variantToImageAndColor());
   }
 
   private loadRelatedProducts(productId: string): void {
@@ -248,7 +210,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       });
     }
     console.log(this.images);
-
     // If no images, add a placeholder
     if (this.images.length === 0) {
       this.images.push({
@@ -273,22 +234,51 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     return null;
   }
 
-  onVariantSelect(variant: any): void {
-    this.selectedVariant = variant;
-    this.quantity = 1; // Reset quantity when variant changes
-    this.checkWishlistStatus();
+   mapVariants(variants:ProductVariant[]  ):{variant:string, attributes:ProductVariantAttribute[]}[] {
+    const variantMap: Record<string, ProductVariantAttribute[]> = {};
+  
+    variants.forEach(variant => {
+      variant.attributes?.forEach(attr => {
+        if (!variantMap[attr.variant]) {
+          variantMap[attr.variant] = [];
+        }
+  
+        const exists = variantMap[attr.variant].some(
+          a => a._id === attr._id
+        );
+        if (!exists) {
+          variantMap[attr.variant].push(attr);
+        }
+      });
+    });
+    return Object.entries(variantMap).map(([variant, attributes]) => ({
+      variant,
+      attributes
+    }));
+  }
+  
+
+  isVariantSelected(attribute: ProductVariantAttribute): boolean {
+    return this.selectedVariantAttributes.some(v => v._id === attribute._id);
   }
 
-  private checkWishlistStatus(): void {
-    if (!this.product) return;
-    this.isInWishlist = this.wishlistService.isInWishlist(
-      this.product._id,
-      this.selectedVariant ? JSON.stringify(this.selectedVariant) : undefined
-    );
+  onVariantSelect(attribute: ProductVariantAttribute): void {
+    const hasSameVariant = this.selectedVariantAttributes.some(v => v.variant === attribute.variant);
+    if(!this.isVariantSelected(attribute) && !hasSameVariant) {
+      this.selectedVariantAttributes.push(attribute);
+    } else {
+      if (hasSameVariant) {
+        const index = this.selectedVariantAttributes.findIndex(v => v.variant === attribute.variant);
+        this.selectedVariantAttributes.splice(index, 1);
+        this.selectedVariantAttributes.push(attribute);
+      }
+    }
+    this.quantity = 1; // Reset quantity when variant changes
+    console.log(this.selectedVariantAttributes);
   }
 
   checkCart(): boolean {
-    return !this.product || (!this.selectedColor && this.variantToImageAndColor() && this.variantToImageAndColor().length > 0) || (!this.selectedSize && this.product.sizes.length > 0);
+    return !this.product || (!this.selectedVariantAttributes || this.selectedVariantAttributes.length === 0);
   }
 
   addToCart(): void {
@@ -306,9 +296,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       productId: this.product._id,
       price: this.product.price,
       quantity: this.quantity,
-      color: this.selectedColor,
-      size: this.selectedSize,
-      image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product.images[0].filePath,
+      selectedVariants: this.selectedVariantAttributes,
+      image: this.selectedVariantAttributes[0]?.image?.filePath || this.product.images[0].filePath,
       productName: this.product.name,
       discount: this.product.discountPrice || 0,
     };
@@ -336,11 +325,11 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     const queryParams: IQueryParamsBuyNow = {
       type: 'product',
       productId: this.product?._id, quantity: this.quantity,
-      color: this.selectedColor || null, size: this.selectedSize || null,
+      selectedVariants: this.selectedVariantAttributes,
       name: this.product?.name, price: this.product?.price,
       discount: this.product?.discountPrice,
-      image: this.variantToImageAndColor().find(item => item.color === this.selectedColor)?.image?.filePath || this.product?.images[0].filePath
-    }
+      image: this.selectedVariantAttributes[0]?.image?.filePath || this.product?.images[0].filePath
+    } 
     this.router.navigate(['/checkout'],
       {
         queryParams: queryParams
@@ -359,10 +348,10 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   increaseQuantity(): void {
-    const maxQuantity = this.selectedVariant?.stock || this.product?.stock || 10;
-    if (this.quantity < maxQuantity) {
+    // const maxQuantity = this.selectedVariant[0]?.stock || this.product?.stock || 10;
+    // if (this.quantity < this.product?.stock) {
       this.quantity++;
-    }
+    // }
   }
 
   decreaseQuantity(): void {
@@ -371,15 +360,15 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     }
   }
 
-  onQuantityChange(event: any): void {
-    const value = parseInt(event.target.value, 10);
-    if (!isNaN(value) && value > 0) {
-      const maxQuantity = this.selectedVariant?.stock || this.product?.stock || 10;
-      this.quantity = Math.min(value, maxQuantity);
-    } else {
-      this.quantity = 1;
-    }
-  }
+  // onQuantityChange(event: any): void {
+  //   const value = parseInt(event.target.value, 10);
+  //   if (!isNaN(value) && value > 0) {
+  //     const maxQuantity = this.product?.stock ;
+  //     this.quantity = Math.min(value, maxQuantity);
+  //   } else {
+  //     this.quantity = 1;
+  //   }
+  // }
 
   navigateToProduct(product: IProduct): void {
     this.router.navigate(['/products', product._id]);
@@ -395,47 +384,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     if (stock === 0) return { text: 'Out of Stock', severity: 'danger' };
     if (stock < 5) return { text: `Only ${stock} left`, severity: 'warning' };
     return { text: 'In Stock', severity: 'success' };
-  }
-
-  onColorSelect(color: MultilingualText): void {
-    this.selectedColor = color;
-    this.selectImageForColor(color);
-    this.findSelectedVariant();
-  }
-
-  selectImageForColor(color: MultilingualText): void {
-    // Find the variant image for the selected color
-    const variantData = this.variantToImageAndColor().find(item => item.color === color);
-    if (variantData && variantData.image) {
-      // Find the index of this image in the images array
-      const imageIndex = this.images.findIndex(img =>
-        img.itemImageSrc === this.getImageUrl(variantData.image?.filePath || '')
-      );
-      if (imageIndex !== -1) {
-        this.activeIndex = imageIndex;
-      }
-    }
-  }
-
-  onSizeSelect(size: MultilingualText): void {
-    this.selectedSize = size;
-    this.findSelectedVariant();
-  }
-
-  private findSelectedVariant(): void {
-    if (!this.product || !this.product.variants) return;
-
-    this.selectedVariant = this.product.variants.find(variant => {
-      if (!variant.attributes) return false;
-
-      const hasSelectedColor = !this.selectedColor ||
-        variant.attributes.some(attr => attr.variant === 'color' && (typeof attr.value === 'string' ? attr.value : ((attr.value as any) as MultilingualText)) === this.selectedColor);
-
-      const hasSelectedSize = !this.selectedSize ||
-        variant.attributes.some(attr => attr.variant === 'size' && (typeof attr.value === 'string' ? attr.value : ((attr.value as any) as MultilingualText)) === this.selectedSize);
-
-      return hasSelectedColor && hasSelectedSize;
-    }) || null;
   }
 
   get currentLanguage(): 'en' | 'ar' {

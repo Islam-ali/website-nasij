@@ -101,20 +101,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
 
   private categoryService = inject(CategoryService);
 
-  updateCartQuantity(item: ICartItem, quantity: number): void {
-    this.cartService.updateQuantity(item.productId!, quantity, item.color, item.size).pipe(
-      takeUntil(this.destroy$),
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Updated',
-          detail: 'Item quantity updated',
-          life: 1000,
-        });
-      })
-    ).subscribe();
-  }
-
   // load categories  
   loadCategories(): void {
     this.categoryService.listCategories().pipe(
@@ -177,8 +163,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       price: item.price,
       image: item.image,
       quantity: item.quantity,
-      color: item.color,
-      size: item.size,
+      selectedVariants: item.selectedVariants,
       productName: item.productName,
       discount: item.discount,
     };
@@ -218,7 +203,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     if (item.packageId) {
       console.log('📦 Removing package with ID:', item.packageId);
       // Handle package removal
-      this.cartService.removeItem(undefined, undefined, undefined, item.packageId).pipe(
+      this.cartService.removeItem(undefined, undefined, item.packageId).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           this.messageService.add({
@@ -242,7 +227,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     } else if (item.productId) {
       console.log('🛍️ Removing product with ID:', item.productId);
       // Handle product removal
-      this.cartService.removeItem(item.productId!, item.color, item.size).pipe(
+      this.cartService.removeItem(item.productId!, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           this.messageService.add({
@@ -284,7 +269,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     if (item.packageId && item.itemType === 'package') {
       console.log('📦 Updating package quantity in topbar');
       // Handle package update
-      this.cartService.updateQuantity(undefined, newQuantity, undefined, undefined, item.packageId).pipe(
+      this.cartService.updateQuantity(undefined, newQuantity, item.packageId).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           console.log('📦 Package quantity updated successfully in topbar');
@@ -297,7 +282,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
       console.log('🛍️ Updating product quantity in topbar');
       // Handle product update
-      this.cartService.updateQuantity(item.productId, newQuantity, item.color, item.size).pipe(
+      this.cartService.updateQuantity(item.productId, newQuantity, undefined, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
           console.log('🛍️ Product quantity updated successfully in topbar');

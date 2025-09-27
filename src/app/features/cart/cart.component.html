@@ -3,30 +3,46 @@
   class="relative z-10 min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500">
   <!-- Background Pattern -->
   <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
-    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0); background-size: 40px 40px;"></div>
+    <div class="absolute inset-0"
+      style="background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0); background-size: 40px 40px;">
+    </div>
   </div>
 
   <!-- Floating Elements -->
-  <div class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-pink-400/20 dark:from-purple-500/20 dark:to-pink-500/20 rounded-full blur-xl animate-float"></div>
-  <div class="absolute top-40 right-20 w-16 h-16 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 dark:from-blue-500/20 dark:to-cyan-500/20 rounded-full blur-xl animate-float" style="animation-delay: -2s;"></div>
-  <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-gradient-to-br from-green-400/20 to-emerald-400/20 dark:from-green-500/20 dark:to-emerald-500/20 rounded-full blur-xl animate-float" style="animation-delay: -4s;"></div>
+  <div
+    class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-pink-400/20 dark:from-purple-500/20 dark:to-pink-500/20 rounded-full blur-xl animate-float">
+  </div>
+  <div
+    class="absolute top-40 right-20 w-16 h-16 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 dark:from-blue-500/20 dark:to-cyan-500/20 rounded-full blur-xl animate-float"
+    style="animation-delay: -2s;"></div>
+  <div
+    class="absolute bottom-20 left-1/4 w-12 h-12 bg-gradient-to-br from-green-400/20 to-emerald-400/20 dark:from-green-500/20 dark:to-emerald-500/20 rounded-full blur-xl animate-float"
+    style="animation-delay: -4s;"></div>
 
   <div class="w-full max-w-7xl px-4 md:px-5 lg:px-6 mx-auto relative z-10">
     <div class="grid grid-cols-12 h-full">
       <!-- Cart Items -->
-      <div class="col-span-12 lg:max-h-[calc(100vh)] overflow-y-auto lg:col-span-8 lg:pe-8 pt-14 pb-8 lg:py-24 w-full max-xl:max-w-3xl max-xl:mx-auto">
+      <div
+        class="col-span-12 lg:max-h-[calc(100vh)] overflow-y-auto lg:col-span-8 lg:pe-8 pt-14 pb-8 lg:py-24 w-full max-xl:max-w-3xl max-xl:mx-auto">
         <!-- Cart Header -->
         <div class="flex items-center justify-between pb-8 border-b border-gray-200 dark:border-gray-700">
           <div class="flex items-center gap-3">
-            <div class="p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-2xl shadow-lg">
-              <svg class="w-7 h-7 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            <div
+              class="p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-2xl shadow-lg">
+              <svg class="w-7 h-7 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                </path>
               </svg>
             </div>
-            <h2 class="font-manrope font-bold text-3xl leading-10 text-gray-900 dark:text-white transition-colors duration-300">{{ 'cart.shoppingCart' | translate }}</h2>
+            <h2
+              class="font-manrope font-bold text-3xl leading-10 text-gray-900 dark:text-white transition-colors duration-300">
+              {{ 'cart.shoppingCart' | translate }}</h2>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{{ 'common.total' | translate }} {{ 'common.items' | translate }}:</span>
+            <span class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{{ 'common.total' |
+              translate }} {{ 'common.items' | translate }}:</span>
             <span class="font-semibold text-lg text-primary-600 dark:text-primary-400 transition-colors duration-300">
               {{ (cartState$ | async)?.items?.length || 0 }}
             </span>
@@ -36,23 +52,31 @@
         <!-- Scrollable Cart Items Container -->
         <div class="pe-2 space-y-6">
           <!-- Cart Items Header -->
-          <div class="z-10 grid grid-cols-12 mt-8 max-md:hidden pb-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-2xl p-4 shadow-lg">
+          <div
+            class="z-10 grid grid-cols-12 mt-8 max-md:hidden pb-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-2xl p-4 shadow-lg">
             <div class="col-span-12 md:col-span-4">
-              <h6 class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 flex items-center gap-2 transition-colors duration-300">
+              <h6
+                class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 flex items-center gap-2 transition-colors duration-300">
                 <i class="pi pi-box text-primary-600 dark:text-primary-400"></i>
-{{ 'cart.cart_items' | translate }}
+                {{ 'cart.cart_items' | translate }}
               </h6>
             </div>
             <div class="col-span-12 md:col-span-8">
               <div class="grid grid-cols-8">
                 <div class="col-span-4">
-                  <h6 class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">{{ 'common.quantity' | translate }}</h6>
+                  <h6
+                    class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    {{ 'common.quantity' | translate }}</h6>
                 </div>
                 <div class="col-span-2">
-                  <h6 class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">{{ 'common.total' | translate }}</h6>
+                  <h6
+                    class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    {{ 'common.total' | translate }}</h6>
                 </div>
                 <div class="col-span-2">
-                  <h6 class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">{{ 'common.action' | translate }}</h6>
+                  <h6
+                    class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    {{ 'common.action' | translate }}</h6>
                 </div>
               </div>
             </div>
@@ -69,42 +93,50 @@
               <div class="grid grid-cols-1 md:grid-cols-6 w-full">
                 <div class="w-full col-span-2">
                   <div class="flex flex-col max-[500px]:items-start gap-1">
-                    <h6 class="font-semibold text-base leading-7 text-gray-900 dark:text-white transition-colors duration-300">
+                    <h6
+                      class="font-semibold text-base leading-7 text-gray-900 dark:text-white transition-colors duration-300">
                       {{ item.productName | multiLanguage }}
-                      <span *ngIf="item.itemType === 'package'" class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
+                      <span *ngIf="item.itemType === 'package'"
+                        class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
                         {{ 'cart.package' | translate }}
                       </span>
-                      <span *ngIf="item.itemType === 'product'" class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
+                      <span *ngIf="item.itemType === 'product'"
+                        class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
                         {{ 'cart.product' | translate }}
                       </span>
                     </h6>
-                    
+
                     <!-- Show color and size only for products -->
                     <div *ngIf="item.itemType === 'product' || !item.itemType">
-                      <p *ngIf="item.color" class="font-medium m-0 text-gray-600 dark:text-gray-300 flex gap-1 transition-colors duration-300">
-                        <span class="font-bold text-gray-600 dark:text-gray-300">{{ 'cart.color' | translate }}:</span>
+                      @if(item.selectedVariants && item.selectedVariants.length > 0) {
+                      @for(variant of item.selectedVariants; track variant._id) {
+                      <p
+                        class="font-medium m-0 text-gray-600 dark:text-gray-300 flex gap-1 transition-colors duration-300">
+                        <span class="font-bold text-gray-600 dark:text-gray-300">{{ 'products.' + variant.variant |
+                          translate }}: </span>
                         <span class="font-medium text-gray-600 dark:text-gray-300 flex flex-1 items-center gap-2">
-                          <span class="w-4 h-4 rounded-full inline-block shadow-md"
-                           [ngStyle]="{'background-color': item.color}">
-                          </span> {{ item.color | multiLanguage }}</span>
+                          {{ variant.value | multiLanguage }}</span>
                       </p>
-                      <p *ngIf="item.size" class="font-medium m-0 text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                        <span class="font-bold text-gray-600 dark:text-gray-300">{{ 'cart.size' | translate }}:</span>
-                        {{ item.size | multiLanguage }}
-                      </p>
+                      }
+                      }
                     </div>
-                    
+
                     <!-- Show package items for packages -->
-                    <div *ngIf="item.itemType === 'package' && item.packageItems && item.packageItems.length > 0" class="mt-2">
-                      <p class="font-bold text-sm text-gray-600 dark:text-gray-300 mb-1">{{ 'cart.package_items' | translate }}:</p>
+                    <div *ngIf="item.itemType === 'package' && item.packageItems && item.packageItems.length > 0"
+                      class="mt-2">
+                      <p class="font-bold text-sm text-gray-600 dark:text-gray-300 mb-1">{{ 'cart.package_items' |
+                        translate }}:</p>
                       <div class="space-y-1">
-                        <div *ngFor="let packageItem of item.packageItems" class="text-xs text-gray-500 dark:text-gray-400">
-                          • {{ packageItem.productName| multiLanguage }} ({{ 'common.quantity' | translate }}: {{ packageItem.quantity }})
+                        <div *ngFor="let packageItem of item.packageItems"
+                          class="text-xs text-gray-500 dark:text-gray-400">
+                          • {{ packageItem.productName| multiLanguage }} ({{ 'common.quantity' | translate }}: {{
+                          packageItem.quantity }})
                         </div>
                       </div>
                     </div>
-                    
-                    <h6 class="font-medium text-base leading-7 text-gray-600 dark:text-gray-300 transition-colors duration-300">
+
+                    <h6
+                      class="font-medium text-base leading-7 text-gray-600 dark:text-gray-300 transition-colors duration-300">
                       {{ (item.price - (item.discount || 0)) * item.quantity | currency }}
                     </h6>
                   </div>
@@ -112,19 +144,23 @@
 
                 <!-- Quantity Controls -->
                 <div class="flex items-center max-[500px]:justify-start h-full max-md:mt-3 col-span-2">
-                  <div class="flex items-center h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-800">
+                  <div
+                    class="flex items-center h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-800">
                     <button (click)="updateQuantity(item, item.quantity - 1)" [disabled]="loading || item.quantity <= 1"
                       class="group rounded-l-full px-4 py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                      <svg class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hov  er:stroke-purple-600 dark:group-hover:stroke-purple-400"
+                      <svg
+                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hov  er:stroke-purple-600 dark:group-hover:stroke-purple-400"
                         xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
                         <path d="M16.5 11H5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                       </svg>
                     </button>
                     <input type="number" [(ngModel)]="item.quantity" (change)="updateQuantity(item, item.quantity)"
-                      [disabled]="loading" min="1" class="w-16 text-center border-0 focus:ring-0 font-semibold text-gray-900 dark:text-white bg-transparent">
+                      [disabled]="loading" min="1"
+                      class="w-16 text-center border-0 focus:ring-0 font-semibold text-gray-900 dark:text-white bg-transparent">
                     <button (click)="updateQuantity(item, item.quantity + 1)" [disabled]="loading"
                       class="group rounded-r-full px-4 py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                      <svg class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-primary-600 dark:group-hover:stroke-primary-400"
+                      <svg
+                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-primary-600 dark:group-hover:stroke-primary-400"
                         xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
                         <path d="M11 5.5V16.5M16.5 11H5.5" stroke="currentColor" stroke-width="1.6"
                           stroke-linecap="round" />
@@ -144,8 +180,9 @@
                   <!-- Remove Item Button -->
                   <button (click)="removeItem(item, i)" [disabled]="loading"
                     class="p-3 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group shadow-lg hover:shadow-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5 group-hover:scale-110 transition-transform duration-300" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -157,18 +194,22 @@
 
           <!-- Empty Cart State -->
           <ng-template #emptyCart>
-            <div class="text-center py-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
-              <div class="p-6 bg-gradient-to-r from-gray-100 to-blue-100 dark:from-gray-700 dark:to-blue-900/30 rounded-full w-24 h-24 mx-auto mb-8 flex items-center justify-center shadow-lg">
+            <div
+              class="text-center py-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+              <div
+                class="p-6 bg-gradient-to-r from-gray-100 to-blue-100 dark:from-gray-700 dark:to-blue-900/30 rounded-full w-24 h-24 mx-auto mb-8 flex items-center justify-center shadow-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 dark:text-gray-500" fill="none"
                   viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">{{ 'cart.yourCartIsEmpty' | translate }}</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-8 text-lg transition-colors duration-300">{{ 'cart.start_adding_items' | translate }}</p>
+              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">{{
+                'cart.yourCartIsEmpty' | translate }}</h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-8 text-lg transition-colors duration-300">{{
+                'cart.start_adding_items' | translate }}</p>
               <div class="mt-8">
-                <a routerLink="/products" 
+                <a routerLink="/products"
                   class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-2xl font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
                   {{ 'cart.continue_shopping' | translate }}
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,25 +223,31 @@
       </div>
 
       <!-- Order Summary -->
-      <div class="sticky top-24 mt-6 z-40 col-span-12 lg:col-span-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm w-full max-xl:px-6 max-w-3xl xl:max-w-lg mx-auto lg:p-4 py-24 max-h-[calc(100vh-6rem)] rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
-        <h2 class="font-manrope font-bold text-3xl leading-10 text-gray-900 dark:text-white pb-8 border-b border-gray-300 dark:border-gray-600 transition-colors duration-300">
+      <div
+        class="sticky top-24 mt-6 z-40 col-span-12 lg:col-span-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm w-full max-xl:px-6 max-w-3xl xl:max-w-lg mx-auto lg:p-4 py-24 max-h-[calc(100vh-6rem)] rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
+        <h2
+          class="font-manrope font-bold text-3xl leading-10 text-gray-900 dark:text-white pb-8 border-b border-gray-300 dark:border-gray-600 transition-colors duration-300">
           {{ 'cart.order_summary' | translate }}
         </h2>
         <div class="mt-8">
           <form>
             <!-- Subtotal -->
             <div class="flex items-center justify-between">
-              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{ 'cart.sub_total' | translate }}</p>
-              <p class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
+              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
+                'cart.sub_total' | translate }}</p>
+              <p
+                class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
                 {{ (cartSummary$ | async)?.subtotal | currency }}
               </p>
             </div>
 
             <!-- Delivery Charge -->
             <div class="flex items-center justify-between mt-4">
-              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{ 'cart.delivery_charge' | translate }}</p>
-              <p class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
-                {{ (cartSummary$ | async)?.shippingCost | currency }}
+              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
+                'cart.delivery_charge' | translate }}</p>
+              <p
+                class="font-semibold text-sm leading-8 text-green-600 dark:text-green-400 transition-colors duration-300">
+                {{'cart.shipping_calculated' | translate}}
               </p>
             </div>
 
@@ -210,7 +257,8 @@
               <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">
                 {{ (cartState$ | async)?.items?.length || 0 }} {{ 'common.items' | translate }}
               </p>
-              <p class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
+              <p
+                class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
                 {{ (cartSummary$ | async)?.total | currency }}
               </p>
             </div>
@@ -224,7 +272,8 @@
 
             <!-- Continue Shopping Link -->
             <div class="mt-6 text-center">
-              <a routerLink="/" class="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 font-medium transition-colors duration-300">
+              <a routerLink="/"
+                class="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 font-medium transition-colors duration-300">
                 {{ 'cart.or_continue_shopping' | translate }}
               </a>
             </div>

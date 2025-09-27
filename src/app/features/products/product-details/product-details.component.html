@@ -81,7 +81,8 @@
           class="w-32 h-32 bg-gradient-to-br from-red-200 to-red-300 dark:from-red-700 dark:to-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
           <i class="pi pi-exclamation-triangle text-5xl text-red-500 dark:text-red-400"></i>
         </div>
-        <h3 class="text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.product_not_found' | translate }}</h3>
+        <h3 class="text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">{{
+          'products.product_not_found' | translate }}</h3>
         <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed text-lg transition-colors duration-300">
           {{ 'products.product_removed' | translate }}
         </p>
@@ -276,50 +277,51 @@
           <!-- Product Options -->
           <form class="space-y-8 mb-8">
             <!-- Color Selection -->
-            @if (variantToImageAndColor() && variantToImageAndColor().length > 0) {
+            @if (product.variants && product.variants.length > 0) {
             <div class="space-y-4">
-              <label
-                class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-                <i class="pi pi-palette me-2 text-primary-600 dark:text-primary-400"></i>
-                {{ 'products.color' | translate }}
-              </label>
-              <div class="flex flex-wrap gap-4">
-                @for (variantimgAndColor of variantToImageAndColor(); track $index) {
-                <label
-                  [for]="'color-' + variantimgAndColor.color"
-                  class="relative cursor-pointer group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
-                  [ngClass]="{ 
-                    'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': selectedColor === variantimgAndColor.color,
-                    'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': selectedColor !== variantimgAndColor.color 
-                  }">
-                  <input type="radio" [id]="'color-' + variantimgAndColor.color" [value]="variantimgAndColor.color"
-                    name="color" [(ngModel)]="selectedColor" (change)="onColorSelect(variantimgAndColor.color)"
-                    class="sr-only" />
-                  @if (variantimgAndColor.image) {
-                  <div
-                    class="w-16 h-16 rounded-xl overflow-hidden">
-                    <img [src]="variantimgAndColor.image.filePath" [alt]="variantimgAndColor.color"
-                      class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110"
-                      (click)="selectImageForColor(variantimgAndColor.color)">
-                  </div>
-                  } @else {
+              <div class="flex flex-col gap-4">
+                @for (variant of mappedVariants; track $index) {
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
+                  {{ variant.variant }}
+                </h3>
+                <div class="flex flex-wrap gap-4">
+                  @for (attribute of variant.attributes; track $index) {
+                  @if (!attribute.image) {
+                  <label [for]="attribute._id" class="relative cursor-pointer w-max group">
+                    <input type="radio" [id]="attribute._id" [value]="attribute" name="variant"
+                      (change)="onVariantSelect(attribute)" class="sr-only" />
                     <div
-                      class="w-16 h-16 rounded-xl p-1 cursor-pointer transition-transform duration-300 hover:scale-110"
-                      [ngStyle]="{'background-color': variantimgAndColor.color}"
-                      (click)="selectImageForColor(variantimgAndColor.color)"></div>
+                      class="p-[2px] rounded-2xl border-2 transition-all duration-300 text-center min-w-[80px] shadow-xl hover:shadow-2xl transform hover:scale-105"
+                      [ngClass]="{ 
+                          'border-primary-500 dark:border-primary-400 bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelected(attribute),
+                          'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800': !isVariantSelected(attribute) 
+                        }">
+                      <span class="font-bold px-2 py-1 block text-lg">{{ attribute.value | multiLanguage }}</span>
+                    </div>
+                  </label>
+                  }@else {
+                  <label [for]="attribute._id"
+                    class="relative cursor-pointer w-max group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+                    [ngClass]="{ 
+                    'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelected(attribute),
+                    'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': !isVariantSelected(attribute) 
+                  }">
+                    <input type="radio" [id]="attribute._id" [value]="attribute" name="color"
+                      (change)="onVariantSelect(attribute)" class="sr-only" />
+                    <div class="w-16 h-16 rounded-xl overflow-hidden">
+                      <img [src]="attribute.image.filePath" [alt]="attribute.value"
+                        class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
+                    </div>
+                  </label>
                   }
-                  <!-- Color Name Tooltip -->
-                  <div
-                    class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                    {{ variantimgAndColor.color | multiLanguage }}
-                  </div>
-                </label>
+                  }
+                </div>
                 }
               </div>
             </div>
             }
             <!-- Size Selection -->
-            @if (product.sizes && product.sizes.length > 0) {
+            <!-- @if (product.sizes && product.sizes.length > 0) {
             <div class="space-y-4">
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
@@ -330,7 +332,7 @@
                 @for (size of product.sizes; track $index) {
                 <label [for]="'size-' + size" class="relative cursor-pointer group">
                   <input type="radio" [id]="'size-' + size" [value]="size" name="size" [(ngModel)]="selectedSize"
-                    (change)="onSizeSelect(size)" class="sr-only" />
+                    (change)="onVariantSelect(variantimgAndColor.variant)" class="sr-only" />
                   <div
                     class="p-[2px] rounded-2xl border-2 transition-all duration-300 text-center min-w-[80px] shadow-xl hover:shadow-2xl transform hover:scale-105"
                     [ngClass]="{ 
@@ -343,7 +345,7 @@
                 }
               </div>
             </div>
-            }
+            } -->
             <!-- Quantity Selection -->
             <div class="space-y-4 w-full">
               <label
@@ -353,10 +355,9 @@
               </label>
               <div class="flex items-center space-x-6">
                 <p-inputNumber inputId="quantity" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
-                  [max]="product.stock" [showButtons]="true" buttonLayout="horizontal"
-                  spinnerMode="horizontal" decrementButtonClass="p-button-secondary"
-                  incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
-                  decrementButtonIcon="pi pi-minus"
+                  [max]="product.stock" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal"
+                  decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
                   styleClass="w-40 max-w-max bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-2xl transition-all duration-300 shadow-lg"></p-inputNumber>
               </div>
             </div>
@@ -366,11 +367,12 @@
           <div class="space-y-6">
             <div class="grid grid-cols-1 gap-4">
               <button type="button"
-              class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-              [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart" tooltipPosition="top">
-              <i class="pi pi-shopping-cart me-2"></i>
-              {{ 'products.add_to_cart' | translate }}
-            </button>
+                class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart"
+                tooltipPosition="top">
+                <i class="pi pi-shopping-cart me-2"></i>
+                {{ 'products.add_to_cart' | translate }}
+              </button>
               <!-- Buy Now Button -->
               <button type="button"
                 class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
@@ -387,8 +389,7 @@
                 <i class="pi pi-heart text-xl"></i>
                 <span class="text-sm font-medium">Add to Wishlist</span>
               </button> -->
-              <button type="button"
-                (click)="share()"
+              <button type="button" (click)="share()"
                 class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
                 <i class="pi pi-share-alt text-xl me-2"></i>
                 <span class="text-sm font-medium">{{ 'products.share' | translate }}</span>
@@ -410,8 +411,7 @@
         class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 overflow-hidden shadow-2xl dark:shadow-gray-900/50 transition-all duration-500 hover:shadow-3xl dark:hover:shadow-gray-900/70">
         <p-accordion [multiple]="true" styleClass="product-accordion">
           @for (detail of product.details; track $index) {
-          <p-accordionTab [header]="detail.name"
-            styleClass="text-xl font-bold text-gray-900 dark:text-white">
+          <p-accordionTab [header]="detail.name" styleClass="text-xl font-bold text-gray-900 dark:text-white">
             <div class="p-8 bg-gray-50 dark:bg-gray-900/50 rounded-3xl transition-colors duration-300">
               <div class="w-full">
                 <div
@@ -430,19 +430,20 @@
   @if (relatedProducts.length > 0) {
   <div class="mt-24 max-w-7xl mx-auto px-4 relative z-10 overflow-hidden">
     <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{{ 'products.you_may_also_like' | translate }}
+      <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{{
+        'products.you_may_also_like' | translate }}
       </h2>
-      <p class="text-gray-600 dark:text-gray-300 text-xl transition-colors duration-300">{{ 'products.discover_more_products' | translate }}
+      <p class="text-gray-600 dark:text-gray-300 text-xl transition-colors duration-300">{{
+        'products.discover_more_products' | translate }}
       </p>
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full overflow-hidden">
       @for (relatedProduct of relatedProducts; track $index) {
-      <div
-        class="transform hover:scale-105 transition-transform duration-300">
+      <div class="transform hover:scale-105 transition-transform duration-300">
         <app-product-card [product]="relatedProduct"></app-product-card>
       </div>
       }
     </div>
   </div>
   }
-  </div>
+</div>

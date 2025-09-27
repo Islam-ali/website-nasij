@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { ICheckout, ICreateOrder, IOrderItem, IPaymentInfo, IPackageItem, IProductVariantAttribute } from '../models/checkout';
+import { ICheckout, ICreateOrder, IOrderItem, IPaymentInfo, IPackageItem } from '../models/checkout';
 import { OrderItemType, PaymentStatus, PaymentMethod } from '../models/order.enum';
 import { ICartItem } from '../../cart/models/cart.interface';
-import { EnumProductVariant } from '../../products/models/product.interface';
+import { EnumProductVariant, ProductVariantAttribute } from '../../products/models/product.interface';
 import { MultilingualText } from '../../../core/models/multi-language';
 
 @Injectable({
@@ -34,6 +34,12 @@ export class CheckoutService {
     return this.http.get(`${environment.apiUrl}/states/country/${countryId}`);
   }
 
+  uploadPaymentImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${environment.apiUrl}/file-upload/upload`, formData);
+  }
+
   // Convert cart items to order items (including packages)
   convertCartItemsToOrderItems(cartItems: ICartItem[]): IOrderItem[] {
     return cartItems.map(item => {
@@ -42,9 +48,9 @@ export class CheckoutService {
         return {
           itemType: OrderItemType.PACKAGE,
           itemId: item.packageId,
-          quantity: item.quantity,
-          price: item.price,
-          discountPrice: item.discount || item.price,
+          quantity: Number(item.quantity),
+          price: Number(item.price),
+          discountPrice: Number(item.discount) || Number(item.price),
           packageItems: this.cleanPackageItems(item.packageItems || [])
         };
       } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
@@ -52,12 +58,10 @@ export class CheckoutService {
         return {
           itemType: OrderItemType.PRODUCT,
           itemId: item.productId,
-          quantity: item.quantity,
-          price: item.price,
-          discountPrice: item.discount || item.price,
-          // color: item.color as MultilingualText,
-          // size: item.size as MultilingualText,
-          selectedVariants: this.buildSelectedVariants(item)
+          quantity: Number(item.quantity),
+          price: Number(item.price),
+          discountPrice: Number(item.discount) || Number(item.price),
+          selectedVariants: item.selectedVariants
         };
       } else {
         // Fallback - this shouldn't happen in normal flow
@@ -74,31 +78,28 @@ export class CheckoutService {
         productId: packageItem.productId,
         quantity: packageItem.quantity,
         selectedVariants: packageItem.selectedVariants.map(variant => ({
+          _id: variant._id,
           variant: variant.variant,
-          value: variant.value
-          // Remove image property from selectedVariants
+          value: variant.value,
+          image: variant.image
         }))
-        // Remove productName, price, image properties from packageItem
       };
       return cleanedItem;
     });
   }
 
   // Build selected variants from cart item
-  private buildSelectedVariants(cartItem: ICartItem): IProductVariantAttribute[] {
-    const variants: IProductVariantAttribute[] = [];
+  private buildSelectedVariants(cartItem: ICartItem): ProductVariantAttribute[] {
+    const variants: ProductVariantAttribute[] = [];
     
-    if (cartItem.color) {
-      variants.push({
-        variant: EnumProductVariant.COLOR,
-        value: cartItem.color
-      });
-    }
-    
-    if (cartItem.size) {
-      variants.push({
-        variant: EnumProductVariant.SIZE,
-        value: cartItem.size
+    if (cartItem.selectedVariants && cartItem.selectedVariants.length > 0) {
+      cartItem.selectedVariants.forEach(variant => {
+        variants.push({
+          _id: variant._id,
+          variant: variant.variant,
+          value: variant.value,
+          image: variant.image
+        });
       });
     }
     

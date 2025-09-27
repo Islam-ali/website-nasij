@@ -24,7 +24,7 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
     ProgressSpinnerModule,
     AccordionModule,
     DividerModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
   ],
   providers: [MessageService],
   templateUrl: './faq.component.html',

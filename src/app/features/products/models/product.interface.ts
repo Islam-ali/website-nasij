@@ -17,6 +17,7 @@ export interface ProductVariant {
 }
 
 export interface ProductVariantAttribute {
+  _id: string;
   variant: EnumProductVariant;
   value: MultilingualText;
   image?: IArchived;
