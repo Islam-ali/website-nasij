@@ -428,7 +428,6 @@ export class CheckoutComponent implements OnInit {
     const orderData: ICreateOrder = {
       customerId: customerId, // This can be undefined for guest orders
       items: orderItems,
-      totalPrice: Number(this.orderTotal()),
       status: OrderStatus.PENDING,
       
       // Additional fields from backend DTO

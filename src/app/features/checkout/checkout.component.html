@@ -377,7 +377,7 @@
                               <span class="text-xs font-medium text-gray-800 dark:text-gray-200">
                                 {{variant.value | multiLanguage}}
                               </span>
-                              <img *ngIf="variant.image" [src]="variant.image" [alt]="variant.value"
+                              <img *ngIf="variant.image" [src]="variant.image.filePath" [alt]="variant.value"
                                 class="w-8 rounded-md border border-gray-300 dark:border-gray-600">
                             </div>
                           </div>

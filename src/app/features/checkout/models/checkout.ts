@@ -7,7 +7,6 @@ import { EnumProductVariant, ProductVariantAttribute } from '../../products/mode
 export interface ICreateOrder {
   customerId?: string;
   items: IOrderItem[];
-  totalPrice: number;
   status?: OrderStatus;
   
   // Additional fields from backend DTO

@@ -123,91 +123,37 @@
                     </div>
                   </div>
 
-                  <!-- Color Selection -->
-                  <div *ngIf="getAvailableColors(item.productId._id).length > 0" class="space-y-3">
-                    <label class="text-lg font-semibold text-primary dark:text-white flex items-center gap-2">
-                      <i class="pi pi-palette text-primary"></i>
-                      {{ 'products.color' | translate }}
-                    </label>
-                    <div class="flex flex-wrap gap-3">
-                      <div *ngFor="let color of getAvailableColors(item.productId._id)" class="relative group">
-                        <button 
-                          type="button"
-                          class="color-swatch w-24 h-24 rounded-lg border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
-                          [class.border-primary!important]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.border-4!important]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.scale-110]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.shadow-2xl]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.animate-pulse]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.selected]="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.hover:scale-105]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.hover:shadow-lg]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [class.hover:border-3]="!isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)"
-                          [title]="getDisplayText(color)"
-                          (click)="onColorSelectForQuantity(item.productId._id, qtyIndex + 1, color, $event)"
-                        >
-                          <!-- Color Image or Color Swatch -->
-                          <img 
-                            *ngIf="getColorImage(item.productId._id, color)"
-                            [src]="getColorImage(item.productId._id, color)"
-                            [alt]="getDisplayText(color)"
-                            class="w-full h-full object-cover"
-                            (error)="onImageError($event)"
-                          />
-                          <div 
-                            *ngIf="!getColorImage(item.productId._id, color)"
-                            class="w-full h-full rounded-lg"
-                            [ngStyle]="{'background-color': getColorValue(getDisplayText(color))}"
-                          ></div>
-                          
-                          <!-- Checkmark for selected state -->
-                          <div *ngIf="isColorSelectedForQuantity(item.productId._id, qtyIndex + 1, color)" 
-                               class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
-                            <div class="bg-white rounded-full p-1">
-                              <i class="pi pi-check text-green-600 text-xs font-bold"></i>
-                            </div>
+                  <!-- Dynamic Variants Selection -->
+                  @if (item.productId.variants && item.productId.variants.length > 0) {
+                    <div class="space-y-4">
+                      <div class="flex flex-col gap-4">
+                        @for (variant of getMappedVariantsForProduct(item.productId._id); track $index) {
+                          <h3 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
+                            {{ variant.variant }}
+                          </h3>
+                          <div class="flex flex-wrap gap-4">
+                            @for (attribute of variant.attributes; track $index) {
+                              @if (!attribute.image) {
+                                <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group">
+                                  <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
+                                  <div class="p-[2px] rounded-2xl border-2 transition-all duration-300 text-center min-w-[80px] shadow-xl hover:shadow-2xl transform hover:scale-105" [ngClass]="{ 'border-primary-500 dark:border-primary-400 bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
+                                    <span class="font-bold px-2 py-1 block text-lg">{{ attribute.value | multiLanguage }}</span>
+                                  </div>
+                                </label>
+                              }@else {
+                                <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110" [ngClass]="{ 'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
+                                  <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
+                                  <div class="w-16 h-16 rounded-xl overflow-hidden">
+                                    <img [src]="attribute.image.filePath" [alt]="attribute.value" class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
+                                  </div>
+                                </label>
+                              }
+                            }
                           </div>
-                        </button>
-                        
-                        <!-- Tooltip -->
-                        <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                          {{ getDisplayText(color) }}
-                        </div>
+                        }
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Size Selection -->
-                  <div *ngIf="getAvailableSizes(item.productId._id).length > 0" class="space-y-3">
-                    <label class="text-lg font-semibold text-primary dark:text-white flex items-center gap-2">
-                      <i class="pi pi-th-large text-primary"></i>
-                      {{ 'products.size' | translate }}
-                    </label>
-                    <div class="flex flex-wrap gap-3">
-                      <button 
-                        *ngFor="let size of getAvailableSizes(item.productId._id)"
-                        type="button"
-                        class="size-button px-4 py-2 rounded-lg border-2 transition-all duration-300 font-semibold text-sm min-w-[60px] text-center"
-                        [class.border-primary!important]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.bg-primary!important]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.text-white!important]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.scale-110]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.shadow-2xl]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.animate-pulse]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.selected]="isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.hover:scale-105]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.hover:shadow-lg]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.hover:border-3]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.border-gray-300]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.text-gray-700]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [class.bg-white]="!isSizeSelectedForQuantity(item.productId._id, qtyIndex + 1, size)"
-                        [title]="getDisplayText(size)"
-                        (click)="onSizeSelectForQuantity(item.productId._id, qtyIndex + 1, size, $event)"
-                      >
-                        {{ getDisplayText(size) }}
-                      </button>
-                    </div>
-                  </div>
+                  }
                 </div>
               </div>
 
@@ -330,9 +276,21 @@
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
+/* Dynamic variant button enhancements */
+.variant-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.variant-button.selected {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
 /* Smooth transitions */
 .color-swatch,
-.size-button {
+.size-button,
+.variant-button {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -362,9 +320,27 @@
   color: white;
 }
 
+.dark .variant-button {
+  border-color: #374151;
+  background-color: #1f2937;
+  color: #d1d5db;
+}
+
+.dark .variant-button:hover {
+  border-color: #6b7280;
+  background-color: #374151;
+}
+
+.dark .variant-button.selected {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {  
-  .size-button {
+  .size-button,
+  .variant-button {
     min-width: 50px;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;

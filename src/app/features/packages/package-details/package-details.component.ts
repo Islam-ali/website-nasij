@@ -465,74 +465,144 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     return Array.from({ length: quantity }, (_, i) => i + 1);
   }
 
-  getVariantKeysLength(variants: any): number {
-    return variants ? Object.keys(variants).length : 0;
-  }
-
-  // New functions for color and size selection
-  getAvailableColors(productId: string): MultilingualText[] {
+  // Dynamic variant methods
+  getAvailableVariants(productId: string, variantType: string): MultilingualText[] {
     const packageData = this.package();
     if (!packageData) return [];
     
     const item = packageData.items.find(i => i.productId._id === productId);
     if (!item?.productId?.variants) return [];
     
-    const colors = new Set<MultilingualText>();
+    const variants = new Set<MultilingualText>();
     item.productId.variants.forEach(variant => {
       if (variant.attributes) {
         variant.attributes.forEach(attr => {
-          if (attr.variant === 'color') {
-            colors.add(attr.value);
+          if (attr.variant === variantType) {
+            variants.add(attr.value);
           }
         });
       }
     });
     
-    return Array.from(colors);
+    return Array.from(variants);
   }
 
-  getAvailableSizes(productId: string): MultilingualText[] {
+  // Get all variant types for a product
+  getAvailableVariantTypes(productId: string): string[] {
     const packageData = this.package();
     if (!packageData) return [];
     
     const item = packageData.items.find(i => i.productId._id === productId);
     if (!item?.productId?.variants) return [];
     
-    const sizes = new Set<MultilingualText>();
+    const variantTypes = new Set<string>();
     item.productId.variants.forEach(variant => {
       if (variant.attributes) {
-          variant.attributes.forEach(attr => {
-            if (attr.variant === 'size') {
-              sizes.add(attr.value);
-            }
-          });
+        variant.attributes.forEach(attr => {
+          variantTypes.add(attr.variant);
+        });
       }
     });
     
-    return Array.from(sizes);
+    return Array.from(variantTypes);
   }
 
-  isColorSelectedForQuantity(productId: string, quantity: number, color: any): boolean {
-    const selectedColor = this.selectedColorsByQuantity[productId]?.[quantity];
-    if (typeof selectedColor === 'string' && typeof color === 'string') {
-      return selectedColor === color;
-    }
-    if (typeof selectedColor === 'object' && typeof color === 'object') {
-      return this.getMultilingualValue(selectedColor) === this.getMultilingualValue(color);
-    }
-    return this.getDisplayText(selectedColor) === this.getDisplayText(color);
+  // Map variants for a specific product (similar to product-details component)
+  getMappedVariantsForProduct(productId: string): {variant: string, attributes: any[]}[] {
+    const packageData = this.package();
+    if (!packageData) return [];
+    
+    const item = packageData.items.find(i => i.productId._id === productId);
+    if (!item?.productId?.variants) return [];
+    
+    const variantMap: Record<string, any[]> = {};
+    
+    item.productId.variants.forEach(variant => {
+      if (variant.attributes) {
+        variant.attributes.forEach(attr => {
+          if (!variantMap[attr.variant]) {
+            variantMap[attr.variant] = [];
+          }
+          
+          const exists = variantMap[attr.variant].some(
+            a => a._id === attr._id
+          );
+          if (!exists) {
+            variantMap[attr.variant].push(attr);
+          }
+        });
+      }
+    });
+    
+    return Object.entries(variantMap).map(([variant, attributes]) => ({
+      variant,
+      attributes
+    }));
   }
 
-  isSizeSelectedForQuantity(productId: string, quantity: number, size: any): boolean {
-    const selectedSize = this.selectedSizesByQuantity[productId]?.[quantity];
-    if (typeof selectedSize === 'string' && typeof size === 'string') {
-      return selectedSize === size;
+  // Dynamic variant selection methods
+  onVariantSelectForQuantity(productId: string, quantity: number, variantType: string, attribute: any, event?: any): void {
+    if (!this.selectedVariantsByQuantity[productId]) {
+      this.selectedVariantsByQuantity[productId] = {};
     }
-    if (typeof selectedSize === 'object' && typeof size === 'object') {
-      return this.getMultilingualValue(selectedSize) === this.getMultilingualValue(size);
+    if (!this.selectedVariantsByQuantity[productId][quantity]) {
+      this.selectedVariantsByQuantity[productId][quantity] = {};
     }
-    return this.getDisplayText(selectedSize) === this.getDisplayText(size);
+    this.selectedVariantsByQuantity[productId][quantity][variantType] = attribute;
+    
+    // Add ripple effect
+    if (event) {
+      this.createRippleEffect(event);
+    }
   }
+
+  isVariantSelectedForQuantity(productId: string, quantity: number, variantType: string, attribute: any): boolean {
+    const selectedAttribute = this.selectedVariantsByQuantity[productId]?.[quantity]?.[variantType];
+    if (!selectedAttribute || !attribute) return false;
+    
+    return (selectedAttribute as any)._id === attribute._id;
+  }
+
+  getVariantIcon(variantType: string): string {
+    switch (variantType) {
+      case 'size':
+        return 'pi-arrows-alt';
+      case 'color':
+        return 'pi-palette';
+      case 'material':
+        return 'pi-box';
+      case 'style':
+        return 'pi-star';
+      case 'pattern':
+        return 'pi-th-large';
+      case 'finish':
+        return 'pi-sun';
+      case 'weight':
+        return 'pi-weight-hanging';
+      case 'length':
+        return 'pi-arrows-h';
+      case 'width':
+        return 'pi-arrows-h';
+      case 'height':
+        return 'pi-arrows-v';
+      default:
+        return 'pi-tag';
+    }
+  }
+
+  // Backward compatibility - keep existing methods for now
+  getAvailableColors(productId: string): MultilingualText[] {
+    return this.getAvailableVariants(productId, 'color');
+  }
+
+  getAvailableSizes(productId: string): MultilingualText[] {
+    return this.getAvailableVariants(productId, 'size');
+  }
+
+  getVariantKeysLength(variants: any): number {
+    return variants ? Object.keys(variants).length : 0;
+  }
+
 
   onColorSelectForQuantity(productId: string, quantity: number, color: MultilingualText, event?: any): void {
     if (!this.selectedColorsByQuantity[productId]) {
@@ -576,27 +646,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     }
   }
 
-  getColorImage(productId: string, color: any): string | null {
-    const packageData = this.package();
-    if (!packageData) return null;
-    
-    const item = packageData.items.find(i => i.productId._id === productId);
-    if (!item?.productId?.variants) return null;
-    
-    // Find the variant that has this color
-    for (const variant of item.productId.variants) {
-      if (variant.attributes) {
-        for (const attr of variant.attributes) {
-          if (attr.variant === 'color' && this.getMultilingualValue(attr.value) === this.getDisplayText(color) && attr.image?.filePath) {
-            return attr.image.filePath;
-          }
-        }
-      }
-    }
-    
-    return null;
-  }
-
   getVariantImageForQuantity(productId: string, quantity: number): string {
     const packageData = this.package();
     if (!packageData) return 'assets/images/placeholder.jpg';
@@ -604,19 +653,42 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     const item = packageData.items.find(i => i.productId._id === productId);
     if (!item) return 'assets/images/placeholder.jpg';
     
-    const selectedColor = this.selectedColorsByQuantity[productId]?.[quantity];
-    const selectedSize = this.selectedSizesByQuantity[productId]?.[quantity];
-    
-    // Try to find image based on selected color and size
-    if (selectedColor) {
-      const colorImage = this.getColorImage(productId, selectedColor);
-      if (colorImage) {
-        return colorImage;
+    // Try to find image based on selected variants
+    const selectedVariants = this.selectedVariantsByQuantity[productId]?.[quantity];
+    if (selectedVariants) {
+      // Try to find image based on any variant with image
+      for (const [variantType, attribute] of Object.entries(selectedVariants)) {
+        if (attribute && (attribute as any).image?.filePath) {
+          return (attribute as any).image.filePath;
+        }
       }
     }
     
     // Fallback to product main image
     return item.productId.images?.[0]?.filePath || 'assets/images/placeholder.jpg';
+  }
+
+  getVariantImage(productId: string, variantType: string, value: MultilingualText): string | null {
+    const packageData = this.package();
+    if (!packageData) return null;
+    
+    const item = packageData.items.find(i => i.productId._id === productId);
+    if (!item?.productId?.variants) return null;
+    
+    // Find the variant that has this value
+    for (const variant of item.productId.variants) {
+      if (variant.attributes) {
+        for (const attr of variant.attributes) {
+          if (attr.variant === variantType && 
+              this.getMultilingualValue(attr.value) === this.getMultilingualValue(value) && 
+              attr.image?.filePath) {
+            return attr.image.filePath;
+          }
+        }
+      }
+    }
+    
+    return null;
   }
 
   increaseQuantity(): void {
@@ -682,36 +754,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     console.log('Leaving color button');
   }
 
-  getVariantImage(variant: any, product: any, quantity: number): string {
-    // أولاً: تحقق من وجود صورة في الـ selected attribute للكمية المحددة
-    const selectedAttribute = this.getSelectedAttributeForQuantity(product._id, quantity);
-    if (selectedAttribute?.image?.filePath) {
-      return selectedAttribute.image.filePath;
-    }
 
-    // ثانياً: تحقق من وجود صورة في الـ variant نفسه
-    if (variant.image?.filePath) {
-      return variant.image.filePath;
-    }
-
-    // ثالثاً: تحقق من وجود صورة في الـ attributes
-    if (variant.attributes && variant.attributes.length > 0) {
-      for (let attr of variant.attributes) {
-        if (attr.image?.filePath) {
-          return attr.image.filePath;
-        }
-      }
-    }
-
-    // رابعاً: تحقق من وجود صورة في الـ selected variant
-    const selectedVariant = this.getSelectedVariantForQuantity(product._id, quantity);
-    if (selectedVariant?.image?.filePath) {
-      return selectedVariant.image.filePath;
-    }
-
-    // أخيراً: استخدم صورة المنتج الافتراضية
-    return product.images?.[0]?.filePath || 'assets/images/placeholder.jpg';
-  }
 
   getSelectedVariantForQuantity(productId: string, quantity: number): any {
     // البحث عن الـ variant المحدد للكمية المحددة
@@ -947,17 +990,18 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       const allVariants = new Map<string, any>();
       
       Object.values(productVariants).forEach((quantityVariants: any) => {
-        Object.entries(quantityVariants).forEach(([variant, value]) => {
+        Object.entries(quantityVariants).forEach(([variant, value]: [string, any]) => {
           const valueString = this.getMultilingualValue(value);
           const variantKey = `${variant}_${valueString}`;
           if (!allVariants.has(variantKey)) {
+            debugger;
             const variantImage = this.getVariantImageForItem(productId, variant, valueString);
             const fallbackImage = this.getFallbackVariantImage(productId, variant, valueString);
             
             allVariants.set(variantKey, {
               variant: variant,
-              value: value, // Keep as MultilingualText
-              image: variantImage || fallbackImage || this.getProductMainImage(productId)
+              value: value.value, // Keep as MultilingualText
+              image: value.image
             });
           }
         });
