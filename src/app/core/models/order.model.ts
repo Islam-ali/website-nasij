@@ -1,6 +1,10 @@
-import { OrderStatus, PaymentMethod, PaymentStatus } from "../../features/checkout/models/order.enum";
+import { PaymentMethod, PaymentStatus } from "../../features/checkout/models/order.enum";
+import { IPackage } from "../../interfaces/package.interface";
+import { IProduct, OrderStatus } from "../../interfaces/product.interface";
 
 export interface OrderItem {
+  itemType: 'Product' | 'Package';
+  itemId: IProduct | IPackage;
   id: string;
   productId: string;
   name: string;

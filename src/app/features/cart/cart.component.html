@@ -96,18 +96,18 @@
                     <h6
                       class="font-semibold text-base leading-7 text-gray-900 dark:text-white transition-colors duration-300">
                       {{ item.productName | multiLanguage }}
-                      <span *ngIf="item.itemType === 'package'"
+                      <span *ngIf="item.itemType === 'Package'"
                         class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
                         {{ 'cart.package' | translate }}
                       </span>
-                      <span *ngIf="item.itemType === 'product'"
+                      <span *ngIf="item.itemType === 'Product'"
                         class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
                         {{ 'cart.product' | translate }}
                       </span>
                     </h6>
 
                     <!-- Show color and size only for products -->
-                    <div *ngIf="item.itemType === 'product' || !item.itemType">
+                    <div *ngIf="item.itemType === 'Product' || !item.itemType">
                       @if(item.selectedVariants && item.selectedVariants.length > 0) {
                       @for(variant of item.selectedVariants; track variant._id) {
                       <p
@@ -122,7 +122,7 @@
                     </div>
 
                     <!-- Show package items for packages -->
-                    <div *ngIf="item.itemType === 'package' && item.packageItems && item.packageItems.length > 0"
+                    <div *ngIf="item.itemType === 'Package' && item.packageItems && item.packageItems.length > 0"
                       class="mt-2">
                       <p class="font-bold text-sm text-gray-600 dark:text-gray-300 mb-1">{{ 'cart.package_items' |
                         translate }}:</p>

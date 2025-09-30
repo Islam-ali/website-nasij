@@ -184,7 +184,7 @@ export class CartComponent implements OnInit, OnDestroy {
       image: packageData.image,
       packageItems: packageData.packageItems || [],
       discount: packageData.discount || 0,
-      itemType: 'package' as const,
+      itemType: 'Package' as const,
       selectedVariants: packageData.selectedVariants || {}
     };
 
@@ -216,7 +216,7 @@ export class CartComponent implements OnInit, OnDestroy {
       image: productData.image,
       selectedVariants: productData.selectedVariants || [],
       discount: productData.discount || 0,
-      itemType: 'product' as const
+      itemType: 'Product' as const
     };
 
     this.cartService.addToCart(productItem).subscribe({
@@ -335,7 +335,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.loading = true;
     
     // Check if it's a package or product
-    if (item.packageId && item.itemType === 'package') {
+    if (item.packageId && item.itemType === 'Package') {
       // Handle package update
       this.cartService.updateQuantity(undefined, newQuantity, item.packageId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
@@ -361,7 +361,7 @@ export class CartComponent implements OnInit, OnDestroy {
           this.loading = false;
         })
       ).subscribe();
-    } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+    } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
       // Handle product update
       this.cartService.updateQuantity(item.productId, newQuantity, item.packageId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
@@ -440,7 +440,7 @@ export class CartComponent implements OnInit, OnDestroy {
           this.loading = false;
         })
       ).subscribe();
-    } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+    } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
       console.log('🛍️ Removing product with ID:', item.productId);
       // Handle product removal
       this.cartService.removeItem(item.productId, item.selectedVariants).pipe(

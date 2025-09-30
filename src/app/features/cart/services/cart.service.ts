@@ -72,7 +72,7 @@ export class CartService implements OnDestroy {
         const newItem: ICartItem = {
           ...item,
           quantity: item.quantity,
-          itemType: 'package'
+          itemType: 'Package'
         };
         console.log('📦 New package item:', newItem);
         console.log('📦 New package packageId:', newItem.packageId);
@@ -103,7 +103,7 @@ export class CartService implements OnDestroy {
         const newItem: ICartItem = {
           ...item,
           quantity: item.quantity,
-          itemType: 'product'
+          itemType: 'Product'
         };
         updatedItems = [...currentState.items, newItem];
       }
@@ -253,7 +253,7 @@ export class CartService implements OnDestroy {
       packageItems: packageData.packageItems,
       discount: packageData.discount,
       selectedVariants: packageData.selectedVariants,
-      itemType: 'package'
+      itemType: 'Package'
     };
     
     console.log('📦 Package item to add:', packageItem);

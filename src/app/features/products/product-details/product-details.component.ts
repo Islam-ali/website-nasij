@@ -307,7 +307,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     this.messageService.add({
       severity: 'success',
       summary: 'Added to Cart',
-      detail: `${this.quantity} x ${this.product.name} has been added to your cart`,
+      detail: `${this.quantity} x ${this.product.name[this.currentLanguage]} has been added to your cart`,
       life: 1000
     });
   }

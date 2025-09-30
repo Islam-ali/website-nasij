@@ -263,7 +263,7 @@ cartService.addToCart(tshirt).subscribe(() => {
     // - 1 package (Summer Essentials)
     
     cartState.items.forEach(item => {
-      if (item.itemType === 'package') {
+      if (item.itemType === 'Package') {
         console.log(`Package: ${item.productName}`);
         console.log(`Package items:`, item.packageItems);
       } else {
@@ -401,7 +401,7 @@ cartService.getCart().subscribe(cartState => {
 ### 2. **Handle Item Types Properly**
 ```typescript
 cartState.items.forEach(item => {
-  if (item.itemType === 'package') {
+  if (item.itemType === 'Package') {
     // Handle package
     console.log('Package:', item.productName);
     console.log('Package items:', item.packageItems);

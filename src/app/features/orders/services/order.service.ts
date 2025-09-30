@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Order } from '../../../core/models/order.model';
-import { OrderStatus } from '../../checkout/models/order.enum';
+import { OrderStatus } from '../../../interfaces/product.interface';
+import { BaseResponse } from '../../../core/models/baseResponse';
 
 export interface CreateOrderDto {
   items: Array<{
@@ -53,8 +54,8 @@ export class OrderService {
     return this.http.get<Order>(`${this.apiUrl}/${id}`);
   }
 
-  getOrderByNumber(orderNumber: string): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}/number/${orderNumber}`);
+  getOrderByNumber(orderNumber: string): Observable<BaseResponse<Order>> {
+    return this.http.get<BaseResponse<Order>>(`${this.apiUrl}/number/${orderNumber}`);
   }
 
   createOrder(orderData: CreateOrderDto): Observable<Order> {

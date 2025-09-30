@@ -38,6 +38,48 @@
     "items": "Items",
     "action": "Action"
   },
+  "orderTracking": {
+    "title": "Track Your Order",
+    "subtitle": "Enter your order number to track order status and delivery timeline",
+    "enterOrderNumber": "Enter order number (e.g., ORD-12345)",
+    "trackOrder": "Track Order",
+    "searching": "Searching...",
+    "orderNotFound": "Order not found",
+    "checkOrderNumber": "Please check the order number and try again",
+    "newSearch": "New Search",
+    "orderNumber": "Order Number:",
+    "orderDate": "Order Date:",
+    "orderStatus": "Order Status:",
+    "totalAmount": "Total Amount:",
+    "paymentMethod": "Payment Method:",
+    "orderStages": "Order Stages",
+    "noTimelineAvailable": "No timeline available",
+    "timelineWillUpdate": "Timeline will be updated when order status changes",
+    "requestedProducts": "Requested Products",
+    "product": "Product",
+    "paymentDetails": "Payment Details",
+    "searchForAnotherOrder": "Search for Another Order",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "received": "Received",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "postponed": "Postponed",
+      "returned": "Returned"
+    },
+    "payment": {
+      "credit_card": "Credit Card",
+      "debit_card": "Debit Card",
+      "bank_transfer": "Bank Transfer",
+      "cash_on_delivery": "Cash on Delivery",
+      "vodafone_cash": "Vodafone Cash",
+      "paypal": "PayPal",
+      "stripe": "Stripe"
+    }
+  },
   "checkout": {
     "title": "Checkout",
     "billing_info": "Billing Information",
@@ -117,7 +159,10 @@
       "invalidFileType": "Please select a valid image file.",
       "fileTooLarge": "File size must be less than 5MB.",
       "uploadFailed": "Failed to upload payment image. Please try again."
-    }
+    },
+    "orderNumberCopied": "Order number copied successfully",
+    "orderNumber": "Order Number",
+    "copyToClipboard": "Copy Order Number"
   },
   "navigation": {
     "home": "Home",
@@ -409,36 +454,5 @@
       "cart_empty": "Your cart is empty",
       "wishlist_empty": "Your wishlist is empty"
     }
-  },
-  "orderTracking": {
-    "title": "Track Your Order",
-    "description": "Enter your order number to track the status of your order and view its timeline",
-    "enterOrderNumber": "Enter your order number",
-    "search": "Track Order",
-    "searching": "Searching...",
-    "orderNumberRequired": "Order number is required",
-    "orderNotFound": "Order Not Found",
-    "tryAgain": "Try Again",
-    "orderDetails": "Order Details",
-    "orderNumber": "Order Number",
-    "orderDate": "Order Date",
-    "customer": "Customer",
-    "paymentMethod": "Payment Method",
-    "totalAmount": "Total Amount",
-    "shippingAddress": "Shipping Address",
-    "orderItems": "Order Items",
-    "quantity": "Quantity",
-    "price": "Price",
-    "orderTimeline": "Order Timeline",
-    "of": "of",
-    "stepsCompleted": "steps completed",
-    "trackingNumber": "Tracking Number",
-    "location": "Location",
-    "estimatedDelivery": "Estimated Delivery",
-    "completedAt": "Completed At",
-    "inProgress": "In Progress",
-    "pending": "Pending",
-    "loadingTimeline": "Loading timeline...",
-    "noTimeline": "No timeline available for this order"
   }
 }

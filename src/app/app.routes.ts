@@ -48,6 +48,14 @@ export const routes: Routes = [
         data: { breadcrumb: 'Packages' }
       },
       {
+        path: 'track-order',
+        loadComponent: () => import('./features/orders/order-tracking/order-tracking.component')
+          .then(m => m.OrderTrackingComponent)
+          .catch(() => ErrorComponent),
+        title: 'Track Order',
+        data: { breadcrumb: 'Track Order' }
+      },
+      {
         path: 'packages/:id',
         loadComponent: () => import('./features/packages/package-details/package-details.component')
           .then(m => m.PackageDetailsComponent)

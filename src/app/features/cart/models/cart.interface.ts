@@ -20,7 +20,7 @@ export interface ICartItem {
   selectedVariants?: ProductVariantAttribute[];
   
   // Common fields
-  itemType?: 'product' | 'package';
+  itemType?: 'Product' | 'Package';
 }
 
 export interface ICartSummary {

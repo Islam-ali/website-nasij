@@ -100,6 +100,7 @@ export class CheckoutComponent implements OnInit {
     // { label: 'PayPal', value: PaymentMethod.PAYPAL }
   ];
   isBuyNow = false;
+  orderNumber:string = '';
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
@@ -198,6 +199,14 @@ export class CheckoutComponent implements OnInit {
       }
     });
   }
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text);
+    this.messageService.add({
+      severity: 'success',
+      summary: this.translate.instant('common.success'),
+      detail: this.translate.instant('checkout.orderNumberCopied')
+    });
+  }
 
   loadStates(): void {
     const countryId = this.checkoutForm.value.shippingAddress.country;
@@ -277,7 +286,7 @@ export class CheckoutComponent implements OnInit {
       image: packageData.image,
       packageItems: packageData.packageItems || [],
       discount: packageData.discount || 0,
-      itemType: 'package' as const,
+      itemType: 'Package' as const,
       selectedVariants: packageData.selectedVariants || {}
     };
     this.cartItems.set([packageItem]);
@@ -294,7 +303,7 @@ export class CheckoutComponent implements OnInit {
       productName: productData.productName,
       image: productData.image,
       discount: productData.discount || 0,
-      itemType: 'product' as const,
+      itemType: 'Product' as const,
       selectedVariants: productData.selectedVariants || []
     };
     this.cartItems.set([productItem]);
@@ -458,12 +467,13 @@ export class CheckoutComponent implements OnInit {
     console.log('Order data being sent:', JSON.stringify(orderData, null, 2));
 
     this.checkoutService.createOrder(orderData).subscribe({
-      next: (response) => {
+      next: (response:any) => {
         this.loading = false;
         this.success = true;
         if (!this.isBuyNow) {
           this.cartService.clearCart().subscribe();
         }
+        this.orderNumber = response.data.orderNumber;
         // Clear cart so all subscribers (Topbar, Cart page) update
         // window scroll to top
         if (isPlatformBrowser(this.platformId)) {

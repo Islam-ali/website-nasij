@@ -44,7 +44,7 @@ export class CheckoutService {
   convertCartItemsToOrderItems(cartItems: ICartItem[]): IOrderItem[] {
     return cartItems.map(item => {
       // Check if item is a package (has packageId)
-      if (item.packageId && item.itemType === 'package') {
+      if (item.packageId && item.itemType === 'Package') {
         return {
           itemType: OrderItemType.PACKAGE,
           itemId: item.packageId,
@@ -53,7 +53,7 @@ export class CheckoutService {
           discountPrice: Number(item.discount) || Number(item.price),
           packageItems: this.cleanPackageItems(item.packageItems || [])
         };
-      } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+      } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
         // Regular product (default if no itemType specified)
         return {
           itemType: OrderItemType.PRODUCT,

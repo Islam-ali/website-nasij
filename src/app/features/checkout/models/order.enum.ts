@@ -20,6 +20,6 @@ export enum PaymentMethod {
 }
 
 export enum OrderItemType {
-  PRODUCT = 'product',
-  PACKAGE = 'package'
+  PRODUCT = 'Product',
+  PACKAGE = 'Package'
 }

@@ -38,6 +38,37 @@
     "items": "العناصر",
     "action": "إجراء"
   },
+  "orderTracking": {
+    "title": "تتبع طلبك",
+    "subtitle": "أدخل رقم طلبك لتتبع حالة الطلب والجدول الزمني للتسليم",
+    "enterOrderNumber": "أدخل رقم الطلب (مثال: ORD-12345)",
+    "trackOrder": "تتبع الطلب",
+    "searching": "جاري البحث...",
+    "orderNotFound": "لم يتم العثور على طلب",
+    "checkOrderNumber": "تأكد من صحة رقم الطلب وأعد المحاولة",
+    "newSearch": "بحث جديد",
+    "orderNumber": "الطلب رقم:",
+    "orderDate": "تاريخ الطلب:",
+    "orderStatus": "حالة الطلب:",
+    "totalAmount": "إجمالي الطلب:",
+    "paymentMethod": "طريقة الدفع:",
+    "orderStages": "مراحل الطلب",
+    "noTimelineAvailable": "لا يوجد جدول زمني متاح",
+    "timelineWillUpdate": "سيتم تحديث الجدول الزمني عند تحديث حالة الطلب",
+    "requestedProducts": "المنتجات المطلوبة",
+    "product": "منتج",
+    "paymentDetails": "تفاصيل الدفع",
+    "searchForAnotherOrder": "بحث عن طلب آخر",
+    "payment": {
+      "credit_card": "بطاقة ائتمان",
+      "debit_card": "بطاقة خصم",
+      "bank_transfer": "تحويل بنكي",
+      "cash_on_delivery": "الدفع عند الاستلام",
+      "vodafone_cash": "فودافون كاش",
+      "paypal": "باي بال",
+      "stripe": "سترايب"
+    }
+  },
   "checkout": {
     "title": "الدفع",
     "billing_info": "معلومات الفواتير",
@@ -117,7 +148,10 @@
       "invalidFileType": "يرجى اختيار ملف صورة صالح.",
       "fileTooLarge": "يجب أن يكون حجم الملف أقل من 5 ميجابايت.",
       "uploadFailed": "فشل في رفع صورة الدفع. يرجى المحاولة مرة أخرى."
-    }
+    },
+    "orderNumberCopied": "تم النسخ بنجاح",
+    "orderNumber": "رقم الطلب",
+    "copyToClipboard": "نسخ رقم الطلب"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -408,36 +442,5 @@
       "cart_empty": "سلتك فارغة",
       "wishlist_empty": "قائمة أمنياتك فارغة"
     }
-  },
-  "orderTracking": {
-    "title": "تتبع طلبك",
-    "description": "أدخل رقم طلبك لتتبع حالة طلبك وعرض الجدول الزمني",
-    "enterOrderNumber": "أدخل رقم طلبك",
-    "search": "تتبع الطلب",
-    "searching": "جاري البحث...",
-    "orderNumberRequired": "رقم الطلب مطلوب",
-    "orderNotFound": "الطلب غير موجود",
-    "tryAgain": "حاول مرة أخرى",
-    "orderDetails": "تفاصيل الطلب",
-    "orderNumber": "رقم الطلب",
-    "orderDate": "تاريخ الطلب",
-    "customer": "العميل",
-    "paymentMethod": "طريقة الدفع",
-    "totalAmount": "المبلغ الإجمالي",
-    "shippingAddress": "عنوان الشحن",
-    "orderItems": "عناصر الطلب",
-    "quantity": "الكمية",
-    "price": "السعر",
-    "orderTimeline": "الجدول الزمني للطلب",
-    "of": "من",
-    "stepsCompleted": "خطوات مكتملة",
-    "trackingNumber": "رقم التتبع",
-    "location": "الموقع",
-    "estimatedDelivery": "تاريخ التوصيل المتوقع",
-    "completedAt": "تم الإكمال في",
-    "inProgress": "قيد التنفيذ",
-    "pending": "معلق",
-    "loadingTimeline": "جاري تحميل الجدول الزمني...",
-    "noTimeline": "لا يوجد جدول زمني متاح لهذا الطلب"
   }
 }

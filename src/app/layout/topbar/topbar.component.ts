@@ -266,7 +266,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     console.log('📦 Item type:', item.itemType);
     
     // Check if it's a package or product
-    if (item.packageId && item.itemType === 'package') {
+    if (item.packageId && item.itemType === 'Package') {
       console.log('📦 Updating package quantity in topbar');
       // Handle package update
       this.cartService.updateQuantity(undefined, newQuantity, item.packageId).pipe(
@@ -279,7 +279,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           return of(null);
         })
       ).subscribe();
-    } else if (item.productId && (item.itemType === 'product' || !item.itemType)) {
+    } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
       console.log('🛍️ Updating product quantity in topbar');
       // Handle product update
       this.cartService.updateQuantity(item.productId, newQuantity, undefined, item.selectedVariants).pipe(
