@@ -15,9 +15,10 @@ import { environment } from '../../../../environments/environment';
 import { WishlistService } from '../../../features/wishlist/services/wishlist.service';
 import { MessageService } from 'primeng/api';
 import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlist.interface';
-import { EnumProductVariant } from '../../../features/products/models/product.interface';
+import { EnumProductVariant, ProductVariant, ProductVariantAttribute } from '../../../features/products/models/product.interface';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { ProductService } from '../../../features/products/services/product.service';
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -64,6 +65,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
     private wishlistService: WishlistService,
     private messageService: MessageService,
     private translationService: TranslationService,
+    public productService: ProductService
   ) {}
 
   // Get product image with fallback to placeholder

@@ -122,27 +122,27 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     });
   }
 
-  getCategoryGridClass(index: number): string {
-    const gridClasses = [
-      'sm:col-span-2 lg:col-span-4 lg:row-span-2', // 0 - Large
-      'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 1 - Medium
-      'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 2 - Medium
-      'sm:col-span-2 lg:col-span-6 lg:row-span-1', // 3 - Wide
-      'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 4 - Medium
-      'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 5 - Medium
-      'sm:col-span-2 lg:col-span-4 lg:row-span-2', // 6 - Large
-      'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 7 - Medium
-      'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 8 - Medium
-      'sm:col-span-2 lg:col-span-6 lg:row-span-1', // 9 - Wide
-    ];
+  // getCategoryGridClass(index: number): string {
+  //   const gridClasses = [
+  //     'sm:col-span-2 lg:col-span-4 lg:row-span-2', // 0 - Large
+  //     'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 1 - Medium
+  //     'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 2 - Medium
+  //     'sm:col-span-2 lg:col-span-6 lg:row-span-1', // 3 - Wide
+  //     'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 4 - Medium
+  //     'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 5 - Medium
+  //     'sm:col-span-2 lg:col-span-4 lg:row-span-2', // 6 - Large
+  //     'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 7 - Medium
+  //     'sm:col-span-1 lg:col-span-3 lg:row-span-1', // 8 - Medium
+  //     'sm:col-span-2 lg:col-span-6 lg:row-span-1', // 9 - Wide
+  //   ];
 
-    if (index < gridClasses.length) {
-      return gridClasses[index];
-    } else {
-      // For categories beyond index 9, use a repeating pattern
-      return 'sm:col-span-1 lg:col-span-3 lg:row-span-1';
-    }
-  }
+  //   if (index < gridClasses.length) {
+  //     return gridClasses[index];
+  //   } else {
+  //     // For categories beyond index 9, use a repeating pattern
+  //     return 'sm:col-span-1 lg:col-span-3 lg:row-span-1';
+  //   }
+  // }
 
   navigateToProductList(categoryId?: string) {
     this.router.navigate(['/shop'], { queryParams: { category: categoryId } });

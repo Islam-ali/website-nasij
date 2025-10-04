@@ -1,4 +1,6 @@
 {
+  "size": "Size",
+  "color": "Color",
   "common": {
     "save": "Save",
     "cancel": "Cancel",

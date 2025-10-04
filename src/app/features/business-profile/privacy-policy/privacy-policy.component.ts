@@ -10,6 +10,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
+import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-privacy-policy',
@@ -20,7 +21,8 @@ import { SafePipe } from '../../../core/pipes/safe.pipe';
     ButtonModule,
     CardModule,
     ProgressSpinnerModule,
-    SafePipe
+    SafePipe,
+    MultiLanguagePipe
   ],
   providers: [MessageService],
   templateUrl: './privacy-policy.component.html',

@@ -32,14 +32,14 @@
       <!-- Categories -->
       <div class="max-w-7xl mx-auto px-4">
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-10 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[250px] lg:auto-rows-[280px]">
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[250px] lg:auto-rows-[280px]">
           @for (category of categories; track category._id; let i = $index) {
           <div data-aos="fade-up"
             class="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 transition-all duration-300"
-            [ngClass]="getCategoryGridClass(i)">
+           >
             <div class="w-full h-full relative overflow-hidden">
               <img [src]="category.image ? category.image.filePath : null" alt="{{category.name | multiLanguage}}"
-                class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700">
+                class="w-full h-full object-contain object-center group-hover:scale-110 transition-transform duration-700">
 
               <!-- Gradient Overlay -->
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>

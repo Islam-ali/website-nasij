@@ -157,7 +157,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.product = response.data;
           this.prepareImages();
           this.loadRelatedProducts(this.product._id);
-          this.mappedVariants = this.mapVariants(this.product.variants);
+          this.mappedVariants = this.productService.getUniqueAttributes(this.product.variants);
           this.loading = false;
         },
         error: (err) => {
@@ -234,28 +234,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     return null;
   }
 
-   mapVariants(variants:ProductVariant[]  ):{variant:string, attributes:ProductVariantAttribute[]}[] {
-    const variantMap: Record<string, ProductVariantAttribute[]> = {};
-  
-    variants.forEach(variant => {
-      variant.attributes?.forEach(attr => {
-        if (!variantMap[attr.variant]) {
-          variantMap[attr.variant] = [];
-        }
-  
-        const exists = variantMap[attr.variant].some(
-          a => a._id === attr._id
-        );
-        if (!exists) {
-          variantMap[attr.variant].push(attr);
-        }
-      });
-    });
-    return Object.entries(variantMap).map(([variant, attributes]) => ({
-      variant,
-      attributes
-    }));
-  }
+
   
 
   isVariantSelected(attribute: ProductVariantAttribute): boolean {
@@ -278,7 +257,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   checkCart(): boolean {
-    return !this.product || (!this.selectedVariantAttributes || this.selectedVariantAttributes.length === 0);
+    return !this.product || (!this.selectedVariantAttributes) || (this.selectedVariantAttributes.length === 0 && this.product.variants && this.product.variants.length > 0);
   }
 
   addToCart(): void {

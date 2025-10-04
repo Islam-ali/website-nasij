@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { IVariant } from '../models/variant.interface';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
-import { IProductQueryParams } from '../models/product.interface';
+import { IProductQueryParams, ProductVariant, ProductVariantAttribute } from '../models/product.interface';
 import { IProduct } from '../models/product.interface';
 
 @Injectable({
@@ -79,5 +79,31 @@ export class ProductService {
     }
 
     return this.http.get<BaseResponse<{products: IProduct[], pagination: pagination}>>(`${this.apiUrl}/search`, { params: httpParams });
+  }
+
+  getUniqueAttributes(items: ProductVariant[]): {variant:string, attributes:ProductVariantAttribute[]}[] {
+    const map = new Map<string, ProductVariantAttribute[]>();
+  
+    items.forEach((item) => {
+      item.attributes?.forEach((attr) => {
+        if (!map.has(attr.variant)) {
+          map.set(attr.variant, []);
+        }
+  
+        const existing = map.get(attr.variant)!;
+        const isDuplicate = existing.some(
+        (val) => val.value.en === attr.value.en && val.value.ar === attr.value.ar
+        );
+  
+        if (!isDuplicate) {
+          existing.push(attr);
+        }
+      });
+    });
+  
+    return Array.from(map.entries()).map(([variant, attributes]) => ({
+      variant,
+      attributes
+    }));
   }
 }

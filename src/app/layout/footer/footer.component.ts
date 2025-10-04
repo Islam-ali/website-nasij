@@ -137,15 +137,15 @@ import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
           <div class="space-y-4">
             <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-envelope text-primary-400"></i>
-              <span>{{ businessProfile?.contactInfo?.email || 'info@pledge.com' }}</span>
+              <span>{{ businessProfile?.contactInfo?.email }}</span>
             </div>
             <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-phone text-primary-400"></i>
-              <span>{{ businessProfile?.contactInfo?.phone || '+1 (555) 123-4567' }}</span>
+              <span>{{ businessProfile?.contactInfo?.phone}}</span>
             </div>
             <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
               <i class="pi pi-map-marker text-primary-400"></i>
-              <span>{{ businessProfile?.contactInfo?.address || '123 Fashion Street, Style City, SC 12345' }}</span>
+              <span>{{ businessProfile?.contactInfo?.address  | multiLanguage}}</span>
             </div>
           </div>
         </div>
