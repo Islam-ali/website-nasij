@@ -603,7 +603,7 @@ export class CheckoutComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('folderName', 'Uploads');
-      formData.append('useCloudinary', 'true'); 
+      formData.append('useCloudinary', 'false'); 
       
       // Upload to your file upload service
       const response = await fetch(`${this.apiUrl}/file-upload`, {

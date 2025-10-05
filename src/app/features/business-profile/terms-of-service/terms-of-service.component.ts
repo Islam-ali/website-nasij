@@ -11,7 +11,6 @@ import { BusinessProfileService } from '../../../services/business-profile.servi
 import { Nl2brPipe } from '../../../core/pipes/nl2br.pipe';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
-import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 
 @Component({
   selector: 'app-terms-of-service',
@@ -23,7 +22,6 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
     CardModule,
     ProgressSpinnerModule,
     SafePipe,
-    MultiLanguagePipe
   ],
   providers: [MessageService],
   templateUrl: './terms-of-service.component.html',
