@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { GenericApiService } from '../../../core/services/generic-api.service';
 import { BaseResponse } from '../../../core/models/baseResponse';
 import { Banner } from '../../../interfaces/banner.interface';
