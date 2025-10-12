@@ -5,10 +5,11 @@ import { BaseResponse } from '../../../core/models/baseResponse';
 import { Banner } from '../../../interfaces/banner.interface';
 import { RouterModule } from '@angular/router';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
-
+import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
+  
 @Component({
   selector: 'app-bannar',
-  imports: [CommonModule , RouterModule, MultiLanguagePipe],
+  imports: [CommonModule , RouterModule, MultiLanguagePipe, FallbackImgDirective],
   templateUrl: './bannar.component.html',
 })
 export class BannarComponent {

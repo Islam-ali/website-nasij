@@ -11,6 +11,7 @@ import { BusinessProfileService } from '../../../services/business-profile.servi
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-privacy-policy',
@@ -22,7 +23,8 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
     CardModule,
     ProgressSpinnerModule,
     SafePipe,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    TranslateModule
   ],
   providers: [MessageService],
   templateUrl: './privacy-policy.component.html',
@@ -60,7 +62,5 @@ export class PrivacyPolicyComponent implements OnInit {
     });
   }
 
-  goBack(): void {
-    this.router.navigate(['/business-profile']);
-  }
+
 } 

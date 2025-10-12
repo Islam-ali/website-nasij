@@ -47,9 +47,7 @@ interface LanguageOption {
     }
     
     :host ::ng-deep .p-dropdown {
-      border: 1px solid #e5e7eb;
       border-radius: 0.375rem;
-      background: white;
     }
     
     :host ::ng-deep .p-dropdown:not(.p-disabled):hover {

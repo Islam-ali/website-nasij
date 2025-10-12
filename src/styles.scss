@@ -6,11 +6,19 @@
 
 html[dir="ltr"] {
   font-family: 'Poppins', 'sans-serif' !important;
+  .ql-editor {
+    text-align: left !important;
+  }
 }
 
 html[dir="rtl"] {
   font-family: 'Cairo' !important;
+  .ql-editor {
+    text-align: right !important;
+  }
 }
+
+
 
 /* Essential base styles using Tailwind */
 @layer base {

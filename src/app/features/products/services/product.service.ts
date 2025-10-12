@@ -18,12 +18,13 @@ export class ProductService {
 
   getProducts(params?: IProductQueryParams): Observable<BaseResponse<{products: IProduct[], pagination: pagination}>> {
     let httpParams = new HttpParams();
-    
+    console.log(params);
     if (params && typeof params === 'object') {
       Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '' && value.length > 0) {
-          httpParams = httpParams.append(key, value.toString());
+        if (value == undefined || value == null || value == '' || value.length == 0) {
+          return;
         }
+        httpParams = httpParams.append(key, value.toString());
       });
     }
 

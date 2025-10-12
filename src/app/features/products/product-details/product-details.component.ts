@@ -31,6 +31,7 @@ import { IQueryParamsBuyNow } from '../../../interfaces/package.interface';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { MultilingualText } from '../../../core/models/multi-language';
 
 interface ProductImage {
@@ -64,7 +65,8 @@ interface ProductImage {
     ProductCardComponent,
     SafePipe,
     TranslateModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    CurrencyPipe
   ],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']

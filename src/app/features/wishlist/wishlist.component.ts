@@ -17,6 +17,7 @@ import { WishlistService } from './services/wishlist.service';
 import { IAddToCartRequest } from '../cart/models/cart.interface';
 import { environment } from '../../../environments/environment';
 import { MultilingualText } from '../../core/models/multi-language';
+import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 
 @Component({  
   selector: 'app-wishlist',
@@ -29,7 +30,8 @@ import { MultilingualText } from '../../core/models/multi-language';
     ProgressSpinnerModule,
     TooltipModule,
     RippleModule,
-    DividerModule
+    DividerModule,
+    CurrencyPipe
 ],
   templateUrl: './wishlist.component.html',
   styleUrls: ['./wishlist.component.scss']

@@ -5,6 +5,7 @@
     <!-- Product Image -->
     <img [src]="product.images[0].filePath" 
       [alt]="product.name" 
+      fallback="images/photo.png"
       width="600" height="800" 
       class="w-full h-full object-contain object-center scale-90 transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-105" />
     

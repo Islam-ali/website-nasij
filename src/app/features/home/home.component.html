@@ -38,7 +38,7 @@
             class="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 transition-all duration-300"
            >
             <div class="w-full h-full relative overflow-hidden">
-              <img [src]="category.image ? category.image.filePath : null" alt="{{category.name | multiLanguage}}"
+              <img [src]="category.image ? category.image.filePath : null" alt="{{category.name | multiLanguage}}" fallback="images/photo.png"
                 class="w-full h-full object-contain object-center group-hover:scale-110 transition-transform duration-700">
 
               <!-- Gradient Overlay -->
@@ -75,7 +75,7 @@
                     </button>
                     <button [routerLink]="['/packages']" [queryParams]="{ category: category._id }"
                       class="bg-white dark:bg-gray-100 text-primary-400 dark:text-primary-400 px-6 py-3 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-base hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                      {{ 'packages.title' | translate }}
+                      {{ 'navigation.boxs' | translate }}
                     </button>
                   </div>
                 </div>

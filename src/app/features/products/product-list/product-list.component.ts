@@ -35,6 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 
 @Component({
   selector: 'app-product-list',
@@ -63,7 +64,8 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
     ProductCardComponent,
     DrawerModule,
     TranslateModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    CurrencyPipe
 ],
   providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder, TranslateModule],
   templateUrl: './product-list.component.html',
@@ -167,10 +169,10 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       this.filterForm.value;
 
     const [sortField, sortOrder] = sortBy === 'featured' ? ['createdAt', 'desc'] : sortBy.split(',');
-
+    
     const params: IProductQueryParams = {
       page: Math.floor(this.first / this.rows) + 1,
-      limit: 12,
+      limit: 10,
       category: selectedCategories,
       brand: selectedBrands,
       minPrice,

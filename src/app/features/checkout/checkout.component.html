@@ -84,7 +84,7 @@
               <div class="sm:col-span-2">
                 <label for="phone"
                   class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.phoneNumber' | translate}}*</label>
-                <input type="tel" id="phone" formControlName="phone"
+                <input type="tel" id="phone" phoneNumber formControlName="phone"
                   [class.border-red-300]="f['phone'].touched && f['phone'].errors"
                   class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
                 <div *ngIf="f['phone'].touched && f['phone'].errors"

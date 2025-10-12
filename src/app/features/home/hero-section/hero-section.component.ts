@@ -4,10 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 import { HeroSectionService } from './hero-section.service';
 import { HeroSection } from './hero-section';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 
 @Component({
   selector: 'app-hero-section',
-  imports: [CommonModule, RouterModule, MultiLanguagePipe],
+  imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective],
   templateUrl: './hero-section.component.html',
 })
 export class HeroSectionComponent implements OnInit {

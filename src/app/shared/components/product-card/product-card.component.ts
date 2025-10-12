@@ -18,7 +18,9 @@ import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlis
 import { EnumProductVariant, ProductVariant, ProductVariantAttribute } from '../../../features/products/models/product.interface';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { ProductService } from '../../../features/products/services/product.service';
+import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -31,7 +33,9 @@ import { ProductService } from '../../../features/products/services/product.serv
     RippleModule,
     RatingModule,
     MessageModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    CurrencyPipe,
+    FallbackImgDirective  
 ],
   providers: [
     { provide: Window, useValue: window },

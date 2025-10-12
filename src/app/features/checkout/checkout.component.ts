@@ -25,7 +25,9 @@ import { IArchived, OrderStatus } from '../../interfaces/product.interface';
 import { ICountry } from '../../core/models/location.interface';
 import { IState } from '../../core/models/location.interface';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
+import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PhoneNumberDirective } from '../../core/directives/phone-number.directive';
 
 @Component({
   selector: 'app-checkout',
@@ -43,7 +45,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     CheckboxModule,
     ButtonModule,
     MultiLanguagePipe,
-    TranslateModule
+    CurrencyPipe,
+    TranslateModule,
+    PhoneNumberDirective
   ],
   providers: [MessageService, CheckoutService],
   templateUrl: './checkout.component.html',

@@ -29,6 +29,7 @@ import { TranslationService } from '../../core/services/translate.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { MultilingualText } from '../../core/models/multi-language';
+import { FallbackImgDirective } from '../../core/directives/fallback-img.directive';
 
 @Component({
   selector: 'app-home',
@@ -49,7 +50,8 @@ import { MultilingualText } from '../../core/models/multi-language';
     BannarComponent,
     FeatureComponent,
     TranslateModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    FallbackImgDirective
 ],
   providers: [
     MessageService,

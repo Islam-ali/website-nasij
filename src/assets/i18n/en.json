@@ -456,5 +456,32 @@
       "cart_empty": "Your cart is empty",
       "wishlist_empty": "Your wishlist is empty"
     }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "loading": "Loading privacy policy...",
+    "commitment": "{{company}} is committed to protecting your privacy",
+    "ourCompany": "Our Company",
+    "backToProfile": "Back to Business Profile",
+    "lastUpdated": "Last updated",
+    "notAvailable": "Privacy Policy Not Available",
+    "notSetup": "The privacy policy content has not been set up yet.",
+    "contactUs": "Contact Us",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
+  },
+  "termsOfService": {
+    "title": "Terms of Service",
+    "loading": "Loading terms of service...",
+    "subtitle": "Please read these terms carefully before using our services",
+    "backToProfile": "Back to Business Profile",
+    "lastUpdated": "Last updated",
+    "notAvailable": "Terms of Service Not Available",
+    "notSetup": "The terms of service content has not been set up yet.",
+    "contactUs": "Contact Us",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
   }
 }

@@ -22,6 +22,7 @@ import { ProductUrlService } from '../products/services/product-url.service';
 import { ICartItem, ICartState, ICartSummary } from './models/cart.interface';
 import { environment } from '../../../environments/environment';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
+import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { ICountry, IState } from '../../core/models/location.interface';
 
@@ -40,6 +41,7 @@ import { ICountry, IState } from '../../core/models/location.interface';
     MessageModule,
     MessagesModule,
     MultiLanguagePipe,
+    CurrencyPipe,
     TranslateModule,
   ],
   templateUrl: './cart.component.html',

@@ -5,10 +5,11 @@ import { FeaturedCollectionsService } from './featured-collection.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
-
+import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
+  
 @Component({
   selector: 'app-featured-collection',
-  imports: [CommonModule, RouterModule, MultiLanguagePipe],
+  imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective],
   templateUrl: './featured-collection.component.html',
 })
 export class FeaturedCollectionComponent {
