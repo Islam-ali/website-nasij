@@ -252,7 +252,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         });
       } else {
         // Fallback: Initialize with default values if no required variants
-        console.log(`No required variant attributes for product ${productId}, initializing with defaults`);
         this.selectedVariants[productId] = {};
         
         // Check if product has variants and use the first available ones
@@ -743,17 +742,14 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
   openImageModal(imageSrc: string): void {
     // يمكن إضافة modal للصور هنا لاحقاً
-    console.log('Opening image modal for:', imageSrc);
   }
 
   onColorHover(colorName: any): void {
     // يمكن إضافة تأثيرات إضافية عند hover
-    console.log('Hovering over color:', colorName);
   }
 
   onColorLeave(): void {
-    // يمكن إضافة تأثيرات إضافية عند leave
-    console.log('Leaving color button');
+    // يمكن إضافة تأثيرات إضافية عند leave    
   }
 
 
@@ -902,14 +898,9 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       selectedVariants: this.selectedVariantsByQuantity
     };
 
-    console.log('📦 Package data for cart:', packageDataForCart);
-    console.log('📦 Package ID:', packageData._id);
-    console.log('📦 Package name:', packageData.name);
-
     // Add package to cart using cart service
     this.cartService.addPackageToCart(packageDataForCart as any).subscribe({
       next: (cartState) => {
-        console.log('Package added to cart successfully:', cartState);
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
@@ -917,7 +908,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         });
       },
       error: (error) => {
-        console.error('Error adding package to cart:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -972,8 +962,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       discount: packageData.discountPrice ? packageData.price - packageData.discountPrice : 0,
       selectedVariants: this.selectedVariantsByQuantity
     };
-    console.log('Package data for URL:', packageDataForUrl);
-    debugger;
     // Navigate to checkout with encoded package data
     this.packageUrlService.navigateToCheckoutWithPackage(packageDataForUrl as any);
   }
@@ -981,11 +969,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   buildSelectedVariantsForItem(productId: string): any[] {
     const variants: any[] = [];
     const productVariants = this.selectedVariantsByQuantity[productId];
-    
-    console.log(`Building selected variants for product ${productId}:`, {
-      productVariants,
-      selectedVariants: this.selectedVariants[productId]
-    });
     
     if (productVariants) {
       // Get all unique variants from all quantities
@@ -996,7 +979,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
           const valueString = this.getMultilingualValue(value);
           const variantKey = `${variant}_${valueString}`;
           if (!allVariants.has(variantKey)) {
-            debugger;
             const variantImage = this.getVariantImageForItem(productId, variant, valueString);
             const fallbackImage = this.getFallbackVariantImage(productId, variant, valueString);
             
@@ -1008,8 +990,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
           }
         });
       });
-      console.log('All variants:', allVariants);
-      debugger;
       variants.push(...Array.from(allVariants.values()));
     }
     
@@ -1049,7 +1029,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       }
     }
     
-    console.log(`Final variants for product ${productId}:`, variants);
     return variants;
   }
 
@@ -1084,12 +1063,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (!item) return undefined;
     
     const valueString = typeof value === 'string' ? value : this.getMultilingualValue(value);
-    console.log(`Looking for variant image: ${variant} = ${valueString}`, {
-      productId,
-      productVariants: item.productId.variants,
-      productAttributes: (item.productId as any).attributes,
-      variantImages: (item.productId as any).variantImages
-    });
     
     // 1. Find variant image from product variants
     if (item.productId.variants) {
@@ -1097,7 +1070,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         // Check if this variant object matches our variant and value
         if (variantObj.variant === variant && variantObj.value === value) {
           if (variantObj.image?.filePath) {
-            console.log(`Found variant image in variant object:`, variantObj.image.filePath);
             return variantObj.image.filePath;
           }
         }
@@ -1108,7 +1080,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
             attr.variant === variant && this.getMultilingualValue(attr.value) === value
           );
           if (matchingAttr?.image?.filePath) {
-            console.log(`Found variant image in variant attributes:`, matchingAttr.image.filePath);
             return matchingAttr.image.filePath;
           }
         }
@@ -1121,7 +1092,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     );
     
     if (attribute?.image?.filePath) {
-      console.log(`Found variant image in product attributes:`, attribute.image.filePath);
       return attribute.image.filePath;
     }
     
@@ -1131,11 +1101,9 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     );
     
     if (variantImage?.image?.filePath) {
-      console.log(`Found variant image in variantImages:`, variantImage.image.filePath);
-      return variantImage.image.filePath;
+        return variantImage.image.filePath;
     }
     
-    console.log(`No variant image found for ${variant} = ${value}`);
     return undefined;
   }
 
@@ -1146,15 +1114,12 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     const item = packageData.items.find(i => i.productId._id === productId);
     if (!item) return undefined;
     
-    console.log(`Looking for fallback variant image: ${variant} = ${value}`);
-    
     // Try to find any image for this variant value from any source
     if (item.productId.variants) {
       for (const variantObj of (item.productId.variants as any[])) {
         // Check if this variant object matches our variant and value
         if (variantObj.variant === variant && variantObj.value === value) {
           if (variantObj.image?.filePath) {
-            console.log(`Found fallback variant image in variant object:`, variantObj.image.filePath);
             return variantObj.image.filePath;
           }
         }
@@ -1165,14 +1130,12 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
             attr.variant === variant && this.getMultilingualValue(attr.value) === value
           );
           if (matchingAttr?.image?.filePath) {
-            console.log(`Found fallback variant image in variant attributes:`, matchingAttr.image.filePath);
             return matchingAttr.image.filePath;
           }
         }
         
         // If variant object has image and matches the value
         if (variantObj.image?.filePath && variantObj.value === value) {
-          console.log(`Found fallback variant image by value match:`, variantObj.image.filePath);
           return variantObj.image.filePath;
         }
       }
@@ -1182,7 +1145,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (item.productId.variants) {
       for (const variantObj of (item.productId.variants as any[])) {
         if (variantObj.variant === variant && variantObj.image?.filePath) {
-          console.log(`Found fallback variant image by variant type:`, variantObj.image.filePath);
           return variantObj.image.filePath;
         }
       }
@@ -1190,7 +1152,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     
     // Fallback to product main image
     const mainImage = item.productId.images?.[0]?.filePath;
-    console.log(`Using product main image as fallback:`, mainImage);
     return mainImage;
   }
 

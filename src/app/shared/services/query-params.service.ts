@@ -61,8 +61,6 @@ export class QueryParamsService {
       data: packageData,
       timestamp: Date.now()
     };
-    console.log('Package info:', packageInfo);
-    debugger;
     return this.encode(packageInfo);
   }
 

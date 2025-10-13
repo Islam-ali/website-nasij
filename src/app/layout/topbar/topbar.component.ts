@@ -196,16 +196,9 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         ).subscribe();
   }
 
-  removeFromCart(item: ICartItem): void {
-    console.log('🚨 TOPBAR removeFromCart CALLED!');
-    console.log('🗑️ Topbar - removing item:', item);
-    console.log('🗑️ Item has packageId:', !!item.packageId);
-    console.log('🗑️ Item has productId:', !!item.productId);
-    console.log('🗑️ Item type:', item.itemType);
-    
+  removeFromCart(item: ICartItem): void {    
     // Check if it's a package or product
     if (item.packageId) {
-      console.log('📦 Removing package with ID:', item.packageId);
       // Handle package removal
       this.cartService.removeItem(undefined, undefined, item.packageId).pipe(
         takeUntil(this.destroy$),
@@ -229,7 +222,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         })
       ).subscribe();
     } else if (item.productId) {
-      console.log('🛍️ Removing product with ID:', item.productId);
       // Handle product removal
       this.cartService.removeItem(item.productId!, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
@@ -262,21 +254,14 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   updateQuantity(item: ICartItem, quantity: number): void {
     const newQuantity = Math.max(1, Math.floor(quantity));
     
-    console.log('🚨 TOPBAR updateQuantity CALLED!');
-    console.log('📦 Updating quantity for item:', item);
-    console.log('📦 New quantity:', newQuantity);
-    console.log('📦 Item has packageId:', !!item.packageId);
-    console.log('📦 Item has productId:', !!item.productId);
-    console.log('📦 Item type:', item.itemType);
+    
     
     // Check if it's a package or product
     if (item.packageId && item.itemType === 'Package') {
-      console.log('📦 Updating package quantity in topbar');
       // Handle package update
       this.cartService.updateQuantity(undefined, newQuantity, item.packageId).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          console.log('📦 Package quantity updated successfully in topbar');
         }),
         catchError((error: any) => {
           console.error('Error updating package quantity in topbar:', error);
@@ -284,12 +269,10 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         })
       ).subscribe();
     } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
-      console.log('🛍️ Updating product quantity in topbar');
       // Handle product update
       this.cartService.updateQuantity(item.productId, newQuantity, undefined, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          console.log('🛍️ Product quantity updated successfully in topbar');
         }),
         catchError((error: any) => {
           console.error('Error updating product quantity in topbar:', error);
@@ -370,7 +353,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   toggleRTL(): void {
-    console.log('RTL toggle requested');
   }
 
   getBusinessProfile() {

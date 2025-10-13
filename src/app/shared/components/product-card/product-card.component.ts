@@ -86,7 +86,6 @@ export class ProductCardComponent implements OnInit, OnChanges {
   // Handle rating changes
   onRate(event: any): void {
     // Handle rating changes if needed
-    console.log('Rating changed:', event.value);
   }
   
   navigateToProduct(product: any): void {
@@ -146,7 +145,6 @@ export class ProductCardComponent implements OnInit, OnChanges {
 
     this.product.colors = Array.from(colors);
     this.product.sizes = Array.from(sizes);
-    console.log(this.product.colors, this.product.sizes);
   }
 
   get currentLanguage(): 'en' | 'ar' {

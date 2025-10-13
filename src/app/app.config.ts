@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
-import { provideRouter, withInMemoryScrolling, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
@@ -24,6 +24,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',    // scroll to top on every navigation
         anchorScrolling: 'enabled'           // allow scrolling to anchor fragments
       }),
+      withViewTransitions(),
       withComponentInputBinding()
     ), 
     provideClientHydration(withEventReplay()),

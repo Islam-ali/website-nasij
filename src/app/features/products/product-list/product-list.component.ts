@@ -169,7 +169,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       this.filterForm.value;
 
     const [sortField, sortOrder] = sortBy === 'featured' ? ['createdAt', 'desc'] : sortBy.split(',');
-    
+
     const params: IProductQueryParams = {
       page: Math.floor(this.first / this.rows) + 1,
       limit: 10,
@@ -185,9 +185,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       inStock: showOnSale ? true : undefined,
     };
 
-    // Debug logging
-    console.log('Search Query:', searchQuery);
-    console.log('API Params:', params);
+
     this.subscriptions.add(
       this.productService.getProducts(params).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {

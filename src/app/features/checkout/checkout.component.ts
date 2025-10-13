@@ -82,8 +82,7 @@ export class CheckoutComponent implements OnInit {
 
   // Computed property to check if payment image is required
   isPaymentImageRequired = computed(() => {
-    const currentPaymentMethod = this.paymentMethod();
-    console.log('Payment method:', currentPaymentMethod , 'Vodafone Cash:', PaymentMethod.VODAFONE_CASH);
+    const currentPaymentMethod = this.paymentMethod();        
     return currentPaymentMethod === PaymentMethod.VODAFONE_CASH;
   });
 
@@ -160,7 +159,6 @@ export class CheckoutComponent implements OnInit {
         this.cartService.cartState$.pipe(
           takeUntil(this.destroy$)
         ).subscribe((items: any) => {
-          console.log('Cart state updated:', items);
           this.cartItems.set(items.items);
         });
         this.isBuyNow = false;
@@ -188,10 +186,8 @@ export class CheckoutComponent implements OnInit {
           // Load states for the first country
           this.loadStates();
           
-          console.log('First country set:', firstCountry, 'Cost:', this.shippingCost(), 'Total:', this.orderTotal());
         } else {
           this.shippingCost.set(0);
-          console.log('No countries available');
         }
       },
       error: (error) => {
@@ -296,8 +292,6 @@ export class CheckoutComponent implements OnInit {
       selectedVariants: packageData.selectedVariants || {}
     };
     this.cartItems.set([packageItem]);
-    console.log('Package item:', packageItem);
-    console.log('Package items details:', packageData.packageItems);
   }
 
   private handleEncodedProduct(productData: any): void {
@@ -364,15 +358,12 @@ export class CheckoutComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.checkoutForm.invalid || this.loading) {
-      console.log('Form is invalid:', this.checkoutForm.errors);
-      console.log('Form values:', this.checkoutForm.value);
       return;
     }
 
     this.loading = true;
 
     const formValue = this.checkoutForm.value;
-    console.log('Form value:', formValue);
     
     // Validate required fields
     if (!formValue.fullName || !formValue.phone || !formValue.shippingAddress.address || 
@@ -413,8 +404,6 @@ export class CheckoutComponent implements OnInit {
     if (formValue.paymentMethod === PaymentMethod.VODAFONE_CASH && this.selectedFile) {
       try {
         paymentImageUrl = await this.uploadPaymentImage();
-        console.log('Payment image URL:', paymentImageUrl);
-        debugger
         if (!paymentImageUrl) {
           this.loading = false;
           return;
@@ -437,8 +426,6 @@ export class CheckoutComponent implements OnInit {
     // Get customer ID from auth service (optional)
     const currentUser = this.authService.currentUserValue;
     const customerId = currentUser?._id || undefined; // Don't use fallback, let it be undefined for guest orders
-    console.log('Customer ID:', orderItems);
-    debugger;
     // Create order data using backend DTO structure
     const orderData: ICreateOrder = {
       customerId: customerId, // This can be undefined for guest orders
@@ -469,8 +456,6 @@ export class CheckoutComponent implements OnInit {
       },
       notes: formValue.notes || ''
     };
-
-    console.log('Order data being sent:', JSON.stringify(orderData, null, 2));
 
     this.checkoutService.createOrder(orderData).subscribe({
       next: (response:any) => {
@@ -528,14 +513,12 @@ export class CheckoutComponent implements OnInit {
      const state = this.states().find(state => state._id === stateId);
      if (state) {
        this.shippingCost.set(state.shippingCost || 0);
-       console.log('Shipping cost updated from state:', state, 'Cost:', this.shippingCost(), 'Total:', this.orderTotal());
      }
    } else if (countryId) {
      // Get default shipping cost from country
      const country = this.countries().find(country => country._id === countryId);
      if (country) {
        this.shippingCost.set(country.defaultShippingCost || 0);
-       console.log('Shipping cost updated from country:', country, 'Cost:', this.shippingCost(), 'Total:', this.orderTotal());
      }
    } else {
      this.shippingCost.set(0);
@@ -622,7 +605,6 @@ export class CheckoutComponent implements OnInit {
       }
 
       const result = await response.json();
-      console.log('Upload result:', result);
       return result.data.filePath;
     } catch (error) {
       console.error('Upload error:', error);

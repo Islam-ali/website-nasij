@@ -89,8 +89,6 @@ export class PackageUrlService {
     selectedVariants?: any;
   }): void {
     try {
-      console.log('Package data for URL:', packageData);
-      debugger;
       const encodedPackage = this.queryParamsService.encodePackage(packageData);
       this.router.navigate(['/cart'], {
         queryParams: {

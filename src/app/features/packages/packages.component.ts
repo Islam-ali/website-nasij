@@ -208,7 +208,6 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   }
 
   getDiscountPercentage(pkg: IPackage): number {
-    console.log(pkg);
     if (!pkg.discountPrice) return 0;
     
     return Math.round(((pkg.price - pkg.discountPrice) / pkg.price) * 100);

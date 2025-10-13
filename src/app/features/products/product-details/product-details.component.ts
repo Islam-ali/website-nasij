@@ -211,7 +211,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
         });
       });
     }
-    console.log(this.images);
     // If no images, add a placeholder
     if (this.images.length === 0) {
       this.images.push({
@@ -254,7 +253,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       }
     }
     this.quantity = 1; // Reset quantity when variant changes
-    console.log(this.selectedVariantAttributes);
   }
 
   checkCart(): boolean {
@@ -351,7 +349,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   // }
 
   navigateToProduct(product: any): void {
-    console.log(product);
     this.router.navigate(['/shop', product._id , product.name.en]);
   }
 

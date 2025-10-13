@@ -18,13 +18,11 @@ export class CheckoutService {
 
   // Create a new order using new backend structure
   createOrder(orderData: ICreateOrder): Observable<any> {
-    console.log('🚀 Creating order with new structure:', orderData);
     return this.http.post(this.apiUrl, orderData);
   }
 
   // Legacy method for backward compatibility
   createOrderLegacy(checkoutData: ICheckout): Observable<any> {
-    console.log('🔄 Using legacy checkout method:', checkoutData);
     return this.http.post(this.apiUrl, checkoutData);
   }
   getCountries(): Observable<any> {
