@@ -27,7 +27,9 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
-
+import { FallbackImgDirective } from '../../core/directives';
+import { CurrencyPipe } from '../../core/pipes';
+  
 @Component({
   selector: 'app-packages',
   standalone: true,
@@ -51,7 +53,9 @@ import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
     IconFieldModule,
     InputIconModule,
     TranslateModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    FallbackImgDirective,
+    CurrencyPipe
   ],
   templateUrl: './packages.component.html',
   styleUrls: ['./packages.component.scss']

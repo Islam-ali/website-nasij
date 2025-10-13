@@ -87,7 +87,7 @@
             <div *ngFor="let item of cartItems; trackBy: trackByFn; let i = index"
               class="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-5 py-6 border-b border-gray-200 dark:border-gray-700 group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300">
               <div class="w-36 md:max-w-[126px]">
-                <img [src]="item.image || 'assets/images/placeholder-product.png'" [alt]="item.productName || 'Product'"
+                <img [src]="item.image || 'images/photo.png'" fallback [alt]="item.productName || 'Product'"
                   class="mx-auto rounded-2xl w-full h-32 object-cover shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
               </div>
               <div class="grid grid-cols-1 md:grid-cols-6 w-full">

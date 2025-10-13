@@ -28,6 +28,7 @@ import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PhoneNumberDirective } from '../../core/directives/phone-number.directive';
+import { FallbackImgDirective } from '../../core/directives';
 
 @Component({
   selector: 'app-checkout',
@@ -47,7 +48,8 @@ import { PhoneNumberDirective } from '../../core/directives/phone-number.directi
     MultiLanguagePipe,
     CurrencyPipe,
     TranslateModule,
-    PhoneNumberDirective
+    PhoneNumberDirective,
+    FallbackImgDirective
   ],
   providers: [MessageService, CheckoutService],
   templateUrl: './checkout.component.html',

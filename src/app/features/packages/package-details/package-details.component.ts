@@ -32,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { FallbackImgDirective } from '../../../core/directives';
 
 interface PackageImage {
   itemImageSrc: string;
@@ -64,7 +65,8 @@ interface PackageImage {
     AccordionModule,
     DividerModule,
     TranslateModule,
-    MultiLanguagePipe
+    MultiLanguagePipe,
+    FallbackImgDirective
   ],
   templateUrl: './package-details.component.html',
 })
@@ -648,10 +650,10 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
   getVariantImageForQuantity(productId: string, quantity: number): string {
     const packageData = this.package();
-    if (!packageData) return 'assets/images/placeholder.jpg';
+    if (!packageData) return 'images/photo.png';
     
     const item = packageData.items.find(i => i.productId._id === productId);
-    if (!item) return 'assets/images/placeholder.jpg';
+    if (!item) return 'images/photo.png';
     
     // Try to find image based on selected variants
     const selectedVariants = this.selectedVariantsByQuantity[productId]?.[quantity];
@@ -665,7 +667,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     }
     
     // Fallback to product main image
-    return item.productId.images?.[0]?.filePath || 'assets/images/placeholder.jpg';
+    return item.productId.images?.[0]?.filePath || 'images/photo.png';
   }
 
   getVariantImage(productId: string, variantType: string, value: MultilingualText): string | null {
@@ -1204,7 +1206,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
     if (target) {
-      target.src = 'assets/images/placeholder.jpg';
+      target.src = 'images/photo.png';
     }
   }
 

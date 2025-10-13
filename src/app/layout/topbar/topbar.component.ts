@@ -35,6 +35,7 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../core/pipes/currency.pipe';
+import { FallbackImgDirective } from '../../core/directives';
 
 @Component({
   selector: 'app-topbar',
@@ -58,7 +59,8 @@ import { CurrencyPipe } from '../../core/pipes/currency.pipe';
     LanguageSwitcherComponent,
     TranslateModule,
     MultiLanguagePipe,
-    CurrencyPipe
+    CurrencyPipe,
+    FallbackImgDirective
   ],
   providers: [MessageService],
   templateUrl: './topbar.component.html',

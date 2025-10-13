@@ -248,6 +248,7 @@
                   <div *ngIf="paymentImagePreview" class="mt-4">
                     <div class="relative inline-block">
                       <img [src]="paymentImagePreview" 
+                      fallback
                            alt="Payment Screenshot Preview" 
                            class="max-w-full h-48 object-contain rounded-lg border-2 border-gray-200 dark:border-gray-600">
                       <button type="button" 
@@ -321,7 +322,7 @@
                 class="bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-200 dark:border-gray-600 overflow-hidden">
                 <!-- Main Item (Product or Package) -->
                 <div class="flex items-start p-2">
-                  <img [src]="item.image" [alt]="item.productName" class="w-16 h-16 object-cover rounded-xl shadow-md">
+                  <img [src]="item.image" [alt]="item.productName" fallback class="w-16 h-16 object-cover rounded-xl shadow-md">
                   <div class="ms-4 flex-1">
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">
                       {{item.productName | multiLanguage}}
@@ -379,12 +380,12 @@
                             class="mt-1">
                             <div *ngFor="let variant of packageItem.selectedVariants" class="flex items-center gap-2">
                               <span class="text-xs text-gray-600 dark:text-gray-400 capitalize">
-                                {{variant.variant}}:
+                                {{'products.' + variant.variant | translate}}:
                               </span>
                               <span class="text-xs font-medium text-gray-800 dark:text-gray-200">
                                 {{variant.value | multiLanguage}}
                               </span>
-                              <img *ngIf="variant.image" [src]="variant.image.filePath" [alt]="variant.value"
+                              <img *ngIf="variant.image" [src]="variant.image.filePath" fallback [alt]="variant.value"
                                 class="w-8 rounded-md border border-gray-300 dark:border-gray-600">
                             </div>
                           </div>

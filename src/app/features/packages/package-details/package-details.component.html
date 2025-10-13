@@ -60,6 +60,7 @@
                   [alt]="'Selected ' + (package().name || '') + ' ' + (i + 1)" 
                   class="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105" 
                   [src]="image.itemImageSrc"
+                  fallback
                   (error)="onImageError($event)"
                   (click)="openImageModal(image.itemImageSrc)"
                 />
@@ -68,6 +69,7 @@
                   [src]="getMainImage()" 
                   [alt]="package().name || ''"
                   class="w-full h-auto object-cover rounded-lg col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
+                  fallback
                   (error)="onImageError($event)"
                   (click)="openImageModal(getMainImage())"
                 />
@@ -114,9 +116,9 @@
                   <div class="relative">
                     <img 
                       [alt]="item.productId.name + ' ' + (qtyIndex + 1)" 
-                      class="w-full h-48 object-cover rounded-lg mb-4 border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
+                      class="w-full h-48 object-contain rounded-lg mb-4 border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
                       [src]="getVariantImageForQuantity(item.productId._id, qtyIndex + 1)"
-                      (error)="onImageError($event)"
+                      fallback
                     />
                     <div class="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-semibold">
                       {{ item.productId.name | multiLanguage }} {{ qtyIndex + 1 }}
@@ -129,7 +131,7 @@
                       <div class="flex flex-col gap-4">
                         @for (variant of getMappedVariantsForProduct(item.productId._id); track $index) {
                           <h3 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
-                            {{ variant.variant }}
+                            {{'products.' + variant.variant | translate}}
                           </h3>
                           <div class="flex flex-wrap gap-4">
                             @for (attribute of variant.attributes; track $index) {
@@ -144,7 +146,7 @@
                                 <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110" [ngClass]="{ 'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
                                   <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
                                   <div class="w-16 h-16 rounded-xl overflow-hidden">
-                                    <img [src]="attribute.image.filePath" [alt]="attribute.value" class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
+                                    <img [src]="attribute.image.filePath" fallback [alt]="attribute.value" class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
                                   </div>
                                 </label>
                               }
@@ -161,12 +163,13 @@
               <div *ngIf="!item.productId.variants || item.productId.variants.length === 0" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <img 
                   [alt]="item.productId.name" 
-                  class="w-full h-48 object-cover rounded-lg border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
-                  [src]="(item.productId.images[0].filePath) || 'assets/images/placeholder.jpg'"
+                  class="w-full h-48 object-contain rounded-lg border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
+                  [src]="(item.productId.images[0].filePath) || 'images/photo.png'"
+                  fallback
                   (error)="onImageError($event)"
                 />
                 <div>
-                  <p class="text-sm text-secondary">This item is included in your package</p>
+                  <p class="text-sm ">{{'packages.this_item_is_included_in_your_package' | translate}}</p>
                 </div>
               </div>
             </div>

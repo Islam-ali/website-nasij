@@ -272,7 +272,7 @@
       @for (item of cartItems(); track item.productId) {
       <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
         [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
-        <img [src]="item.image" [alt]="item.productName" class="w-16 h-16 object-cover rounded-lg">
+        <img [src]="item.image" fallback [alt]="item.productName" class="w-16 h-16 object-cover rounded-lg">
         <div class="flex-1">
           <h4 class="font-medium text-gray-900 text-sm mb-0 transition-colors duration-300"
             [class.dark:text-dark-text]="isDarkTheme()">{{ item.productName | multiLanguage }}</h4>
@@ -345,7 +345,8 @@
       @for (item of wishlistItems(); track item.productId) {
       <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
         [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
-        <img [src]="item.product.images[0].filePath" [alt]="item.product.name"
+        <img [src]="item.product.images[0].filePath"
+        fallback [alt]="item.product.name"
           class="w-16 h-16 object-cover rounded-lg">
         <div class="flex-1">
           <h4 class="font-medium text-gray-900 transition-colors duration-300"

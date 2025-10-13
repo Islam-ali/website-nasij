@@ -69,6 +69,7 @@
             <img 
               [src]="getMainImage(package)" 
               [alt]="package.name"
+              fallback
               class="w-full h-48 object-cover rounded-lg"
                              (error)="onImageError($event)"
             />
@@ -111,7 +112,7 @@
 
             <!-- Items Count -->
             <div class="items-count mb-3">
-              <i class="pi pi-box text-blue-500 mr-2"></i>
+              <i class="pi pi-box text-blue-500 me-2"></i>
               <span class="text-sm text-gray-600 dark:text-gray-400">
                 {{ 'packages.items_included' | translate: {count: getItemsCount(package)} }}
               </span>
@@ -122,7 +123,7 @@
               <p-chip 
                 *ngFor="let tag of getTags(package)" 
                 [label]="tag"
-                class="mr-2 mb-2"
+                class="me-2 mb-2"
               ></p-chip>
             </div>
 
@@ -130,10 +131,10 @@
             <div class="price-section mb-4">
               <div class="price-container">
                 <span *ngIf="package.discountPrice" class="original-price">
-                  ${{ package.price.toFixed(2) }}
+                  ${{ package.price.toFixed(2) | currency }}
                 </span>
                 <span class="current-price">
-                  ${{ (package.price - (package.discountPrice || 0)).toFixed(2) }}
+                  ${{ (package.price - (package.discountPrice || 0)).toFixed(2) | currency }}
                 </span>
               </div>
             </div>

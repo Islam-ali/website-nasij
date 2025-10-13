@@ -440,7 +440,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full overflow-hidden">
       @for (relatedProduct of relatedProducts; track $index) {
       <div class="transform hover:scale-105 transition-transform duration-300">
-        <app-product-card [product]="relatedProduct"></app-product-card>
+        <app-product-card [product]="relatedProduct" (clicked)="navigateToProduct($event)"></app-product-card>
       </div>
       }
     </div>

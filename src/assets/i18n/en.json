@@ -411,7 +411,8 @@
     "total_value_label": "Total Value",
     "buy_now": "Buy Now",
     "something_went_wrong": "Oops! Something went wrong",
-    "try_again": "Try Again"
+    "try_again": "Try Again",
+    "this_item_is_included_in_your_package": "This item is included in your package"
   },
   "footer": {
     "about_us": "About Us",

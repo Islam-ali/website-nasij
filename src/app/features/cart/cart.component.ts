@@ -25,6 +25,7 @@ import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { ICountry, IState } from '../../core/models/location.interface';
+import { FallbackImgDirective } from '../../core/directives';
 
 @Component({
   selector: 'app-cart',
@@ -43,6 +44,7 @@ import { ICountry, IState } from '../../core/models/location.interface';
     MultiLanguagePipe,
     CurrencyPipe,
     TranslateModule,
+    FallbackImgDirective
   ],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],

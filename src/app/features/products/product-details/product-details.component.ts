@@ -236,7 +236,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     return null;
   }
 
-
   
 
   isVariantSelected(attribute: ProductVariantAttribute): boolean {
@@ -351,8 +350,9 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   //   }
   // }
 
-  navigateToProduct(product: IProduct): void {
-    this.router.navigate(['/products', product._id]);
+  navigateToProduct(product: any): void {
+    console.log(product);
+    this.router.navigate(['/shop', product._id , product.name.en]);
   }
 
   getVariantOptions(variant: any): string {
