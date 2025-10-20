@@ -160,6 +160,10 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.prepareImages();
           this.loadRelatedProducts(this.product._id);
           this.mappedVariants = this.productService.getUniqueAttributes(this.product.variants);
+          
+          // Auto-select first variant of each type (index 0)
+          this.autoSelectDefaultVariants();
+          
           this.loading = false;
         },
         error: (err) => {
@@ -253,6 +257,24 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       }
     }
     this.quantity = 1; // Reset quantity when variant changes
+  }
+
+  /**
+   * Auto-select the first variant (index 0) of each variant type
+   */
+  private autoSelectDefaultVariants(): void {
+    if (!this.mappedVariants || this.mappedVariants.length === 0) return;
+    
+    // Clear any existing selections
+    this.selectedVariantAttributes = [];
+    
+    // Select the first attribute of each variant type
+    this.mappedVariants.forEach(mappedVariant => {
+      if (mappedVariant.attributes && mappedVariant.attributes.length > 0) {
+        // Select the first attribute (index 0)
+        this.selectedVariantAttributes.push(mappedVariant.attributes[0]);
+      }
+    });
   }
 
   checkCart(): boolean {

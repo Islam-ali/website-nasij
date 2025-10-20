@@ -407,7 +407,7 @@
     "required": "Required",
     "select_quantity": "Select {{quantity}}",
     "total_price": "Total Price",
-    "you_save_amount": "You save ${{amount}}!",
+    "you_save_amount": "You save {{amount}}!",
     "total_value_label": "Total Value",
     "buy_now": "Buy Now",
     "something_went_wrong": "Oops! Something went wrong",

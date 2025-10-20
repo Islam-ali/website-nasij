@@ -21,7 +21,7 @@
         <p-skeleton height="20px" class="mb-2"></p-skeleton>
         <p-skeleton height="16px" class="mb-2"></p-skeleton>
         <p-skeleton height="16px" class="mb-3"></p-skeleton>
-        <div class="flex gap-2">
+        <div class="flex gap-2 mt-2">
           <p-skeleton height="32px" width="60px"></p-skeleton>
           <p-skeleton height="32px" width="60px"></p-skeleton>
         </div>
@@ -131,10 +131,10 @@
             <div class="price-section mb-4">
               <div class="price-container">
                 <span *ngIf="package.discountPrice" class="original-price">
-                  ${{ package.price.toFixed(2) | currency }}
+                  {{ package.price.toFixed(2) | currency }}
                 </span>
                 <span class="current-price">
-                  ${{ (package.price - (package.discountPrice || 0)).toFixed(2) | currency }}
+                  {{ (package.price - (package.discountPrice || 0)).toFixed(2) | currency }}
                 </span>
               </div>
             </div>

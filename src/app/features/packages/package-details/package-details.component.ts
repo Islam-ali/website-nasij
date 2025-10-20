@@ -33,6 +33,7 @@ import { TranslationService } from '../../../core/services/translate.service';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives';
+import { CurrencyPipe } from '../../../core/pipes';
 
 interface PackageImage {
   itemImageSrc: string;
@@ -66,7 +67,8 @@ interface PackageImage {
     DividerModule,
     TranslateModule,
     MultiLanguagePipe,
-    FallbackImgDirective
+    FallbackImgDirective,
+    CurrencyPipe
   ],
   templateUrl: './package-details.component.html',
 })

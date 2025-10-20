@@ -395,12 +395,11 @@
     "required": "مطلوب",
     "select_quantity": "اختر {{quantity}}",
     "total_price": "السعر الإجمالي",
-    "you_save_amount": "توفيرك ${{amount}}!",
+    "you_save_amount": "توفيرك {{amount}}!",
     "total_value_label": "القيمة الإجمالية",
     "buy_now": "اشتري الآن",
     "something_went_wrong": "عذراً! حدث خطأ ما",
-    "try_again": "حاول مرة أخرى",
-    "this_item_is_included_in_your_package": "هذا العنصر مضمن في باقتك"
+    "try_again": "حاول مرة أخرى"
   },
   "footer": {
     "about_us": "من نحن",
@@ -445,32 +444,5 @@
       "cart_empty": "سلتك فارغة",
       "wishlist_empty": "قائمة أمنياتك فارغة"
     }
-  },
-  "privacyPolicy": {
-    "title": "سياسة الخصوصية",
-    "loading": "جاري تحميل سياسة الخصوصية...",
-    "commitment": "{{company}} ملتزمة بحماية خصوصيتك",
-    "ourCompany": "شركتنا",
-    "backToProfile": "العودة إلى الملف التعريفي",
-    "lastUpdated": "آخر تحديث",
-    "notAvailable": "سياسة الخصوصية غير متاحة",
-    "notSetup": "لم يتم إعداد محتوى سياسة الخصوصية بعد.",
-    "contactUs": "تواصل معنا",
-    "email": "البريد الإلكتروني",
-    "phone": "الهاتف",
-    "address": "العنوان"
-  },
-  "termsOfService": {
-    "title": "شروط الخدمة",
-    "loading": "جاري تحميل شروط الخدمة...",
-    "subtitle": "يرجى قراءة هذه الشروط بعناية قبل استخدام خدماتنا",
-    "backToProfile": "العودة إلى الملف التعريفي",
-    "lastUpdated": "آخر تحديث",
-    "notAvailable": "شروط الخدمة غير متاحة",
-    "notSetup": "لم يتم إعداد محتوى شروط الخدمة بعد.",
-    "contactUs": "تواصل معنا",
-    "email": "البريد الإلكتروني",
-    "phone": "الهاتف",
-    "address": "العنوان"
   }
 }

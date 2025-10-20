@@ -28,8 +28,8 @@ export class LanguageService {
       en: 'Track Your Order'
     },
     'orderTrackingSubtitle': {
-      ar: 'أدخل رقم طلبك لتتبع حالة الطلب والجدول الزمني للتسليم',
-      en: 'Enter your order number to track order status and delivery timeline'
+      ar: 'أدخل رقم طلبك لتتبع حالة الطلب',
+      en: 'Enter your order number to track order status'
     },
 
     // Search Section
@@ -80,20 +80,6 @@ export class LanguageService {
     'paymentMethod': {
       ar: 'طريقة الدفع:',
       en: 'Payment Method:'
-    },
-
-    // Timeline Section
-    'orderStages': {
-      ar: 'مراحل الطلب',
-      en: 'Order Stages'
-    },
-    'noTimelineAvailable': {
-      ar: 'لا يوجد جدول زمني متاح',
-      en: 'No timeline available'
-    },
-    'timelineWillUpdate': {
-      ar: 'سيتم تحديث الجدول الزمني عند تحديث حالة الطلب',
-      en: 'Timeline will be updated when order status changes'
     },
 
     // Order Items Section
