@@ -8,6 +8,7 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { ThemeService } from '../../core/services/theme.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -25,9 +26,9 @@ import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-gradient-to-br from-primary-300 to-primary-200 rounded-lg flex items-center justify-center">
               @if(isDarkTheme()) {
-                <img [src]="businessProfile?.logo_dark?.filePath" alt="pledge Logo" class="w-10 h-10">
+                <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="pledge Logo" class="w-10 h-10">
               } @else {
-              <img [src]="businessProfile?.logo_light?.filePath" alt="pledge Logo" class="w-10 h-10">
+              <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="pledge Logo" class="w-10 h-10">
               }
             </div>  
             <span class="text-2xl font-bold bg-gradient-to-r from-primary-400 to-primary-400 bg-clip-text text-transparent">pledge</span>
@@ -309,6 +310,7 @@ export class FooterComponent implements OnInit {
   currentYear = new Date().getFullYear();
   businessProfile: IBusinessProfile | null = null;
   isDarkTheme = computed(() => this.themeService.isDark());
+  domain = environment.domain;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -317,6 +319,13 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() {
     this.loadBusinessProfile();
+  }
+
+  // Helper method to add domain prefix to file paths
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${this.domain}/${imagePath}`;
   }
 
   private loadBusinessProfile() {

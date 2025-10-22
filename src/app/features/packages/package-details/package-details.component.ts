@@ -34,6 +34,7 @@ import { MultilingualText } from '../../../core/models/multi-language';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives';
 import { CurrencyPipe } from '../../../core/pipes';
+import { environment } from '../../../../environments/environment';
 
 interface PackageImage {
   itemImageSrc: string;
@@ -79,6 +80,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   loading = signal(true);
   error = signal<string | null>(null);
   quantity = 1;
+  domain = environment.domain;
   activeTabIndex: number = 0;
   selectedVariants: { [key: string]: { [key: string]: MultilingualText } } = {};
   selectedQuantities: { [key: string]: number } = {};
@@ -311,8 +313,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (!packageData || !packageData.images) return;
 
     this.images = packageData.images.map((image, index) => ({
-      itemImageSrc: image.filePath,
-      thumbnailImageSrc: image.filePath,
+      itemImageSrc: this.getImageUrl(image.filePath),
+      thumbnailImageSrc: this.getImageUrl(image.filePath),
       alt: `${packageData.name} - Image ${index + 1}`,
       title: `${packageData.name} - Image ${index + 1}`
     }));
@@ -323,7 +325,15 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (!packageData || !packageData.images || packageData.images.length === 0) {
       return 'assets/images/placeholder.jpg';
     }
-    return packageData.images[0]?.filePath || 'assets/images/placeholder.jpg';
+    const imagePath = packageData.images[0]?.filePath;
+    return imagePath ? `${this.domain}${imagePath}` : 'assets/images/placeholder.jpg';
+  }
+
+  // Helper method to add domain prefix to file paths
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) return 'assets/images/placeholder.jpg';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${this.domain}/${imagePath}`;
   }
 
   getDiscountPercentage(): number {
@@ -888,13 +898,13 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       price: packageData.price,
       discount: packageData.discountPrice ,
       productName: packageData.name,
-      image: packageData.images?.[0]?.filePath || '',
+      image: this.getImageUrl(packageData.images?.[0]?.filePath || ''),
       packageItems: packageData.items.map(item => ({
         productId: item.productId._id,
         productName: item.productId.name,
         quantity: this.getSelectedQuantity(item.productId._id),
         price: item.productId.price,
-        image: item.productId.images?.[0]?.filePath || '',
+        image: this.getImageUrl(item.productId.images?.[0]?.filePath || ''),
         selectedVariants: this.buildSelectedVariantsForItem(item.productId._id)
       })),
       selectedVariants: this.selectedVariantsByQuantity
@@ -952,13 +962,13 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       quantity: this.quantity,
       price: packageData.price,
       productName: packageData.name,
-      image: packageData.images?.[0]?.filePath || '',
+      image: this.getImageUrl(packageData.images?.[0]?.filePath || ''),
       packageItems: packageData.items.map(item => ({
         productId: item.productId._id,
         productName: item.productId.name,
         quantity: this.getSelectedQuantity(item.productId._id),
         price: item.productId.price,
-        image: item.productId.images?.[0]?.filePath || '',
+        image: this.getImageUrl(item.productId.images?.[0]?.filePath || ''),
         selectedVariants: this.buildSelectedVariantsForItem(item.productId._id)
       })),
       discount: packageData.discountPrice ? packageData.price - packageData.discountPrice : 0,
@@ -1054,7 +1064,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (!packageData) return undefined;
     
     const item = packageData.items.find(i => i.productId._id === productId);
-    return item?.productId?.images?.[0]?.filePath;
+    const imagePath = item?.productId?.images?.[0]?.filePath;
+    return imagePath ? this.getImageUrl(imagePath) : undefined;
   }
 
   getVariantImageForItem(productId: string, variant: string, value: string | MultilingualText): string | undefined {
@@ -1072,7 +1083,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         // Check if this variant object matches our variant and value
         if (variantObj.variant === variant && variantObj.value === value) {
           if (variantObj.image?.filePath) {
-            return variantObj.image.filePath;
+            return this.getImageUrl(variantObj.image.filePath);
           }
         }
         
@@ -1082,7 +1093,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
             attr.variant === variant && this.getMultilingualValue(attr.value) === value
           );
           if (matchingAttr?.image?.filePath) {
-            return matchingAttr.image.filePath;
+            return this.getImageUrl(matchingAttr.image.filePath);
           }
         }
       }
@@ -1094,7 +1105,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     );
     
     if (attribute?.image?.filePath) {
-      return attribute.image.filePath;
+      return this.getImageUrl(attribute.image.filePath);
     }
     
     // 3. Fallback to variant image
@@ -1103,7 +1114,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     );
     
     if (variantImage?.image?.filePath) {
-        return variantImage.image.filePath;
+        return this.getImageUrl(variantImage.image.filePath);
     }
     
     return undefined;
@@ -1122,7 +1133,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         // Check if this variant object matches our variant and value
         if (variantObj.variant === variant && variantObj.value === value) {
           if (variantObj.image?.filePath) {
-            return variantObj.image.filePath;
+            return this.getImageUrl(variantObj.image.filePath);
           }
         }
         
@@ -1132,13 +1143,13 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
             attr.variant === variant && this.getMultilingualValue(attr.value) === value
           );
           if (matchingAttr?.image?.filePath) {
-            return matchingAttr.image.filePath;
+            return this.getImageUrl(matchingAttr.image.filePath);
           }
         }
         
         // If variant object has image and matches the value
         if (variantObj.image?.filePath && variantObj.value === value) {
-          return variantObj.image.filePath;
+          return this.getImageUrl(variantObj.image.filePath);
         }
       }
     }
@@ -1147,14 +1158,14 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (item.productId.variants) {
       for (const variantObj of (item.productId.variants as any[])) {
         if (variantObj.variant === variant && variantObj.image?.filePath) {
-          return variantObj.image.filePath;
+          return this.getImageUrl(variantObj.image.filePath);
         }
       }
     }
     
     // Fallback to product main image
     const mainImage = item.productId.images?.[0]?.filePath;
-    return mainImage;
+    return mainImage ? this.getImageUrl(mainImage) : undefined;
   }
 
   addToWishlist(): void {

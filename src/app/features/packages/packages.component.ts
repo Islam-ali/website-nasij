@@ -29,6 +29,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../core/directives';
 import { CurrencyPipe } from '../../core/pipes';
+import { environment } from '../../../environments/environment';
   
 @Component({
   selector: 'app-packages',
@@ -69,6 +70,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   sortBy = 'name';
   sortOrder: 'asc' | 'desc' = 'asc';
   router = inject(Router);
+  domain = environment.domain;
   categories = [
     { label: 'All Categories', value: 'all' },
     { label: 'Electronics', value: 'electronics' },
@@ -202,9 +204,10 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   }
 
   getMainImage(pkg: IPackage): string {
-    return pkg.images && pkg.images.length > 0 
+    const imagePath = pkg.images && pkg.images.length > 0 
       ? pkg.images[0]?.filePath
-      : 'assets/images/placeholder.jpg';
+      : null;
+    return imagePath ? `${this.domain}/${imagePath}` : 'assets/images/placeholder.jpg';
   }
 
   getDiscountPercentage(pkg: IPackage): number {

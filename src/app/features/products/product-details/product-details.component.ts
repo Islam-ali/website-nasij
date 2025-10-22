@@ -33,6 +33,7 @@ import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { MultilingualText } from '../../../core/models/multi-language';
+import { environment } from '../../../../environments/environment';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -86,6 +87,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   activeIndex = 0;
   isInWishlist = false;
   wishlistLoading = false;
+  domain = environment.domain;
 
   // Image gallery
   images: ProductImage[] = [];
@@ -229,7 +231,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   getImageUrl(imagePath: string, size: 'original' | 'thumbnail' = 'original'): string {
     if (!imagePath) return 'assets/images/placeholder.png';
     if (imagePath.startsWith('http')) return imagePath;
-    return imagePath;
+    return `${this.domain}/${imagePath}`;
   }
 
   getDiscountPercentage(price: number, discountPrice?: number): number | null {

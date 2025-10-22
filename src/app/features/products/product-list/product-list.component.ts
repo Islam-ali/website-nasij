@@ -36,6 +36,7 @@ import { TranslationService } from '../../../core/services/translate.service';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-list',
@@ -76,6 +77,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   loading = true;
   error: string | null = null;
   aosInitialized = false;
+  domain = environment.domain;
   // Pagination
   totalRecords = 0;
   rows = 12;
@@ -337,7 +339,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   getProductImage(product: IProduct): string {
-    return `${product.images?.[0]?.filePath}` || 'assets/images/placeholder.png';
+    const imagePath = product.images?.[0]?.filePath;
+    return imagePath ? `${this.domain}/${imagePath}` : 'assets/images/placeholder.png';
   }
 
   getColorStyle(color: string): string {

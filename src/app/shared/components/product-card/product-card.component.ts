@@ -74,7 +74,8 @@ export class ProductCardComponent implements OnInit, OnChanges {
 
   // Get product image with fallback to placeholder
   getProductImage(product: any): string {
-    return `${product?.images?.[0].filePath}` || 'assets/images/placeholder.png';
+    const imagePath = product?.images?.[0]?.filePath;
+    return imagePath ? `${this.domain}/${imagePath}` : 'assets/images/placeholder.png';
   }
 
   // Handle image loading errors

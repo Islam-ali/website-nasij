@@ -202,7 +202,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       quantity: 1,
       price: product.price,
       selectedVariants: product.variants?.[0]?.attributes || [],
-      image: product.images[0].filePath,
+      image: `${this.domain}/${product.images[0].filePath}`,
       productName: product.name,
       discount: product.discountPrice || 0,
     });
