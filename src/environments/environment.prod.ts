@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  domain: 'https://pledeg.tappih.com/',
-  apiUrl: 'https://pledeg.tappih.com/api/v1', // Development API URL
+  domain: 'https://api.pledgestores.com',
+  apiUrl: 'https://api.pledgestores.com/api/v1', // Development API URL
   appName: 'Online Store (Dev)',
   appVersion: '1.0.0',
   stripePublishableKey: 'your-test-stripe-key',

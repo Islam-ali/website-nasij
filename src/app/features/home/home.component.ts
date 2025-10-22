@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ProductService } from '../products/services/product.service';
-import { EnumProductVariant, IProduct } from '../products/models/product.interface';
+import { IProduct } from '../products/models/product.interface';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RatingModule } from 'primeng/rating';
@@ -12,7 +12,6 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { CartService } from '../cart/services/cart.service';
-import { WishlistService } from '../wishlist/services/wishlist.service';
 import { BaseResponse, pagination } from '../../core/models/baseResponse';
 import { CarouselComponent } from "../../shared/components/carousel/carousel.component";
 import { CategoryService } from '../products/services/category.service';
@@ -25,10 +24,8 @@ import { BannarComponent } from "./bannar/bannar.component";
 import { FeatureComponent } from "./feature/feature.component";
 import { PackageService } from '../packages/services/package.service';
 import { IPackage } from '../../interfaces/package.interface';
-import { TranslationService } from '../../core/services/translate.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
-import { MultilingualText } from '../../core/models/multi-language';
 import { FallbackImgDirective } from '../../core/directives/fallback-img.directive';
 
 @Component({
@@ -73,11 +70,9 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private wishlistService: WishlistService,
     private messageService: MessageService,
     private categoryService: CategoryService,
     private packageService: PackageService,
-    private translationService: TranslationService
   ) {}
 
   ngOnInit() {
