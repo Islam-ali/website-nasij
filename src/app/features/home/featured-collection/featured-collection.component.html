@@ -21,7 +21,7 @@
         </div>
 <div class="flex justify-center">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8"
-        [ngClass]="{'grid-cols-1 md:grid-cols-1 max-w-sm': collection.collections.length === 1, 'grid-cols-2 md:grid-cols-2 max-w-7xl mx-auto': collection.collections.length > 1}">
+        [ngClass]="{'grid-cols-1 md:grid-cols-1 max-w-sm': collection.collections.length === 1, 'grid-cols-1 md:grid-cols-2 max-w-7xl mx-auto': collection.collections.length > 1}">
             @for (item of collection.collections; track item.title) {
             <div data-aos="zoom-in"
                 class="group relative overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-900/50 hover:shadow-2xl dark:hover:shadow-gray-900/70 transition-all duration-500">

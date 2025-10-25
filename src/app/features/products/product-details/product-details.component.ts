@@ -34,6 +34,7 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { environment } from '../../../../environments/environment';
+import { secureEncodeUrl } from '../../../core/utils/secure-query';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -288,7 +289,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       this.messageService.add({
         severity: 'warn',
         summary: 'Warning',
-        detail: 'Please select a color',
+        detail: 'Please select a variant',
         life: 1000
       });
       return;
@@ -319,22 +320,29 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       this.messageService.add({
         severity: 'warn',
         summary: 'Warning',
-        detail: 'Please select a color',
+        detail: 'Please select a variant',
         life: 1000
       });
       return;
     }
+
+    const selectedImage = this.selectedVariantAttributes.find(v => v.variant === 'color')?.image?.filePath || this.product?.images[0].filePath;
     const queryParams: IQueryParamsBuyNow = {
       type: 'product',
-      productId: this.product?._id, quantity: this.quantity,
+      productId: this.product?._id, 
+      quantity: this.quantity,
       selectedVariants: this.selectedVariantAttributes,
-      name: this.product?.name, price: this.product?.price,
+      name: this.product?.name, 
+      price: this.product?.price,
       discount: this.product?.discountPrice,
-      image: this.selectedVariantAttributes[0]?.image?.filePath || this.product?.images[0].filePath
+      image: selectedImage
     } 
+    let secureQuery = secureEncodeUrl(queryParams);
     this.router.navigate(['/checkout'],
       {
-        queryParams: queryParams
+        queryParams: {
+          buyNow: secureQuery
+        }
       });
   }
 

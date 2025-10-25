@@ -269,7 +269,7 @@
               <p *ngIf="product.discountPrice"
                 class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center transition-colors duration-300">
                 <i class="pi pi-check-circle me-2 text-lg"></i>
-                You save {{ - (product.discountPrice) | currency }}!
+                {{ 'packages.you_save_amount' | translate: {amount: (product.discountPrice) | currency} }}
               </p>
             </div>
           </div>
@@ -368,15 +368,15 @@
             <div class="grid grid-cols-1 gap-4">
               <button type="button"
                 class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                [disabled]="product.stock === 0" (click)="addToCart()" pTooltip="Add item to your shopping cart"
-                tooltipPosition="top">
+                [disabled]="product.stock === 0" (click)="addToCart()"
+                >
                 <i class="pi pi-shopping-cart me-2"></i>
                 {{ 'products.add_to_cart' | translate }}
               </button>
               <!-- Buy Now Button -->
               <button type="button"
                 class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                [disabled]="product.stock === 0" (click)="checkout()" pTooltip="Checkout" tooltipPosition="top">
+                [disabled]="product.stock === 0" (click)="checkout()">
                 <i class="pi pi-shopping-cart me-2"></i>
                 {{ 'products.buy_now' | translate }}
               </button>

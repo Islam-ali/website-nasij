@@ -355,6 +355,10 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   toggleRTL(): void {
   }
 
+  getImageUrl(filePath: string): string {
+    return `${this.domain}/${filePath}`;
+  }
+
   getBusinessProfile() {
     this.businessProfileService.getBusinessProfile$().subscribe({
       next: (businessProfile) => {

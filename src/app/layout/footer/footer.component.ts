@@ -24,11 +24,11 @@ import { environment } from '../../../environments/environment';
         <!-- Company Info -->
         <div class="space-y-6">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-primary-300 to-primary-200 rounded-lg flex items-center justify-center">
+            <div class="w-20 h-20 rounded-lg border border-primary-200 flex items-center justify-center">
               @if(isDarkTheme()) {
-                <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="pledge Logo" class="w-10 h-10">
+                <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="pledge Logo" class="w-full h-full object-contain">
               } @else {
-              <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="pledge Logo" class="w-10 h-10">
+              <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="pledge Logo" class="w-full h-full object-contain">
               }
             </div>  
             <span class="text-2xl font-bold bg-gradient-to-r from-primary-400 to-primary-400 bg-clip-text text-transparent">pledge</span>

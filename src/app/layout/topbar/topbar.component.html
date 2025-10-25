@@ -48,9 +48,9 @@
         <a routerLink="/" class="flex items-center space-x-3 group">
           <div class="w-12 h-12 flex items-center justify-center">
             @if(isDarkTheme()) {
-            <img [src]="businessProfile?.logo_dark?.filePath" alt="logo" class="w-full h-full object-contain">
+            <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="logo" class="w-full h-full object-contain">
             } @else {
-            <img [src]="businessProfile?.logo_light?.filePath" alt="logo" class="w-full h-full object-contain">
+            <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="logo" class="w-full h-full object-contain">
             }
           </div>
           <!-- <img [src]="businessProfile?.logo_light?.filePath" alt="logo" class="w-full h-full object-contain"> -->

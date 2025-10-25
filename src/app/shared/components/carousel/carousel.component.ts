@@ -38,7 +38,7 @@ export class CarouselComponent implements OnInit {
       },
       {
         breakpoint: '575px',
-        numVisible: 2,
+        numVisible: 1,
         numScroll: 1,
       },
     ];

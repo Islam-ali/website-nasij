@@ -29,6 +29,7 @@ import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PhoneNumberDirective } from '../../core/directives/phone-number.directive';
 import { FallbackImgDirective } from '../../core/directives';
+import { secureDecodeUrl } from '../../core/utils/secure-query';
 
 @Component({
   selector: 'app-checkout',
@@ -137,18 +138,20 @@ export class CheckoutComponent implements OnInit {
       }
 
       // Legacy product handling
-      if (params['productId']) {
+      if (params['buyNow']) {
+        const buyNow = secureDecodeUrl(params['buyNow']);
+        debugger;
         this.isBuyNow = true;
-        const productId = params['productId'];
-        const quantity = params['quantity'];
-        const productName = params['productName'];
-        const price = params['price'];
-        const discount = params['discount'];
-        const image = params['image'];
+        const productId = buyNow.productId;
+        const quantity = buyNow.quantity;
+        const productName = buyNow.productName;
+        const price = buyNow.price;
+        const discount = buyNow.discount;
+        const image = buyNow.image;
         this.cartItems.set([{
           productId: productId,
           quantity: quantity,
-          selectedVariants: params['selectedVariants'] || [],
+          selectedVariants: buyNow.selectedVariants || [],
           productName: productName,
           price: price,
           discount: discount,
