@@ -1,6 +1,25 @@
 {
   "size": "Size",
   "color": "Color",
+  "orderStatus": {
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "postponed": "Postponed",
+    "returned": "Returned"
+  },
+  "paymentStatus": {
+    "pending": "Pending",
+    "paid": "Paid",
+    "failed": "Failed",
+    "refunded": "Refunded"
+  },
+  "paymentMethod": {
+    "cash": "Cash",
+    "vodafone_cash": "Vodafone Cash"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

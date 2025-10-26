@@ -1,6 +1,25 @@
 {
   "size": "المقاس",
   "color": "اللون",
+  "orderStatus": {
+    "pending": "قيد الانتظار",
+    "confirmed": "تم التأكيد",
+    "shipped": "تم الشحن",
+    "delivered": "تم التسليم",
+    "cancelled": "تم الإلغاء",
+    "postponed": "تم التأجيل",
+    "returned": "تم الإرجاع"
+  },
+  "paymentStatus": {
+    "pending": "قيد الانتظار",
+    "paid": "تم الدفع",
+    "failed": "فشل الدفع",
+    "refunded": "تم الاسترجاع"
+  },
+  "paymentMethod": {
+    "cash": "نقدي",
+    "vodafone_cash": "فودافون كاش"
+  },
   "common": {
     "save": "حفظ",
     "cancel": "إلغاء",

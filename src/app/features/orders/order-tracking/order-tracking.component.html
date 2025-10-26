@@ -82,7 +82,7 @@
                 class="px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide"
                 [ngClass]="getStatusClass(order.status)"
               >
-                {{ order.status }}
+                {{ 'orderStatus.' + order.status | translate }}
               </span>
             </div>
           </div>
@@ -95,7 +95,7 @@
             </div>
             <div class="flex justify-between items-center py-3">
               <label class="font-semibold text-gray-700 dark:text-gray-300">{{ 'orderTracking.paymentMethod' | translate }}</label>
-              <span class="text-gray-900 dark:text-white">{{ order.paymentMethod }}</span>
+              <span class="text-gray-900 dark:text-white">{{ 'paymentMethod.' + order.paymentMethod | translate }}</span>
             </div>
           </div>
         </div>
@@ -163,7 +163,7 @@
           <div class="flex justify-between items-center py-3">
             <p class="text-gray-600 dark:text-gray-300 font-medium">{{ 'orderTracking.paymentMethod' | translate }}</p>
             <p class="text-gray-900 dark:text-white font-semibold">
-              {{ getPaymentMethodText(order.paymentMethod) }}
+              {{ 'paymentMethod.' + order.paymentMethod | translate }}
             </p>
           </div>
           

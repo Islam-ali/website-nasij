@@ -83,7 +83,7 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.loading = false;
-        this.error = 'لم يتم العثور على طلب بهذا الرقم';
+        this.error = this.translateService.instant('orderTracking.orderNotFound');
         console.error('Error fetching order:', error);
       }
     });

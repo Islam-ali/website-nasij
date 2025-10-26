@@ -247,9 +247,12 @@ export class CartService implements OnDestroy {
   // Calculate cart summary
   private calculateSummary(items: ICartItem[], selectedCountry?: ICountry, selectedState?: IState): ICartSummary {
     const subtotal = items.reduce((sum, item) => sum + ((item.price - (item.discount || 0)) * item.quantity), 0);
-    const taxRate = 0.1; // 10% tax rate - should come from config
+    const taxRate = 0; // 10% tax rate - should come from config
     const tax = subtotal * taxRate;
-    
+    console.log('Subtotal:', subtotal);
+    console.log('Tax:', tax);
+    console.log('Items:', items);
+    debugger;
     // Calculate shipping cost based on location
     let shippingCost = 0;
     if (selectedCountry) {
