@@ -117,7 +117,7 @@
             <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 flex-shrink-0 flex items-center justify-center overflow-hidden relative">
               <img 
                 *ngIf="item.itemId.images && item.itemId.images.length > 0" 
-                [src]="item.itemId.images[0].filePath" 
+                [src]="getImageUrl(item.itemId.images[0].filePath)" 
                 [alt]="item.itemId.name | multiLanguage " 
                 class="w-full h-full object-cover rounded-xl transition-opacity duration-300"
                 (error)="onImageError($event)"

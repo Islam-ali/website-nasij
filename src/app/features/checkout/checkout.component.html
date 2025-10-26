@@ -207,8 +207,11 @@
                 <input type="radio" id="{{method.value}}" [value]="method.value" formControlName="paymentMethod"
                   class="h-5 w-5 text-primary-600 dark:text-primary-400 focus:ring-primary-500 dark:focus:ring-primary-400 border-gray-300 dark:border-gray-600">
                 <label [for]="method.value"
-                  class="ms-4 block text-lg font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                  {{'checkout.' + method.value.toLowerCase() | translate}}
+                  class="ms-4 text-lg flex w-full items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                  <span>{{'checkout.' + method.value.toLowerCase() | translate}}</span>
+                  <span class="text-gray-500 dark:text-gray-400 inline-block" *ngIf="method.value === 'vodafone_cash'">
+                    010602123312
+                  </span>
                 </label>
               </div>
 

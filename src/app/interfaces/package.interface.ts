@@ -5,7 +5,7 @@ import { ProductVariantAttribute } from "../features/products/models/product.int
 
 
 export interface IQueryParamsBuyNow {
-  type: 'product' | 'package';
+  type: 'Product' | 'Package';
   productId?: string;
   packageId?: string;
   quantity: number;

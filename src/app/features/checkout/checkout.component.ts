@@ -140,7 +140,7 @@ export class CheckoutComponent implements OnInit {
       // Legacy product handling
       if (params['buyNow']) {
         const buyNow = secureDecodeUrl(params['buyNow']);
-        debugger;
+        console.log(buyNow);
         this.isBuyNow = true;
         const productId = buyNow.productId;
         const quantity = buyNow.quantity;
@@ -150,12 +150,15 @@ export class CheckoutComponent implements OnInit {
         const image = buyNow.image;
         this.cartItems.set([{
           productId: productId,
+          packageId: buyNow.packageId,
           quantity: quantity,
           selectedVariants: buyNow.selectedVariants || [],
           productName: productName,
           price: price,
           discount: discount,
-          image: image
+          image: image,
+          itemType: buyNow.type,
+          packageItems: buyNow.packageItems || []
         }]);
       } else {
         // Regular cart checkout
@@ -445,8 +448,8 @@ export class CheckoutComponent implements OnInit {
       orderStatus: OrderStatus.PENDING,
       paymentMethod: formValue.paymentMethod,
       cashPayment: {
-        amountPaid: Number(this.shippingCost()),
-        changeDue: Number(this.orderTotal()) - Number(this.shippingCost()),
+        amountPaid: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH ? Number(this.shippingCost()) : 0,
+        changeDue: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH ? Number(this.orderTotal()) - Number(this.shippingCost()) : Number(this.orderTotal()),
         paymentImage: paymentImageUrl || '',
       },
       shippingAddress: {

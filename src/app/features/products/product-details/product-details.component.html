@@ -309,7 +309,7 @@
                     <input type="radio" [id]="attribute._id" [value]="attribute" name="color"
                       (change)="onVariantSelect(attribute)" class="sr-only" />
                     <div class="w-16 h-16 rounded-xl overflow-hidden">
-                      <img [src]="attribute.image.filePath" [alt]="attribute.value"
+                      <img [src]="getImageUrl(attribute.image.filePath)" [alt]="attribute.value"
                         class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
                     </div>
                   </label>

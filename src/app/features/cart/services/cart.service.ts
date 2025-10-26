@@ -190,7 +190,7 @@ export class CartService implements OnDestroy {
     discount?: number;
     selectedVariants?: any;
   }): Observable<ICartState> {
-    
+    console.log('Adding package to cart:', packageData);
     
     const packageItem: IAddToCartRequest = {
       packageId: packageData.packageId,
@@ -204,7 +204,7 @@ export class CartService implements OnDestroy {
       itemType: 'Package'
     };
     
-    
+    console.log('Package item prepared for cart:', packageItem);
     
     return this.addToCart(packageItem);
   }
@@ -278,13 +278,11 @@ export class CartService implements OnDestroy {
 
   // Update cart state and notify subscribers
   private updateCartState(items: ICartItem[], selectedCountry?: ICountry, selectedState?: IState): Observable<ICartState> {    
-    items.forEach((item, index) => {
-      
-    });
-    
     const summary = this.calculateSummary(items, selectedCountry, selectedState);
     const newState: ICartState = { items, summary };
     
+    console.log('Cart state being updated:', newState);
+    console.log('Total items in cart:', summary.itemsCount);
     
     // In a real app, you would make an API call here to sync with the server
     // For now, we'll just update the local state

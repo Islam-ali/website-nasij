@@ -99,8 +99,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   ) {
     super();
     this.getBusinessProfile();
-    this.loadCart();
-    this.loadWishlist();
   }
 
   private categoryService = inject(CategoryService);
@@ -116,7 +114,10 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
+    console.log('Topbar component initialized');
     this.loadCategories();
+    this.loadCart();
+    this.loadWishlist();
     this.subscriptions.add(
       this.authService.currentUser$.subscribe({
         next: (user: IUser | null) => {
@@ -131,34 +132,43 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   loadCart(): void {
-    
-    const subscription = this.cartService.cartState$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (cartItems: ICartState) => {
-        this.cartItems.set(cartItems.items);
-        this.cartItemCount.set(cartItems.items.reduce((total: number, item: ICartItem) => total + (item.quantity || 0), 0));
-        this.cartTotal.set(cartItems.items.reduce((total: number, item: ICartItem) => total + ((item.price - (item.discount || 0)) * (item.quantity || 1)), 0));
-      },
-      error: (error: Error) => {
-        console.error('Error loading cart items:', error);
-      }
-    });
-    
+    this.subscriptions.add(
+      this.cartService.cartState$.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (cartState: ICartState) => {
+          console.log('Cart state updated in topbar:', cartState);
+          this.cartItems.set(cartState.items);
+          // Calculate total quantity of all items
+          const totalCount = cartState.items.reduce((total: number, item: ICartItem) => {
+            return total + (item.quantity || 0);
+          }, 0);
+          console.log('Cart item count updated:', totalCount);
+          this.cartItemCount.set(totalCount);
+          // Use summary total instead of recalculating
+          this.cartTotal.set(cartState.summary.total);
+        },
+        error: (error: Error) => {
+          console.error('Error loading cart items:', error);
+        }
+      })
+    );
   }
 
   loadWishlist(): void {
-    this.wishlistService.wishlistState$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (state: IWishlistState) => {
-        this.wishlistItems.set(state.items);
-        this.wishlistCount.set(state.summary.itemsCount);
-      },
-      error: (error: Error) => {
-        console.error('Error loading wishlist items:', error);
-      }
-    });
+    this.subscriptions.add(
+      this.wishlistService.wishlistState$.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (state: IWishlistState) => {
+          this.wishlistItems.set(state.items);
+          this.wishlistCount.set(state.summary.itemsCount);
+        },
+        error: (error: Error) => {
+          console.error('Error loading wishlist items:', error);
+        }
+      })
+    );
   }
 
   addToCart(item: any): void {

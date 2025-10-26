@@ -249,24 +249,36 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       this.selectedQuantities[productId] = item.quantity;
       
       // Initialize variants
+      this.selectedVariants[productId] = {};
+      
+      // Store full attribute objects for comparison with template
+      const firstAttributesMap: Record<string, any> = {};
+      
       if (item.requiredVariantAttributes && item.requiredVariantAttributes.length > 0) {
-        this.selectedVariants[productId] = {};
+        // Use required variant attributes if available
         item.requiredVariantAttributes.forEach(attr => {
           this.selectedVariants[productId][attr.variant] = attr.value;
+          firstAttributesMap[attr.variant] = attr;
         });
-      } else {
-        // Fallback: Initialize with default values if no required variants
-        this.selectedVariants[productId] = {};
+      } else if (item.productId.variants && item.productId.variants.length > 0) {
+        // Fallback: Select first available variant of each type by default
+        const firstVariantsMap: Record<string, any> = {};
         
-        // Check if product has variants and use the first available ones
-        if (item.productId.variants && item.productId.variants.length > 0) {
-          const productVariants = item.productId.variants[0];
-          if (productVariants.attributes && productVariants.attributes.length > 0) {
-            productVariants.attributes.forEach(attr => {
-              this.selectedVariants[productId][attr.variant] = attr.value;
+        // Iterate through all variants to find the first occurrence of each variant type
+        item.productId.variants.forEach(variant => {
+          if (variant.attributes && variant.attributes.length > 0) {
+            variant.attributes.forEach(attr => {
+              // Only set if we haven't seen this variant type before
+              if (!firstVariantsMap[attr.variant]) {
+                firstVariantsMap[attr.variant] = attr.value;
+                firstAttributesMap[attr.variant] = attr; // Store full attribute object
+              }
             });
           }
-        }
+        });
+        
+        // Apply the first variants to selectedVariants
+        this.selectedVariants[productId] = firstVariantsMap;
       }
       
       // Initialize variants by quantity
@@ -279,30 +291,30 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         this.selectedColorsByQuantity[productId][i] = {} as MultilingualText;
         this.selectedSizesByQuantity[productId][i] = {} as MultilingualText;
         
-        if (item.requiredVariantAttributes && item.requiredVariantAttributes.length > 0) {
-          item.requiredVariantAttributes.forEach(attr => {
-            this.selectedVariantsByQuantity[productId][i][attr.variant] = attr.value; // Store as MultilingualText
+        // Use full attribute objects for selectedVariantsByQuantity (for template comparison)
+        if (Object.keys(firstAttributesMap).length > 0) {
+          Object.entries(firstAttributesMap).forEach(([variantType, attribute]) => {
+            // Store the full attribute object for proper comparison
+            this.selectedVariantsByQuantity[productId][i][variantType] = attribute;
             
             // Set default color and size if available
-            if (attr.variant === 'color') {
-              this.selectedColorsByQuantity[productId][i] = attr.value;
-            } else if (attr.variant === 'size') {
-              this.selectedSizesByQuantity[productId][i] = attr.value;
+            if (variantType === 'color') {
+              this.selectedColorsByQuantity[productId][i] = attribute.value;
+            } else if (variantType === 'size') {
+              this.selectedSizesByQuantity[productId][i] = attribute.value;
             }
           });
-        } else {
-          // Fallback: Use default variants from product
-          if (this.selectedVariants[productId]) {
-            Object.entries(this.selectedVariants[productId]).forEach(([variant, value]) => {
-              this.selectedVariantsByQuantity[productId][i][variant] = value; // Store as MultilingualText
-              
-              if (variant === 'color') {
-                this.selectedColorsByQuantity[productId][i] = value;
-              } else if (variant === 'size') {
-                this.selectedSizesByQuantity[productId][i] = value;
-              }
-            });
-          }
+        } else if (this.selectedVariants[productId] && Object.keys(this.selectedVariants[productId]).length > 0) {
+          // Fallback for when we only have values
+          Object.entries(this.selectedVariants[productId]).forEach(([variant, value]) => {
+            this.selectedVariantsByQuantity[productId][i][variant] = value;
+            
+            if (variant === 'color') {
+              this.selectedColorsByQuantity[productId][i] = value;
+            } else if (variant === 'size') {
+              this.selectedSizesByQuantity[productId][i] = value;
+            }
+          });
         }
       }
     });
@@ -334,12 +346,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     if (!imagePath) return 'assets/images/placeholder.jpg';
     if (imagePath.startsWith('http')) return imagePath;
     return `${this.domain}/${imagePath}`;
-  }
-
-  getDiscountPercentage(): number {
-    const packageData = this.package();
-    if (!packageData || !packageData.discountPrice) return 0;
-    return Math.round(((packageData.price - packageData.discountPrice) / packageData.price) * 100);
   }
 
   getItemsCount(): number {
@@ -963,6 +969,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       price: packageData.price,
       productName: packageData.name,
       image: this.getImageUrl(packageData.images?.[0]?.filePath || ''),
+      type: 'Package',
       packageItems: packageData.items.map(item => ({
         productId: item.productId._id,
         productName: item.productId.name,
@@ -971,7 +978,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         image: this.getImageUrl(item.productId.images?.[0]?.filePath || ''),
         selectedVariants: this.buildSelectedVariantsForItem(item.productId._id)
       })),
-      discount: packageData.discountPrice ? packageData.price - packageData.discountPrice : 0,
+      discount: packageData.discountPrice,
       selectedVariants: this.selectedVariantsByQuantity
     };
     // Navigate to checkout with encoded package data

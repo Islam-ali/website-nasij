@@ -11,4 +11,5 @@ export interface ICategory {
   sortOrder: number;
   isActive: boolean;
   productCount: number;
+  packageCount: number;
 }

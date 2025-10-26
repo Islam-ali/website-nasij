@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-order-tracking',
@@ -140,6 +141,10 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
     if (img) {
       img.style.display = 'block';
     }
+  }
+
+  getImageUrl(filePath: string): string {
+    return `${environment.domain}/${filePath}`;
   }
 
 }

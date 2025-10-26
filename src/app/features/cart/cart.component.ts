@@ -48,7 +48,7 @@ import { FallbackImgDirective } from '../../core/directives';
   ],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  providers: [MessageService, CartService]
+  providers: [MessageService]
 })
 export class CartComponent implements OnInit, OnDestroy {
   // Component state

@@ -2,6 +2,7 @@ import { Inject, PLATFORM_ID, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { QueryParamsService } from '../../../shared/services/query-params.service';
 import { isPlatformBrowser } from '@angular/common';
+import { secureEncodeUrl } from '../../../core/utils/secure-query';
 
 @Injectable({
   providedIn: 'root'
@@ -59,12 +60,13 @@ export class PackageUrlService {
     selectedVariants?: any[];
   }): void {
     try {
-      const encodedPackage = this.queryParamsService.encodePackage(packageData);
+      console.log(packageData);
+      debugger;
+
+      const secureQuery = secureEncodeUrl(packageData);
       this.router.navigate(['/checkout'], {
         queryParams: {
-          package: encodedPackage,
-          buyNow: 'true',
-          source: 'package'
+          buyNow: secureQuery,
         }
       });
     } catch (error) {

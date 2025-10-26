@@ -328,14 +328,14 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     const selectedImage = this.selectedVariantAttributes.find(v => v.variant === 'color')?.image?.filePath || this.product?.images[0].filePath;
     const queryParams: IQueryParamsBuyNow = {
-      type: 'product',
+      type: 'Product',
       productId: this.product?._id, 
       quantity: this.quantity,
       selectedVariants: this.selectedVariantAttributes,
       name: this.product?.name, 
       price: this.product?.price,
       discount: this.product?.discountPrice,
-      image: selectedImage
+      image: selectedImage,
     } 
     let secureQuery = secureEncodeUrl(queryParams);
     this.router.navigate(['/checkout'],
