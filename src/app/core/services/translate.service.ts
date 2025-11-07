@@ -6,8 +6,8 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root'
 })
 export class TranslationService {
-  private readonly defaultLanguage = 'en';
-  private readonly supportedLanguages = ['en', 'ar'];
+  private readonly defaultLanguage = 'ar';
+  private readonly supportedLanguages = ['ar', 'en'];
 
   constructor(
     private translate: TranslateService,
@@ -99,8 +99,8 @@ export class TranslationService {
   // Get language display name
   getLanguageDisplayName(language: string): string {
     const languageNames: { [key: string]: string } = {
-      'en': 'EN',
-      'ar': 'AR'
+      'ar': 'AR',
+      'en': 'EN'
     };
     return languageNames[language] || language;
   }

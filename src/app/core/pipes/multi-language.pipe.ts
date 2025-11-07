@@ -18,10 +18,10 @@ export class MultiLanguagePipe implements PipeTransform, OnDestroy {
     if (!value) return '';
     // platform browser
     if (isPlatformBrowser(this.platformId)) {
-      const currentLang = localStorage.getItem('pledge-language') || 'en';
-      return value[currentLang as keyof MultilingualText] || value.en || '';
+      const currentLang = localStorage.getItem('pledge-language') || 'ar';
+      return value[currentLang as keyof MultilingualText] || value.ar || '';
     }
-    return value.en || '';
+    return value.ar || '';
   }
 
   ngOnDestroy(): void {

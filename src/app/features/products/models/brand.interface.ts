@@ -1,7 +1,9 @@
+import { MultilingualText } from "../../../core/models/multi-language";
+
 export interface IBrand {
   _id?: string;
-  name: string;
-  description?: string;
+  name: MultilingualText;
+  description?: MultilingualText;
   logo?: string;
   website?: string;
   slug: string;

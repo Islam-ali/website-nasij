@@ -116,12 +116,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       searchQuery: [''],
       selectedCategories: [[]],
       selectedBrands: [[]],
-      selectedSizes: [[]],
-      selectedColors: [[]],
-      minPrice: [0],
-      maxPrice: [1000],
-      minRating: [0],
-      showOnSale: [false],
       sortBy: ['featured'],
     });
   }
@@ -174,13 +168,9 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
 
     const params: IProductQueryParams = {
       page: Math.floor(this.first / this.rows) + 1,
-      limit: 10,
+      limit: this.rows,
       category: selectedCategories,
       brand: selectedBrands,
-      minPrice,
-      // maxPrice,
-      size: selectedSizes,
-      color: selectedColors,
       sortBy: sortField,
       sortOrder: sortOrder as 'asc' | 'desc',
       search: searchQuery || undefined,
@@ -276,12 +266,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     if (searchQuery) queryParams.search = searchQuery;
     if (selectedCategories.length > 0) queryParams.category = selectedCategories.join(',');
     if (selectedBrands.length > 0) queryParams.brand = selectedBrands.join(',');
-    if (selectedSizes.length > 0) queryParams.size = selectedSizes.join(',');
-    if (selectedColors.length > 0) queryParams.color = selectedColors.join(',');
-    if (minPrice > 0) queryParams.minPrice = minPrice;
-    if (maxPrice < 1000) queryParams.maxPrice = maxPrice;
-    if (minRating > 0) queryParams.minRating = minRating;
-    if (showOnSale) queryParams.inStock = true;
     if (sortBy !== 'featured') queryParams.sortBy = sortBy;
     
     // Update URL without reloading the page
@@ -298,12 +282,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       searchQuery: '',
       selectedCategories: [],
       selectedBrands: [],
-      selectedSizes: [],
-      selectedColors: [],
-      minPrice: 0,
-      maxPrice: 1000,
-      minRating: 0,
-      showOnSale: false,
       sortBy: 'featured',
     });
     
@@ -322,12 +300,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
       this.filterForm.value;
     return (
       selectedCategories.length +
-      selectedBrands.length +
-      selectedSizes.length +
-      selectedColors.length +
-      (showOnSale ? 1 : 0) +
-      (minRating > 0 ? 1 : 0) +
-      (minPrice > 0 || maxPrice < 1000 ? 1 : 0)
+      selectedBrands.length
     );
   }
 
@@ -397,7 +370,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   getBrandName(brandId: string): string {
     if (!this.brands) return 'Unknown Brand';
     const brand = this.brands.find(b => b._id === brandId);
-    return brand?.name || 'Unknown Brand';
+    return brand?.name[this.currentLanguage] || brand?.name.en || 'Unknown Brand';
   }
 
   removeCategoryFilter(categoryId: string): void {

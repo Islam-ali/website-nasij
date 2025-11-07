@@ -1,6 +1,11 @@
 {
   "size": "المقاس",
   "color": "اللون",
+  "productStatus": {
+    "active": "متوفر",
+    "inactive": "متوقف",
+    "out_of_stock": "غير متوفر"
+  },
   "orderStatus": {
     "pending": "قيد الانتظار",
     "confirmed": "تم التأكيد",
@@ -18,7 +23,8 @@
   },
   "paymentMethod": {
     "cash": "نقدي",
-    "vodafone_cash": "فودافون كاش"
+    "vodafone_cash": "فودافون كاش",
+    "deposit": "دفعة مقدّمة فودافون كاش"
   },
   "common": {
     "save": "حفظ",
@@ -87,7 +93,8 @@
       "cash_on_delivery": "الدفع عند الاستلام",
       "vodafone_cash": "فودافون كاش",
       "paypal": "باي بال",
-      "stripe": "سترايب"
+      "stripe": "سترايب",
+      "deposit": "دفعة مقدّمة فودافون كاش"
     }
   },
   "checkout": {
@@ -130,6 +137,7 @@
     "paymentMethod": "طريقة الدفع",
     "cash": "نقداً",
     "vodafone_cash": "فودافون كاش",
+    "deposit": "دفعة مقدّمة فودافون كاش",
     "creditCard": "بطاقة ائتمان",
     "bankTransfer": "تحويل بنكي",
     "payPal": "باي بال",
@@ -180,7 +188,7 @@
     "about": "من نحن",
     "contact": "اتصل بنا",
     "packages": "الباقات",
-    "boxs": "الصناديق",
+    "boxs": "البوكسات",
     "trackOrder": "تتبع الطلب",
     "categories": "الفئات",
     "cart": "السلة",
@@ -215,8 +223,8 @@
     "categories": "الفئات",
     "explore_collection": "استكشف المجموعة",
     "products": "المنتجات",
-    "packages": "الباقات",
-    "our_packages": "باقاتنا",
+    "packages": "البوكسات",
+    "our_packages": "البوكسات الخاصة بنا",
     "trending_now": "الأكثر رواجاً الآن",
     "discover_popular": "اكتشف أكثر عناصر الموضة شعبية التي يتحدث عنها الجميع",
     "no_categories_found": "لم يتم العثور على فئات",
@@ -228,7 +236,7 @@
     "add_to_cart": "أضف للسلة",
     "add_to_wishlist": "أضف لقائمة الأمنيات",
     "remove_from_wishlist": "احذف من قائمة الأمنيات",
-    "out_of_stock": "نفد المخزون",
+    "out_of_stock": "غير متوفر",
     "in_stock": "متوفر",
     "low_stock": "مخزون قليل",
     "product_details": "تفاصيل المنتج",
@@ -282,7 +290,19 @@
     "you_save": "توفيرك {{amount}}!",
     "off": "% خصم",
     "you_may_also_like": "قد يعجبك أيضاً",
-    "discover_more_products": "اكتشف المزيد من المنتجات الرائعة"
+    "discover_more_products": "اكتشف المزيد من المنتجات الرائعة",
+    "errors": {
+      "not_found": "المنتج غير موجود",
+      "load_failed": "فشل تحميل تفاصيل المنتج، حاول مرة أخرى لاحقاً."
+    },
+    "notifications": {
+      "not_available": "هذا المنتج غير متاح",
+      "select_variant": "يرجى اختيار خيار المنتج",
+      "added_to_cart_summary": "تمت الإضافة للسلة",
+      "added_to_cart_detail": "{{quantity}} × {{product}} تمت إضافته إلى سلتك",
+      "wishlist_coming_soon_title": "قريباً",
+      "wishlist_coming_soon_detail": "ميزة قائمة الأمنيات ستكون متاحة قريباً!"
+    }
   },
   "cart": {
     "title": "سلة التسوق",

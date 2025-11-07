@@ -21,6 +21,10 @@ export class CheckoutService {
     return this.http.post(this.apiUrl, orderData);
   }
 
+  getVodafoneCashAccount(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/business-profile/vodafone-cash-account`);
+  }
+
   // Legacy method for backward compatibility
   createOrderLegacy(checkoutData: ICheckout): Observable<any> {
     return this.http.post(this.apiUrl, checkoutData);

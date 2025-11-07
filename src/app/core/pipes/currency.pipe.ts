@@ -31,9 +31,9 @@ export class CurrencyPipe implements PipeTransform {
     });
 
     // Get current language
-    let currentLang = 'en';
+    let currentLang = 'ar';
     if (isPlatformBrowser(this.platformId)) {
-      currentLang = localStorage.getItem('pledge-language') || 'en';
+      currentLang = localStorage.getItem('pledge-language') || 'ar';
     }
 
     // Return formatted value with currency symbol based on language

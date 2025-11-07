@@ -16,22 +16,23 @@
     @if (isOnSale) {
     <div class="absolute top-4 left-4 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 dark:from-red-600 dark:via-pink-600 dark:to-red-700 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg animate-pulse-once transition-colors duration-300">
       <i class="pi pi-tag mr-1"></i>
-      {{ discountPercentage }}% OFF
+      {{ discountPercentage }}% {{ 'products.off' | translate }}
     </div>
     }
 
     <!-- Stock Status Badge -->
-    @if (product.stock === 0) {
+    @if (product.status && product.status !== productStatus.ACTIVE) {
     <div class="absolute top-4 right-4 bg-red-500 dark:bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg transition-colors duration-300">
       <i class="pi pi-times-circle mr-1"></i>
-      Out of Stock
+      {{ 'products.out_of_stock' | translate }}
     </div>
-    } @else if (product.stock < 5) {
+    } 
+    <!-- @else if (product.status === productStatus.ACTIVE) {
     <div class="absolute top-4 right-4 bg-orange-500 dark:bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg transition-colors duration-300">
       <i class="pi pi-exclamation-triangle mr-1"></i>
       Only {{ product.stock }} left
     </div>
-    }
+    } -->
 
     <!-- Action Buttons -->
     <div class="absolute top-4 right-4 flex flex-col gap-2 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out transform translate-y-2 group-hover:translate-y-0">
@@ -80,15 +81,15 @@
 
       <!-- Stock Status (Hover Only) -->
       <div class="mb-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-        @if (product.stock > 0) {
+        @if (product.stock && product.status === productStatus.ACTIVE) {
         <div class="flex items-center gap-1">
           <i class="pi pi-check-circle text-green-300 dark:text-green-400 text-xs transition-colors duration-300"></i>
-          <span class="text-xs text-green-200 dark:text-green-300 font-medium transition-colors duration-300">In Stock</span>
+          <span class="text-xs text-green-200 dark:text-green-300 font-medium transition-colors duration-300">{{ 'products.in_stock' | translate }}</span>
         </div>
-        } @else {
+        } @else if (product.status && product.status !== productStatus.ACTIVE) {
         <div class="flex items-center gap-1">
           <i class="pi pi-times-circle text-red-300 dark:text-red-400 text-xs transition-colors duration-300"></i>
-          <span class="text-xs text-red-200 dark:text-red-300 font-medium transition-colors duration-300">Out of Stock</span>
+          <span class="text-xs text-red-200 dark:text-red-300 font-medium transition-colors duration-300">{{ 'products.out_of_stock' | translate }}</span>
         </div>
         }
       </div>

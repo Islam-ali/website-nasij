@@ -21,7 +21,9 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { ProductService } from '../../../features/products/services/product.service';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
-@Component({
+import { ProductStatus } from '../../../interfaces/product.interface';
+import { TranslateModule } from '@ngx-translate/core';
+  @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [
@@ -35,7 +37,8 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
     MessageModule,
     MultiLanguagePipe,
     CurrencyPipe,
-    FallbackImgDirective  
+    FallbackImgDirective,
+    TranslateModule
 ],
   providers: [
     { provide: Window, useValue: window },
@@ -50,6 +53,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   quantity = 1;
   loading = false;
   domain = environment.domain;
+  productStatus = ProductStatus;
   
   get isOnSale(): boolean {
     return this.product.price > 0 && this.product.price > this.product.price;

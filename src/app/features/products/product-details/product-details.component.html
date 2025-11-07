@@ -193,19 +193,19 @@
                 <span
                   class="inline-flex items-center px-6 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200 border-2 border-blue-200 dark:border-blue-800 transition-all duration-300 hover:scale-105 shadow-lg">
                   <i class="pi pi-tag me-2 text-lg"></i>
-                  {{ product.brand.name }}
+                  {{ product.brand.name | multiLanguage }}
                 </span>
               </div>
 
               <span
                 class="font-semibold text-sm flex items-center transition-colors duration-300 px-3 py-1 rounded-full"
                 [ngClass]="{
-    'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30': getStockStatus(product.stock).severity === 'success',
-    'text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30': getStockStatus(product.stock).severity === 'warning',
-    'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30': getStockStatus(product.stock).severity === 'danger'
+    'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30': product.status === productStatus.ACTIVE,
+    'text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30': product.status === productStatus.INACTIVE,
+    'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30': product.status === productStatus.OUT_OF_STOCK
   }">
                 <i class="pi pi-circle-fill me-2 text-xs"></i>
-                {{ getStockStatus(product.stock).text }}
+                {{ 'productStatus.' + product.status | translate }}
               </span>
             </div>
 

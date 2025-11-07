@@ -126,7 +126,7 @@
                 styleClass="text-indigo-600 dark:text-indigo-400"></p-checkbox>
               <label [for]="'brand-' + brand._id"
                 class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
-                {{ brand.name }}
+                {{ brand.name | multiLanguage }}
               </label>
             </div>
           </div>
@@ -166,32 +166,10 @@
           </p-chip>
           }
           @for (brandId of filterForm.get('selectedBrands')?.value || []; track brandId) {
-          <p-chip (onRemove)="removeBrandFilter(brandId)"
+          <p-chip removable (onRemove)="removeBrandFilter(brandId)"
             styleClass="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800 rounded-xl font-medium">
             <i class="pi pi-star mr-2"></i>
             {{ getBrandName(brandId) }}
-          </p-chip>
-          }
-          @for (size of filterForm.get('selectedSizes')?.value || []; track size) {
-          <p-chip (onRemove)="removeSizeFilter(size)"
-            styleClass="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 border-primary-200 dark:border-primary-800 rounded-xl font-medium">
-            <i class="pi pi-th-large mr-2"></i>
-            {{ 'products.size_label' | translate: {size: size} }}
-          </p-chip>
-          }
-          @for (color of filterForm.get('selectedColors')?.value || []; track color) {
-          <p-chip
-            [style]="{'background-color': getColorStyle(color), 'color': getContrastColor(getColorStyle(color)), 'border-color': getColorStyle(color)}"
-            removable (onRemove)="removeColorFilter(color)" styleClass="rounded-xl font-medium border-2">
-            <i class="pi pi-palette mr-2"></i>
-            {{ color }}
-          </p-chip>
-          }
-          @if (filterForm.get('showOnSale')?.value) {
-          <p-chip (onRemove)="filterForm.get('showOnSale')?.setValue(false)"
-            styleClass="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800 rounded-xl font-medium">
-            <i class="pi pi-tag mr-2"></i>
-            On Sale
           </p-chip>
           }
         </div>

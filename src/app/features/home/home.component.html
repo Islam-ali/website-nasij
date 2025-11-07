@@ -161,3 +161,21 @@
 
 
 </div>
+
+@if (businessProfile?.contactInfo?.phone) { <!-- icon whatsapp fixed bottom right -->
+  
+<div class="fixed bottom-32 right-8 z-50">
+  <a
+    href="https://wa.me/{{businessProfile?.contactInfo?.phone}}"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="WhatsApp"
+    class="group relative flex h-14 w-14 items-center justify-center overflow-visible rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 transition-all duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/60 "
+  >
+    <span class="pointer-events-none absolute -inset-2 rounded-full bg-emerald-400/40 opacity-75 motion-safe:animate-ping"></span>
+    <span class="pointer-events-none absolute -inset-4 rounded-full bg-emerald-400/20 opacity-75 motion-safe:animate-ping [animation-delay:200ms]"></span>
+    <span class="pointer-events-none absolute inset-0 rounded-full border border-white/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+    <i class="pi pi-whatsapp text-2xl"></i>
+  </a>
+</div>
+}

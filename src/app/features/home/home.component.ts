@@ -27,6 +27,8 @@ import { IPackage } from '../../interfaces/package.interface';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../core/directives/fallback-img.directive';
+import { BusinessProfileService } from '../../services/business-profile.service';
+import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 
 @Component({
   selector: 'app-home',
@@ -67,12 +69,14 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   router = inject(Router);
   aosInitialized = false;
   packages: IPackage[] = [];
+  businessProfile: IBusinessProfile | null = null;
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private messageService: MessageService,
     private categoryService: CategoryService,
     private packageService: PackageService,
+    private businessProfileService: BusinessProfileService
   ) {}
 
   ngOnInit() {
@@ -80,6 +84,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.loadNewArrivals();
     this.loadCategories();
     this.loadPackages();
+    this.getBusinessProfile();
   }
   ngAfterViewInit(): void {
     AOS.init({
@@ -210,6 +215,14 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       severity: 'success',
       summary: 'Added to Cart',
       detail: `${product.name} has been added to your cart.`
+    });
+  }
+
+  getBusinessProfile() {
+    this.businessProfileService.getBusinessProfile$().subscribe({
+      next: (businessProfile) => {
+        this.businessProfile = businessProfile;
+      }
     });
   }
 

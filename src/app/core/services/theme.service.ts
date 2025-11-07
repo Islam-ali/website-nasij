@@ -13,10 +13,10 @@ export interface ThemeConfig {
 })
 export class ThemeService {
   private readonly THEME_KEY = 'pledge-theme-mode';
-  
+
   private _themeConfig = signal<ThemeConfig>({
-    mode: 'light',
-    isDark: false
+    mode: this.getIsDark() ? 'dark' : 'light',
+    isDark: this.getIsDark()
   });
 
   public themeConfig = this._themeConfig.asReadonly();
@@ -25,12 +25,12 @@ export class ThemeService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.initializeTheme();
-    
+
     // Watch for system theme changes
     if (isPlatformBrowser(this.platformId)) {
       this.watchSystemTheme();
     }
-    
+
     // Effect to apply theme changes
     effect(() => {
       const config = this._themeConfig();
@@ -40,23 +40,19 @@ export class ThemeService {
 
   private initializeTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const savedMode = localStorage.getItem(this.THEME_KEY) as ThemeMode;
-      const mode = savedMode || 'light';
-      const isDark = this.getIsDark(mode);
-      
-      this._themeConfig.set({ mode, isDark });
+      this._themeConfig.set({ mode: this.getIsDark() ? 'dark' : 'light', isDark: this.getIsDark() });
+      this.applyTheme(this.getIsDark());
     }
   }
 
-  private getIsDark(mode: ThemeMode): boolean {
-    if (!mode) {
-      return this.getSystemPrefersDark();
-    }
-    return mode === 'dark';
+  private getIsDark(): boolean {
+    const savedMode = localStorage.getItem(this.THEME_KEY) as ThemeMode || (this.getSystemPrefersDark() ? 'dark' : 'light');
+    return savedMode === 'dark';
   }
 
   private getSystemPrefersDark(): boolean {
     if (isPlatformBrowser(this.platformId)) {
+      console.log('getSystemPrefersDark', window.matchMedia('(prefers-color-scheme: dark)').matches);
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
@@ -65,7 +61,7 @@ export class ThemeService {
   private watchSystemTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
+
       mediaQuery?.addEventListener('change', (e) => {
         const isDark = e.matches;
         this._themeConfig.update(config => ({ ...config, isDark }));
@@ -74,13 +70,13 @@ export class ThemeService {
   }
 
   setTheme(mode: ThemeMode): void {
-    const isDark = this.getIsDark(mode);
-    
-    this._themeConfig.set({ mode, isDark });
-    
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem(this.THEME_KEY, mode);
     }
+    const isDark = this.getIsDark();
+    this._themeConfig.set({ mode, isDark });
+
   }
 
   toggleTheme(): void {
@@ -108,17 +104,11 @@ export class ThemeService {
   // Utility methods
   getThemeIcon(): string {
     const mode = this._themeConfig().mode;
-    // if (mode === 'system') {
-    //   return this.getSystemPrefersDark() ? 'pi-moon' : 'pi-sun';
-    // }
     return mode === 'dark' ? 'pi-moon' : 'pi-sun';
   }
 
   getThemeLabel(): string {
     const mode = this._themeConfig().mode;
-    // if (mode === 'system') {
-    //   return this.getSystemPrefersDark() ? 'Switch to Light' : 'Switch to Dark';
-    // }
     return mode === 'dark' ? 'Switch to Light' : 'Switch to Dark';
   }
 

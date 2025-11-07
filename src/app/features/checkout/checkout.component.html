@@ -111,7 +111,7 @@
               <div>
                 <label for="country"
                   class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.country' | translate}}*</label>
-                <p-select [options]="countries()" formControlName="country" optionLabel="name.en" optionValue="_id"
+                <p-select [options]="countries()" formControlName="country" [optionLabel]=" 'name.'+ currentLanguage()" optionValue="_id"
                   [placeholder]="'checkout.selectCountry' | translate"
                   (onChange)="loadStates(); setShippingCost()"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.country')?.touched && checkoutForm.get('shippingAddress.country')?.errors"
@@ -127,7 +127,9 @@
               <div>
                 <label for="state"
                   class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.state' | translate}}*</label>
-                <p-select [options]="states()" formControlName="state" optionLabel="name.en" optionValue="_id"
+                <p-select [options]="states()" formControlName="state" [optionLabel]=" 'name.'+ currentLanguage()" optionValue="_id"
+                filterBy="name.{{currentLanguage()}}"
+                [filter]="true"
                   [placeholder]="'checkout.selectState' | translate"
                   (onChange)="setShippingCost()"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.state')?.touched && checkoutForm.get('shippingAddress.state')?.errors"
@@ -209,12 +211,12 @@
                 <label [for]="method.value"
                   class="ms-4 text-lg flex w-full items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
                   <span>{{'checkout.' + method.value.toLowerCase() | translate}}</span>
-                  <span class="text-gray-500 dark:text-gray-400 inline-block" *ngIf="method.value === 'vodafone_cash'">
-                    010602123312
+                  <span *ngIf=" method.value === 'deposit'"> {{shippingCost() | currency}}</span>
+                  <span class="text-gray-500 dark:text-gray-400 inline-block" *ngIf="method.value === 'vodafone_cash' || method.value === 'deposit'">
+                    {{vodafoneCashAccount()}}
                   </span>
                 </label>
               </div>
-
 
               <!-- Payment Image Upload (shown when Vodafone Cash is selected) -->
                @if(isPaymentImageRequired()) {  

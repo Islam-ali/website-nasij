@@ -1,6 +1,11 @@
 {
   "size": "Size",
   "color": "Color",
+  "productStatus": {
+    "active": "Available",
+    "inactive": "Inactive",
+    "out_of_stock": "Out of Stock"
+  },
   "orderStatus": {
     "pending": "Pending",
     "confirmed": "Confirmed",
@@ -18,7 +23,8 @@
   },
   "paymentMethod": {
     "cash": "Cash",
-    "vodafone_cash": "Vodafone Cash"
+    "vodafone_cash": "Vodafone Cash",
+    "deposit": "Deposit"
   },
   "common": {
     "save": "Save",
@@ -97,6 +103,7 @@
       "bank_transfer": "Bank Transfer",
       "cash_on_delivery": "Cash on Delivery",
       "vodafone_cash": "Vodafone Cash",
+      "deposit": "Deposit",
       "paypal": "PayPal",
       "stripe": "Stripe"
     }
@@ -141,6 +148,7 @@
     "paymentMethod": "Payment Method",
     "cash": "Cash",
     "vodafone_cash": "Vodafone Cash",
+    "deposit": "Deposit",
     "creditCard": "Credit Card",
     "bankTransfer": "Bank Transfer",
     "payPal": "PayPal",
@@ -293,7 +301,19 @@
     "you_save": "You save {{amount}}!",
     "off": "% OFF",
     "you_may_also_like": "You May Also Like",
-    "discover_more_products": "Discover more amazing products"
+    "discover_more_products": "Discover more amazing products",
+    "errors": {
+      "not_found": "Product not found",
+      "load_failed": "Failed to load product details. Please try again later."
+    },
+    "notifications": {
+      "not_available": "This product is not available",
+      "select_variant": "Please select a variant",
+      "added_to_cart_summary": "Added to Cart",
+      "added_to_cart_detail": "{{quantity}} × {{product}} has been added to your cart",
+      "wishlist_coming_soon_title": "Coming Soon",
+      "wishlist_coming_soon_detail": "Wishlist functionality is coming soon!"
+    }
   },
   "cart": {
     "title": "Shopping Cart",

@@ -84,7 +84,7 @@ export class CheckoutComponent implements OnInit {
   // Computed property to check if payment image is required
   isPaymentImageRequired = computed(() => {
     const currentPaymentMethod = this.paymentMethod();        
-    return currentPaymentMethod === PaymentMethod.VODAFONE_CASH;
+    return currentPaymentMethod === PaymentMethod.VODAFONE_CASH || currentPaymentMethod === PaymentMethod.DEPOSIT;
   });
 
   // File upload properties
@@ -98,9 +98,12 @@ export class CheckoutComponent implements OnInit {
 
   states = signal<IState[]>([]);
 
+  vodafoneCashAccount = signal<string>('');
+  currentLanguage = signal<string>('en');
   paymentMethods = [
     { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
+    { label: 'Deposit', value: PaymentMethod.DEPOSIT },
     // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
     // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
     // { label: 'PayPal', value: PaymentMethod.PAYPAL }
@@ -121,8 +124,11 @@ export class CheckoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.translate.onLangChange.subscribe(() => {
+      this.currentLanguage.set(this.translate.currentLang === 'ar' ? 'ar' : 'en');
+    });
     this.checkoutForm = this.createCheckoutForm();
-    
+    this.getVodafoneCashAccount();
     // Subscribe to payment method changes
     this.checkoutForm.get('paymentMethod')?.valueChanges.pipe(
       takeUntil(this.destroy$)
@@ -407,7 +413,7 @@ export class CheckoutComponent implements OnInit {
 
     // Upload payment image if required
     let paymentImageUrl: string | null = null;
-    if (formValue.paymentMethod === PaymentMethod.VODAFONE_CASH && this.selectedFile) {
+    if (this.selectedFile) {
       try {
         paymentImageUrl = await this.uploadPaymentImage();
         if (!paymentImageUrl) {
@@ -448,8 +454,8 @@ export class CheckoutComponent implements OnInit {
       orderStatus: OrderStatus.PENDING,
       paymentMethod: formValue.paymentMethod,
       cashPayment: {
-        amountPaid: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH ? Number(this.shippingCost()) : 0,
-        changeDue: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH ? Number(this.orderTotal()) - Number(this.shippingCost()) : Number(this.orderTotal()),
+        amountPaid: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.paymentMethod === PaymentMethod.DEPOSIT ? Number(this.shippingCost()) : 0,
+        changeDue: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.paymentMethod === PaymentMethod.DEPOSIT ? Number(this.orderTotal()) - Number(this.shippingCost()) : Number(this.orderTotal()),
         paymentImage: paymentImageUrl || '',
       },
       shippingAddress: {
@@ -508,6 +514,12 @@ export class CheckoutComponent implements OnInit {
           detail: errorMessage 
         });
       }
+    });
+  }
+
+  getVodafoneCashAccount(): void {
+    this.checkoutService.getVodafoneCashAccount().subscribe((response: any) => {
+      this.vodafoneCashAccount.set(response.data);
     });
   }
   setShippingCost(): void {

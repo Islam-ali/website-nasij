@@ -17,7 +17,7 @@ import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { IProduct, ProductVariant, ProductVariantAttribute } from '../models/product.interface';
+import { IProduct, ProductStatus, ProductVariant, ProductVariantAttribute } from '../models/product.interface';
 import { ProductService } from '../services/product.service';
 import { CartService } from '../../cart/services/cart.service';
 import { TabsModule } from 'primeng/tabs';
@@ -28,7 +28,7 @@ import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
 import { SafePipe } from '../../../core/pipes/safe.pipe';
 import { IQueryParamsBuyNow } from '../../../interfaces/package.interface';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
@@ -89,7 +89,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   isInWishlist = false;
   wishlistLoading = false;
   domain = environment.domain;
-
+  productStatus = ProductStatus;
   // Image gallery
   images: ProductImage[] = [];
   responsiveOptions: any[];
@@ -101,6 +101,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     private cartService: CartService,
     private messageService: MessageService,
     private translationService: TranslationService,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     super();
@@ -126,7 +127,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       if (productId) {
         this.loadProduct(productId);
       } else {
-        this.error = 'Product not found';
+        this.error = this.translate.instant('products.errors.not_found');
         this.loading = false;
       }
     });
@@ -171,7 +172,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
         },
         error: (err) => {
           console.error('Error loading product:', err);
-          this.error = 'Failed to load product details. Please try again later.';
+          this.error = this.translate.instant('products.errors.load_failed');
           this.loading = false;
         }
       })
@@ -285,11 +286,20 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   addToCart(): void {
+    if (this.product?.status !== ProductStatus.ACTIVE) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translate.instant('common.warning'),
+        detail: this.translate.instant('products.notifications.not_available'),
+        life: 1000
+      });
+      return;
+    }
     if (this.checkCart()) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Warning',
-        detail: 'Please select a variant',
+        summary: this.translate.instant('common.warning'),
+        detail: this.translate.instant('products.notifications.select_variant'),
         life: 1000
       });
       return;
@@ -309,18 +319,30 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     this.messageService.add({
       severity: 'success',
-      summary: 'Added to Cart',
-      detail: `${this.quantity} x ${this.product.name[this.currentLanguage]} has been added to your cart`,
+      summary: this.translate.instant('products.notifications.added_to_cart_summary'),
+      detail: this.translate.instant('products.notifications.added_to_cart_detail', {
+        quantity: this.quantity,
+        product: this.getLocalizedProductName()
+      }),
       life: 1000
     });
   }
 
   checkout(): void {
+    if (this.product?.status !== ProductStatus.ACTIVE) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translate.instant('common.warning'),
+        detail: this.translate.instant('products.notifications.not_available'),
+        life: 1000
+      });
+      return;
+    }
     if (this.checkCart()) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Warning',
-        detail: 'Please select a variant',
+        summary: this.translate.instant('common.warning'),
+        detail: this.translate.instant('products.notifications.select_variant'),
         life: 1000
       });
       return;
@@ -351,8 +373,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     // TODO: Implement wishlist functionality
     this.messageService.add({
       severity: 'info',
-      summary: 'Coming Soon',
-      detail: 'Wishlist functionality is coming soon!',
+      summary: this.translate.instant('products.notifications.wishlist_coming_soon_title'),
+      detail: this.translate.instant('products.notifications.wishlist_coming_soon_detail'),
       life: 1000
     });
   }
@@ -398,6 +420,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   get currentLanguage(): 'en' | 'ar' {
     return this.translationService.getCurrentLanguage() as 'en' | 'ar';
+  }
+
+  private getLocalizedProductName(): string {
+    if (!this.product?.name) {
+      return '';
+    }
+    return this.product.name[this.currentLanguage] || this.product.name.en || this.product.name.ar || '';
   }
 
   scrollToTop(): void {
