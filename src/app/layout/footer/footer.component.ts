@@ -22,9 +22,9 @@ import { environment } from '../../../environments/environment';
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         
         <!-- Company Info -->
-        <div class="space-y-6">
+        <div class="space-y-6 col-span-2">
           <div class="flex items-center gap-3">
-            <div class="w-20 h-20 rounded-lg border border-primary-200 flex items-center justify-center">
+            <div class="w-20 h-20 rounded-lg border bg-white dark:bg-gray-800 border-primary-200 flex items-center justify-center">
               @if(isDarkTheme()) {
                 <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="pledge Logo" class="w-full h-full object-contain">
               } @else {
@@ -36,22 +36,6 @@ import { environment } from '../../../environments/environment';
           <p class="text-gray-300 leading-relaxed">
             {{ businessProfile?.description | multiLanguage }}
           </p>
-          
-          <!-- Contact Info -->
-          <!-- <div class="space-y-3">
-            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
-              <i class="pi pi-envelope text-primary-400"></i>
-              <span>{{'info@pledge.com'}}</span>
-            </div>
-            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
-              <i class="pi pi-phone text-primary-400"></i>
-              <span>+1 (555) 123-4567</span>
-            </div>
-            <div class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
-              <i class="pi pi-map-marker text-primary-400"></i>
-              <span>123 Fashion Street, Style City, SC 12345</span>
-            </div>
-          </div> -->
         </div>
 
         <!-- Quick Links -->

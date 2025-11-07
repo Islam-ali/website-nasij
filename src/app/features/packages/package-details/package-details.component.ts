@@ -678,13 +678,12 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       // Try to find image based on any variant with image
       for (const [variantType, attribute] of Object.entries(selectedVariants)) {
         if (attribute && (attribute as any).image?.filePath) {
-          return (attribute as any).image.filePath;
+          return this.getImageUrl((attribute as any).image.filePath);
         }
       }
     }
-    
     // Fallback to product main image
-    return item.productId.images?.[0]?.filePath || 'images/photo.png';
+    return this.getImageUrl(item.productId.images[0]?.filePath || 'images/photo.png');
   }
 
   getVariantImage(productId: string, variantType: string, value: MultilingualText): string | null {

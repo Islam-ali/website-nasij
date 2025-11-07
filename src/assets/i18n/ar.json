@@ -418,7 +418,8 @@
     "total_value_label": "القيمة الإجمالية",
     "buy_now": "اشتري الآن",
     "something_went_wrong": "عذراً! حدث خطأ ما",
-    "try_again": "حاول مرة أخرى"
+    "try_again": "حاول مرة أخرى",
+    "this_item_is_included_in_your_package": "هذا العنصر موجود في باقتك"
   },
   "footer": {
     "about_us": "من نحن",

@@ -3,8 +3,8 @@
 
 export const environment = {
   production: false,
-  domain: 'https://api.pledgestores.com',
-  apiUrl: 'https://api.pledgestores.com/api/v1',// Development API URL
+  domain: 'http://localhost:3000',
+  apiUrl: 'http://localhost:3000/api/v1',// Development API URL
   appName: 'Online Store (Dev)',
   appVersion: '1.0.0-dev',
   stripePublishableKey: 'your-test-stripe-key',

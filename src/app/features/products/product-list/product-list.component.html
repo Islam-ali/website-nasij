@@ -41,7 +41,7 @@
           </div> -->
 
           <!-- Filter Button -->
-          <!-- <button type="button" (click)="isDrawerOpen = true"
+          <button type="button" (click)="isDrawerOpen = true"
             class="relative bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
             <i class="pi pi-filter"></i>
             Filters
@@ -51,7 +51,7 @@
               {{ activeFiltersCount }}
             </span>
             }
-          </button> -->
+          </button>
         </div>
       </div>
     </div>
@@ -85,43 +85,11 @@
             (onChange)="onSortChange()"></p-select>
         </div>
 
-        <!-- Price Range -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-              <i class="pi pi-dollar text-green-600 dark:text-green-400 text-sm"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.price_range' | translate }}
-            </h3>
-          </div>
-          <div
-            class="space-y-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-2xl border border-green-200 dark:border-green-800">
-            <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">{{ 'products.min_price' | translate }}</label>
-                <p-inputNumber formControlName="minPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
-                  [showButtons]="false" [step]="5"
-                  styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-green-500 dark:focus:border-green-400 rounded-xl transition-all duration-300"></p-inputNumber>
-              </div>
-              <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">{{ 'products.max_price' | translate }}</label>
-                <p-inputNumber formControlName="maxPrice" mode="currency" currency="USD" [min]="0" [max]="1000"
-                  [showButtons]="false" [step]="5"
-                  styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-green-500 dark:focus:border-green-400 rounded-xl transition-all duration-300"></p-inputNumber>
-              </div>
-            </div>
-            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-              <span class="font-medium">{{ filterForm.get('minPrice')?.value | currency }}</span>
-              <span class="font-medium">{{ filterForm.get('maxPrice')?.value | currency }}</span>
-            </div>
-          </div>
-        </div>
-
         <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
 
         <!-- Categories -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-tag text-blue-600 dark:text-blue-400 text-sm"></i>
             </div>
@@ -130,7 +98,7 @@
           </div>
           <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let category of categories"
-              class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
+              class="flex items-center gap-2 p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
               <p-checkbox [value]="category._id" formControlName="selectedCategories"
                 [inputId]="'category-' + category._id" styleClass="text-blue-600 dark:text-blue-400"></p-checkbox>
               <label [for]="'category-' + category._id"
@@ -144,8 +112,8 @@
         <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
 
         <!-- Brands -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
               <i class="pi pi-star text-indigo-600 dark:text-indigo-400 text-sm"></i>
             </div>
@@ -153,7 +121,7 @@
           </div>
           <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let brand of brands"
-              class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
+              class="flex items-center gap-2 p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
               <p-checkbox [value]="brand._id" formControlName="selectedBrands" [inputId]="'brand-' + brand._id"
                 styleClass="text-indigo-600 dark:text-indigo-400"></p-checkbox>
               <label [for]="'brand-' + brand._id"
@@ -166,70 +134,6 @@
 
         <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
 
-        <!-- Sizes -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <i class="pi pi-th-large text-primary-600 dark:text-primary-400 text-sm"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.sizes' | translate }}</h3>
-          </div>
-          <div class="grid grid-cols-3 gap-3 p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-            <div *ngFor="let size of sizes"
-              class="flex items-center space-x-2 p-3 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
-              <p-checkbox [value]="size" formControlName="selectedSizes" [inputId]="'size-' + size"
-                styleClass="text-primary-600 dark:text-primary-400"></p-checkbox>
-              <label [for]="'size-' + size"
-                class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                {{ size }}
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
-
-        <!-- Colors -->
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <i class="pi pi-palette text-primary-600 dark:text-primary-400 text-sm"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.colors' | translate }}</h3>
-          </div>
-          <div class="space-y-2 p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-            <div *ngFor="let color of colors"
-              class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
-              <p-checkbox [value]="color" formControlName="selectedColors" [inputId]="'color-' + color"
-                styleClass="text-primary-600 dark:text-primary-400"></p-checkbox>
-              <div class="flex items-center space-x-3">
-                <div
-                  class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 shadow-sm group-hover:scale-110 transition-transform duration-300"
-                  [ngStyle]="{ 'background-color': getColorStyle(color) }"></div>
-                <label [for]="'color-' + color"
-                  class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                  {{ color }}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
-
-        <!-- Sale Items -->
-        <div
-          class="flex items-center space-x-3 p-4 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/10 dark:to-orange-900/10 rounded-2xl border border-red-200 dark:border-red-800 hover:from-red-100 hover:to-orange-100 dark:hover:from-red-800/20 dark:hover:to-orange-800/20 transition-all duration-300">
-          <p-checkbox formControlName="showOnSale" binary="true" inputId="on-sale"
-            styleClass="text-red-600 dark:text-red-400"></p-checkbox>
-          <label for="on-sale"
-            class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white transition-colors duration-300">
-            <span class="flex items-center gap-2">
-              <i class="pi pi-tag text-red-500 dark:text-red-400"></i>
-              {{ 'products.on_sale_only' | translate }}
-            </span>
-          </label>
-        </div>
       </div>
     </p-drawer>
 

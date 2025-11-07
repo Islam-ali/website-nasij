@@ -5,10 +5,11 @@ import { HeroSectionService } from './hero-section.service';
 import { HeroSection } from './hero-section';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-hero-section',
-  imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective],
+  imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective, TranslateModule],
   templateUrl: './hero-section.component.html',
 })
 export class HeroSectionComponent implements OnInit {
@@ -114,7 +115,9 @@ export class HeroSectionComponent implements OnInit {
   }
 
   navigateTo(url: string) {
-    this.router.navigate([url]);
+    if (url) {
+      this.router.navigate([url]);
+    }
   }
   
   navigateToProducts() {

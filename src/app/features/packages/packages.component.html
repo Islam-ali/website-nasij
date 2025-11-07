@@ -1,13 +1,14 @@
-<div class="min-h-screen max-w-screen-zxl mx-auto">
+<div class="min-h-screen bg-white dark:bg-gray-900">
   <p-toast></p-toast>
 
   <!-- Header Section -->
-  <div class="header-section">
-    <div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="bg-gradient-to-b from-slate-50 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 py-10">
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          {{ 'packages.our_packages' | translate }}
-        </h1>
+        <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
+          <i class="pi pi-sparkles text-sm"></i>
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">{{ 'packages.our_packages' | translate }}</h2>
+        </span>
       </div>
     </div>
   </div>
@@ -15,33 +16,33 @@
 
   <!-- Loading State -->
   <div *ngIf="loading()" class="max-w-7xl mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <div *ngFor="let item of [1,2,3,4,5,6,7,8]" class="package-skeleton">
-        <p-skeleton height="200px" class="mb-3"></p-skeleton>
-        <p-skeleton height="20px" class="mb-2"></p-skeleton>
-        <p-skeleton height="16px" class="mb-2"></p-skeleton>
-        <p-skeleton height="16px" class="mb-3"></p-skeleton>
-        <div class="flex gap-2 mt-2">
-          <p-skeleton height="32px" width="60px"></p-skeleton>
-          <p-skeleton height="32px" width="60px"></p-skeleton>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div *ngFor="let item of [1,2,3,4,5,6,7,8]" class="animate-pulse space-y-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
+        <p-skeleton height="200px" class="rounded-xl"></p-skeleton>
+        <p-skeleton height="20px" class="rounded-lg"></p-skeleton>
+        <p-skeleton height="16px" class="rounded-lg"></p-skeleton>
+        <p-skeleton height="16px" class="rounded-lg"></p-skeleton>
+        <div class="flex gap-2 pt-1">
+          <p-skeleton height="32px" width="60px" class="rounded-full"></p-skeleton>
+          <p-skeleton height="32px" width="60px" class="rounded-full"></p-skeleton>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Error State -->
-  <div *ngIf="error() && !loading()" class="max-w-7xl mx-auto px-4 py-8">
-    <div class="text-center">
-      <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-4"></i>
-      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+  <div *ngIf="error() && !loading()" class="max-w-7xl mx-auto px-4 py-12">
+    <div class="flex flex-col items-center text-center">
+      <i class="pi pi-exclamation-triangle mb-4 text-5xl text-rose-500"></i>
+      <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
         {{ 'packages.something_went_wrong' | translate }}
       </h3>
-      <p class="text-gray-600 dark:text-gray-300 mb-4">{{ error() }}</p>
+      <p class="mb-4 max-w-xl text-sm text-slate-600 dark:text-slate-300">{{ error() }}</p>
       <button 
         pButton 
         [label]="'packages.try_again' | translate" 
         icon="pi pi-refresh" 
-        class="p-button-primary"
+        class="w-full max-w-xs rounded-lg bg-blue-600 px-4 py-3 text-white shadow transition hover:bg-blue-500"
         (click)="loadPackages()"
       ></button>
     </div>
@@ -50,9 +51,9 @@
   <!-- Packages Grid -->
   <div *ngIf="!loading() && !error()" class="max-w-7xl mx-auto px-4 py-8">
     <!-- No Packages Found -->
-    <div *ngIf="packages().length === 0" class="text-center py-12">
-      <i class="pi pi-box !text-7xl text-gray-400 mb-4"></i>
-      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+    <div *ngIf="packages().length === 0" class="flex flex-col items-center py-16 text-center">
+      <i class="pi pi-box mb-5 text-6xl text-slate-400"></i>
+      <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
         {{ 'packages.no_packages_found' | translate }}
       </h3>
       <!-- <p class="text-gray-600 dark:text-gray-300">
@@ -61,112 +62,108 @@
     </div>
 
     <!-- Packages Grid -->
-    <div *ngIf="packages().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <div *ngFor="let package of packages()" class="package-card">
-        <p-card styleClass="h-full package-card-inner">
-          <!-- Package Image -->
-          <div class="package-image-container mb-4">
-            <img 
-              [src]="getMainImage(package)" 
-              [alt]="package.name"
-              fallback
-              class="w-full h-48 object-cover rounded-lg"
-                             (error)="onImageError($event)"
-            />
-            
-            <!-- Discount Badge -->
-            <div *ngIf="package.discountPrice" class="discount-badge">
-              -{{ getDiscountPercentage(package) }}%
+    <div *ngIf="packages().length > 0" class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div *ngFor="let package of packages()" class="group h-full">
+        <p-card styleClass="h-full overflow-hidden rounded-[28px] border border-slate-200 bg-white text-slate-900 shadow-lg shadow-slate-200/50 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:shadow-slate-900/40">
+          <div class="flex flex-col md:flex-row">
+            <!-- Package Image -->
+            <div class="relative md:w-6/12">
+              <img 
+                [src]="getMainImage(package)" 
+                [alt]="package.name"
+                fallback
+                class="h-48 w-full object-cover md:h-full"
+                (error)="onImageError($event)"
+              />
+              
+              <!-- Discount Badge -->
+              <div *ngIf="package.discountPrice" class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-lg shadow-rose-400/50">
+                <i class="pi pi-tag text-sm"></i>
+                {{ getDiscountPercentage(package) }}%
+              </div>
+
+              <!-- Stock Badge -->
+              <!-- <div 
+                class="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-lg"
+                [ngClass]="{
+                  'bg-emerald-500': package.stock > 5,
+                  'bg-amber-500': package.stock > 0 && package.stock <= 5,
+                  'bg-rose-500': package.stock === 0
+                }"
+              >
+                <i class="pi pi-circle-fill text-[10px]"></i>
+                {{ package.stock > 0 ? (package.stock <= 5 ? 'Low Stock' : 'In Stock') : 'Out of Stock' }}
+              </div> -->
             </div>
 
-            <!-- Stock Badge -->
-            <div class="stock-badge" [class.low-stock]="package.stock <= 5">
-              {{ package.stock > 0 ? (package.stock <= 5 ? 'Low Stock' : 'In Stock') : 'Out of Stock' }}
-            </div>
-          </div>
+            <!-- Package Info -->
+            <div class="flex flex-1 flex-col gap-6 px-4 py-6">
+              <div class="space-y-4">
+                <!-- Package Name -->
+                <h3 class="text-2xl font-semibold leading-snug text-slate-900 transition group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-300">
+                  {{ package.name | multiLanguage }}
+                </h3>
 
-          <!-- Package Info -->
-          <div class="package-info p-2">
-            <!-- Package Name -->
-            <h3 class="package-name mb-2">
-              {{ package.name | multiLanguage }}
-            </h3>
+                <!-- Description -->
+                <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  {{ package.description | multiLanguage}}
+                </p>
+              </div>
 
-            <!-- Rating -->
-            <div class="rating-container mb-2" *ngIf="package.averageRating > 0">
-              <p-rating 
-                [ngModel]="package.averageRating" 
-                [readonly]="true" 
-                [stars]="5"
- 
-              ></p-rating>
-              <span class="rating-text">
-                ({{ package.reviewCount }} reviews)
-              </span>
-            </div>
+              <!-- Rating and meta -->
+              <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-300">
+                <div class="flex items-center gap-2" *ngIf="package.averageRating > 0">
+                  <p-rating 
+                    [ngModel]="package.averageRating" 
+                    [readonly]="true" 
+                    [stars]="5"
 
-            <!-- Description -->
-            <p class="package-description mb-3 line-clamp-3 ">
-              {{ package.description | multiLanguage}}
-            </p>
+                  ></p-rating>
+                  <span>
+                    ({{ package.reviewCount }} reviews)
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="pi pi-box text-blue-500 dark:text-blue-300"></i>
+                  <span>
+                    {{ 'packages.items_included' | translate: {count: getItemsCount(package)} }}
+                  </span>
+                </div>
+              </div>
 
-            <!-- Items Count -->
-            <div class="items-count mb-3">
-              <i class="pi pi-box text-blue-500 me-2"></i>
-              <span class="text-sm text-gray-600 dark:text-gray-400">
-                {{ 'packages.items_included' | translate: {count: getItemsCount(package)} }}
-              </span>
-            </div>
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-2" *ngIf="getTags(package).length > 0">
+                <p-chip 
+                  *ngFor="let tag of getTags(package)" 
+                  [label]="tag"
+                  class="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200"
+                ></p-chip>
+              </div>
 
-            <!-- Tags -->
-            <div class="tags-container mb-4" *ngIf="getTags(package).length > 0">
-              <p-chip 
-                *ngFor="let tag of getTags(package)" 
-                [label]="tag"
-                class="me-2 mb-2"
-              ></p-chip>
-            </div>
+              <!-- Price & CTA -->
+              <div class="mt-auto flex flex-col gap-4 rounded-[24px] bg-slate-100 p-4 text-slate-700 dark:bg-slate-800/70 dark:text-slate-100">
+                <div class="flex items-end justify-between">
+                  <div class="flex flex-col text-nowrap text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-400">
+                    <span *ngIf="package.discountPrice" class="text-sm font-medium tracking-normal text-slate-400 line-through dark:text-slate-500">
+                      {{ package.price.toFixed(2) | currency }}
+                    </span>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xl text-nowrap font-bold text-blue-600 dark:text-blue-200">
+                      {{ (package.price - (package.discountPrice || 0)).toFixed(2) | currency }}
+                    </div>
+                  </div>
+                </div>
 
-            <!-- Price Section -->
-            <div class="price-section mb-4">
-              <div class="price-container">
-                <span *ngIf="package.discountPrice" class="original-price">
-                  {{ package.price.toFixed(2) | currency }}
-                </span>
-                <span class="current-price">
-                  {{ (package.price - (package.discountPrice || 0)).toFixed(2) | currency }}
-                </span>
+                <button 
+                  pButton 
+                  [label]="'packages.view_details' | translate" 
+                  icon="pi pi-arrow-right" 
+                  class="rounded-2xl bg-emerald-500 px-5 py-3 text-base font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-400 dark:bg-emerald-500 dark:hover:bg-emerald-400"
+                  (click)="viewPackage(package)"
+                ></button>
               </div>
             </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-              <button 
-                pButton 
-                [label]="'packages.view_details' | translate" 
-                icon="pi pi-eye" 
-                class=" p-button-outlined flex-1 mr-2"
-                (click)="viewPackage(package)"
-              ></button>
-              
-              <!-- <button 
-                pButton 
-                icon="pi pi-heart" 
-                class="p-button-outlined p-button-secondary"
-                pTooltip="Add to Wishlist"
-                (click)="addToWishlist(package)"
-              ></button> -->
-            </div>
-
-            <!-- Quick Add to Cart -->
-            <!-- <button 
-              pButton 
-              label="Add to Cart" 
-              icon="pi pi-shopping-cart" 
-              class="p-button-success w-full mt-3"
-              [disabled]="package.stock === 0"
-              (click)="addToCart(package)"
-            ></button> -->
           </div>
         </p-card>
       </div>

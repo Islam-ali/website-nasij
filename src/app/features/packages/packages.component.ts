@@ -213,7 +213,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   getDiscountPercentage(pkg: IPackage): number {
     if (!pkg.discountPrice) return 0;
     
-    return Math.round(((pkg.price - pkg.discountPrice) / pkg.price) * 100);
+    return Math.round(((pkg.price - (pkg.price - pkg.discountPrice)) / pkg.price) * 100);
   }
 
   getItemsCount(pkg: IPackage): number {
