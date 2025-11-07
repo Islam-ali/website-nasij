@@ -89,7 +89,8 @@ a {
 }
 
 .loading-logo {
-  @apply w-32 h-32 mx-auto rounded-full bg-white/10 dark:bg-gray-800/10 shadow-2xl backdrop-blur-lg border border-white/20 dark:border-gray-700/20 transition-transform duration-300 p-4 hover:scale-105;
+  @apply w-32 h-32 mx-auto rounded-full bg-white/10 dark:bg-gray-800/10 shadow-2xl backdrop-blur-lg border dark:border-gray-700/20 transition-transform duration-300 p-4 hover:scale-105
+  animate-bounce
 }
 
 .loading-text {
