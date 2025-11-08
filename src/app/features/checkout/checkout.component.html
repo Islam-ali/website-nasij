@@ -212,6 +212,7 @@
                   class="ms-4 text-lg flex w-full items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
                   <span>{{'checkout.' + method.value.toLowerCase() | translate}}</span>
                   <span *ngIf=" method.value === 'deposit'"> {{shippingCost() | currency}}</span>
+                  <span *ngIf=" method.value === 'vodafone_cash'"> {{orderTotal() | currency}}</span>
                   <span class="text-gray-500 dark:text-gray-400 inline-block" *ngIf="method.value === 'vodafone_cash' || method.value === 'deposit'">
                     {{vodafoneCashAccount()}}
                   </span>

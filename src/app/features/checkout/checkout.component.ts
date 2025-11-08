@@ -101,7 +101,7 @@ export class CheckoutComponent implements OnInit {
   vodafoneCashAccount = signal<string>('');
   currentLanguage = signal<string>('en');
   paymentMethods = [
-    { label: 'Cash', value: PaymentMethod.CASH },
+    // { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
     { label: 'Deposit', value: PaymentMethod.DEPOSIT },
     // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
@@ -454,8 +454,8 @@ export class CheckoutComponent implements OnInit {
       orderStatus: OrderStatus.PENDING,
       paymentMethod: formValue.paymentMethod,
       cashPayment: {
-        amountPaid: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.paymentMethod === PaymentMethod.DEPOSIT ? Number(this.shippingCost()) : 0,
-        changeDue: formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.paymentMethod === PaymentMethod.DEPOSIT ? Number(this.orderTotal()) - Number(this.shippingCost()) : Number(this.orderTotal()),
+        amountPaid: this.getAmountPaid(),
+        changeDue: this.getChangeDue(),
         paymentImage: paymentImageUrl || '',
       },
       shippingAddress: {
@@ -515,6 +515,28 @@ export class CheckoutComponent implements OnInit {
         });
       }
     });
+  }
+
+  getAmountPaid(): number {
+    if (this.checkoutForm.value.paymentMethod === PaymentMethod.DEPOSIT) {
+      return Number(this.shippingCost());
+    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
+      return Number(this.orderTotal());
+    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.CASH) {
+      return Number(this.orderTotal());
+    }
+    return 0;
+  }
+
+  getChangeDue(): number {
+    if (this.checkoutForm.value.paymentMethod === PaymentMethod.DEPOSIT) {
+      return Number(this.orderTotal()) - Number(this.shippingCost());
+    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
+      return 0;
+    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.CASH) {
+      return 0;
+    }
+    return 0;
   }
 
   getVodafoneCashAccount(): void {
