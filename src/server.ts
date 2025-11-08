@@ -1,66 +1,50 @@
-import {
-  AngularNodeAppEngine,
-  createNodeRequestHandler,
-  isMainModule,
-  writeResponseToNodeResponse,
-} from '@angular/ssr/node';
+// server.js
+import 'zone.js/node';
 import express from 'express';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import compression from 'compression';
+import { join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { APP_BASE_HREF } from '@angular/common';
+import { renderApplication } from '@angular/platform-server';
 
-const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-const browserDistFolder = resolve(serverDistFolder, '../browser');
+import bootstrap from './main.server';
 
-const app = express();
-const angularApp = new AngularNodeAppEngine();
+const distFolder = join(process.cwd(), 'dist/pledge-website/browser');
+const indexFile = existsSync(join(distFolder, 'index.original.html'))
+  ? 'index.original.html'
+  : 'index.html';
+const indexHtml = readFileSync(join(distFolder, indexFile), 'utf8');
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+function run(): void {
+  const port = Number(process.env['PORT'] || 4000);
+  const app = express();
 
-/**
- * Serve static files from /browser
- */
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
-);
+  app.use(compression());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.static(distFolder, { index: false, maxAge: '1y' }));
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
-app.use('/**', (req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
-});
+  app.get('*', async (req, res) => {
+    try {
+      const html = await renderApplication(bootstrap, {
+        url: req.originalUrl,
+        document: indexHtml,
+        platformProviders: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }]
+      });
 
-/**
- * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
- */
-if (isMainModule(import.meta.url)) {
-  const port = process.env['PORT'] || 4000;
+      res.setHeader('Content-Type', 'text/html');
+      res.send(html);
+    } catch (error) {
+      console.error('SSR render error:', error);
+      res.status(500).send('Internal server error');
+    }
+  });
+
   app.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+    console.log(`Angular SSR server listening on http://localhost:${port}`);
   });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
-export const reqHandler = createNodeRequestHandler(app);
+run();
+
+export default run;

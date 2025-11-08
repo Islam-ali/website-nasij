@@ -1,5 +1,5 @@
-import { AfterViewChecked, AfterViewInit, Component, inject, OnInit } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { AfterViewChecked, AfterViewInit, Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { ProductService } from '../products/services/product.service';
 import { IProduct } from '../products/models/product.interface';
 import { CardModule } from 'primeng/card';
@@ -70,6 +70,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   aosInitialized = false;
   packages: IPackage[] = [];
   businessProfile: IBusinessProfile | null = null;
+  platformId = inject(PLATFORM_ID);
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -87,6 +88,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.getBusinessProfile();
   }
   ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) { 
     AOS.init({
       duration: 800,
       easing: 'ease-out-cubic',
@@ -95,10 +97,10 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       delay: 200,
     });
     this.aosInitialized = true;
-  }
+  }}
   ngAfterViewChecked(): void {
     // إعادة تحديث AOS لما العناصر تتغير
-    if (this.aosInitialized) {
+    if (this.aosInitialized && isPlatformBrowser(this.platformId)) {
       AOS.refresh();
       AOS.refreshHard();
     }

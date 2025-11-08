@@ -33,9 +33,7 @@ import { IProduct } from '../models/product.interface';
 import AOS from 'aos';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
-import { MultilingualText } from '../../../core/models/multi-language';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
-import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -66,7 +64,6 @@ import { environment } from '../../../../environments/environment';
     DrawerModule,
     TranslateModule,
     MultiLanguagePipe,
-    CurrencyPipe
 ],
   providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder, TranslateModule],
   templateUrl: './product-list.component.html',

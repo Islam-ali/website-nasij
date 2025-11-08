@@ -31,6 +31,7 @@ export enum ProductStatus {
 
 export interface IProduct {
   _id: string;
+  sku?: string;
   name: MultilingualText;
   description: MultilingualText;
   price: number;

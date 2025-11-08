@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
+import { TransferState, makeStateKey } from '@angular/core';
 
 // PrimeNG Modules
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -35,6 +36,7 @@ import { CurrencyPipe } from '../../../core/pipes/currency.pipe';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { environment } from '../../../../environments/environment';
 import { secureEncodeUrl } from '../../../core/utils/secure-query';
+import { SeoService } from '../../../core/services/seo.service';
 
 interface ProductImage {
   itemImageSrc: string;
@@ -42,6 +44,8 @@ interface ProductImage {
   alt: string;
   title: string;
 }
+
+const FRONTEND_DOMAIN = 'https://pledgestores.com';
 
 @Component({
   selector: 'app-product-details',
@@ -74,6 +78,7 @@ interface ProductImage {
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent extends ComponentBase implements OnInit {
+  private static readonly PRODUCT_STATE_KEY = makeStateKey<IProduct>('product-details');
   @ViewChild('galleryImage') galleryImage!: ElementRef;
   currentImageIndex: number = 0;
   selectedColor: MultilingualText | null = null;
@@ -102,6 +107,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     private messageService: MessageService,
     private translationService: TranslationService,
     private translate: TranslateService,
+    private seoService: SeoService,
+    private transferState: TransferState,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     super();
@@ -122,13 +129,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+
+    this.route.paramMap
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(params => {
       const productId = params.get('id');
       if (productId) {
         this.loadProduct(productId);
-      } else {
-        this.error = this.translate.instant('products.errors.not_found');
-        this.loading = false;
       }
     });
   }
@@ -161,13 +168,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       .subscribe({
         next: (response: BaseResponse<IProduct>) => {
           this.product = response.data;
-          this.prepareImages();
-          this.loadRelatedProducts(this.product._id);
-          this.mappedVariants = this.productService.getUniqueAttributes(this.product.variants);
-          
-          // Auto-select first variant of each type (index 0)
-          this.autoSelectDefaultVariants();
-          
+          this.transferState.set(ProductDetailsComponent.PRODUCT_STATE_KEY, this.product);
+          this.afterProductLoaded();
           this.loading = false;
         },
         error: (err) => {
@@ -176,6 +178,17 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.loading = false;
         }
       })
+  }
+
+  private afterProductLoaded(): void {
+    if (!this.product) {
+      return;
+    }
+    this.prepareImages();
+    this.loadRelatedProducts(this.product._id);
+    this.mappedVariants = this.productService.getUniqueAttributes(this.product.variants);
+    this.autoSelectDefaultVariants();
+    this.updateSeo(this.product);
   }
 
   private loadRelatedProducts(productId: string): void {
@@ -222,8 +235,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     // If no images, add a placeholder
     if (this.images.length === 0) {
       this.images.push({
-        itemImageSrc: 'assets/images/placeholder.png',
-        thumbnailImageSrc: 'assets/images/placeholder.png',
+        itemImageSrc: 'assets/images/logo.png',
+        thumbnailImageSrc: 'assets/images/logo.png',
         alt: 'No image available',
         title: 'No image available'
       });
@@ -231,7 +244,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   getImageUrl(imagePath: string, size: 'original' | 'thumbnail' = 'original'): string {
-    if (!imagePath) return 'assets/images/placeholder.png';
+    if (!imagePath) return 'assets/images/photo.png';
     if (imagePath.startsWith('http')) return imagePath;
     return `${this.domain}/${imagePath}`;
   }
@@ -422,13 +435,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     return this.translationService.getCurrentLanguage() as 'en' | 'ar';
   }
 
-  private getLocalizedProductName(): string {
-    if (!this.product?.name) {
-      return '';
-    }
-    return this.product.name[this.currentLanguage] || this.product.name.en || this.product.name.ar || '';
-  }
-
   scrollToTop(): void {
     if (isPlatformBrowser(this.platformId)) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -441,5 +447,62 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     navigator.share({
       url: url
     });
+  }
+
+  private updateSeo(product: IProduct): void {
+    const localizedName = product.name?.[this.currentLanguage] || product.name?.en || '';
+    const localizedSummary = product.description?.[this.currentLanguage] || product.description?.en || '';
+    const description = localizedSummary
+      ? localizedSummary.replace(/<[^>]+>/g, '').substring(0, 160)
+      : `Discover ${localizedName} with premium quality on pledgestores.com.`;
+    const canonicalUrl = `${FRONTEND_DOMAIN}/shop/${product._id}`;
+    const ogImage = product.images?.length
+      ? `${environment.domain}/${product.images[0].filePath}`
+      : `${environment.domain}/assets/images/logo.png`;
+
+    this.seoService.updateSeo({
+      title: `${localizedName} | pledgestores.com`,
+      description,
+      keywords: product.tags?.join(', '),
+      canonicalUrl,
+      ogImage,
+      ogType: 'product',
+      hreflangs: [
+        { lang: 'en', url: `${FRONTEND_DOMAIN}/shop/${product._id}` },
+        { lang: 'ar', url: `${FRONTEND_DOMAIN}/shop/${product._id}` },
+        { lang: 'x-default', url: canonicalUrl }
+      ]
+    });
+
+    this.seoService.injectStructuredData({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: localizedName,
+      image: ogImage,
+      description,
+      sku: product.sku || product._id,
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'SAR',
+        price: (product.price - (product.discountPrice || 0)).toFixed(2),
+        availability: product.status === ProductStatus.ACTIVE
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+        url: canonicalUrl
+      },
+      brand: product.brand?.name
+        ? {
+            '@type': 'Brand',
+            name: product.brand.name[this.currentLanguage] || product.brand.name.en || product.brand.name.ar
+          }
+        : undefined
+    });
+  }
+
+  private getLocalizedProductName(): string {
+    if (!this.product?.name) {
+      return '';
+    }
+    return this.product.name[this.currentLanguage] || this.product.name.en || this.product.name.ar || '';
   }
 }

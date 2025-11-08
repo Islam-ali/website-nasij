@@ -20,6 +20,17 @@
             "outputPath": "dist/pledge-website",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "aos",
+              "crypto-js",
+              "lz-string",
+              "primeicons",
+              "primeng",
+              "quill",
+              "rxjs",
+              "tslib",
+              "zone.js"
+            ],
             "polyfills": [
               "zone.js"
             ],
@@ -83,7 +94,7 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/pledge-website/server",
-            "main": "src/main.server.ts",
+            "main": "src/server.ts",
             "tsConfig": "tsconfig.server.json"
           },
           "configurations": {
