@@ -315,6 +315,22 @@
       "wishlist_coming_soon_detail": "Wishlist functionality is coming soon!"
     }
   },
+  "businessProfileFaq": {
+    "loading": "Loading FAQ...",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to the most common questions about {{businessName}}.",
+    "default_business_name": "our services",
+    "back_to_profile": "Back to Business Profile",
+    "faq_label": "FAQ",
+    "questions_available": "{{count}} questions available",
+    "no_questions_brief": "No questions available yet",
+    "no_faq_title": "No FAQ Available",
+    "no_faq_description": "No frequently asked questions have been set up yet. Please check back later or contact us directly.",
+    "go_back": "Go Back",
+    "business_profile": "Business Profile",
+    "contact_title": "Still Have Questions?",
+    "contact_description": "If you couldn't find the answer you're looking for, feel free to contact us directly."
+  },
   "cart": {
     "title": "Shopping Cart",
     "empty": "Your cart is empty",

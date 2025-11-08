@@ -304,6 +304,22 @@
       "wishlist_coming_soon_detail": "ميزة قائمة الأمنيات ستكون متاحة قريباً!"
     }
   },
+  "businessProfileFaq": {
+    "loading": "جاري تحميل الأسئلة الشائعة...",
+    "title": "الأسئلة المتكررة",
+    "subtitle": "اعثر على إجابات لأكثر الأسئلة شيوعاً حول {{businessName}}.",
+    "default_business_name": "خدماتنا",
+    "back_to_profile": "العودة إلى الملف التجاري",
+    "faq_label": "الأسئلة الشائعة",
+    "questions_available": "{{count}} سؤال متاح",
+    "no_questions_brief": "لا توجد أسئلة حتى الآن",
+    "no_faq_title": "لا توجد أسئلة متكررة",
+    "no_faq_description": "لم يتم إعداد الأسئلة المتكررة بعد. يرجى العودة لاحقاً أو التواصل معنا مباشرة.",
+    "go_back": "عودة",
+    "business_profile": "الملف التجاري",
+    "contact_title": "هل ما زلت تملك أسئلة؟",
+    "contact_description": "إذا لم تجد الإجابة التي تبحث عنها، لا تتردد في التواصل معنا مباشرة."
+  },
   "cart": {
     "title": "سلة التسوق",
     "empty": "سلتك فارغة",
@@ -484,5 +500,34 @@
       "cart_empty": "سلتك فارغة",
       "wishlist_empty": "قائمة أمنياتك فارغة"
     }
+  },
+  "privacyPolicy": {
+    "title": "سياسة الخصوصية",
+    "loading": "جاري التحميل...",
+    "commitment": "{{company}} يعتبر مسؤولاً عن حماية الخصوصية الخاصة بك",
+    "ourCompany": "شركتنا",
+    "backToProfile": "العودة للملف الشخصي",
+    "lastUpdated": "تاريخ التحديث الأخير",
+    "notAvailable": "سياسة الخصوصية غير متاحة",
+    "notSetup": "سياسة الخصوصية غير مضبوطة بعد",
+    "contactUs": "اتصل بنا",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "address": "العنوان"
+  },
+  "termsOfService": {
+    "title": "شروط الخدمة",
+    "subtitle": "يرجى قراءة هذه الشروط بعناية قبل استخدام خدماتنا",
+    "loading": "جاري التحميل...",
+    "commitment": "{{company}} يعتبر مسؤولاً عن حماية الخصوصية الخاصة بك",
+    "ourCompany": "شركتنا",
+    "backToProfile": "العودة للملف الشخصي",
+    "lastUpdated": "تاريخ التحديث الأخير",
+    "notAvailable": "شروط الخدمة غير متاحة",
+    "notSetup": "شروط الخدمة غير مضبوطة بعد",
+    "contactUs": "اتصل بنا",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "address": "العنوان"
   }
 }

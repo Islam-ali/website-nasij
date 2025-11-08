@@ -8,9 +8,9 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between text-sm">
         <div class="flex items-center space-x-6">
-          <a [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone" class="flex items-center hover:text-primary-50 transition-colors">
+          <a [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone" target="_blank" class="flex items-center hover:text-primary-50 transition-colors">
             <i class="pi pi-whatsapp me-2"></i>
-            {{businessProfile?.contactInfo?.phone}}
+            <span dir="ltr">{{businessProfile?.contactInfo?.phone}}</span>
           </a>
         </div>
         <div class="flex items-center gap-2">

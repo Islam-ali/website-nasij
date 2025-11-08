@@ -12,6 +12,7 @@ import { DividerModule } from 'primeng/divider';
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-faq',
@@ -25,6 +26,8 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
     AccordionModule,
     DividerModule,
     MultiLanguagePipe,
+    TranslateModule,
+    TranslatePipe
   ],
   providers: [MessageService],
   templateUrl: './faq.component.html',
