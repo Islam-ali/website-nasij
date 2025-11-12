@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, input } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
@@ -23,9 +23,10 @@ interface LanguageOption {
         (onChange)="onLanguageChange($event)"
         [placeholder]="'common.language' | translate"
         [showClear]="false"
-        [style]="{ 'width': '80px' }"
+        [style]="{ 'width': width() }"
         [appendTo]="'body'"
-        [panelStyle]="{ 'width': '80px' }"
+        [panelStyle]="{ 'width': width() }"
+        [styleClass]="'border-none shadow-none'"
       >
         <ng-template pTemplate="selectedItem">
           <div class="flex items-center gap-2">
@@ -78,6 +79,7 @@ interface LanguageOption {
 export class LanguageSwitcherComponent implements OnInit {
   selectedLanguage: string = 'en';
   languageOptions: LanguageOption[] = [];
+  width = input<string>('80px');
 
   constructor(
     private translationService: TranslationService,

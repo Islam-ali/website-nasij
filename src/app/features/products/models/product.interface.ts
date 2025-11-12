@@ -10,7 +10,7 @@ export enum EnumProductVariant {
 
 export interface ProductVariant {
   attributes?: ProductVariantAttribute[];
-  price: number;
+  price?: number;
   stock?: number;
   sku?: string;
   image?: IArchived;
@@ -56,6 +56,7 @@ export interface IProduct {
   reviewCount?: number;
   soldCount?: number;
   isInWishlist?: boolean;
+  useVariantPrice?: boolean;
 }
 
 export interface IProductQueryParams {

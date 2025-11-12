@@ -1,37 +1,46 @@
 <!-- Enhanced Fixed Navbar -->
 <header
-  class="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-dark-surface/95 backdrop-blur-md border-b border-gray-200 shadow-lg transition-all duration-300"
-  [class.dark:border-dark-border]="isDarkTheme()">
+  class="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-dark-surface/95 backdrop-blur-md border-b border-primary-100/60 dark:border-primary-900/20 transition-all duration-300">
 
   <!-- Top Bar -->
-  <div class="bg-gradient-to-r from-primary-900 to-primary-600 text-white py-2">
+  <div
+    class="bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500 text-white/90 py-2 border-b border-white\10">
     <div class="max-w-7xl mx-auto px-4">
-      <div class="flex items-center justify-between text-sm">
-        <div class="flex items-center space-x-6">
-          <a [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone" target="_blank" class="flex items-center hover:text-primary-50 transition-colors">
-            <i class="pi pi-whatsapp me-2"></i>
+      <div class="flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm tracking-wide">
+        <div class="flex flex-wrap items-center gap-4">
+          <a *ngIf="businessProfile?.contactInfo?.phone" [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone"
+            target="_blank" class="flex items-center gap-2 hover:text-white transition-colors">
+            <i class="pi pi-whatsapp text-white/80"></i>
             <span dir="ltr">{{businessProfile?.contactInfo?.phone}}</span>
           </a>
+          <span *ngIf="businessProfile?.contactInfo?.email" class="hidden sm:flex items-center gap-2 text-white/80">
+            <i class="pi pi-envelope"></i>
+            {{businessProfile?.contactInfo?.email}}
+          </span>
+          <span class="hidden lg:flex items-center gap-2 text-white/70">
+            <i class="pi pi-clock"></i>
+            {{ 'navigation.support24h' | translate }}
+          </span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
           <a *ngIf="businessProfile?.socialMedia?.facebook" [href]="businessProfile!.socialMedia!.facebook!"
-            target="_blank" class="hover:text-primary-50 transition-colors">
+            target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-facebook"></i>
           </a>
           <a *ngIf="businessProfile?.socialMedia?.twitter" [href]="businessProfile!.socialMedia!.twitter!"
-            target="_blank" class="hover:text-primary-50 transition-colors">
+            target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-twitter"></i>
           </a>
           <a *ngIf="businessProfile?.socialMedia?.instagram" [href]="businessProfile!.socialMedia!.instagram!"
-            target="_blank" class="hover:text-primary-50 transition-colors">
+            target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-instagram"></i>
           </a>
           <a *ngIf="businessProfile?.socialMedia?.linkedin" [href]="businessProfile!.socialMedia!.linkedin!"
-            target="_blank" class="hover:text-primary-50 transition-colors">
+            target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-linkedin"></i>
           </a>
           <a *ngIf="businessProfile?.socialMedia?.tiktok" [href]="businessProfile!.socialMedia!.tiktok!" target="_blank"
-            class="hover:text-primary-50 transition-colors">
+            class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-tiktok"></i>
           </a>
         </div>
@@ -45,87 +54,79 @@
 
       <!-- Logo -->
       <div class="flex items-center">
-        <a routerLink="/" class="flex items-center space-x-3 group">
-          <div class="w-12 h-12 flex items-center justify-center">
+        <a routerLink="/" class="flex items-center gap-3 group">
+          <div class="w-12 h-12 flex items-center justify-center rounded-2xl">
             @if(isDarkTheme()) {
-            <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="logo" class="w-full h-full object-contain">
+            <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="logo"
+              class="w-full h-full object-contain">
             } @else {
-            <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="logo" class="w-full h-full object-contain">
+            <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="logo"
+              class="w-full h-full object-contain">
             }
           </div>
-          <!-- <img [src]="businessProfile?.logo_light?.filePath" alt="logo" class="w-full h-full object-contain"> -->
-          <!-- <span class="text-xl font-bold text-gray-900 transition-all duration-300">
-            {{businessProfile?.name}}
-          </span> -->
+          <div class="hidden sm:flex flex-col">
+            <span class="text-base font-semibold text-gray-900 dark:text-dark-text tracking-wide">
+              {{businessProfile?.name | multiLanguage}}
+            </span>
+            <span class="text-xs text-gray-500 dark:text-dark-textSecondary">
+              {{ 'navigation.tagline' | translate }}
+            </span>
+          </div>
         </a>
       </div>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center gap-2">
-        <!-- <a routerLink="/" routerLinkActive="text-primary-500" [routerLinkActiveOptions]="{exact: true}"
-           class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1">
-          <i class="pi pi-home text-sm"></i>
-          <span>Home</span>
-        </a> -->
+      <nav class="hidden lg:flex items-center gap-2 xl:gap-4">
+        <a routerLink="/" routerLinkActive="text-primary-600" [routerLinkActiveOptions]="{exact: true}"
+          class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
+          <span>{{ 'navigation.home' | translate }}</span>
+          <span
+            class="absolute left-4 right-4 -bottom-0.5 h-0.5 bg-primary-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+        </a>
 
-        <a routerLink="/shop" routerLinkActive="text-primary-500"
-          class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
-          <i class="pi pi-shopping-bag text-sm me-2"></i>
-            <span>{{ 'navigation.shop' | translate }}</span>
+        <a routerLink="/shop" routerLinkActive="text-primary-600"
+          class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
+          <span>{{ 'navigation.shop' | translate }}</span>
         </a>
 
         <div class="relative group">
           <button
-            class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1"
-            [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
-            <i class="pi pi-list text-sm me-2"></i>
+            class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300 flex items-center gap-2">
             <span>{{ 'navigation.categories' | translate }}</span>
-            <i class="pi pi-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+            <i style="font-size: 12px;" class="pi pi-chevron-down transition-transform duration-300 group-hover:-rotate-180"></i>
+            <span
+              class="absolute inset-x-4 -bottom-0.5 h-0.5 bg-primary-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
           </button>
           <div
-            class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100"
-            [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:border-dark-border]="isDarkTheme()">
-            <div class="py-2">
+            class="absolute top-full left-0 mt-3 w-[20rem] xl:w-[22rem] bg-white/95 dark:bg-dark-surface/95 rounded-2xl shadow-xl border border-primary-100/60 dark:border-primary-900/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md"
+            [class.dark:shadow-[0_20px_40px_-25px_rgba(79,70,229,0.35)]]="isDarkTheme()">
+            <div class="py-3 px-3 grid grid-cols-1 gap-1 max-h-72 overflow-y-auto">
               @for (category of categories(); track category._id) {
               <a routerLink="/shop" [queryParams]="{category: category._id}"
-                class="block px-4 py-3 text-gray-700 hover:bg-primary-900hover:text-primary-500 transition-colors"
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
                 [class.dark:text-dark-textSecondary]="isDarkTheme()"
-                [class.dark:hover:bg-dark-surfaceHover]="isDarkTheme()"
-                [class.dark:hover:text-primary-500]="isDarkTheme()">
-                <i class="pi pi-circle-fill text-xs me-2 text-primary-500"></i>
-                {{ category.name | multiLanguage}}
+                [class.dark:hover:bg-primary-500\10]="isDarkTheme()"
+                [class.dark:hover:text-primary-300]="isDarkTheme()">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-500\10 text-primary-500">
+                  <i class="pi pi-circle-fill text-[10px]"></i>
+                </span>
+                <div class="flex-1">
+                  <p class="font-medium">{{ category.name | multiLanguage}}</p>
+                  <p class="text-[11px] text-gray-400 dark:text-dark-textMuted">
+                    {{ 'navigation.exploreCategory' | translate }}
+                  </p>
+                </div>
               </a>
               }
             </div>
           </div>
         </div>
 
-        <a routerLink="/packages" routerLinkActive="text-primary-500"
-          class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
-          <i class="pi pi-box text-sm me-2"></i>
+        <a routerLink="/packages" routerLinkActive="text-primary-600"
+          class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
           <span>{{ 'navigation.boxs' | translate }}</span>
         </a>
 
-        <a routerLink="/track-order" routerLinkActive="text-primary-500"
-          class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
-          <i class="pi pi-search text-sm me-2"></i>
-          <span>{{ 'navigation.trackOrder' | translate }}</span>
-        </a>
-
-        <!-- <a routerLink="/about" routerLinkActive="text-primary-500"
-           class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1">
-          <i class="pi pi-info-circle text-sm me-2"></i>
-          <span>About</span>
-        </a> -->
-
-        <!-- <a routerLink="/contact" routerLinkActive="text-primary-500"
-           class="text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-1">
-          <i class="pi pi-envelope text-sm me-2"></i>
-          <span>Contact</span>
-        </a> -->
       </nav>
 
       <!-- Search Bar -->
@@ -142,56 +143,43 @@
 
       <!-- Right Side Actions -->
       <div class="flex items-center gap-2">
+        <a routerLink="/track-order" routerLinkActive="!border-primary-400 !text-primary-600"
+          class="hidden lg:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary-600 border border-primary-200 rounded-xl hover:bg-primary-50 transition-all duration-300">
+          <i class="pi pi-truck text-primary-500"></i>
+          {{ 'navigation.trackOrder' | translate }}
+        </a>
 
         <!-- Language Switcher -->
-        <app-language-switcher></app-language-switcher>
-
+        <span class="hidden lg:flex items-center gap-2 text-white/70">
+          <app-language-switcher></app-language-switcher>
+        </span>
         <!-- Theme Toggle -->
         <app-theme-toggle></app-theme-toggle>
 
-        <!-- Wishlist -->
-        <!-- <button (click)="wishlistOpen = !wishlistOpen" 
-                class="relative w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-300"
-                [class.dark:bg-gray-800]="isDarkTheme()"
-                [class.dark:hover:bg-gray-700]="isDarkTheme()">
-          <i class="pi pi-heart text-gray-600" [class.dark:text-gray-300]="isDarkTheme()"></i>
-          <span *ngIf="wishlistCount() > 0" 
-                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-            {{ wishlistCount() }}
-          </span>
-        </button> -->
-
         <!-- Cart -->
         <button (click)="cartOpen = !cartOpen"
-          class="relative w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-300"
-          [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:hover:bg-dark-surfaceHover]="isDarkTheme()">
-          <i class="pi pi-shopping-cart text-gray-600 transition-colors duration-300"
-            [class.dark:text-dark-text]="isDarkTheme()"></i>
+          class="relative w-10 h-10 rounded-full bg-gray-100 hover:bg-primary-50 flex items-center justify-center transition-all duration-300"
+          [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
+          <i class="pi pi-shopping-cart text-primary-500 transition-colors duration-300"
+            [class.dark:text-primary-300]="isDarkTheme()"></i>
           <span *ngIf="cartItemCount() > 0"
-            class="absolute -top-1 -right-1 w-5 h-5 bg-primary-900 text-white text-xs rounded-full flex items-center justify-center">
+            class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-primary-600 text-white text-[10px] rounded-full flex items-center justify-center shadow-md">
             {{ cartItemCount() }}
           </span>
         </button>
 
-        <!-- User Menu -->
-        <!-- <div class="relative" *ngIf="currentUser; else loginButton">
-          <button class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-900 to-primary-500 text-white flex items-center justify-center font-semibold hover:from-primary-900 hover:to-primary-600 transition-all duration-300">
-            {{ userInitials }}
-          </button>
-        </div>
-        <ng-template #loginButton>
-          <a routerLink="/auth/login" 
-             class="px-4 py-2 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
-            Login
-          </a>
-        </ng-template> -->
+        <a routerLink="/track-order" routerLinkActive="!border-primary-400 !text-primary-600"
+          class="lg:hidden flex items-center gap-2 px-3 py-2 text-sm font-semibold text-primary-600 border border-primary-200 rounded-xl hover:bg-primary-50 transition-all duration-300"
+          [class.dark:border-primary-900\40]="isDarkTheme()">
+          <i class="pi pi-truck text-primary-500"></i>
+          {{ 'navigation.trackOrder' | translate }}
+        </a>
 
-        <!-- Mobile Menu Button -->
         <button (click)="toggleNavbar()"
-          class="lg:hidden w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-300"
-          [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:hover:bg-dark-surfaceHover]="isDarkTheme()">
-          <i class="pi pi-bars text-gray-600 transition-colors duration-300"
-            [class.dark:text-dark-text]="isDarkTheme()"></i>
+          class="lg:hidden w-10 h-10 rounded-lg bg-gray-100 hover:bg-primary-50 flex items-center justify-center transition-all duration-300"
+          [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
+          <i class="pi pi-bars text-primary-500 transition-colors duration-300"
+            [class.dark:text-primary-300]="isDarkTheme()"></i>
         </button>
       </div>
     </div>
@@ -199,41 +187,39 @@
 
   <!-- Mobile Navigation -->
   <div class="lg:hidden" [class.hidden]="!navbarOpen()">
-    <div class="px-4 py-6 bg-white border-t border-gray-200 transition-all duration-300"
+    <div class="px-4 py-6 bg-white border-t border-primary-100 transition-all duration-300 space-y-3"
       [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:border-dark-border]="isDarkTheme()">
-      <div class="space-y-4">
-        <a routerLink="/" (click)="toggleNavbar()" routerLinkActive="text-primary-500"
+      <div class="space-y-3">
+        <a routerLink="/" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
           [routerLinkActiveOptions]="{exact: true}"
-          class="block text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-2"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
+          [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
           <i class="pi pi-home me-2"></i>
           <span>{{ 'navigation.home' | translate }}</span>
         </a>
-        <a routerLink="/shop" (click)="toggleNavbar()" routerLinkActive="text-primary-500"
-          class="block text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-2"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
+        <a routerLink="/shop" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
+          [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
           <i class="pi pi-shopping-bag me-2"></i>
-            <span>{{ 'navigation.shop' | translate }}</span>
+          <span>{{ 'navigation.shop' | translate }}</span>
         </a>
-        <!-- <a routerLink="/about" (click)="toggleNavbar()" routerLinkActive="text-primary-500"
-          class="block text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-2"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
-          <i class="pi pi-info-circle me-2"></i>
-          <span>About</span>
-        </a> -->
-        <a routerLink="/packages" (click)="toggleNavbar()" routerLinkActive="text-primary-500"
-          class="block text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-2"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
+        <a routerLink="/packages" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
+          [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
           <i class="pi pi-box me-2"></i>
           <span>{{ 'navigation.boxs' | translate }}</span>
         </a>
-        <a routerLink="/track-order" (click)="toggleNavbar()" routerLinkActive="text-primary-500"
-          class="block text-gray-700 hover:text-primary-500 font-medium transition-colors duration-300 flex items-center space-x-2"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-500]="isDarkTheme()">
-          <i class="pi pi-search me-2"></i>
-          <span>{{ 'navigation.trackOrder' | translate }}</span>
-        </a>
       </div>
+      <span class="flex items-center gap-2 text-white/70">
+        <app-language-switcher class="w-full" [width]="'100%'"></app-language-switcher>
+      </span>
+      <a routerLink="/shop" (click)="toggleNavbar()"
+        class="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white text-sm font-semibold shadow-lg shadow-primary-500/30 hover:shadow-primary-500/40 transition-all duration-300">
+        {{ 'navigation.startShopping' | translate }}
+      </a>
     </div>
   </div>
 </header>
@@ -277,8 +263,10 @@
           <h4 class="font-medium text-gray-900 text-sm mb-0 transition-colors duration-300"
             [class.dark:text-dark-text]="isDarkTheme()">{{ item.productName | multiLanguage }}</h4>
           <p class="text-sm text-gray-500 transition-colors duration-300"
-            [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.quantity' | translate }}: {{ item.quantity }}</p>
-          <p class="text-lg font-bold text-primary-500">{{ (item.price - (item.discount || 0)) * item.quantity! | currency }}</p>
+            [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.quantity' | translate }}: {{ item.quantity }}
+          </p>
+          <p class="text-lg font-bold text-primary-500">{{ (item.price - (item.discount || 0)) * item.quantity! |
+            currency }}</p>
         </div>
         <button (click)="removeFromCart(item)" class="text-red-500 hover:text-red-700 transition-colors duration-300">
           <i class="pi pi-trash"></i>
@@ -345,8 +333,7 @@
       @for (item of wishlistItems(); track item.productId) {
       <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
         [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
-        <img [src]="item.product.images[0].filePath"
-        fallback [alt]="item.product.name"
+        <img [src]="item.product.images[0].filePath" fallback [alt]="item.product.name"
           class="w-16 h-16 object-cover rounded-lg">
         <div class="flex-1">
           <h4 class="font-medium text-gray-900 transition-colors duration-300"

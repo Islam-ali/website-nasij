@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <section
-  class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500 text-gray-800 dark:text-gray-200">
+  class="min-h-screen bg-gray-50 dark:bg-gray-800 transition-all duration-500 text-gray-800 dark:text-gray-200">
   <!-- Background Pattern -->
   <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
     <div class="absolute inset-0"
@@ -10,23 +10,17 @@
   </div>
 
   <!-- Floating Elements -->
-  <div
-    class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-pink-400/20 dark:from-purple-500/20 dark:to-pink-500/20 rounded-full blur-xl animate-float">
-  </div>
-  <div
-    class="absolute top-40 right-20 w-16 h-16 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 dark:from-blue-500/20 dark:to-cyan-500/20 rounded-full blur-xl animate-float"
-    style="animation-delay: -2s;"></div>
-  <div
-    class="absolute bottom-20 left-1/4 w-12 h-12 bg-gradient-to-br from-green-400/20 to-emerald-400/20 dark:from-green-500/20 dark:to-emerald-500/20 rounded-full blur-xl animate-float"
-    style="animation-delay: -4s;"></div>
+  <div class="absolute top-24 left-10 w-24 h-24 bg-primary-200/30 dark:bg-primary-500/20 rounded-full blur-2xl"></div>
+  <div class="absolute top-48 right-16 w-20 h-20 bg-primary-300/30 dark:bg-primary-600/20 rounded-full blur-2xl"></div>
+  <div class="absolute bottom-24 left-1/4 w-16 h-16 bg-primary-100/40 dark:bg-primary-500/20 rounded-full blur-2xl"></div>
 
   <div class="max-w-7xl mx-auto p-6 lg:p-12 relative z-10">
     <!-- Success Message -->
     <div *ngIf="success"
-      class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border-2 border-green-200 dark:border-green-700 text-green-800 dark:text-green-200 p-8 rounded-3xl mb-8 shadow-xl backdrop-blur-sm">
+      class="bg-white/95 dark:bg-gray-900/80 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-200 p-8 rounded-3xl mb-8">
       <div class="flex flex-col items-center">
         <div
-          class="p-4 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-800/50 dark:to-emerald-800/50 rounded-full mb-6 shadow-lg">
+          class="p-4 bg-primary-100 dark:bg-primary-800/40 rounded-full mb-6">
           <img src="Done.gif" alt="confirm" width="120" class="rounded-full">
         </div>
         <div class="text-center">
@@ -40,7 +34,7 @@
               (click)="copyToClipboard(orderNumber)"></button>
           </p>
           <button pButton pRipple [label]="'checkout.continueShopping' | translate" icon="pi pi-arrow-left"
-            class="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-500 dark:to-emerald-500 hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-600 dark:hover:to-emerald-600 text-white border-0 rounded-2xl px-8 py-4 font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+            class="bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white border-0 rounded-2xl px-8 py-4 font-semibold transition-all duration-300"
             routerLink="/shop"></button>
         </div>
       </div>
@@ -60,10 +54,10 @@
         <div class="lg:col-span-2 space-y-6">
           <!-- Billing Details -->
           <div
-            class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-500 hover:shadow-2xl dark:hover:shadow-gray-900/70">
+            class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-8">
               <div
-                class="p-3 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl shadow-lg">
+                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-user text-2xl text-blue-600 dark:text-blue-400"></i>
               </div>
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.billingDetails' | translate}}</h2>
@@ -98,11 +92,11 @@
 
           <!-- Shipping Address -->
           <div
-            class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-500 hover:shadow-2xl dark:hover:shadow-gray-900/70"
+            class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300"
             formGroupName="shippingAddress">
             <div class="flex items-center gap-3 mb-8">
               <div
-                class="p-3 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-2xl shadow-lg">
+                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-map-marker text-2xl text-green-600 dark:text-green-400"></i>
               </div>
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.shippingAddress' | translate}}</h2>
@@ -173,10 +167,10 @@
 
           <!-- Notes -->
           <div
-            class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-500 hover:shadow-2xl dark:hover:shadow-gray-900/70">
+            class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-6">
               <div
-                class="p-3 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-2xl shadow-lg">
+                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-pencil text-2xl text-yellow-600 dark:text-yellow-400"></i>
               </div>
               <label for="notes"
@@ -189,17 +183,17 @@
 
           <!-- Payment Method -->
           <div
-            class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-500 hover:shadow-2xl dark:hover:shadow-gray-900/70">
+            class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-8">
               <div
-                class="p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-2xl shadow-lg">
+                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-credit-card text-2xl text-primary-600 dark:text-primary-400"></i>
               </div>
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.paymentMethod' | translate}}</h2>
             </div>
             <div class="space-y-4">
               <div *ngFor="let method of paymentMethods"
-                class="flex items-center border-2 border-gray-200 dark:border-gray-600 rounded-2xl p-6 hover:border-primary-500 dark:hover:border-primary-400 cursor-pointer transition-all duration-300 bg-white dark:bg-gray-700 shadow-lg hover:shadow-xl"
+                class="flex items-center border-2 border-primary-100 dark:border-primary-900/30 rounded-2xl p-6 hover:border-primary-500 dark:hover:border-primary-400 cursor-pointer transition-all duration-300 bg-white dark:bg-gray-900"
                 [class.border-primary-500]="checkoutForm.get('paymentMethod')?.value === method.value"
                 [class.dark:border-primary-400]="checkoutForm.get('paymentMethod')?.value === method.value"
                 [class.ring-4]="checkoutForm.get('paymentMethod')?.value === method.value"
@@ -211,11 +205,28 @@
                 <label [for]="method.value"
                   class="ms-4 text-lg flex w-full items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
                   <span>{{'checkout.' + method.value.toLowerCase() | translate}}</span>
-                  <span *ngIf=" method.value === 'deposit'"> {{shippingCost() | currency}}</span>
-                  <span *ngIf=" method.value === 'vodafone_cash'"> {{orderTotal() | currency}}</span>
-                  <span class="text-gray-500 dark:text-gray-400 inline-block" *ngIf="method.value === 'vodafone_cash' || method.value === 'deposit'">
+                  <span class="text-gray-500 dark:text-gray-400 inline-block" *ngIf="method.value === 'vodafone_cash'">
                     {{vodafoneCashAccount()}}
                   </span>
+                </label>
+              </div>
+
+              <div
+                class="flex flex-wrap items-center justify-between gap-4 border border-dashed border-primary-300 dark:border-primary-600 rounded-2xl p-6 bg-primary-50/20 dark:bg-primary-900/20">
+                <div class="max-w-lg">
+                  <p class="text-lg font-semibold text-primary-700 dark:text-primary-300">
+                    {{'checkout.depositToggleLabel' | translate}}
+
+                    <span class="text-gray-800 dark:text-gray-400 text-2xl inline-block"> {{shippingCost() | currency}}</span>
+                  </p>
+                  <p class="text-sm text-primary-600/80 dark:text-primary-200/80">
+                    {{'checkout.depositToggleHint' | translate}}
+                  </p>
+                </div>
+                <label for="hs-basic-usage" class="relative inline-block w-11 h-6 cursor-pointer">
+                  <input type="checkbox" id="hs-basic-usage" formControlName="isDeposit" class="peer sr-only">
+                  <span class="absolute inset-0 bg-gray-200 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-primary-600 dark:bg-neutral-700 dark:peer-checked:bg-primary-500 peer-disabled:opacity-50 peer-disabled:pointer-events-none"></span>
+                  <span class="absolute top-1/2 end-0.5 -translate-y-1/2 size-5 bg-gray-300 rounded-full shadow-xs transition-transform duration-200 ease-in-out peer-checked:translate-x-full dark:bg-neutral-400 dark:peer-checked:bg-primary-400"></span>
                 </label>
               </div>
 
@@ -232,7 +243,7 @@
                   </p>
                   
                   <!-- File Upload Area -->
-                  <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-gray-50 dark:bg-gray-800">
+                  <div class="border-2 border-dashed border-primary-200 dark:border-primary-700 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-primary-50/10 dark:bg-primary-900/20">
                     <input type="file" 
                            id="paymentImage" 
                            accept="image/*" 
@@ -296,7 +307,7 @@
 
               <!-- Submit Button -->
               <button type="submit" [disabled]="checkoutForm.invalid || loading"
-                class="w-full py-4 mt-8 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white rounded-2xl font-bold text-lg hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
+                class="w-full py-4 mt-8 disabled:opacity-50 disabled:cursor-not-allowed bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-2xl font-bold text-lg transition-all duration-300">
                 <span *ngIf="!loading" class="flex items-center justify-center gap-3">
                   <i class="pi pi-shopping-cart text-xl"></i>
                   {{'checkout.placeOrder' | translate}}
@@ -313,10 +324,10 @@
         <!-- Right Column - Order Summary -->
         <div class="lg:col-span-1">
           <div
-            class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 sticky top-28 z-40 max-h-[calc(100vh-6rem)] overflow-y-auto transition-all duration-500 hover:shadow-3xl dark:hover:shadow-gray-900/70">
+            class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 sticky top-28 z-40 max-h-[calc(100vh-6rem)] overflow-y-auto">
             <div class="flex items-center gap-3 mb-8">
               <div
-                class="p-3 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl shadow-lg">
+                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-shopping-bag text-2xl text-indigo-600 dark:text-indigo-400"></i>
               </div>
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.orderSummary' | translate}}</h2>

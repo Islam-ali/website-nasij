@@ -250,10 +250,10 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   getDiscountPercentage(price: number, discountPrice?: number): number | null {
-    if (discountPrice && discountPrice < price) {
-      return Math.round(100 - ((price - discountPrice) / price) * 100);
+    if (!price || !discountPrice || discountPrice <= 0 || discountPrice >= price) {
+      return null;
     }
-    return null;
+    return Math.round(((price - discountPrice) / price) * 100);
   }
 
   
@@ -318,12 +318,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       return;
     };
     if (!this.product) return;
+    const variantBasePrice = this.getVariantBasePrice();
     const productToAdd: IAddToCartRequest = {
       productId: this.product._id,
-      price: this.product.price,
+      price: variantBasePrice,
       quantity: this.quantity,
       selectedVariants: this.selectedVariantAttributes,
-      image: this.selectedVariantAttributes[0]?.image?.filePath || this.product.images[0].filePath,
+      image: this.selectedVariantAttributes[0]?.image?.filePath || this.product.images?.[0]?.filePath,
       productName: this.product.name,
       discount: this.product.discountPrice || 0,
     };
@@ -361,14 +362,14 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       return;
     }
 
-    const selectedImage = this.selectedVariantAttributes.find(v => v.variant === 'color')?.image?.filePath || this.product?.images[0].filePath;
+    const selectedImage = this.selectedVariantAttributes.find(v => v.variant === 'color')?.image?.filePath || this.product?.images?.[0]?.filePath;
     const queryParams: IQueryParamsBuyNow = {
       type: 'Product',
       productId: this.product?._id, 
       quantity: this.quantity,
       selectedVariants: this.selectedVariantAttributes,
       name: this.product?.name, 
-      price: this.product?.price,
+      price: this.getVariantBasePrice(),
       discount: this.product?.discountPrice,
       image: selectedImage,
     } 
@@ -447,6 +448,89 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     navigator.share({
       url: url
     });
+  }
+
+  get basePrice(): number {
+    return this.getVariantBasePrice();
+  }
+
+  get effectivePrice(): number {
+    const discount = this.product?.discountPrice || 0;
+    const effective = this.basePrice - discount;
+    return effective > 0 ? effective : 0;
+  }
+
+  get hasDiscount(): boolean {
+    const discount = this.product?.discountPrice || 0;
+    return discount > 0 && discount < this.basePrice;
+  }
+
+  private getActiveVariant(): ProductVariant | null {
+    if (!this.product?.useVariantPrice || !this.product?.variants?.length) {
+      return null;
+    }
+
+    if (!this.selectedVariantAttributes?.length) {
+      return this.product.variants[0] || null;
+    }
+
+    return (
+      this.product.variants.find(variant => {
+        if (!variant.attributes?.length) {
+          return false;
+        }
+        return variant.attributes.every(attr =>
+          this.selectedVariantAttributes.some(sel => {
+            if (sel._id && attr._id && sel._id === attr._id) {
+              return true;
+            }
+            return (
+              sel.variant === attr.variant &&
+              this.compareMultilingualValues(sel.value, attr.value as any)
+            );
+          })
+        );
+      }) || null
+    );
+  }
+
+  private compareMultilingualValues(
+    selectedValue: MultilingualText,
+    variantValue: MultilingualText
+  ): boolean {
+    const normalize = (value: MultilingualText) => ({
+      en: (value?.en || '').toString().toLowerCase().trim(),
+      ar: (value?.ar || '').toString().toLowerCase().trim()
+    });
+
+    const sel = normalize(selectedValue);
+    const variant = normalize(variantValue);
+    return sel.en === variant.en && sel.ar === variant.ar;
+  }
+
+  private getVariantBasePrice(): number {
+    if (!this.product) {
+      return 0;
+    }
+
+    if (!this.product.useVariantPrice) {
+      return this.product.price || 0;
+    }
+
+    const activeVariant = this.getActiveVariant();
+    if (activeVariant?.price != null) {
+      return activeVariant.price;
+    }
+
+    const variantPrices = (this.product.variants || [])
+      .map(variant => variant.price)
+      .filter((price): price is number => price != null);
+
+    if (variantPrices.length) {
+      return Math.min(...variantPrices);
+    }
+
+    return this.product.price || 0;
   }
 
   private updateSeo(product: IProduct): void {

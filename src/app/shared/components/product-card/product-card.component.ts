@@ -55,17 +55,38 @@ export class ProductCardComponent implements OnInit, OnChanges {
   domain = environment.domain;
   productStatus = ProductStatus;
   
-  get isOnSale(): boolean {
-    return this.product.price > 0 && this.product.price > this.product.price;
+  get basePrice(): number {
+    if (!this.product) {
+      return 0;
+    }
+
+    if (this.product.useVariantPrice && Array.isArray(this.product.variants) && this.product.variants.length) {
+      const prices = this.product.variants
+        .map((variant: ProductVariant) => variant?.price)
+        .filter((price: number | undefined): price is number => price != null);
+
+      if (prices.length) {
+        return Math.min(...prices);
+      }
+    }
+
+    return this.product.price || 0;
   }
-  
+
   get price(): number {
-    return this.product.price;
+    const discount = this.product?.discountPrice || 0;
+    const salePrice = this.basePrice - discount;
+    return salePrice > 0 ? salePrice : 0;
+  }
+
+  get isOnSale(): boolean {
+    const discount = this.product?.discountPrice || 0;
+    return discount > 0 && discount < this.basePrice;
   }
   
   get discountPercentage(): number {
     if (!this.isOnSale) return 0;
-    return Math.round(((this.product.price - this.product.price) / this.product.price) * 100);
+    return Math.round(((this.basePrice - this.price) / this.basePrice) * 100);
   }
 
   constructor(

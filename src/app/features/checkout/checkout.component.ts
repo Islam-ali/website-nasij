@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
 import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
 import { IArchived, OrderStatus } from '../../interfaces/product.interface';
@@ -46,6 +47,7 @@ import { secureDecodeUrl } from '../../core/utils/secure-query';
     RadioButtonModule,
     CheckboxModule,
     ButtonModule,
+    InputSwitchModule,
     MultiLanguagePipe,
     CurrencyPipe,
     TranslateModule,
@@ -79,12 +81,15 @@ export class CheckoutComponent implements OnInit {
   });
 
   // Signal to track payment method changes
-  paymentMethod = signal<PaymentMethod>(PaymentMethod.CASH);
+  paymentMethod = signal<PaymentMethod>(PaymentMethod.VODAFONE_CASH);
+
+  depositOrder = signal<boolean>(false);
 
   // Computed property to check if payment image is required
   isPaymentImageRequired = computed(() => {
-    const currentPaymentMethod = this.paymentMethod();        
-    return currentPaymentMethod === PaymentMethod.VODAFONE_CASH || currentPaymentMethod === PaymentMethod.DEPOSIT;
+    const currentPaymentMethod = this.paymentMethod();
+    const isDeposit = this.depositOrder();
+    return currentPaymentMethod === PaymentMethod.VODAFONE_CASH || isDeposit;
   });
 
   // File upload properties
@@ -103,7 +108,6 @@ export class CheckoutComponent implements OnInit {
   paymentMethods = [
     // { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
-    { label: 'Deposit', value: PaymentMethod.DEPOSIT },
     // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
     // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
     // { label: 'PayPal', value: PaymentMethod.PAYPAL }
@@ -135,6 +139,14 @@ export class CheckoutComponent implements OnInit {
     ).subscribe(value => {
       this.paymentMethod.set(value);
     });
+
+    this.checkoutForm.get('isDeposit')?.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
+      this.depositOrder.set(!!value);
+    });
+
+    this.depositOrder.set(!!this.checkoutForm.get('isDeposit')?.value);
     
     this.loadCountries();
     this.route.queryParams.subscribe(params => {
@@ -351,8 +363,9 @@ export class CheckoutComponent implements OnInit {
       }),
 
       // Payment Details
-      paymentMethod: [PaymentMethod.CASH],
+      paymentMethod: [PaymentMethod.VODAFONE_CASH],
       paymentImage: [''], // For Vodafone Cash screenshot
+      isDeposit: [false],
 
       // Order Notes
       notes: [''],
@@ -390,7 +403,7 @@ export class CheckoutComponent implements OnInit {
     }
 
     // Validate payment image for Vodafone Cash
-    if (formValue.paymentMethod === PaymentMethod.VODAFONE_CASH && !this.selectedFile) {
+    if ((formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.isDeposit) && !this.selectedFile) {
       this.messageService.add({ 
         severity: 'error', 
         summary: this.translate.instant('common.error'), 
@@ -453,6 +466,7 @@ export class CheckoutComponent implements OnInit {
       paymentStatus: PaymentStatus.PENDING,
       orderStatus: OrderStatus.PENDING,
       paymentMethod: formValue.paymentMethod,
+      isDeposit: !!formValue.isDeposit,
       cashPayment: {
         amountPaid: this.getAmountPaid(),
         changeDue: this.getChangeDue(),
@@ -518,7 +532,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAmountPaid(): number {
-    if (this.checkoutForm.value.paymentMethod === PaymentMethod.DEPOSIT) {
+    if (this.checkoutForm.value.isDeposit) {
       return Number(this.shippingCost());
     } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
       return Number(this.orderTotal());
@@ -529,7 +543,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   getChangeDue(): number {
-    if (this.checkoutForm.value.paymentMethod === PaymentMethod.DEPOSIT) {
+    if (this.checkoutForm.value.isDeposit) {
       return Number(this.orderTotal()) - Number(this.shippingCost());
     } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
       return 0;

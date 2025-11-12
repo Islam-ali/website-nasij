@@ -5,7 +5,7 @@
   <div class="max-w-4xl mx-auto mb-12">
     <div class="text-center relative">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 flex items-center justify-center gap-3">
-        <i class="fas fa-search-location text-blue-600 dark:text-blue-400"></i>
+        <i class="fas fa-search-location text-primary-500"></i>
         {{ 'orderTracking.title' | translate }}
       </h1>
       <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -16,20 +16,20 @@
 
   <!-- Search Section -->
   <div class="max-w-2xl mx-auto mb-8">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
       <form (ngSubmit)="searchOrder()">
         <div class="flex flex-col sm:flex-row gap-4">
           <input
             type="text"
             [(ngModel)]="orderNumber"
             name="orderNumber"
-            class="flex-1 px-6 py-4 text-lg border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-300 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+            class="flex-1 px-6 py-4 text-lg border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-800 transition-all duration-300 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             [placeholder]="'orderTracking.enterOrderNumber' | translate"
             [disabled]="loading"
           />
           <button
             type="submit"
-            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+            class="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
             [disabled]="loading || !orderNumber.trim()"
           >
             <i class="fas fa-search" *ngIf="!loading"></i>
@@ -50,165 +50,418 @@
   </div>
 
   <!-- Results Section -->
-  <div class="max-w-6xl mx-auto space-y-8" *ngIf="showResults && order">
-    <!-- Order Information -->
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h3 class="text-2xl font-bold text-white flex items-center gap-3">
-            <i class="fas fa-receipt"></i>
-            {{ 'orderTracking.orderNumber' | translate }} {{ order.orderNumber }}
-          </h3>
-          <button 
-            class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2"
-            (click)="clearSearch()"
-          >
-            <i class="fas fa-times"></i>
-            {{ 'orderTracking.newSearch' | translate }}
-          </button>
+  <div class="max-w-6xl mx-auto space-y-10" *ngIf="showResults && order">
+    <!-- Order Summary -->
+    <section class="bg-white/95 dark:bg-gray-900/80 backdrop-blur rounded-3xl border border-primary-100/60 dark:border-primary-800/50 overflow-hidden">
+      <div class="bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 px-8 py-6 sm:px-12 sm:py-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.3em] text-white/70 mb-2">
+              {{ 'orderTracking.title' | translate }}
+            </p>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white flex flex-wrap items-center gap-3">
+              <i class="fas fa-receipt text-white/80"></i>
+              <span>{{ 'orderTracking.orderNumber' | translate }}</span>
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white/90 text-lg font-semibold">
+                {{ order.orderNumber }}
+              </span>
+            </h3>
+            <div class="mt-4 flex flex-wrap items-center gap-4 text-white/80 text-sm sm:text-base">
+              <span class="inline-flex items-center gap-2">
+                <i class="fas fa-calendar-alt"></i>
+                {{ 'orderTracking.orderDate' | translate }} {{ formatDateTime(order.date) }}
+              </span>
+              @if(order.trackingNumber) {
+              <span class="inline-flex items-center gap-2">
+                <i class="fas fa-shipping-fast"></i>
+                {{ 'orderTracking.trackingNumber' | translate }} {{ order.trackingNumber }}
+              </span>
+              }
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide bg-white/20 text-white">
+              {{ 'paymentStatus.' + order.paymentStatus | translate }}
+            </span>
+            @if(order.isDeposit) {
+            <span class="px-4 py-2 rounded-full text-sm font-semibold bg-white/20 text-white">
+              {{ 'orderTracking.depositBadge' | translate }}
+            </span>
+            }
+          </div>
         </div>
       </div>
-      
-      <div class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4">
-            <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-              <label class="font-semibold text-gray-700 dark:text-gray-300">{{ 'orderTracking.orderDate' | translate }}</label>
-              <span class="text-gray-900 dark:text-white">{{ formatDateTime(order.date) }}</span>
-            </div>
-            <div class="flex justify-between items-center py-3">
-              <label class="font-semibold text-gray-700 dark:text-gray-300">{{ 'orderTracking.orderStatus' | translate }}</label>
-              <span 
-                class="px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide"
-                [ngClass]="getStatusClass(order.status)"
-              >
+      <div class="p-8 sm:p-10 space-y-8">
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div class="rounded-2xl border border-primary-100 dark:border-primary-900/60 bg-primary-50/70 dark:bg-primary-900/10 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-500/15 text-primary-600 dark:text-primary-300">
+                <i class="pi pi-bolt text-xl"></i>
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-wide"
+                    [ngClass]="getStatusClass(order.status)">
                 {{ 'orderStatus.' + order.status | translate }}
               </span>
             </div>
+            <h4 class="text-sm font-semibold text-primary-700 dark:text-primary-300 uppercase tracking-widest mb-1">
+              {{ 'orderTracking.currentStage' | translate }}
+            </h4>
+            <p class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+              {{ 'orderTracking.status.' + order.status | translate }}
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
+              {{ 'orderTracking.timeline.' + order.status | translate }}
+            </p>
           </div>
-          <div class="space-y-4">
-            <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-              <label class="font-semibold text-gray-700 dark:text-gray-300">{{ 'orderTracking.totalAmount' | translate }}</label>
-              <span class="text-2xl font-bold text-green-600 dark:text-green-400">
-                {{ order.total | currency:'EGP':'symbol':'1.2-2' }}
+
+          <div class="rounded-2xl border border-primary-100 dark:border-primary-900/60 bg-primary-50/60 dark:bg-primary-900/15 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-500/15 text-primary-600 dark:text-primary-300">
+                <i class="pi pi-wallet text-xl"></i>
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-white/70 text-primary-700 dark:bg-primary-800/50 dark:text-primary-300">
+                {{ 'orderTracking.paymentSummary' | translate }}
               </span>
             </div>
-            <div class="flex justify-between items-center py-3">
-              <label class="font-semibold text-gray-700 dark:text-gray-300">{{ 'orderTracking.paymentMethod' | translate }}</label>
-              <span class="text-gray-900 dark:text-white">{{ 'paymentMethod.' + order.paymentMethod | translate }}</span>
+            <h4 class="text-sm font-semibold text-primary-700 dark:text-primary-300 uppercase tracking-widest mb-1">
+              {{ 'orderTracking.amountPaid' | translate }}
+            </h4>
+            <p class="text-3xl font-bold text-primary-600 dark:text-primary-300">
+              {{ getAmountPaid() | currency }}
+            </p>
+            <div class="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+              <p class="flex items-center gap-2">
+                <i class="pi pi-credit-card text-primary-500"></i>
+                {{ 'orderTracking.paymentMethod' | translate }}: 
+                <span class="font-semibold text-gray-800 dark:text-gray-100">
+                  {{ 'paymentMethod.' + order.paymentMethod | translate }}
+                </span>
+              </p>
+              <p *ngIf="hasOutstandingBalance()" class="flex items-center gap-2 text-primary-600 dark:text-primary-300">
+                <i class="pi pi-exclamation-circle text-primary-500"></i>
+                {{ 'orderTracking.remainingBalance' | translate }}:
+                <span class="font-semibold">{{ getOutstandingAmount() | currency }}</span>
+              </p>
+              <p *ngIf="!hasOutstandingBalance()" class="flex items-center gap-2 text-primary-600 dark:text-primary-300">
+                <i class="pi pi-check-circle text-primary-500"></i>
+                {{ 'orderTracking.paidBadge' | translate }}
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-primary-100 dark:border-primary-900/60 bg-primary-50/50 dark:bg-primary-900/10 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-500/15 text-primary-600 dark:text-primary-300">
+                <i class="pi pi-compass text-xl"></i>
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-white/70 text-primary-700 dark:bg-primary-800/50 dark:text-primary-300">
+                {{ 'orderTracking.shippingOverview' | translate }}
+              </span>
+            </div>
+            <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+              <p class="flex items-center gap-2">
+                <i class="pi pi-truck text-primary-500"></i>
+                {{ 'common.shipping' | translate }}:
+                <span class="font-semibold text-gray-800 dark:text-gray-100">
+                  {{ getShippingAmount() | currency }}
+                </span>
+              </p>
+              <p class="flex items-center gap-2">
+                <i class="pi pi-percentage text-primary-500"></i>
+                {{ 'common.tax' | translate }}:
+                <span class="font-semibold text-gray-800 dark:text-gray-100">
+                  {{ getTaxAmount() | currency }}
+                </span>
+              </p>
+              @if(order.notes) {
+              <p class="flex items-center gap-2 text-primary-600 dark:text-primary-300">
+                <i class="pi pi-comment text-primary-500"></i>
+                {{ 'orderTracking.notesAvailable' | translate }}
+              </p>
+              }
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Order Items Section -->
-    <div *ngIf="order && order.items && order.items.length > 0">
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-teal-600 px-8 py-6">
-          <h4 class="text-2xl font-bold text-white flex items-center gap-3">
-            <i class="fas fa-shopping-bag"></i>
-            {{ 'orderTracking.requestedProducts' | translate }}
-          </h4>
-        </div>
-        
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-          <div class="p-6 flex items-center gap-6" *ngFor="let item of order.items">
-            <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 flex-shrink-0 flex items-center justify-center overflow-hidden relative">
-              <img 
-                *ngIf="item.itemId.images && item.itemId.images.length > 0" 
-                [src]="getImageUrl(item.itemId.images[0].filePath)" 
-                [alt]="item.itemId.name | multiLanguage " 
-                class="w-full h-full object-cover rounded-xl transition-opacity duration-300"
-                (error)="onImageError($event)"
-                (load)="onImageLoad($event)"
-              >
-              <div *ngIf="!item.itemId.images || item.itemId.images.length === 0" class="w-full h-full flex items-center justify-center">
-                <i class="fas fa-box text-gray-500 dark:text-gray-300 text-2xl"></i>
+    <div class="grid gap-8 xl:grid-cols-3">
+      <div class="space-y-8 xl:col-span-2">
+        <!-- Timeline -->
+        <section class="bg-white dark:bg-gray-900/80 rounded-3xl border border-primary-100 dark:border-primary-900/50 overflow-hidden">
+          <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-4">
+            <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+              <i class="pi pi-map-marker text-primary-500"></i>
+              {{ 'orderTracking.timelineHeading' | translate }}
+            </h4>
+            <span class="text-sm font-semibold text-primary-600 dark:text-primary-300" *ngIf="shouldShowTimeline()">
+              {{ 'orderTracking.currentStage' | translate }}: {{ 'orderTracking.status.' + order.status | translate }}
+            </span>
+          </div>
+          <div class="p-8">
+            @if(shouldShowTimeline()) {
+            <div class="relative pl-8 sm:pl-12">
+              <span class="absolute left-4 sm:left-5 top-0 bottom-0 w-px bg-gradient-to-b from-primary-200 via-primary-100 to-transparent dark:from-primary-900/40 dark:via-primary-900/30"></span>
+              <div class="space-y-8">
+                @for(step of statusSteps; track step; let idx = $index) {
+                <div class="relative flex items-start gap-4 sm:gap-6">
+                  <div class="relative z-10">
+                    <span
+                      class="flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 "
+                      [ngClass]="{
+                        'bg-primary-500 text-white border-primary-500 shadow-primary-200/70': isStepActive(step),
+                        'bg-primary-100 text-primary-700 border-primary-200 dark:bg-primary-900/60 dark:text-primary-300 dark:border-primary-800': isStepCompleted(step),
+                        'bg-gray-100 text-gray-400 border-gray-200 dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700': !isStepActive(step) && !isStepCompleted(step)
+                      }">
+                      <i [class]="getStatusIcon(step)"></i>
+                    </span>
+                    @if(idx < statusSteps.length - 1) {
+                    <span class="absolute left-1/2 -bottom-8 translate-x-[-50%] w-px h-8 bg-gray-200 dark:bg-gray-700"></span>
+                    }
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                      <p class="text-sm font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-200">
+                        {{ 'orderTracking.status.' + step | translate }}
+                      </p>
+                      @if(isStepActive(step)) {
+                      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
+                        {{ 'orderTracking.currentStage' | translate }}
+                      </span>
+                      }
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {{ 'orderTracking.timeline.' + step | translate }}
+                    </p>
+                  </div>
+                </div>
+                }
               </div>
             </div>
-            <div class="flex-grow">
-              <h5 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                {{ item.itemId.name | multiLanguage }}
-              </h5>
-              <p class="text-gray-600 dark:text-gray-300 mb-2">
-                {{ 'quantity' | translate }} {{ item.quantity }}
-              </p>
-
+            } @else {
+            <div class="text-center py-10 text-gray-600 dark:text-gray-300">
+              <i class="pi pi-info-circle text-3xl text-blue-400 mb-4"></i>
+              <p class="font-semibold mb-2">{{ 'orderTracking.noTimelineAvailable' | translate }}</p>
+              <p>{{ 'orderTracking.timelineWillUpdate' | translate }}</p>
             </div>
-            <div class="text-right">
-              <p class="text-xl font-bold text-gray-900 dark:text-white">
-                {{ (item.price * item.quantity) | currency:'EGP':'symbol':'1.2-2' }}
-              </p>
-              <p class="text-sm text-gray-500 dark:text-gray-400" *ngIf="item.quantity > 1">
-                {{ item.price | currency:'EGP':'symbol':'1.2-2' }} × {{ item.quantity }}
-              </p>
+            }
+          </div>
+        </section>
+
+        <!-- Order Items -->
+        @if(order.items && order.items.length > 0) {
+        <section class="bg-white dark:bg-gray-900/80 rounded-3xl border border-primary-100 dark:border-primary-900/50 overflow-hidden">
+          <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800">
+            <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+              <i class="pi pi-shopping-cart text-primary-500"></i>
+              {{ 'orderTracking.requestedProducts' | translate }}
+            </h4>
+          </div>
+          <div class="divide-y divide-gray-100 dark:divide-gray-800">
+            <div class="p-6 flex flex-col sm:flex-row sm:items-center gap-6" *ngFor="let item of order.items">
+              <div class="relative">
+                <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-gray-100 via-white to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 flex items-center justify-center overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700">
+                  <img
+                    *ngIf="item.itemId && item.itemId.images && item.itemId.images.length > 0"
+                    [src]="getImageUrl(item.itemId.images[0].filePath)"
+                    [alt]="item.itemId ? (item.itemId.name | multiLanguage) : ''"
+                    class="w-full h-full object-cover"
+                    (error)="onImageError($event)"
+                    (load)="onImageLoad($event)"
+                  >
+                  <div *ngIf="!item.itemId || !item.itemId.images || item.itemId.images.length === 0" class="w-full h-full flex items-center justify-center text-3xl text-gray-400 dark:text-gray-500">
+                    <i class="fas fa-box"></i>
+                  </div>
+                </div>
+                <span class="absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-semibold shadow-md"
+                      [ngClass]="item.itemType === 'Package' ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300' : 'bg-primary-200 text-primary-800 dark:bg-primary-900/80 dark:text-primary-300'">
+                  {{ item.itemType === 'Package' ? ('orderTracking.packageBadge' | translate) : ('orderTracking.productBadge' | translate) }}
+                </span>
+              </div>
+              <div class="flex-1 space-y-3">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <h5 class="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    {{ item.itemId ? (item.itemId.name | multiLanguage) : '' }}
+                  </h5>
+                  <div class="text-right">
+                    <p class="text-xl font-bold text-gray-900 dark:text-gray-50">
+                      {{ (item.price * item.quantity) | currency }}
+                    </p>
+                    @if(item.quantity > 1) {
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                      {{ item.price | currency }} × {{ item.quantity }}
+                    </p>
+                    }
+                  </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                  <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-900/40">
+                    <i class="pi pi-hashtag text-primary-400"></i>
+                    {{ 'common.quantity' | translate }}: <strong>{{ item.quantity }}</strong>
+                  </span>
+                  @if(getSkuForItem(item); as sku) {
+                  <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-900/40">
+                    <i class="pi pi-tag text-primary-400"></i>
+                    {{ sku }}
+                  </span>
+                  }
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+        }
       </div>
-    </div>
 
-    <!-- Order Summary Section -->
-    <div *ngIf="order">
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div class="bg-gradient-to-r from-indigo-600 to-blue-600 px-8 py-6">
-          <h4 class="text-2xl font-bold text-white flex items-center gap-3">
-            <i class="fas fa-receipt"></i>
-            {{ 'orderTracking.paymentDetails' | translate }}
-          </h4>
-        </div>
-        
-        <div class="p-8 space-y-6">
-          <div class="flex justify-between items-center py-3">
-            <p class="text-gray-600 dark:text-gray-300 font-medium">{{ 'orderTracking.paymentMethod' | translate }}</p>
-            <p class="text-gray-900 dark:text-white font-semibold">
-              {{ 'paymentMethod.' + order.paymentMethod | translate }}
-            </p>
+      <div class="space-y-8">
+        <!-- Payment Breakdown -->
+        <section class="bg-white dark:bg-gray-900/80 rounded-3xl border border-primary-100 dark:border-primary-900/50 overflow-hidden">
+          <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800">
+            <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+              <i class="pi pi-credit-card text-primary-500"></i>
+              {{ 'orderTracking.paymentDetails' | translate }}
+            </h4>
           </div>
-          
-          <hr class="border-gray-200 dark:border-gray-700"/>
-          
-          <div class="flex justify-between items-center py-3">
-            <p class="text-gray-600 dark:text-gray-300">{{ 'common.subtotal' | translate }}</p>
-            <p class="text-gray-900 dark:text-white font-semibold">
-              {{ order.subtotal | currency:'EGP':'symbol':'1.2-2' }}
-            </p>
+          <div class="p-8 space-y-5 text-sm">
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'orderTracking.paymentMethod' | translate }}</span>
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ 'paymentMethod.' + order.paymentMethod | translate }}
+              </span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'orderTracking.isDeposit' | translate }}</span>
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ (order.isDeposit ? 'common.yes' : 'common.no') | translate }}
+              </span>
+            </div>
+            <hr class="border-dashed border-gray-200 dark:border-gray-800">
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'common.subtotal' | translate }}</span>
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ getSubtotal() | currency }}
+              </span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'common.shipping' | translate }}</span>
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ getShippingAmount() | currency }}
+              </span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'common.tax' | translate }}</span>
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ getTaxAmount() | currency }}
+              </span>
+            </div>
+            @if(hasDiscount()) {
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'common.discount' | translate }}</span>
+              <span class="font-semibold text-emerald-600 dark:text-emerald-300">
+                -{{ getDiscountAmount() | currency }}
+              </span>
+            </div>
+            }
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'orderTracking.amountPaid' | translate }}</span>
+              <span class="font-semibold text-primary-600 dark:text-primary-300">
+                {{ getAmountPaid() | currency }}
+              </span>
+            </div>
+            @if(hasOutstandingBalance()) {
+            <div class="flex justify-between items-center text-gray-600 dark:text-gray-300">
+              <span>{{ 'orderTracking.remainingBalance' | translate }}</span>
+              <span class="font-semibold text-primary-600 dark:text-primary-300">
+                {{ getOutstandingAmount() | currency }}
+              </span>
+            </div>
+            }
+            <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center">
+              <span class="text-base font-semibold text-gray-900 dark:text-gray-100">
+                {{ 'common.total' | translate }}
+              </span>
+              <span class="text-2xl font-bold text-primary-600 dark:text-primary-300">
+                {{ order.total | currency }}
+              </span>
+            </div>
           </div>
-          
-          <div class="flex justify-between items-center py-3">
-            <p class="text-gray-600 dark:text-gray-300">{{ 'common.shipping' | translate }}</p>
-            <p class="text-gray-900 dark:text-white font-semibold">
-              {{ order.shipping | currency:'EGP':'symbol':'1.2-2' }}
-            </p>
+        </section>
+
+        <!-- Shipping Details -->
+        @if(order.shippingAddress) {
+        <section class="bg-white dark:bg-gray-900/80 rounded-3xl border border-primary-100 dark:border-primary-900/50 overflow-hidden">
+          <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800">
+            <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+              <i class="pi pi-map text-primary-500"></i>
+              {{ 'orderTracking.shippingDetails' | translate }}
+            </h4>
           </div>
-          
-          <div class="flex justify-between items-center py-3">
-            <p class="text-gray-600 dark:text-gray-300">{{ 'common.tax' | translate }}</p>
-            <p class="text-gray-900 dark:text-white font-semibold">
-              {{ order.tax | currency:'EGP':'symbol':'1.2-2' }}
-            </p>
+          <div class="p-8 space-y-5 text-sm text-gray-600 dark:text-gray-300">
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-gray-400 dark:text-gray-500">
+                {{ 'orderTracking.recipient' | translate }}
+              </p>
+              <p class="text-base font-semibold text-gray-900 dark:text-gray-100 mt-1">
+                {{ order.shippingAddress.fullName  }}
+              </p>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-gray-400 dark:text-gray-500">
+                {{ 'orderTracking.contact' | translate }}
+              </p>
+              <p class="text-base font-semibold text-gray-900 dark:text-gray-100 mt-1">
+                {{ order.shippingAddress.phone  }}
+              </p>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-gray-400 dark:text-gray-500">
+                {{ 'orderTracking.deliveryAddress' | translate }}
+              </p>
+              <p class="text-base font-semibold text-gray-900 dark:text-gray-100 mt-1 leading-relaxed">
+                {{ order.shippingAddress.address }}
+                <br>
+                {{ order.shippingAddress.city }}, {{ order.shippingAddress.state }}
+                <br>
+                {{ order.shippingAddress.country }}
+                @if(order.shippingAddress['zip']) {
+                <span>, {{ order.shippingAddress['zip'] }}</span>
+                }
+              </p>
+            </div>
           </div>
-          
-          <hr class="border-gray-200 dark:border-gray-700"/>
-          
-          <div class="flex justify-between items-center py-4 bg-gray-50 dark:bg-gray-700 rounded-xl px-6">
-            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ 'common.total' | translate }}</p>
-            <p class="text-2xl font-bold text-green-600 dark:text-green-400">
-              {{ order.total | currency:'EGP':'symbol':'1.2-2' }}
-            </p>
+        </section>
+        }
+
+        <!-- Notes -->
+        <section class="bg-white dark:bg-gray-900/80 rounded-3xl border border-primary-100 dark:border-primary-900/50 overflow-hidden">
+          <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
+            <i class="pi pi-comment text-primary-500"></i>
+            <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100">
+              {{ 'orderTracking.notesTitle' | translate }}
+            </h4>
           </div>
-        </div>
+          <div class="p-8">
+            @if(order.notes) {
+            <p class="leading-relaxed text-gray-700 dark:text-gray-200">
+              {{ order.notes }}
+            </p>
+            } @else {
+            <p class="text-gray-500 dark:text-gray-400">
+              {{ 'orderTracking.noNotes' | translate }}
+            </p>
+            }
+          </div>
+        </section>
       </div>
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex justify-center pt-8">
-      <button 
-        class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-3"
+    <div class="flex justify-center pt-4">
+      <button
+        class="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-10 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
         (click)="clearSearch()"
       >
-        <i class="fas fa-search"></i>
+        <i class="pi pi-search"></i>
         {{ 'orderTracking.searchForAnotherOrder' | translate }}
       </button>
     </div>
@@ -216,12 +469,12 @@
 
   <!-- No Results Message -->
   <div class="max-w-2xl mx-auto" *ngIf="showResults && !order">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-primary-100 dark:border-primary-900/50 p-12 text-center">
       <i class="fas fa-search text-gray-400 text-6xl mb-6"></i>
       <h5 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">{{ 'orderNotFound' | translate }}</h5>
       <p class="text-gray-500 dark:text-gray-400 mb-8">{{ 'checkOrderNumber' | translate }}</p>
       <button 
-        class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center gap-3 mx-auto"
+        class="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-3 mx-auto"
         (click)="clearSearch()"
       >
         <i class="fas fa-search"></i>

@@ -19,7 +19,7 @@ export interface OrderItem {
 }
 
 export interface OrderAddress {
-  name: string;
+  fullName: string;
   address: string;
   city: string;
   state: string;
@@ -45,4 +45,6 @@ export interface Order {
   paymentStatus: PaymentStatus;
   trackingNumber?: string;
   notes?: string;
+  isDeposit?: boolean;
+  amountPaid?: number;
 }

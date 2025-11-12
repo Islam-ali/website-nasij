@@ -86,6 +86,23 @@
     "product": "Product",
     "paymentDetails": "Payment Details",
     "searchForAnotherOrder": "Search for Another Order",
+    "paymentSummary": "Payment Snapshot",
+    "remainingBalance": "Remaining Balance",
+    "paidBadge": "Paid in full",
+    "depositBadge": "Deposit Order",
+    "shippingOverview": "Shipping Snapshot",
+    "timelineHeading": "Delivery Timeline",
+    "currentStage": "Current Stage",
+    "shippingDetails": "Shipping Details",
+    "recipient": "Recipient",
+    "contact": "Contact",
+    "deliveryAddress": "Delivery Address",
+    "notesTitle": "Order Notes",
+    "noNotes": "No additional notes were added to this order.",
+    "notesAvailable": "Customer note included",
+    "trackingNumber": "Tracking #:",
+    "productBadge": "Product",
+    "packageBadge": "Package",
     "status": {
       "pending": "Pending",
       "confirmed": "Confirmed",
@@ -106,6 +123,19 @@
       "deposit": "Deposit",
       "paypal": "PayPal",
       "stripe": "Stripe"
+    },
+    "isDeposit": "Is Deposit?",
+    "amountPaid": "Amount Paid:",
+    "timeline": {
+      "pending": "We have received your order and it is waiting to be confirmed.",
+      "confirmed": "Your order has been confirmed and will move to processing shortly.",
+      "received": "Our team has received the order details and is preparing the items.",
+      "processing": "Your items are being prepared, packed, and quality checked.",
+      "shipped": "The order has left our warehouse and is on its way to you.",
+      "delivered": "Delivery confirmed. We hope you enjoy your purchase!",
+      "cancelled": "This order has been cancelled. Please contact support if you have questions.",
+      "postponed": "Delivery has been postponed. We will notify you with the next update.",
+      "returned": "The order has been returned. Please reach out if you need further assistance."
     }
   },
   "checkout": {
@@ -174,6 +204,8 @@
     "paymentScreenshotDescription": "Please upload a screenshot of your Vodafone Cash transfer as proof of payment.",
     "uploadScreenshot": "Upload Screenshot",
     "supportedFormats": "Supported formats: JPG, PNG, GIF (Max 5MB)",
+    "depositToggleLabel": "Mark this order as a deposit",
+    "depositToggleHint": "Enable this option if the customer paid only the deposit amount (usually the shipping cost). A payment screenshot is still required.",
     "validationErrors": {
       "fullNameRequired": "Full name is required",
       "phoneRequired": "Phone number is required",
@@ -184,7 +216,7 @@
       "acceptTermsRequired": "You must accept the terms and conditions",
       "fillAllFields": "Please fill in all required fields.",
       "cartEmpty": "Your cart is empty. Please add items before checkout.",
-      "paymentImageRequired": "Payment screenshot is required for Vodafone Cash payment method.",
+      "paymentImageRequired": "Payment screenshot is required for Vodafone Cash payments or deposit orders.",
       "invalidFileType": "Please select a valid image file.",
       "fileTooLarge": "File size must be less than 5MB.",
       "uploadFailed": "Failed to upload payment image. Please try again."
@@ -202,6 +234,9 @@
     "boxs": "Boxs",
     "trackOrder": "Track Order",
     "categories": "Categories",
+    "tagline": "Premium shopping experience",
+    "support24h": "24/7 customer support",
+    "exploreCategory": "Browse curated products",
     "cart": "Cart",
     "checkout": "Checkout",
     "profile": "Profile",
@@ -218,7 +253,8 @@
     "support": "Support",
     "faq": "FAQ",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+    "terms": "Terms of Service",
+    "startShopping": "Start Shopping"
   },
   "home": {
     "title": "Welcome to Pledge",
@@ -273,6 +309,10 @@
     "clear_all": "Clear All",
     "sort_by_label": "Sort by",
     "choose_sorting": "Choose sorting option",
+    "select_categories": "Select categories...",
+    "select_brands": "Select brands...",
+    "no_categories_available": "No categories available",
+    "no_brands_available": "No brands available",
     "min_price": "Min Price",
     "max_price": "Max Price",
     "categories": "Categories",
@@ -281,6 +321,24 @@
     "colors": "Colors",
     "on_sale_only": "On Sale Only",
     "active_filters": "Active Filters",
+    "no_active_filters": "No filters applied",
+    "filters_applied": "filters applied",
+    "quick_filters": {
+      "featured": "Featured",
+      "newest": "Newest",
+      "top_rated": "Top Rated",
+      "lowest_price": "Lowest Price"
+    },
+    "stats": {
+      "total_products": "Total products",
+      "updated_live": "Updated in real time",
+      "categories": "Categories",
+      "discover_categories": "Explore curated product families",
+      "brands": "Brands",
+      "brands_caption": "Trusted partners and premium suppliers",
+      "tip": "Pro Tip",
+      "tip_caption": "Mix filters to discover the perfect collection faster!"
+    },
     "size_label": "Size {{size}}",
     "try_adjusting_filters": "Try adjusting your filters or search terms to find what you're looking for.",
     "browse_all_products": "Browse All Products",

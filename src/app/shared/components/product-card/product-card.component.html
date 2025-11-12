@@ -104,10 +104,10 @@
         <!-- Price Section -->
         <div class="flex items-baseline gap-2 flex-shrink-0">
           @if (isOnSale) {
-          <span class="text-md font-bold text-red-300 dark:text-red-400 transition-colors duration-300">{{ price | currency }}</span>
-          <span class="text-sm text-gray-300 dark:text-gray-400 line-through transition-colors duration-300">{{ product.price | currency }}</span>
+          <span class="text-md font-bold text-primary-50 dark:text-primary-300 transition-colors duration-300">{{ price | currency }}</span>
+          <span class="text-sm text-gray-300 dark:text-gray-400 line-through transition-colors duration-300">{{ basePrice | currency }}</span>
           } @else {
-          <span class="text-md font-bold text-white dark:text-gray-100 transition-colors duration-300">{{ price | currency }}</span>
+          <span class="text-md font-bold text-primary-50 dark:text-primary-300 transition-colors duration-300">{{ price | currency }}</span>
           }
         </div>
       </div>

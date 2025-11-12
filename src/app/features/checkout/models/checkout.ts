@@ -28,6 +28,7 @@ export interface ICreateOrder {
   };
   shippingAddress?: IShippingAddress;
   paymentMethod?: PaymentMethod;
+  isDeposit?: boolean;
   deliveryDate?: string;
   notes?: string;
 }

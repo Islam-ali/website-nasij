@@ -21,11 +21,6 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
            [class]="'pi ' + themeService.getThemeIcon()"
            [class.dark:text-dark-text]="themeService.isDark()"></i>
       </button>
-      <!-- Theme Mode Indicator -->
-      <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-purple-500 border-2 border-white"
-           [class.dark:border-dark-surface]="themeService.isDark()"
-           [title]="'Current mode: ' + themeService.mode()">
-      </div>
     </div>
   `,
   styles: [`
