@@ -536,7 +536,7 @@ export class CheckoutComponent implements OnInit {
     } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
       return Number(this.orderTotal());
     } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.CASH) {
-      return Number(this.orderTotal());
+      return 0
     }
     return 0;
   }
@@ -547,7 +547,7 @@ export class CheckoutComponent implements OnInit {
     } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
       return 0;
     } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.CASH) {
-      return 0;
+      return Number(this.orderTotal());
     }
     return 0;
   }
