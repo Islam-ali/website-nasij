@@ -81,7 +81,7 @@ export class CheckoutComponent implements OnInit {
   });
 
   // Signal to track payment method changes
-  paymentMethod = signal<PaymentMethod>(PaymentMethod.VODAFONE_CASH);
+  paymentMethod = signal<PaymentMethod>(PaymentMethod.CASH);
 
   depositOrder = signal<boolean>(false);
 
@@ -106,7 +106,7 @@ export class CheckoutComponent implements OnInit {
   vodafoneCashAccount = signal<string>('');
   currentLanguage = signal<string>('en');
   paymentMethods = [
-    // { label: 'Cash', value: PaymentMethod.CASH },
+    { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
     // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
     // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
@@ -363,7 +363,7 @@ export class CheckoutComponent implements OnInit {
       }),
 
       // Payment Details
-      paymentMethod: [PaymentMethod.VODAFONE_CASH],
+      paymentMethod: [PaymentMethod.CASH],
       paymentImage: [''], // For Vodafone Cash screenshot
       isDeposit: [false],
 
@@ -482,7 +482,6 @@ export class CheckoutComponent implements OnInit {
       },
       notes: formValue.notes || ''
     };
-    debugger;
     this.checkoutService.createOrder(orderData).subscribe({
       next: (response:any) => {
         this.loading = false;

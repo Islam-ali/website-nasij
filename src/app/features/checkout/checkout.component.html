@@ -1,7 +1,6 @@
 <p-toast></p-toast>
 
-<section
-  class="min-h-screen bg-gray-50 dark:bg-gray-800 transition-all duration-500 text-gray-800 dark:text-gray-200">
+<section class="min-h-screen bg-gray-50 dark:bg-gray-800 transition-all duration-500 text-gray-800 dark:text-gray-200">
   <!-- Background Pattern -->
   <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
     <div class="absolute inset-0"
@@ -12,26 +11,27 @@
   <!-- Floating Elements -->
   <div class="absolute top-24 left-10 w-24 h-24 bg-primary-200/30 dark:bg-primary-500/20 rounded-full blur-2xl"></div>
   <div class="absolute top-48 right-16 w-20 h-20 bg-primary-300/30 dark:bg-primary-600/20 rounded-full blur-2xl"></div>
-  <div class="absolute bottom-24 left-1/4 w-16 h-16 bg-primary-100/40 dark:bg-primary-500/20 rounded-full blur-2xl"></div>
+  <div class="absolute bottom-24 left-1/4 w-16 h-16 bg-primary-100/40 dark:bg-primary-500/20 rounded-full blur-2xl">
+  </div>
 
   <div class="max-w-7xl mx-auto p-6 lg:p-12 relative z-10">
     <!-- Success Message -->
     <div *ngIf="success"
       class="bg-white/95 dark:bg-gray-900/80 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-200 p-8 rounded-3xl mb-8">
       <div class="flex flex-col items-center">
-        <div
-          class="p-4 bg-primary-100 dark:bg-primary-800/40 rounded-full mb-6">
+        <div class="p-4 bg-primary-100 dark:bg-primary-800/40 rounded-full mb-6">
           <img src="Done.gif" alt="confirm" width="120" class="rounded-full">
         </div>
         <div class="text-center">
-          <h3 class="text-2xl font-bold text-green-900 dark:text-green-100 mb-3">{{'checkout.orderConfirmed' | translate}}</h3>
+          <h3 class="text-2xl font-bold text-green-900 dark:text-green-100 mb-3">{{'checkout.orderConfirmed' |
+            translate}}</h3>
           <p class="text-green-700 dark:text-green-300 mb-6">{{'checkout.thankYou' | translate}}</p>
-          <p class="text-gray-600 p-4 rounded-2xl my-4 bg-green-400/10 dark:bg-gray-800 dark:text-gray-300 text-lg transition-colors duration-300">
+          <p
+            class="text-gray-600 p-4 rounded-2xl my-4 bg-green-400/10 dark:bg-gray-800 dark:text-gray-300 text-lg transition-colors duration-300">
             <!-- cupy order number -->
             <span class="font-bold px-2">{{'checkout.orderNumber' | translate}}: {{orderNumber}}</span>
             <!-- copy to clipboard -->
-            <button pButton pRipple icon="pi pi-copy"
-              (click)="copyToClipboard(orderNumber)"></button>
+            <button pButton pRipple icon="pi pi-copy" (click)="copyToClipboard(orderNumber)"></button>
           </p>
           <button pButton pRipple [label]="'checkout.continueShopping' | translate" icon="pi pi-arrow-left"
             class="bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white border-0 rounded-2xl px-8 py-4 font-semibold transition-all duration-300"
@@ -45,7 +45,8 @@
         <h1 class="text-4xl lg:text-5xl font-bold mb-3 text-gray-900 dark:text-white transition-colors duration-300">
           {{'checkout.title' | translate}}</h1>
         <p class="text-gray-600 dark:text-gray-300 text-lg transition-colors duration-300">
-          {{'checkout.itemsInCart' | translate: {count: cartItems().length, itemText: getItemText(cartItems().length)} }}
+          {{'checkout.itemsInCart' | translate: {count: cartItems().length, itemText: getItemText(cartItems().length)}
+          }}
         </p>
       </div>
 
@@ -56,16 +57,17 @@
           <div
             class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-8">
-              <div
-                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
+              <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-user text-2xl text-blue-600 dark:text-blue-400"></i>
               </div>
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.billingDetails' | translate}}</h2>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                {{'checkout.billingDetails' | translate}}</h2>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div class="sm:col-span-2">
                 <label for="fullName"
-                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.fullName' | translate}}*</label>
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.fullName'
+                  | translate}}*</label>
                 <input type="text" id="fullName" formControlName="fullName"
                   [class.border-red-300]="f['fullName'].touched && f['fullName'].errors"
                   class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
@@ -77,7 +79,8 @@
               </div>
               <div class="sm:col-span-2">
                 <label for="phone"
-                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.phoneNumber' | translate}}*</label>
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.phoneNumber'
+                  | translate}}*</label>
                 <input type="tel" id="phone" phoneNumber formControlName="phone"
                   [class.border-red-300]="f['phone'].touched && f['phone'].errors"
                   class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
@@ -95,18 +98,19 @@
             class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300"
             formGroupName="shippingAddress">
             <div class="flex items-center gap-3 mb-8">
-              <div
-                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
+              <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-map-marker text-2xl text-green-600 dark:text-green-400"></i>
               </div>
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.shippingAddress' | translate}}</h2>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                {{'checkout.shippingAddress' | translate}}</h2>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label for="country"
-                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.country' | translate}}*</label>
-                <p-select [options]="countries()" formControlName="country" [optionLabel]=" 'name.'+ currentLanguage()" optionValue="_id"
-                  [placeholder]="'checkout.selectCountry' | translate"
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.country'
+                  | translate}}*</label>
+                <p-select [options]="countries()" formControlName="country" [optionLabel]=" 'name.'+ currentLanguage()"
+                  optionValue="_id" [placeholder]="'checkout.selectCountry' | translate"
                   (onChange)="loadStates(); setShippingCost()"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.country')?.touched && checkoutForm.get('shippingAddress.country')?.errors"
                   styleClass="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300">
@@ -120,12 +124,11 @@
               </div>
               <div>
                 <label for="state"
-                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.state' | translate}}*</label>
-                <p-select [options]="states()" formControlName="state" [optionLabel]=" 'name.'+ currentLanguage()" optionValue="_id"
-                filterBy="name.{{currentLanguage()}}"
-                [filter]="true"
-                  [placeholder]="'checkout.selectState' | translate"
-                  (onChange)="setShippingCost()"
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.state'
+                  | translate}}*</label>
+                <p-select [options]="states()" formControlName="state" [optionLabel]=" 'name.'+ currentLanguage()"
+                  optionValue="_id" filterBy="name.{{currentLanguage()}}" [filter]="true"
+                  [placeholder]="'checkout.selectState' | translate" (onChange)="setShippingCost()"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.state')?.touched && checkoutForm.get('shippingAddress.state')?.errors"
                   styleClass="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300">
                 </p-select>
@@ -138,7 +141,8 @@
               </div>
               <div>
                 <label for="city"
-                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.city' | translate}}*</label>
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.city'
+                  | translate}}*</label>
                 <input type="text" id="city" formControlName="city"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.city')?.touched && checkoutForm.get('shippingAddress.city')?.errors"
                   class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
@@ -151,7 +155,8 @@
               </div>
               <div class="sm:col-span-2">
                 <label for="address"
-                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.address' | translate}}*</label>
+                  class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.address'
+                  | translate}}*</label>
                 <input type="text" id="address" formControlName="address"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.address')?.touched && checkoutForm.get('shippingAddress.address')?.errors"
                   class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
@@ -169,12 +174,12 @@
           <div
             class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-6">
-              <div
-                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
+              <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-pencil text-2xl text-yellow-600 dark:text-yellow-400"></i>
               </div>
               <label for="notes"
-                class="block text-lg font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">{{'checkout.notes' | translate}}</label>
+                class="block text-lg font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">{{'checkout.notes'
+                | translate}}</label>
             </div>
             <textarea id="notes" formControlName="notes"
               class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-yellow-500/20 dark:focus:ring-yellow-400/20 focus:border-yellow-500 dark:focus:border-yellow-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 resize-none"
@@ -185,11 +190,11 @@
           <div
             class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-8">
-              <div
-                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
+              <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-credit-card text-2xl text-primary-600 dark:text-primary-400"></i>
               </div>
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.paymentMethod' | translate}}</h2>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                {{'checkout.paymentMethod' | translate}}</h2>
             </div>
             <div class="space-y-4">
               <div *ngFor="let method of paymentMethods"
@@ -210,43 +215,40 @@
                   </span>
                 </label>
               </div>
-
+              @if(checkoutForm.get('paymentMethod')?.value !== 'cash') {
               <div
-                class="flex flex-wrap items-center justify-between gap-4 border border-dashed border-primary-300 dark:border-primary-600 rounded-2xl p-6 bg-primary-50/60 dark:bg-primary-900/20">
+                class="flex flex-wrap items-center justify-between gap-4 border border-dashed border-primary-300 dark:border-primary-600 rounded-2xl p-6 bg-primary-50/10 dark:bg-primary-900/20">
                 <div class="max-w-lg">
                   <p class="text-lg font-semibold text-primary-700 dark:text-primary-300">
                     {{'checkout.depositToggleLabel' | translate}}
 
-                    <span class="text-gray-500 dark:text-gray-400 inline-block"> {{shippingCost() | currency}}</span>
+                    <span class="text-gray-500 dark:text-gray-400 text-xl font-semibold inline-block"> {{shippingCost() | currency}}</span>
                   </p>
                   <p class="text-sm text-primary-600/80 dark:text-primary-200/80">
                     {{'checkout.depositToggleHint' | translate}}
                   </p>
                 </div>
-                <p-inputSwitch formControlName="isDeposit"></p-inputSwitch>
+                  <p-inputSwitch styleClass="relative" formControlName="isDeposit"></p-inputSwitch>
               </div>
-
+              }
               <!-- Payment Image Upload (shown when Vodafone Cash is selected) -->
-               @if(isPaymentImageRequired()) {  
-              <div
-                class="mt-8 space-y-6 border-t-2 border-gray-200 dark:border-gray-600 pt-8">
+              @if(isPaymentImageRequired()) {
+              <div class="mt-8 space-y-6 border-t-2 border-gray-200 dark:border-gray-600 pt-8">
                 <div>
-                  <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                  <label
+                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                     {{'checkout.paymentScreenshot' | translate}} <span class="text-red-500">*</span>
                   </label>
                   <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     {{'checkout.paymentScreenshotDescription' | translate}}
                   </p>
-                  
+
                   <!-- File Upload Area -->
-                  <div class="border-2 border-dashed border-primary-200 dark:border-primary-700 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-primary-50/50 dark:bg-primary-900/20">
-                    <input type="file" 
-                           id="paymentImage" 
-                           accept="image/*" 
-                           (change)="onFileSelected($event)"
-                           class="hidden">
-                    <label for="paymentImage" 
-                           class="cursor-pointer flex flex-col items-center">
+                  <div
+                    class="border-2 border-dashed border-primary-200 dark:border-primary-700 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-primary-50/10 dark:bg-primary-900/20">
+                    <input type="file" id="paymentImage" accept="image/*" (change)="onFileSelected($event)"
+                      class="hidden">
+                    <label for="paymentImage" class="cursor-pointer flex flex-col items-center">
                       <i class="pi pi-cloud-upload text-4xl text-gray-400 dark:text-gray-500 mb-4"></i>
                       <span class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         {{'checkout.uploadScreenshot' | translate}}
@@ -260,13 +262,10 @@
                   <!-- Image Preview -->
                   <div *ngIf="paymentImagePreview" class="mt-4">
                     <div class="relative inline-block">
-                      <img [src]="paymentImagePreview" 
-                      fallback
-                           alt="Payment Screenshot Preview" 
-                           class="max-w-full h-48 object-contain rounded-lg border-2 border-gray-200 dark:border-gray-600">
-                      <button type="button" 
-                              (click)="removeSelectedFile()"
-                              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors duration-200">
+                      <img [src]="paymentImagePreview" fallback alt="Payment Screenshot Preview"
+                        class="max-w-full h-48 object-contain rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                      <button type="button" (click)="removeSelectedFile()"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors duration-200">
                         <i class="pi pi-times text-xs"></i>
                       </button>
                     </div>
@@ -288,10 +287,12 @@
                     class="font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
                     {{'checkout.acceptTerms' | translate}}
                     <a href="#"
-                      class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors duration-300">{{'checkout.termsOfService' | translate}}</a>
+                      class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors duration-300">{{'checkout.termsOfService'
+                      | translate}}</a>
                     {{'checkout.and' | translate}}
                     <a href="#"
-                      class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors duration-300">{{'checkout.privacyPolicy' | translate}}</a>
+                      class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors duration-300">{{'checkout.privacyPolicy'
+                      | translate}}</a>
                   </label>
                   <div *ngIf="f['acceptTerms'].touched && f['acceptTerms'].errors"
                     class="text-red-600 dark:text-red-400 text-sm mt-2 flex items-center gap-2">
@@ -322,11 +323,11 @@
           <div
             class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 sticky top-28 z-40 max-h-[calc(100vh-6rem)] overflow-y-auto">
             <div class="flex items-center gap-3 mb-8">
-              <div
-                class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
+              <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
                 <i class="pi pi-shopping-bag text-2xl text-indigo-600 dark:text-indigo-400"></i>
               </div>
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">{{'checkout.orderSummary' | translate}}</h2>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                {{'checkout.orderSummary' | translate}}</h2>
             </div>
 
             <!-- Order Items -->
@@ -335,7 +336,8 @@
                 class="bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-200 dark:border-gray-600 overflow-hidden">
                 <!-- Main Item (Product or Package) -->
                 <div class="flex items-start p-2">
-                  <img [src]="item.image" [alt]="item.productName" fallback class="w-16 h-16 object-cover rounded-xl shadow-md">
+                  <img [src]="item.image" [alt]="item.productName" fallback
+                    class="w-16 h-16 object-cover rounded-xl shadow-md">
                   <div class="ms-4 flex-1">
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">
                       {{item.productName | multiLanguage}}
@@ -348,14 +350,13 @@
                     <!-- Product Variants (for regular products) -->
                     <div *ngIf="item.itemType === 'Product' || !item.itemType">
                       @if(item.selectedVariants && item.selectedVariants.length > 0) {
-                        @for(variant of item.selectedVariants; track variant._id) {
-                      <p
-                        class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                      @for(variant of item.selectedVariants; track variant._id) {
+                      <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
                         {{'products.' + variant.variant | translate}}:
-                          <span class="text-xs font-semibold">{{variant.value | multiLanguage}}</span>
-                        </p>
+                        <span class="text-xs font-semibold">{{variant.value | multiLanguage}}</span>
+                      </p>
                       }
-                    }
+                      }
                     </div>
 
                   </div>
@@ -375,7 +376,8 @@
                 <!-- Package Items (for packages) -->
                 <div *ngIf="item.itemType === 'Package' && item.packageItems && item.packageItems.length > 0"
                   class="mt-3 p-2">
-                  <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">{{'checkout.packageContents' | translate}}:</p>
+                  <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">{{'checkout.packageContents' |
+                    translate}}:</p>
                   <div class="space-y-2">
                     <div *ngFor="let packageItem of item.packageItems"
                       class="bg-white dark:bg-gray-800/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
