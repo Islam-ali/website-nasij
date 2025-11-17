@@ -24,22 +24,23 @@ export class TranslationService {
 
     // Get saved language from localStorage or use browser language
     const savedLanguage = localStorage.getItem('pledge-language');
-    const browserLanguage = this.getBrowserLanguage();
-    const languageToUse = savedLanguage || browserLanguage || this.defaultLanguage;
+    // const browserLanguage = this.getBrowserLanguage();
+
+    const languageToUse = savedLanguage || this.defaultLanguage;
 
     this.setLanguage(languageToUse);
   }
 
-  private getBrowserLanguage(): string | null {
-    if (isPlatformBrowser(this.platformId)) {
-      const browserLang = navigator.language || (navigator as any).userLanguage;
-      if (browserLang) {
-        const lang = browserLang.split('-')[0];
-        return this.supportedLanguages.includes(lang) ? lang : null;
-      }
-    }
-    return null;
-  }
+  // private getBrowserLanguage(): string | null {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     const browserLang = navigator.language || (navigator as any).userLanguage;
+  //     if (browserLang) {
+  //       const lang = browserLang.split('-')[0];
+  //       return this.supportedLanguages.includes(lang) ? lang : null;
+  //     }
+  //   }
+  //   return null;
+  // }
 
   setLanguage(language: string): void {
     if (this.supportedLanguages.includes(language)) {

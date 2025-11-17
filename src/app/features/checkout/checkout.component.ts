@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, signal, computed, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, signal, computed, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { takeUntil, Subject } from 'rxjs';
@@ -59,6 +59,7 @@ import { secureDecodeUrl } from '../../core/utils/secure-query';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
+  private translate = inject(TranslateService);
   checkoutForm!: FormGroup;
   loading = false;
   success = false;
@@ -104,7 +105,7 @@ export class CheckoutComponent implements OnInit {
   states = signal<IState[]>([]);
 
   vodafoneCashAccount = signal<string>('');
-  currentLanguage = signal<string>('en');
+  currentLanguage = signal<string>(this.translate.currentLang === 'ar' ? 'ar' : 'en');
   paymentMethods = [
     { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
@@ -124,7 +125,6 @@ export class CheckoutComponent implements OnInit {
     private productUrlService: ProductUrlService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
-    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -403,15 +403,15 @@ export class CheckoutComponent implements OnInit {
     }
 
     // Validate payment image for Vodafone Cash
-    if ((formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.isDeposit) && !this.selectedFile) {
-      this.messageService.add({ 
-        severity: 'error', 
-        summary: this.translate.instant('common.error'), 
-        detail: this.translate.instant('checkout.validationErrors.paymentImageRequired') 
-      });
-      this.loading = false;
-      return;
-    }
+    // if ((formValue.paymentMethod === PaymentMethod.VODAFONE_CASH || formValue.isDeposit) && !this.selectedFile) {
+    //   this.messageService.add({ 
+    //     severity: 'error', 
+    //     summary: this.translate.instant('common.error'), 
+    //     detail: this.translate.instant('checkout.validationErrors.paymentImageRequired') 
+    //   });
+    //   this.loading = false;
+    //   return;
+    // }
 
     // Validate cart items
     if (this.cartItems().length === 0) {
