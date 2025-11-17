@@ -253,7 +253,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     if (!price || !discountPrice || discountPrice <= 0 || discountPrice >= price) {
       return null;
     }
-    return Math.round(((price - discountPrice) / price) * 100);
+    return Math.round((((price) - (price - discountPrice)) / price) * 100);
   }
 
   
@@ -568,7 +568,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       offers: {
         '@type': 'Offer',
         priceCurrency: 'SAR',
-        price: (product.price - (product.discountPrice || 0)).toFixed(2),
+        price: (this.getVariantBasePrice() - (product.discountPrice || 0)).toFixed(2),
         availability: product.status === ProductStatus.ACTIVE
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',

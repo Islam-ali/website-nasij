@@ -482,7 +482,7 @@ export class CheckoutComponent implements OnInit {
       },
       notes: formValue.notes || ''
     };
-
+    debugger;
     this.checkoutService.createOrder(orderData).subscribe({
       next: (response:any) => {
         this.loading = false;

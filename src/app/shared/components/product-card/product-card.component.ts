@@ -23,6 +23,7 @@ import { ProductService } from '../../../features/products/services/product.serv
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 import { ProductStatus } from '../../../interfaces/product.interface';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultilingualText } from '../../../core/models/multi-language';
   @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -54,23 +55,79 @@ export class ProductCardComponent implements OnInit, OnChanges {
   loading = false;
   domain = environment.domain;
   productStatus = ProductStatus;
+  selectedVariantAttributes: ProductVariantAttribute[] = [];
+  mappedVariants: {variant: string, attributes: ProductVariantAttribute[]}[] = [];
   
   get basePrice(): number {
+    return this.getVariantBasePrice();
+  }
+
+  private getVariantBasePrice(): number {
     if (!this.product) {
       return 0;
     }
 
-    if (this.product.useVariantPrice && Array.isArray(this.product.variants) && this.product.variants.length) {
-      const prices = this.product.variants
-        .map((variant: ProductVariant) => variant?.price)
-        .filter((price: number | undefined): price is number => price != null);
+    if (!this.product.useVariantPrice) {
+      return this.product.price || 0;
+    }
 
-      if (prices.length) {
-        return Math.min(...prices);
-      }
+    const activeVariant = this.getActiveVariant();
+    if (activeVariant?.price != null) {
+      return activeVariant.price;
+    }
+
+    const variantPrices = (this.product.variants || [])
+      .map((variant: ProductVariant) => variant.price)
+      .filter((price: number | undefined): price is number => price != null);
+
+    if (variantPrices.length) {
+      return Math.min(...variantPrices);
     }
 
     return this.product.price || 0;
+  }
+
+  private getActiveVariant(): ProductVariant | null {
+    if (!this.product?.useVariantPrice || !this.product?.variants?.length) {
+      return null;
+    }
+
+    if (!this.selectedVariantAttributes?.length) {
+      return this.product.variants[0] || null;
+    }
+
+    return (
+      this.product.variants.find((variant: ProductVariant) => {
+        if (!variant.attributes?.length) {
+          return false;
+        }
+        return variant.attributes.every(attr =>
+          this.selectedVariantAttributes.some(sel => {
+            if (sel._id && attr._id && sel._id === attr._id) {
+              return true;
+            }
+            return (
+              sel.variant === attr.variant &&
+              this.compareMultilingualValues(sel.value, attr.value as any)
+            );
+          })
+        );
+      }) || null
+    );
+  }
+
+  private compareMultilingualValues(
+    selectedValue: MultilingualText,
+    variantValue: MultilingualText
+  ): boolean {
+    const normalize = (value: MultilingualText) => ({
+      en: (value?.en || '').toString().toLowerCase().trim(),
+      ar: (value?.ar || '').toString().toLowerCase().trim()
+    });
+
+    const sel = normalize(selectedValue);
+    const variant = normalize(variantValue);
+    return sel.en === variant.en && sel.ar === variant.ar;
   }
 
   get price(): number {
@@ -86,7 +143,8 @@ export class ProductCardComponent implements OnInit, OnChanges {
   
   get discountPercentage(): number {
     if (!this.isOnSale) return 0;
-    return Math.round(((this.basePrice - this.price) / this.basePrice) * 100);
+    const discount = this.product?.discountPrice || 0;
+    return Math.round((((this.price) - (this.price - discount)) / this.basePrice) * 100);
   }
 
   constructor(
@@ -120,12 +178,84 @@ export class ProductCardComponent implements OnInit, OnChanges {
   
   ngOnInit(): void {
     // Check if product is in wishlist
+    if (this.product) {
+      this.initializeVariants();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product']) {
       this.extractColorsAndSizes();
+      this.initializeVariants();
     }
+  }
+
+  private initializeVariants(): void {
+    if (!this.product?.variants?.length) {
+      this.mappedVariants = [];
+      this.selectedVariantAttributes = [];
+      return;
+    }
+    
+    this.mappedVariants = this.productService.getUniqueAttributes(this.product.variants);
+    this.autoSelectDefaultVariants();
+  }
+
+  private autoSelectDefaultVariants(): void {
+    if (!this.mappedVariants || this.mappedVariants.length === 0) return;
+    
+    this.selectedVariantAttributes = [];
+    
+    this.mappedVariants.forEach(mappedVariant => {
+      if (mappedVariant.attributes && mappedVariant.attributes.length > 0) {
+        this.selectedVariantAttributes.push(mappedVariant.attributes[0]);
+      }
+    });
+  }
+
+  isVariantSelected(attribute: ProductVariantAttribute): boolean {
+    return this.selectedVariantAttributes.some(v => v._id === attribute._id);
+  }
+
+  onVariantSelect(attribute: ProductVariantAttribute, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    
+    const hasSameVariant = this.selectedVariantAttributes.some(v => v.variant === attribute.variant);
+    if (!this.isVariantSelected(attribute) && !hasSameVariant) {
+      this.selectedVariantAttributes.push(attribute);
+    } else {
+      if (hasSameVariant) {
+        const index = this.selectedVariantAttributes.findIndex(v => v.variant === attribute.variant);
+        this.selectedVariantAttributes.splice(index, 1);
+        this.selectedVariantAttributes.push(attribute);
+      }
+    }
+  }
+
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) return 'assets/images/photo.png';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${this.domain}/${imagePath}`;
+  }
+
+  getProductImageUrl(): string {
+    // If variant with image is selected, use that image
+    const selectedColorVariant = this.selectedVariantAttributes.find(
+      attr => attr.variant === 'color' && attr.image?.filePath
+    );
+    
+    if (selectedColorVariant?.image?.filePath) {
+      return this.getImageUrl(selectedColorVariant.image.filePath);
+    }
+    
+    // Otherwise use the first product image
+    if (this.product?.images?.[0]?.filePath) {
+      return this.getImageUrl(this.product.images[0].filePath);
+    }
+    
+    return 'assets/images/photo.png';
   }
 
   // add to wishlist

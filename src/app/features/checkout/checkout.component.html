@@ -212,22 +212,18 @@
               </div>
 
               <div
-                class="flex flex-wrap items-center justify-between gap-4 border border-dashed border-primary-300 dark:border-primary-600 rounded-2xl p-6 bg-primary-50/20 dark:bg-primary-900/20">
+                class="flex flex-wrap items-center justify-between gap-4 border border-dashed border-primary-300 dark:border-primary-600 rounded-2xl p-6 bg-primary-50/60 dark:bg-primary-900/20">
                 <div class="max-w-lg">
                   <p class="text-lg font-semibold text-primary-700 dark:text-primary-300">
                     {{'checkout.depositToggleLabel' | translate}}
 
-                    <span class="text-gray-800 dark:text-gray-400 text-2xl inline-block"> {{shippingCost() | currency}}</span>
+                    <span class="text-gray-500 dark:text-gray-400 inline-block"> {{shippingCost() | currency}}</span>
                   </p>
                   <p class="text-sm text-primary-600/80 dark:text-primary-200/80">
                     {{'checkout.depositToggleHint' | translate}}
                   </p>
                 </div>
-                <label for="hs-basic-usage" class="relative inline-block w-11 h-6 cursor-pointer">
-                  <input type="checkbox" id="hs-basic-usage" formControlName="isDeposit" class="peer sr-only">
-                  <span class="absolute inset-0 bg-gray-200 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-primary-600 dark:bg-neutral-700 dark:peer-checked:bg-primary-500 peer-disabled:opacity-50 peer-disabled:pointer-events-none"></span>
-                  <span class="absolute top-1/2 end-0.5 -translate-y-1/2 size-5 bg-gray-300 rounded-full shadow-xs transition-transform duration-200 ease-in-out peer-checked:translate-x-full dark:bg-neutral-400 dark:peer-checked:bg-primary-400"></span>
-                </label>
+                <p-inputSwitch formControlName="isDeposit"></p-inputSwitch>
               </div>
 
               <!-- Payment Image Upload (shown when Vodafone Cash is selected) -->
@@ -243,7 +239,7 @@
                   </p>
                   
                   <!-- File Upload Area -->
-                  <div class="border-2 border-dashed border-primary-200 dark:border-primary-700 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-primary-50/10 dark:bg-primary-900/20">
+                  <div class="border-2 border-dashed border-primary-200 dark:border-primary-700 rounded-2xl p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors duration-300 bg-primary-50/50 dark:bg-primary-900/20">
                     <input type="file" 
                            id="paymentImage" 
                            accept="image/*" 

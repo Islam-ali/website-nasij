@@ -1,6 +1,7 @@
 import { PaymentMethod, PaymentStatus } from "../../features/checkout/models/order.enum";
 import { IPackage } from "../../interfaces/package.interface";
 import { IProduct, OrderStatus } from "../../interfaces/product.interface";
+import { ICountry, IState } from "./location.interface";
 
 export interface OrderItem {
   itemType: 'Product' | 'Package';
@@ -22,9 +23,8 @@ export interface OrderAddress {
   fullName: string;
   address: string;
   city: string;
-  state: string;
-  zip: string;
-  country: string;
+  state: IState;
+  country: ICountry;
   phone?: string;
 }
 

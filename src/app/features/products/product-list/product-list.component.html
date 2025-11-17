@@ -42,9 +42,9 @@
 
           <!-- Filter Button -->
           <button type="button" (click)="isDrawerOpen = true"
-            class="relative bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+            class="relative text-primary-500 border-0 rounded-2xl px-6 py-3 font-semibold transform hover:scale-105 transition-all duration-300">
             <i class="pi pi-filter"></i>
-            Filters
+            {{ 'products.filters' | translate }}
             @if (activeFiltersCount > 0) {
             <span
               class="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold animate-pulse shadow-lg">
