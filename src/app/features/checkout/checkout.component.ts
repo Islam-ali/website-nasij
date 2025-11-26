@@ -11,15 +11,11 @@ import { AuthService } from '../auth/services/auth.service';
 import { PackageUrlService } from '../packages/services/package-url.service';
 import { ProductUrlService } from '../products/services/product-url.service';
 import { environment } from '../../../environments/environment';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { MessageService } from 'primeng/api';
-import { SelectModule } from 'primeng/select';
-import { InputTextModule } from 'primeng/inputtext';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ButtonModule } from 'primeng/button';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { 
+  UiToastService, 
+  UiButtonComponent,
+  UiInputDirective
+} from '../../shared/ui';
 import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
 import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
 import { IArchived, OrderStatus } from '../../interfaces/product.interface';
@@ -40,21 +36,15 @@ import { secureDecodeUrl } from '../../core/utils/secure-query';
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    ToastModule,
-    ProgressSpinnerModule,
-    SelectModule,
-    InputTextModule,
-    RadioButtonModule,
-    CheckboxModule,
-    ButtonModule,
-    InputSwitchModule,
+    UiButtonComponent,
+    UiInputDirective,
     MultiLanguagePipe,
     CurrencyPipe,
     TranslateModule,
     PhoneNumberDirective,
     FallbackImgDirective
   ],
-  providers: [MessageService, CheckoutService],
+  providers: [CheckoutService],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
@@ -120,7 +110,7 @@ export class CheckoutComponent implements OnInit {
     private cartService: CartService,
     private checkoutService: CheckoutService,
     private authService: AuthService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private packageUrlService: PackageUrlService,
     private productUrlService: ProductUrlService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -217,21 +207,19 @@ export class CheckoutComponent implements OnInit {
       error: (error) => {
         console.error('Error loading countries:', error);
         this.shippingCost.set(0);
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('common.error'),
-          detail: this.translate.instant('checkout.validationErrors.fillAllFields')
-        });
+        this.toastService.error(
+          this.translate.instant('checkout.validationErrors.fillAllFields'),
+          this.translate.instant('common.error')
+        );
       }
     });
   }
   copyToClipboard(text: string): void {
     navigator.clipboard.writeText(text);
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translate.instant('common.success'),
-      detail: this.translate.instant('checkout.orderNumberCopied')
-    });
+    this.toastService.success(
+      this.translate.instant('checkout.orderNumberCopied'),
+      this.translate.instant('common.success')
+    );
   }
 
   loadStates(): void {
@@ -293,11 +281,7 @@ export class CheckoutComponent implements OnInit {
       return false;
     } catch (error) {
       console.error('Error handling encoded data:', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to process checkout data from URL'
-      });
+      this.toastService.error('Failed to process checkout data from URL', 'Error');
       return false;
     }
   }
@@ -393,11 +377,10 @@ export class CheckoutComponent implements OnInit {
     // Validate required fields
     if (!formValue.fullName || !formValue.phone || !formValue.shippingAddress.address || 
         !formValue.shippingAddress.city || !formValue.shippingAddress.state || !formValue.shippingAddress.country) {
-      this.messageService.add({ 
-        severity: 'error', 
-        summary: this.translate.instant('common.error'), 
-        detail: this.translate.instant('checkout.validationErrors.fillAllFields') 
-      });
+      this.toastService.error(
+        this.translate.instant('checkout.validationErrors.fillAllFields'),
+        this.translate.instant('common.error')
+      );
       this.loading = false;
       return;
     }
@@ -415,11 +398,10 @@ export class CheckoutComponent implements OnInit {
 
     // Validate cart items
     if (this.cartItems().length === 0) {
-      this.messageService.add({ 
-        severity: 'error', 
-        summary: this.translate.instant('common.error'), 
-        detail: this.translate.instant('checkout.validationErrors.cartEmpty') 
-      });
+      this.toastService.error(
+        this.translate.instant('checkout.validationErrors.cartEmpty'),
+        this.translate.instant('common.error')
+      );
       this.loading = false;
       return;
     }
@@ -435,11 +417,10 @@ export class CheckoutComponent implements OnInit {
         }
       } catch (error) {
         console.error('Payment image upload failed:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('common.error'),
-          detail: this.translate.instant('checkout.validationErrors.uploadFailed')
-        });
+        this.toastService.error(
+          this.translate.instant('checkout.validationErrors.uploadFailed'),
+          this.translate.instant('common.error')
+        );
         this.loading = false;
         return;
       }
@@ -495,11 +476,10 @@ export class CheckoutComponent implements OnInit {
         if (isPlatformBrowser(this.platformId)) {
           window.scrollTo(0, 0);
         }
-        this.messageService.add({ 
-          severity: 'success', 
-          summary: this.translate.instant('common.success'), 
-          detail: this.translate.instant('checkout.thankYou') 
-        });
+        this.toastService.success(
+          this.translate.instant('checkout.thankYou'),
+          this.translate.instant('common.success')
+        );
         // Optionally redirect to order confirmation page
         // this.router.navigate(['/order-confirmation', response.orderId]);
       },
@@ -521,11 +501,7 @@ export class CheckoutComponent implements OnInit {
         }
         
         this.loading = false;
-        this.messageService.add({ 
-          severity: 'error', 
-          summary: this.translate.instant('common.error'), 
-          detail: errorMessage 
-        });
+        this.toastService.error(errorMessage, this.translate.instant('common.error'));
       }
     });
   }
@@ -595,21 +571,19 @@ export class CheckoutComponent implements OnInit {
     if (file) {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('common.error'),
-          detail: this.translate.instant('checkout.validationErrors.invalidFileType')
-        });
+        this.toastService.error(
+          this.translate.instant('checkout.validationErrors.invalidFileType'),
+          this.translate.instant('common.error')
+        );
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('common.error'),
-          detail: this.translate.instant('checkout.validationErrors.fileTooLarge')
-        });
+        this.toastService.error(
+          this.translate.instant('checkout.validationErrors.fileTooLarge'),
+          this.translate.instant('common.error')
+        );
         return;
       }
 
@@ -661,13 +635,23 @@ export class CheckoutComponent implements OnInit {
       return result.data.filePath;
     } catch (error) {
       console.error('Upload error:', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: this.translate.instant('common.error'),
-        detail: this.translate.instant('checkout.validationErrors.uploadFailed')
-      });
+      this.toastService.error(
+        this.translate.instant('checkout.validationErrors.uploadFailed'),
+        this.translate.instant('common.error')
+      );
       return null;
     }
+  }
+
+  // Helper methods for getting localized names
+  getCountryName(country: ICountry): string {
+    const lang = this.currentLanguage() as 'en' | 'ar';
+    return country.name[lang] || country.name.en;
+  }
+
+  getStateName(state: IState): string {
+    const lang = this.currentLanguage() as 'en' | 'ar';
+    return state.name[lang] || state.name.en;
   }
 
   // Helper method to get shipping address form group

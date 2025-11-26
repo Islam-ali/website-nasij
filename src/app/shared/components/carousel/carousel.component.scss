@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Ensure smooth scrolling
+.overflow-hidden {
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+.carousel-inner {
+  will-change: transform;
+  display: flex;
+}
+
+.carousel-item {
+  flex-shrink: 0;
+}
+
+// Make navigation buttons always visible on mobile
+@media (max-width: 768px) {
+  .group button {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  .group.dark button {
+    background: rgba(31, 41, 55, 0.9) !important;
+  }
+}
+
+// Smooth transitions
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+}
+
+// Touch swipe support
+@media (hover: none) and (pointer: coarse) {
+  .overflow-hidden {
+    touch-action: pan-x;
+  }
+}
+

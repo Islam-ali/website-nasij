@@ -122,13 +122,27 @@
   <section class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
-        <span data-aos="fade-up"
-          class="text-primary-400 dark:text-primary-400 font-medium transition-colors duration-300">{{ 'home.packages' | translate }}</span>
+          <span data-aos="fade-up"
+          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
+          <i class="pi pi-star-fill me-2"></i>
+          {{ 'home.packages' | translate }}
+        </span>
         <h2 data-aos="fade-up"
-          class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">{{ 'home.our_packages' | translate }}
-        </h2>
+        class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
+        <span
+          class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">{{ 'home.our_packages' | translate }}</span>
+      </h2>
       </div>
-      <app-carousel data-aos="fade-up" (onItemClick)="navigateToPackage($event)" [items]="packages"></app-carousel>
+      <app-carousel 
+        data-aos="fade-up" 
+        (onItemClick)="navigateToPackage($event)" 
+        [items]="packages"
+        [itemsPerView]="4"
+        [itemsPerScroll]="1"
+        [showArrows]="true"
+        [showIndicators]="true"
+        [autoPlay]="false"
+      ></app-carousel>
     </div>
   </section>
   }
@@ -139,17 +153,30 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
         <span data-aos="fade-up"
-          class="text-primary-400 dark:text-primary-400 font-medium transition-colors duration-300">{{ 'home.featured_products' | translate }}
+          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
+          <i class="pi pi-star-fill me-2"></i>
+          {{ 'home.featured_products' | translate }}
         </span>
         <h2 data-aos="fade-up"
-          class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">{{ 'home.trending_now' | translate }}
+          class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
+          <span
+            class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">{{ 'home.trending_now' | translate }}</span>
         </h2>
         <p data-aos="fade-up" class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
           {{ 'home.discover_popular' | translate }}
         </p>
       </div>
 
-      <app-carousel data-aos="fade-up" (onItemClick)="navigateToProduct($event)" [items]="featuredProducts"></app-carousel>
+      <app-carousel 
+        data-aos="fade-up" 
+        (onItemClick)="navigateToProduct($event)" 
+        [items]="featuredProducts"
+        [itemsPerView]="4"
+        [itemsPerScroll]="1"
+        [showArrows]="true"
+        [showIndicators]="true"
+        [autoPlay]="false"
+      ></app-carousel>
     </div>
   </section>
   }
@@ -164,7 +191,7 @@
 
 @if (businessProfile?.contactInfo?.phone) { <!-- icon whatsapp fixed bottom right -->
   
-<div class="fixed bottom-32 right-8 z-50">
+<div class="fixed bottom-10 right-8 z-50">
   <a
     href="https://wa.me/{{businessProfile?.contactInfo?.phone}}"
     target="_blank"

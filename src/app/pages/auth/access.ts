@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { AppFloatingConfigurator } from '../../layout/app.floatingconfigurator';
+import { UiButtonComponent } from '../../shared/ui';
 
 @Component({
     selector: 'app-access',
     standalone: true,
-    imports: [ButtonModule, RouterModule, RippleModule, AppFloatingConfigurator],
-    template: ` <app-floating-configurator />
+    imports: [UiButtonComponent, RouterModule],
+    template: `
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
             <div class="flex flex-col items-center justify-center">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, rgba(247, 149, 48, 0.4) 10%, rgba(247, 149, 48, 0) 30%)">
@@ -21,7 +19,7 @@ import { AppFloatingConfigurator } from '../../layout/app.floatingconfigurator';
                             <span class="text-muted-color mb-8">You do not have the necessary permisions. Please contact admins.</span>
                             <img src="https://primefaces.org/cdn/templates/sakai/auth/asset-access.svg" alt="Access denied" class="mb-8" width="80%" />
                             <div class="col-span-12 mt-8 text-center">
-                                <p-button label="Go to Dashboard" routerLink="/" severity="warn" />
+                                <ui-button variant="outline" routerLink="/">Go to Dashboard</ui-button>
                             </div>
                         </div>
                     </div>

@@ -2,22 +2,28 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { RippleModule } from 'primeng/ripple';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { LoginService } from '../services/login.service';
-import { MessageService } from 'primeng/api';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCheckboxComponent,
+  UiInputDirective,
+  UiPasswordComponent
+} from '../../shared/ui';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   standalone: true,
-  imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RippleModule, AppFloatingConfigurator],
-  providers: [LoginService, MessageService]
+  imports: [
+    UiButtonComponent, 
+    UiCheckboxComponent, 
+    UiInputDirective, 
+    UiPasswordComponent, 
+    FormsModule
+  ],
+  providers: [LoginService]
 })
 export class LoginComponent {
   email: string = '';
@@ -29,7 +35,7 @@ export class LoginComponent {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private messageService: MessageService) { }
+    private toastService: UiToastService) { }
 
   onSubmit() {
     this.loginService.login(this.email, this.password).subscribe({
@@ -41,12 +47,7 @@ export class LoginComponent {
             this.loginService.user.next(user);
           },
           error: (error) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: error.error.message,
-              life: 1000
-            });
+            this.toastService.error(error.error.message, 'Error');
           }
         })
 
@@ -54,12 +55,7 @@ export class LoginComponent {
       },
       error: (error) => {
         // toast error
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.error.message,
-          life: 1000
-        });
+        this.toastService.error(error.error.message, 'Error');
       }
     })
   }

@@ -1,8 +1,6 @@
 import { Component, Inject, PLATFORM_ID, OnInit, inject, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { BusinessProfileService } from '../../services/business-profile.service';
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { ThemeService } from '../../core/services/theme.service';
@@ -13,7 +11,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, InputTextModule, TranslateModule, MultiLanguagePipe],
+  imports: [CommonModule, RouterModule, TranslateModule, MultiLanguagePipe],
   template: `
   <!-- Enhanced Footer -->
   <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
@@ -191,10 +189,10 @@ import { environment } from '../../../environments/environment';
     </div>
 
     <!-- Back to Top Button -->
-    <button (click)="scrollToTop()" 
+    <!-- <button (click)="scrollToTop()" 
             class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-primary-200 to-primary-200 hover:from-primary-700 hover:to-primary-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 z-50">
       <i class="pi pi-arrow-up"></i>
-    </button>
+    </button> -->
   </footer>
   `,
   styles: [`

@@ -2,28 +2,6 @@
   display: block;
 }
 
-// Custom card styles
-::ng-deep .p-card {
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  
-  .p-card-body {
-    padding: 2rem;
-  }
-}
-
-// Custom button styles
-::ng-deep .p-button {
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-  
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-}
-
 // Prose styles for content
 .prose {
   color: #374151;
@@ -114,33 +92,8 @@
   }
 }
 
-// Loading spinner styles
-::ng-deep .p-progressspinner {
-  .p-progressspinner-circle {
-    stroke: #667eea;
-  }
-}
-
-// Toast styles
-::ng-deep .p-toast {
-  .p-toast-message {
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-}
-
 // Responsive adjustments
 @media (max-width: 768px) {
-  ::ng-deep .p-card {
-    .p-card-body {
-      padding: 1rem;
-    }
-  }
-  
-  ::ng-deep .p-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-  }
   
   .prose {
     h1 {

@@ -1,32 +1,14 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked, Inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked, Inject, PLATFORM_ID, signal, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { RatingModule } from 'primeng/rating';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { PaginatorModule } from 'primeng/paginator';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TooltipModule } from 'primeng/tooltip';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { Select } from 'primeng/select';
-import { CheckboxModule } from 'primeng/checkbox';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProductService } from '../services/product.service';
 import { CategoryService } from '../services/category.service';
 import { BrandService } from '../services/brand.service';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
 import { IBrand } from '../models/brand.interface';
-import { DividerModule } from "primeng/divider";
-import { ChipModule } from "primeng/chip";
-import { MessagesModule } from 'primeng/messages';
-import { InputTextModule } from 'primeng/inputtext';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
-import { DrawerModule } from 'primeng/drawer';
 import { IProductQueryParams } from '../models/product.interface';
 import { ICategory } from '../../../interfaces/category.interface';
 import { IProduct } from '../models/product.interface';
@@ -35,6 +17,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { environment } from '../../../../environments/environment';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiChipComponent, 
+  UiPaginationComponent, 
+  UiDividerComponent
+} from '../../../shared/ui';
 
 @Component({
   selector: 'app-product-list',
@@ -44,28 +33,15 @@ import { environment } from '../../../../environments/environment';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    CardModule,
-    ButtonModule,
-    RippleModule,
-    RatingModule,
-    InputNumberModule,
-    InputTextModule,
-    PaginatorModule,
-    ProgressSpinnerModule,
-    TooltipModule,
-    MessageModule,
-    Select,
-    CheckboxModule,
-    RadioButtonModule,
-    ChipModule,
-    DividerModule,
-    MessagesModule,
     ProductCardComponent,
-    DrawerModule,
     TranslateModule,
     MultiLanguagePipe,
-],
-  providers: [MessageService, ProductService, CategoryService, BrandService, FormBuilder, TranslateModule],
+    UiButtonComponent,
+    UiChipComponent,
+    UiPaginationComponent,
+    UiDividerComponent,
+  ],
+  providers: [ProductService, CategoryService, BrandService, FormBuilder, TranslateModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
@@ -87,13 +63,13 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   colors: string[] = [];
   filterForm: FormGroup;
   isDrawerOpen = false;
-  sortOptions: { label: string; value: string }[] = [
-    { label: 'Featured', value: 'featured' },
-    { label: 'Newest First', value: 'createdAt,desc' },
-    { label: 'Price: Low to High', value: 'price,asc' },
-    { label: 'Price: High to Low', value: 'price,desc' },
-    { label: 'Highest Rated', value: 'averageRating,desc' },
-    { label: 'Name: A to Z', value: 'name,asc' },
+  sortOptions: { labelKey: string; value: string }[] = [
+    { labelKey: 'products.sort_options.featured', value: 'featured' },
+    { labelKey: 'products.sort_options.newest_first', value: 'createdAt,desc' },
+    { labelKey: 'products.sort_options.price_low_to_high', value: 'price,asc' },
+    { labelKey: 'products.sort_options.price_high_to_low', value: 'price,desc' },
+    { labelKey: 'products.sort_options.highest_rated', value: 'averageRating,desc' },
+    { labelKey: 'products.sort_options.name_a_to_z', value: 'name,asc' },
   ];
   wishlistLoading = false;
   private subscriptions = new Subscription();
@@ -105,9 +81,9 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private messageService: MessageService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private toastService: UiToastService
   ) {
     this.filterForm = this.fb.group({
       searchQuery: [''],
@@ -183,9 +159,9 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
           this.loading = false;
           this.error = null;
         },
-        error: (err) => {
+        error: () => {
           this.error = 'Failed to load products. Please try again later.';
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.error });
+          this.toastService.error(this.error, 'Error');
           this.loading = false;
         },
       })
@@ -200,7 +176,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
         },
         error: (err) => {
           console.error('Error loading categories:', err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load categories.' });
+          this.toastService.error('Failed to load categories.', 'Error');
         },
       })
     );
@@ -214,7 +190,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
         },
         error: (err) => {
           console.error('Error loading brands:', err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load brands.' });
+          this.toastService.error('Failed to load brands.', 'Error');
         },
       })
     );
@@ -234,19 +210,45 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     );
   }
 
-  onPageChange(event: any): void {
-    this.first = event.first;
-    this.rows = event.rows;
-    this.loadProducts();
-    // scroll to top
-    if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  changePage(next: boolean): void {
+    const currentPage = Math.floor(this.first / this.rows);
+    const totalPages = Math.max(Math.ceil(this.totalRecords / this.rows), 1);
+    const targetPage = next ? Math.min(currentPage + 1, totalPages - 1) : Math.max(currentPage - 1, 0);
+    if (targetPage === currentPage) {
+      return;
     }
+    this.first = targetPage * this.rows;
+    this.loadProducts();
+    this.scrollToTop();
+  }
+
+  goToPage(page: number): void {
+    const totalPages = Math.max(Math.ceil(this.totalRecords / this.rows), 1);
+    if (page < 0 || page >= totalPages) {
+      return;
+    }
+    this.first = page * this.rows;
+    this.loadProducts();
+    this.scrollToTop();
+  }
+
+  onRowsChange(rows: number): void {
+    this.rows = rows;
+    this.first = 0;
+    this.loadProducts();
+    this.scrollToTop();
   }
 
   onSortChange(): void {
     this.first = 0;
-    // this.loadProducts();
+    this.loadProducts();
+  }
+
+  onPageChange(event: { first: number; rows: number; page: number; pageCount: number }): void {
+    this.first = event.first;
+    this.rows = event.rows;
+    this.loadProducts();
+    this.scrollToTop();
   }
 
   onFilterChange(): void {
@@ -272,6 +274,41 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     //   queryParamsHandling: 'merge',
     //   replaceUrl: true
     // });
+  }
+
+  toggleSelection(controlName: string, value: string, checked: boolean): void {
+    const control = this.filterForm.get(controlName);
+    if (!control) {
+      return;
+    }
+    const current: string[] = control.value || [];
+    if (checked) {
+      if (!current.includes(value)) {
+        control.setValue([...current, value]);
+      }
+    } else {
+      control.setValue(current.filter(v => v !== value));
+    }
+    control.markAsDirty();
+    this.onFilterChange();
+  }
+
+  onCategoryToggle(categoryId: string | undefined, event: Event): void {
+    if (!categoryId) return;
+    const target = event.target as HTMLInputElement;
+    this.toggleSelection('selectedCategories', categoryId, target.checked);
+  }
+
+  onBrandToggle(brandId: string | undefined, event: Event): void {
+    if (!brandId) return;
+    const target = event.target as HTMLInputElement;
+    this.toggleSelection('selectedBrands', brandId, target.checked);
+  }
+
+  private scrollToTop(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   clearAllFilters(): void {
@@ -341,13 +378,13 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
 
   addToCart(product: IProduct, event: Event): void {
     event.stopPropagation();
-    this.messageService.add({ severity: 'info', summary: 'Added to Cart', detail: `${product.name} added to cart.` });
+    this.toastService.success(`${product.name} added to cart.`, 'Added to Cart');
   }
 
   toggleWishlist(product: IProduct, event: Event): void {
     event.stopPropagation();
     this.wishlistLoading = !this.wishlistLoading;
-    this.messageService.add({ severity: 'info', summary: 'Added to Wishlist', detail: `${product.name} added to wishlist.` });
+    this.toastService.success(`${product.name} added to wishlist.`, 'Added to Wishlist');
   }
 
   trackByProductId(index: number, product: IProduct): string {
@@ -445,4 +482,31 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   navigateToProduct(product: IProduct): void {
     this.router.navigate(['/shop', product._id, product.name.en]);
   }
+
+  get totalPages(): number {
+    return Math.max(Math.ceil((this.totalRecords || 0) / (this.rows || 1)), 1);
+  }
+
+  get currentPage(): number {
+    return Math.min(Math.floor(this.first / this.rows) + 1, this.totalPages);
+  }
+
+  get selectedCategoryIds(): string[] {
+    return this.filterForm.get('selectedCategories')?.value || [];
+  }
+
+  get selectedBrandIds(): string[] {
+    return this.filterForm.get('selectedBrands')?.value || [];
+  }
+
+  isCategorySelected(categoryId: string): boolean {
+    const selectedCategories = this.filterForm.get('selectedCategories')?.value || [];
+    return selectedCategories.includes(categoryId);
+  }
+
+  isBrandSelected(brandId: string): boolean {
+    const selectedBrands = this.filterForm.get('selectedBrands')?.value || [];
+    return selectedBrands.includes(brandId);
+  }
+
 }

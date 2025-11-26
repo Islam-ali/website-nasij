@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { AccordionModule } from 'primeng/accordion';
-import { DividerModule } from 'primeng/divider';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCardComponent, 
+  UiSpinnerComponent,
+  UiDividerComponent
+} from '../../../shared/ui';
 
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
@@ -19,27 +19,36 @@ import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
   standalone: true,
   imports: [
     CommonModule,
-    ToastModule,
-    ButtonModule,
-    CardModule,
-    ProgressSpinnerModule,
-    AccordionModule,
-    DividerModule,
+    UiButtonComponent,
+    UiCardComponent,
+    UiSpinnerComponent,
+    UiDividerComponent,
     MultiLanguagePipe,
     TranslateModule,
     TranslatePipe
   ],
-  providers: [MessageService],
   templateUrl: './faq.component.html',
   styleUrl: './faq.component.scss'
 })
 export class FaqComponent implements OnInit {
   businessProfile: IBusinessProfile | null = null;
   loading = true;
+  openAccordionIndices = new Set<number>();
+
+  toggleAccordion(index: number): void {
+    if (this.openAccordionIndices.has(index)) {
+      this.openAccordionIndices.delete(index);
+    } else {
+      this.openAccordionIndices.add(index);
+    }
+  }
+
+  isAccordionOpen(index: number): boolean {
+    return this.openAccordionIndices.has(index);
+  }
 
   constructor(
     private businessProfileService: BusinessProfileService,
-    private messageService: MessageService,
     private router: Router
   ) {}
 

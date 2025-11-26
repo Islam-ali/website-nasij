@@ -4,23 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil, switchMap } from 'rxjs/operators';
 
-// PrimeNG Modules
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { GalleriaModule } from 'primeng/galleria';
-import { RatingModule } from 'primeng/rating';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ChipModule } from 'primeng/chip';
-import { SkeletonModule } from 'primeng/skeleton';
-import { MessageService } from 'primeng/api';
-import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
-import { TooltipModule } from 'primeng/tooltip';
-import { TabsModule } from 'primeng/tabs';
-import { CardModule } from 'primeng/card';
-import { AccordionModule } from 'primeng/accordion';
-import { DividerModule } from 'primeng/divider';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiSpinnerComponent, 
+  UiChipComponent,
+  UiCardComponent,
+  UiInputDirective,
+  UiDividerComponent
+} from '../../../shared/ui';
 
 import { IPackage } from '../../../interfaces/package.interface';
 import { PackageService } from '../services/package.service';
@@ -46,26 +38,16 @@ interface PackageImage {
 @Component({
   selector: 'app-package-details',
   standalone: true,
-  providers: [MessageService],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    ButtonModule,
-    RippleModule,
-    RatingModule,
-    InputNumberModule,
-    GalleriaModule,
-    ChipModule,
-    SkeletonModule,
-    MessageModule,
-    ToastModule,
-    TooltipModule,
-    ProgressSpinnerModule,
-    TabsModule,
-    CardModule,
-    AccordionModule,
-    DividerModule,
+    UiButtonComponent,
+    UiSpinnerComponent,
+    UiChipComponent,
+    UiCardComponent,
+    UiInputDirective,
+    UiDividerComponent,
     TranslateModule,
     MultiLanguagePipe,
     FallbackImgDirective,
@@ -108,7 +90,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private packageService = inject(PackageService);
-  private messageService = inject(MessageService);
+  private toastService = inject(UiToastService);
   private packageUrlService = inject(PackageUrlService);
   private cartService = inject(CartService);
   private translationService = inject(TranslationService);
@@ -191,11 +173,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         error: (err) => {
           this.error.set('Failed to load package details. Please try again later.');
           this.loading.set(false);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to load package details'
-          });
+          this.toastService.error('Failed to load package details', 'Error');
         }
       });
   }
@@ -875,11 +853,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
     // Validate all items have required variants selected
     if (!this.validateVariants()) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Warning',
-        detail: 'Please select all required variants for all products before adding to cart'
-      });
+      this.toastService.warn('Please select all required variants for all products before adding to cart', 'Warning');
       return;
     }
 
@@ -887,11 +861,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     for (const item of packageData.items) {
       const quantity = this.getSelectedQuantity(item.productId._id);
       if (quantity <= 0) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Warning',
-          detail: `Please select a valid quantity for ${item.productId.name}`
-        });
+        this.toastService.warn(`Please select a valid quantity for ${item.productId.name}`, 'Warning');
         return;
       }
     }
@@ -918,18 +888,10 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     // Add package to cart using cart service
     this.cartService.addPackageToCart(packageDataForCart as any).subscribe({
       next: (cartState) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Package added to cart successfully!'
-        });
+        this.toastService.success('Package added to cart successfully!', 'Success');
       },
       error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to add package to cart. Please try again.'
-        });
+        this.toastService.error('Failed to add package to cart. Please try again.', 'Error');
       }
     });
   }
@@ -940,11 +902,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
     // Validate all items have required variants selected
     if (!this.validateVariants()) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Warning',
-        detail: 'Please select all required variants for all products before proceeding'
-      });
+      this.toastService.warn('Please select all required variants for all products before proceeding', 'Warning');
       return;
     }
 
@@ -952,11 +910,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     for (const item of packageData.items) {
       const quantity = this.getSelectedQuantity(item.productId._id);
       if (quantity <= 0) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Warning',
-          detail: `Please select a valid quantity for ${item.productId.name}`
-        });
+        this.toastService.warn(`Please select a valid quantity for ${item.productId.name}`, 'Warning');
         return;
       }
     }
@@ -1176,11 +1130,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
   addToWishlist(): void {
     // This will be implemented when we integrate with wishlist service
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Package added to wishlist'
-    });
+    this.toastService.success('Package added to wishlist', 'Success');
   }
 
   onImageError(event: Event): void {

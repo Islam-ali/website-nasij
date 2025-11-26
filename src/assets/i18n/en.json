@@ -310,6 +310,14 @@
     "filters": "Filters",
     "sort_by_label": "Sort by",
     "choose_sorting": "Choose sorting option",
+    "sort_options": {
+      "featured": "Featured",
+      "newest_first": "Newest First",
+      "price_low_to_high": "Price: Low to High",
+      "price_high_to_low": "Price: High to Low",
+      "highest_rated": "Highest Rated",
+      "name_a_to_z": "Name: A to Z"
+    },
     "select_categories": "Select categories...",
     "select_brands": "Select brands...",
     "no_categories_available": "No categories available",

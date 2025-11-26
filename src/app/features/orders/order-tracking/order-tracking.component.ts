@@ -5,11 +5,6 @@ import { Router } from '@angular/router';
 import { OrderService } from '../services/order.service';
 import { Order, OrderItem } from '../../../core/models/order.model';
 import { BaseResponse } from '../../../core/models/baseResponse';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
@@ -22,15 +17,10 @@ import { CurrencyPipe } from '../../../core/pipes';
   imports: [
     CommonModule, 
     FormsModule,
-    InputTextModule,
-    ButtonModule,
-    CardModule,
-    ToastModule,
     TranslateModule,
     MultiLanguagePipe ,
     CurrencyPipe
   ],
-  providers: [MessageService],
   templateUrl: './order-tracking.component.html'
 })
 export class OrderTrackingComponent implements OnInit, OnDestroy {
@@ -57,7 +47,6 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
   constructor(
     private orderService: OrderService,
     private router: Router,
-    private messageService: MessageService,
     private translateService: TranslateService
   ) {}
 

@@ -2,15 +2,9 @@ import { AfterViewChecked, AfterViewInit, Component, inject, OnInit, PLATFORM_ID
 import { CommonModule, CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { ProductService } from '../products/services/product.service';
 import { IProduct } from '../products/models/product.interface';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { RatingModule } from 'primeng/rating';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { TooltipModule } from 'primeng/tooltip';
+import { UiToastService } from '../../shared/ui';
 import { CartService } from '../cart/services/cart.service';
 import { BaseResponse, pagination } from '../../core/models/baseResponse';
 import { CarouselComponent } from "../../shared/components/carousel/carousel.component";
@@ -35,14 +29,8 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
   standalone: true,
   imports: [
     CommonModule,
-    CardModule,
-    ButtonModule,
-    RatingModule,
     FormsModule,
     RouterModule,
-    ProgressSpinnerModule,
-    ToastModule,
-    TooltipModule,
     CarouselComponent,
     HeroSectionComponent,
     FeaturedCollectionComponent,
@@ -53,7 +41,6 @@ import { IBusinessProfile } from '../../interfaces/business-profile.interface';
     FallbackImgDirective
 ],
   providers: [
-    MessageService,
     CurrencyPipe
   ],
   templateUrl: './home.component.html',
@@ -74,7 +61,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private categoryService: CategoryService,
     private packageService: PackageService,
     private businessProfileService: BusinessProfileService
@@ -213,11 +200,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       productName: product.name,
       discount: product.discountPrice || 0,
     });
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Added to Cart',
-      detail: `${product.name} has been added to your cart.`
-    });
+    this.toastService.success(`${product.name} has been added to your cart.`, 'Added to Cart');
   }
 
   getBusinessProfile() {

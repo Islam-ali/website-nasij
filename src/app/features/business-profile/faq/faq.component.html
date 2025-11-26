@@ -1,6 +1,5 @@
 <div class="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 py-8">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <p-toast></p-toast>
 
     <!-- Loading State -->
     <div *ngIf="loading" class="flex justify-center items-center py-12">
@@ -55,22 +54,30 @@
         <div class="p-8">
           <!-- FAQ Items -->
           <div *ngIf="hasFAQ" class="space-y-4">
-            <p-accordion [multiple]="true" styleClass="custom-faq-accordion">
+            <div class="space-y-2">
               @for (faq of businessProfile!.faq; track faq.question) {
-              <p-accordionTab 
-                [header]="faq.question ? (faq.question | multiLanguage) : ''"
-                [disabled]="!faq.question"
-              >
-                <div class="prose prose-lg max-w-none">
-                  <div class="bg-orange-50 border-s-4 border-orange-500 p-4 rounded-s-lg">
-                    <p class="text-gray-700 leading-relaxed mb-0">
-                      {{ faq.answer | multiLanguage }}
-                    </p>
-                  </div>
+                <div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
+                  <button 
+                    type="button"
+                    (click)="toggleAccordion($index)"
+                    class="w-full px-6 py-4 text-left text-lg font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 flex items-center justify-between"
+                    [disabled]="!faq.question"
+                  >
+                    <span>{{ faq.question ? (faq.question | multiLanguage) : '' }}</span>
+                    <i class="pi" [ngClass]="{'pi-chevron-down': !isAccordionOpen($index), 'pi-chevron-up': isAccordionOpen($index)}"></i>
+                  </button>
+                  @if (isAccordionOpen($index)) {
+                    <div class="p-6 bg-white dark:bg-gray-900 transition-colors duration-300">
+                      <div class="bg-orange-50 dark:bg-orange-900/20 border-s-4 border-orange-500 dark:border-orange-400 p-4 rounded-s-lg">
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-0">
+                          {{ faq.answer | multiLanguage }}
+                        </p>
+                      </div>
+                    </div>
+                  }
                 </div>
-              </p-accordionTab>
-            }
-            </p-accordion>
+              }
+            </div>
           </div>
           
           <!-- No FAQ Content -->

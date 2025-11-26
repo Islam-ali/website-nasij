@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
-import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { CheckboxModule } from 'primeng/checkbox';
-import { CardModule } from 'primeng/card';
 import { NgClass } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ILoginCredentials } from '../../models/auth.interface';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCardComponent, 
+  UiCheckboxComponent,
+  UiInputDirective,
+  UiPasswordComponent
+} from '../../../../shared/ui';
 
 @Component({
   selector: 'app-login',
@@ -22,13 +24,11 @@ import { ILoginCredentials } from '../../models/auth.interface';
     ReactiveFormsModule,
     FormsModule,
     RouterLink,
-    ButtonModule,
-    InputTextModule,
-    PasswordModule,
-    CheckboxModule,
-    CardModule,
-    NgIf,
-    NgClass
+    UiButtonComponent,
+    UiCardComponent,
+    UiCheckboxComponent,
+    UiInputDirective,
+    UiPasswordComponent
   ]
 })
 export class LoginComponent implements OnInit {
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService
+    private toastService: UiToastService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -82,19 +82,11 @@ export class LoginComponent implements OnInit {
     this.authService.login(credentials).subscribe({
       next: () => {
         this.router.navigate(['/']);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Login Successful',
-          detail: 'Welcome back!'
-        });
+        this.toastService.success('Welcome back!', 'Login Successful');
       },
       error: (error) => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Login Failed',
-          detail: error.error?.message || 'Invalid email or password'
-        });
+        this.toastService.error(error.error?.message || 'Invalid email or password', 'Login Failed');
       }
     });
   }

@@ -1,5 +1,4 @@
 <div class="min-h-screen bg-white dark:bg-gray-900">
-  <p-toast></p-toast>
 
   <!-- Header Section -->
   <div class="bg-gradient-to-b from-slate-50 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
@@ -18,13 +17,13 @@
   <div *ngIf="loading()" class="max-w-7xl mx-auto px-4 py-8">
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <div *ngFor="let item of [1,2,3,4,5,6,7,8]" class="animate-pulse space-y-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
-        <p-skeleton height="200px" class="rounded-xl"></p-skeleton>
-        <p-skeleton height="20px" class="rounded-lg"></p-skeleton>
-        <p-skeleton height="16px" class="rounded-lg"></p-skeleton>
-        <p-skeleton height="16px" class="rounded-lg"></p-skeleton>
+        <div class="h-48 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+        <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
         <div class="flex gap-2 pt-1">
-          <p-skeleton height="32px" width="60px" class="rounded-full"></p-skeleton>
-          <p-skeleton height="32px" width="60px" class="rounded-full"></p-skeleton>
+          <div class="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+          <div class="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
         </div>
       </div>
     </div>
@@ -38,13 +37,14 @@
         {{ 'packages.something_went_wrong' | translate }}
       </h3>
       <p class="mb-4 max-w-xl text-sm text-slate-600 dark:text-slate-300">{{ error() }}</p>
-      <button 
-        pButton 
-        [label]="'packages.try_again' | translate" 
-        icon="pi pi-refresh" 
-        class="w-full max-w-xs rounded-lg bg-blue-600 px-4 py-3 text-white shadow transition hover:bg-blue-500"
+      <ui-button 
+        variant="primary" 
+        size="lg"
         (click)="loadPackages()"
-      ></button>
+        class="w-full max-w-xs">
+        <i class="pi pi-refresh mr-2"></i>
+        {{ 'packages.try_again' | translate }}
+      </ui-button>
     </div>
   </div>
 
@@ -64,7 +64,7 @@
     <!-- Packages Grid -->
     <div *ngIf="packages().length > 0" class="grid grid-cols-1 gap-8 md:grid-cols-2">
       <div *ngFor="let package of packages()" class="group h-full">
-        <p-card styleClass="h-full overflow-hidden rounded-[28px] border border-slate-200 bg-white text-slate-900 shadow-lg shadow-slate-200/50 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:shadow-slate-900/40">
+        <ui-card class="h-full overflow-hidden rounded-[28px] border border-slate-200 bg-white text-slate-900 shadow-lg shadow-slate-200/50 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:shadow-slate-900/40">
           <div class="flex flex-col md:flex-row">
             <!-- Package Image -->
             <div class="relative md:w-6/12">
@@ -113,12 +113,18 @@
               <!-- Rating and meta -->
               <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-300">
                 <div class="flex items-center gap-2" *ngIf="package.averageRating > 0">
-                  <p-rating 
-                    [ngModel]="package.averageRating" 
-                    [readonly]="true" 
-                    [stars]="5"
-
-                  ></p-rating>
+                  <div class="flex items-center gap-1">
+                    @for (star of getRatingStars(package.averageRating); track $index) {
+                      <i class="pi" 
+                        [ngClass]="{
+                          'pi-star-fill text-yellow-400': star === 1,
+                          'pi-star-half-fill text-yellow-400': star === 0.5,
+                          'pi-star text-gray-300 dark:text-gray-600': star === 0
+                        }"
+                        class="text-sm">
+                      </i>
+                    }
+                  </div>
                   <span>
                     ({{ package.reviewCount }} reviews)
                   </span>
@@ -133,11 +139,12 @@
 
               <!-- Tags -->
               <div class="flex flex-wrap gap-2" *ngIf="getTags(package).length > 0">
-                <p-chip 
+                <ui-chip 
                   *ngFor="let tag of getTags(package)" 
-                  [label]="tag"
-                  class="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200"
-                ></p-chip>
+                  variant="default"
+                  class="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200">
+                  {{ tag }}
+                </ui-chip>
               </div>
 
               <!-- Price & CTA -->
@@ -165,18 +172,18 @@
               </div>
             </div>
           </div>
-        </p-card>
+          </ui-card>
       </div>
     </div>
 
     <!-- Load More Button -->
     <div *ngIf="packages().length > 10" class="text-center mt-8">
-      <button 
-        pButton 
-        [label]="'packages.load_more_packages' | translate" 
-        icon="pi pi-plus" 
-        class="p-button-outlined"
-      ></button>
+      <ui-button 
+        variant="outline" 
+        size="lg">
+        <i class="pi pi-plus mr-2"></i>
+        {{ 'packages.load_more_packages' | translate }}
+      </ui-button>
     </div>
   </div>
 </div>

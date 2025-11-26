@@ -1,25 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
+import { UiButtonComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-not-found',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, RippleModule],
+  imports: [CommonModule, RouterModule, UiButtonComponent],
   template: `
     <div class="not-found-container">
       <div class="not-found-content">
         <div class="error-code">404</div>
         <h1>Page Not Found</h1>
         <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
-        <button pButton pRipple 
-                label="Go to Home" 
-                icon="pi pi-home" 
-                routerLink="/"
-                class="p-button-primary">
-        </button>
+        <ui-button variant="primary" routerLink="/">
+          <i class="pi pi-home mr-2"></i>
+          Go to Home
+        </ui-button>
       </div>
     </div>
   `,

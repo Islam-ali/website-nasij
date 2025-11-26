@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { MessageService } from 'primeng/api';
 import { IUser, IAuthResponse, ILoginCredentials, IRegisterData } from '../models/auth.interface';
 
 @Injectable({
@@ -20,7 +19,6 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private messageService: MessageService
   ) {
     this.currentUserSubject = new BehaviorSubject<IUser | null>(this.getUserFromToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
@@ -59,11 +57,6 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     this.currentUserSubject.next(null);
     this.router.navigate(['/auth/login']);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Logged Out',
-      detail: 'You have been successfully logged out.'
-    });
   }
 
   private handleAuthentication(response: IAuthResponse): void {

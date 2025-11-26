@@ -1,6 +1,5 @@
 <div
   class="product-list-container min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500">
-  <p-messages></p-messages>
 
   <!-- Main Form Group -->
   <form [formGroup]="filterForm" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -35,7 +34,7 @@
             <div class="absolute inset-0 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
             <span class="p-input-icon-left relative">
               <i class="absolute left-3 top-1/2 -translate-y-1/2 pi pi-search text-gray-400 dark:text-gray-500 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-300"></i>
-              <input pInputText type="text" placeholder="Search for amazing products..." formControlName="searchQuery"
+              <input uiInput type="text" placeholder="Search for amazing products..." formControlName="searchQuery"
                 class="w-full sm:w-80 lg:w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-primary-500 dark:focus:border-primary-400 focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 rounded-2xl transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
             </span>
           </div> -->
@@ -57,10 +56,27 @@
     </div>
 
     <!-- Filter Sidebar -->
-    <p-drawer [(visible)]="isDrawerOpen" position="right"
-      styleClass="!w-96 sm:!w-[30rem] p-4 bg-white/95 dark:!bg-gray-800/95 backdrop-blur-xl border-l border-gray-200/50 dark:border-gray-700/50 shadow-2xl"
-      [dismissible]="false" [showCloseIcon]="true" [header]="'products.advanced_filters' | translate">
-      <div class="p-4 h-full overflow-y-auto space-y-8">
+    @if (isDrawerOpen) {
+      <!-- Backdrop -->
+      <div 
+        class="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-40 transition-opacity duration-300"
+        (click)="isDrawerOpen = false">
+      </div>
+      <!-- Drawer -->
+      <div class="fixed top-0 right-0 h-full w-96 sm:w-[30rem] p-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-l border-gray-200/50 dark:border-gray-700/50 shadow-2xl z-50 transform transition-transform duration-300 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ 'products.advanced_filters' | translate }}</h2>
+          <button 
+            type="button"
+            (click)="isDrawerOpen = false"
+            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="space-y-8">
         <!-- Clear All Button -->
         <div
           class="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-primary-50 dark:from-red-900/20 dark:to-primary-900/20 rounded-2xl border border-red-200 dark:border-red-800">
@@ -68,8 +84,13 @@
             <i class="pi pi-trash text-red-500 dark:text-red-400"></i>
             <span class="text-sm font-medium text-red-700 dark:text-red-300">{{ 'products.clear_all_filters' | translate }}</span>
           </div>
-          <p-button pRipple type="button" icon="pi pi-times" [label]="'products.clear_all' | translate" (click)="clearAllFilters()"
-            styleClass="p-button-text p-button-danger p-button-sm bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-800/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"></p-button>
+          <ui-button 
+            variant="destructive" 
+            size="sm" 
+            (click)="clearAllFilters()"
+            class="bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-800/50 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">
+            {{ 'products.clear_all' | translate }}
+          </ui-button>
         </div>
 
         <!-- Sort Dropdown -->
@@ -80,12 +101,18 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">{{ 'products.sort_by_label' | translate }}</h3>
           </div>
-          <p-select [options]="sortOptions" formControlName="sortBy" [placeholder]="'products.choose_sorting' | translate"
-            styleClass="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-primary-500 dark:focus:border-primary-400 rounded-xl transition-all duration-300"
-            (onChange)="onSortChange()"></p-select>
+          <select
+            formControlName="sortBy"
+            (change)="onSortChange()"
+            class="w-full px-4 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-primary-500 dark:focus:border-primary-400 rounded-xl transition-all duration-300 appearance-none pr-10 cursor-pointer">
+            <option value="featured">{{ 'products.choose_sorting' | translate }}</option>
+            @for (option of sortOptions; track option.value) {
+              <option [value]="option.value">{{ option.labelKey | translate }}</option>
+            }
+          </select>
         </div>
 
-        <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
+        <ui-divider></ui-divider>
 
         <!-- Categories -->
         <div class="space-y-2">
@@ -99,8 +126,12 @@
           <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let category of categories"
               class="flex items-center gap-2 p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
-              <p-checkbox [value]="category._id" formControlName="selectedCategories"
-                [inputId]="'category-' + category._id" styleClass="text-blue-600 dark:text-blue-400"></p-checkbox>
+              <input
+                type="checkbox"
+                [id]="'category-' + category._id"
+                [checked]="category._id && isCategorySelected(category._id)"
+                (change)="onCategoryToggle(category._id, $event)"
+                class="w-5 h-5 rounded-md border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 cursor-pointer">
               <label [for]="'category-' + category._id"
                 class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                 {{ category.name | multiLanguage }}
@@ -109,7 +140,7 @@
           </div>
         </div>
 
-        <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
+        <ui-divider></ui-divider>
 
         <!-- Brands -->
         <div class="space-y-2">
@@ -122,8 +153,12 @@
           <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
             <div *ngFor="let brand of brands"
               class="flex items-center gap-2 p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 group">
-              <p-checkbox [value]="brand._id" formControlName="selectedBrands" [inputId]="'brand-' + brand._id"
-                styleClass="text-indigo-600 dark:text-indigo-400"></p-checkbox>
+              <input
+                type="checkbox"
+                [id]="'brand-' + brand._id"
+                [checked]="brand._id && isBrandSelected(brand._id)"
+                (change)="onBrandToggle(brand._id, $event)"
+                class="w-5 h-5 rounded-md border-gray-300 dark:border-gray-600 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 cursor-pointer">
               <label [for]="'brand-' + brand._id"
                 class="text-sm font-medium cursor-pointer text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
                 {{ brand.name | multiLanguage }}
@@ -132,10 +167,11 @@
           </div>
         </div>
 
-        <p-divider styleClass="border-gray-200 dark:border-gray-700"></p-divider>
+        <ui-divider></ui-divider>
 
+        </div>
       </div>
-    </p-drawer>
+    }
 
     <!-- Active Filters -->
     @if (activeFiltersCount > 0) {
@@ -153,24 +189,26 @@
               {{ activeFiltersCount }}
             </span>
           </div>
-          <button pButton type="button" [label]="'products.clear_all' | translate"
-            class="p-button-text text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium transition-colors duration-300 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-800/30 px-4 py-2 rounded-xl"
-            (click)="clearAllFilters()"></button>
+          <ui-button 
+            variant="destructive" 
+            size="sm" 
+            (click)="clearAllFilters()"
+            class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-800/30">
+            {{ 'products.clear_all' | translate }}
+          </ui-button>
         </div>
         <div class="flex flex-wrap gap-3">
           @for (categoryId of filterForm.get('selectedCategories')?.value || []; track categoryId) {
-          <p-chip removable (onRemove)="removeCategoryFilter(categoryId)"
-            styleClass="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800 rounded-xl font-medium">
+          <ui-chip variant="primary" [removable]="true" (remove)="removeCategoryFilter(categoryId)">
             <i class="pi pi-tag mr-2"></i>
             {{ getCategoryName(categoryId) }}
-          </p-chip>
+          </ui-chip>
           }
           @for (brandId of filterForm.get('selectedBrands')?.value || []; track brandId) {
-          <p-chip removable (onRemove)="removeBrandFilter(brandId)"
-            styleClass="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800 rounded-xl font-medium">
+          <ui-chip variant="success" [removable]="true" (remove)="removeBrandFilter(brandId)">
             <i class="pi pi-star mr-2"></i>
             {{ getBrandName(brandId) }}
-          </p-chip>
+          </ui-chip>
           }
         </div>
       </div>
@@ -204,9 +242,13 @@
 
       <!-- Pagination -->
       <div class="flex justify-center mt-16">
-        <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
-          dropdownAppendTo="body" appendTo="body" [rowsPerPageOptions]="[12, 24, 48, 96]"
-          styleClass="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300"></p-paginator>
+        <ui-pagination 
+          [first]="first" 
+          [rows]="rows" 
+          [totalRecords]="totalRecords" 
+          (pageChange)="onPageChange($event)"
+          [rowsPerPageOptions]="[12, 24, 48, 96]">
+        </ui-pagination>
       </div>
     </div>
     }
@@ -225,12 +267,18 @@
           </p>
         </div>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button pButton pRipple type="button" [label]="'products.clear_all' | translate"
-            class="bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-            (click)="clearAllFilters()"></button>
-          <button pButton pRipple type="button" [label]="'products.browse_all_products' | translate"
-            class="p-button-outlined border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-primary-500 dark:hover:border-primary-400 rounded-2xl px-6 py-3 font-semibold transition-all duration-300"
-            routerLink="/products"></button>
+          <ui-button 
+            variant="primary" 
+            size="lg"
+            (click)="clearAllFilters()">
+            {{ 'products.clear_all' | translate }}
+          </ui-button>
+          <ui-button 
+            variant="outline" 
+            size="lg"
+            routerLink="/products">
+            {{ 'products.browse_all_products' | translate }}
+          </ui-button>
         </div>
       </div>
     </div>
@@ -249,9 +297,12 @@
             {{ error }}
           </p>
         </div>
-        <button pButton pRipple type="button" [label]="'products.try_again' | translate"
-          class="bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-500 dark:to-orange-500 hover:from-red-700 hover:to-orange-700 dark:hover:from-red-600 dark:hover:to-orange-600 text-white border-0 rounded-2xl px-6 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          (click)="loadProducts()"></button>
+        <ui-button 
+          variant="destructive" 
+          size="lg"
+          (click)="loadProducts()">
+          {{ 'products.try_again' | translate }}
+        </ui-button>
       </div>
     </div>
     }

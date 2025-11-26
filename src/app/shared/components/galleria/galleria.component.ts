@@ -1,6 +1,5 @@
 
 import { Component, OnInit } from '@angular/core';
-import { GalleriaModule } from 'primeng/galleria';
 import { CommonModule } from '@angular/common';
 
 interface GalleriaImage {
@@ -13,7 +12,7 @@ interface GalleriaImage {
 @Component({
   selector: 'app-galleria',
   standalone: true,
-  imports: [CommonModule, GalleriaModule],
+  imports: [CommonModule],
   templateUrl: './galleria.component.html',
   styleUrls: ['./galleria.component.scss']
 })
@@ -69,7 +68,23 @@ export class GalleriaComponent implements OnInit {
     ];
   }
 
-  imageClicked(index: number) {
+  imageClicked(index: number): void {
     this.activeIndex = index;
+  }
+
+  next(): void {
+    if (this.activeIndex < this.images.length - 1) {
+      this.activeIndex++;
+    } else {
+      this.activeIndex = 0;
+    }
+  }
+
+  previous(): void {
+    if (this.activeIndex > 0) {
+      this.activeIndex--;
+    } else {
+      this.activeIndex = this.images.length - 1;
+    }
   }
 }

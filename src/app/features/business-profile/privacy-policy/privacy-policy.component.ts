@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCardComponent, 
+  UiSpinnerComponent
+} from '../../../shared/ui';
 
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
@@ -18,15 +19,13 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [
     CommonModule,
-    ToastModule,
-    ButtonModule,
-    CardModule,
-    ProgressSpinnerModule,
+    UiButtonComponent,
+    UiCardComponent,
+    UiSpinnerComponent,
     SafePipe,
     MultiLanguagePipe,
     TranslateModule
   ],
-  providers: [MessageService],
   templateUrl: './privacy-policy.component.html',
   styleUrls: ['./privacy-policy.component.scss']
 })
@@ -36,7 +35,7 @@ export class PrivacyPolicyComponent implements OnInit {
 
   constructor(
     private businessProfileService: BusinessProfileService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private router: Router
   ) {}
 
@@ -52,11 +51,7 @@ export class PrivacyPolicyComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading business profile:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load privacy policy'
-        });
+        this.toastService.error('Failed to load privacy policy', 'Error');
         this.loading = false;
       }
     });

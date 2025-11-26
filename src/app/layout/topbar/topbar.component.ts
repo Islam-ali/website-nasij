@@ -1,27 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewChild, inject, signal, computed, Signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { MenubarModule } from 'primeng/menubar';
-import { BadgeModule } from 'primeng/badge';
-import { AvatarModule } from 'primeng/avatar';
-import { InputTextModule } from 'primeng/inputtext';
-import { RippleModule } from 'primeng/ripple';
 import { catchError, finalize, of, Subscription, takeUntil, tap } from 'rxjs';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { WishlistService } from '../../features/wishlist/services/wishlist.service';
-import { MessageService } from 'primeng/api';
-import { DialogModule } from 'primeng/dialog';
-import { MenuItem } from 'primeng/api';
-import { TooltipModule } from 'primeng/tooltip';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { CardModule } from 'primeng/card';
 import { CartService } from '../../features/cart/services/cart.service';
 import { IUser } from '../../features/auth/models/auth.interface';
 import { IAddToCartRequest, ICartItem, ICartState } from '../../features/cart/models/cart.interface';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
 import { environment } from '../../../environments/environment';
-import { DrawerModule } from 'primeng/drawer';
 import { IWishlistItem, IWishlistState } from '../../features/wishlist/models/wishlist.interface';
 import { ComponentBase } from '../../core/directives/component-base.directive';
 import { ICategory } from '../../interfaces/category.interface';
@@ -36,6 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 import { FallbackImgDirective } from '../../core/directives';
+import { UiToastService } from '../../shared/ui';
 
 @Component({
   selector: 'app-topbar',
@@ -43,18 +30,6 @@ import { FallbackImgDirective } from '../../core/directives';
   imports: [
     CommonModule,
     RouterModule,
-    MenubarModule,
-    BadgeModule,
-    AvatarModule,
-    InputTextModule,
-    RippleModule,
-    TooltipModule,
-    DialogModule,
-    InputNumberModule,
-    CardModule,
-    FormsModule,
-    ButtonModule,
-    DrawerModule,
     ThemeToggleComponent,
     LanguageSwitcherComponent,
     TranslateModule,
@@ -62,12 +37,10 @@ import { FallbackImgDirective } from '../../core/directives';
     CurrencyPipe,
     FallbackImgDirective
   ],
-  providers: [MessageService],
   templateUrl: './topbar.component.html',
 })
 export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy {
   domain = environment.domain;
-  @ViewChild('cartDialog') cartDialog: any;
   submenuOpen: boolean = false;
   wishlistOpen: boolean = false;
   cartOpen: boolean = false;
@@ -84,7 +57,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   currentUser: IUser | null = null;
   private subscriptions = new Subscription();
   businessProfile: IBusinessProfile | null = null;
-  userMenuItems: MenuItem[] = [];
   toggleNavbar(): void {
     this.navbarOpen.set(!this.navbarOpen());
   }
@@ -92,7 +64,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     private authService: AuthService,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private router: Router,
     private businessProfileService: BusinessProfileService,
     public themeService: ThemeService
@@ -122,7 +94,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       this.authService.currentUser$.subscribe({
         next: (user: IUser | null) => {
           this.currentUser = user;
-          this.initializeUserMenu();
         },
         error: (error: Error) => {
           console.error('Error in user subscription:', error);
@@ -184,21 +155,21 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     this.cartService.addToCart(newItem).pipe(
           takeUntil(this.destroy$),
           tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Added',
-              detail: 'Item added to cart',
-              life: 1000,
-            });
+          this.toastService.add({
+            severity: 'success',
+            summary: 'Added',
+            detail: 'Item added to cart',
+            life: 1500,
+          });
           }),
           catchError((error: any) => {
             console.error('Error adding item:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Failed to add item. Please try again.',
-              life: 1000,
-            });
+          this.toastService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to add item. Please try again.',
+            life: 2000,
+          });
             return of(null);
           }),
           finalize(() => {
@@ -213,20 +184,20 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       this.cartService.removeItem(undefined, undefined, item.packageId).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
+          this.toastService.add({
             severity: 'success',
             summary: 'Removed',
             detail: 'Package removed from cart',
-            life: 1000,
+            life: 1500,
           });
         }),
         catchError((error: any) => {
           console.error('Error removing package:', error);
-          this.messageService.add({
+          this.toastService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Failed to remove package. Please try again.',
-            life: 1000,
+            life: 1500,
           });
           return of(null);
         })
@@ -236,20 +207,20 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       this.cartService.removeItem(item.productId!, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
+          this.toastService.add({
             severity: 'success',
             summary: 'Removed',
             detail: 'Product removed from cart',
-            life: 1000,
+            life: 1500,
           });
         }),
         catchError((error: any) => {
           console.error('Error removing product:', error);
-          this.messageService.add({
+          this.toastService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Failed to remove product. Please try again.',
-            life: 1000,
+            life: 1500,
           });
           return of(null);
         }),
@@ -342,19 +313,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
       this.router.navigate(['/search'], { queryParams: { q: query } });
       this.searchQuery = '';
     }
-  }
-
-  private initializeUserMenu(): void {
-    this.userMenuItems = [
-      { label: 'Profile', icon: 'pi pi-user', routerLink: '/profile', visible: !!this.currentUser },
-      { label: 'Orders', icon: 'pi pi-shopping-bag', routerLink: '/orders', visible: !!this.currentUser },
-      { label: 'Wishlist', icon: 'pi pi-heart', routerLink: '/wishlist', visible: !!this.currentUser },
-      { label: 'Settings', icon: 'pi pi-cog', routerLink: '/settings', visible: !!this.currentUser },
-      { separator: true, visible: !!this.currentUser },
-      { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout(), visible: !!this.currentUser },
-      { label: 'Login', icon: 'pi pi-sign-in', routerLink: '/auth/login', visible: !this.currentUser },
-      { label: 'Register', icon: 'pi pi-user-plus', routerLink: '/auth/register', visible: !this.currentUser }
-    ];
   }
 
   get userInitials(): string {

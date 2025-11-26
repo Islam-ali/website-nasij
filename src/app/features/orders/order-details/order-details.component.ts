@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
+import { UiButtonComponent, UiCardComponent, UiChipComponent, UiSpinnerComponent } from '../../../shared/ui';
 import { OrderStatus } from '../../../interfaces/product.interface';
 
 interface OrderItem {
@@ -41,53 +38,61 @@ interface Order {
   imports: [
     CommonModule,
     RouterModule,
-    CardModule,
-    ButtonModule,
-    TableModule,
-    TagModule
+    UiButtonComponent,
+    UiCardComponent,
+    UiChipComponent,
+    UiSpinnerComponent
   ],
   template: `
     <div class="p-4">
       <div class="mb-4">
-        <button pButton pRipple 
-                icon="pi pi-arrow-left" 
-                label="Back to Orders" 
-                class="p-button-text"
-                routerLink="/orders">
-        </button>
+        <ui-button variant="ghost" size="md" routerLink="/orders">
+          <i class="pi pi-arrow-left mr-2"></i>
+          Back to Orders
+        </ui-button>
       </div>
 
-      <p-card [header]="'Order #' + (order?.id || '')" subheader="Order Details">
+      <ui-card>
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold">Order #{{order?.id || ''}}</h2>
+          <p class="text-gray-500 mt-1">Order Details</p>
+        </div>
         <div class="grid">
           <div class="col-12 md:col-8">
-            <h4>Order Items</h4>
-            <p-table [value]="order?.items || []" [showCurrentPageReport]="true" 
-                    [rowsPerPageOptions]="[5,10,25,50]" [paginator]="true" 
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-item>
-                <tr>
-                  <td>
-                    <div class="flex align-items-center gap-2">
-                      <img [src]="item.image || 'assets/images/placeholder.png'" 
-                          [alt]="item.name" 
-                          style="width: 50px; height: 50px; object-fit: cover;"/>
-                      <span>{{item.name}}</span>
-                    </div>
-                  </td>
-                  <td>{{item.price | currency:'USD'}}</td>
-                  <td>{{item.quantity}}</td>
-                  <td>{{item.price * item.quantity | currency:'USD'}}</td>
-                </tr>
-              </ng-template>
-            </p-table>
+            <h4 class="text-lg font-semibold mb-4">Order Items</h4>
+            @if (loading) {
+              <ui-spinner></ui-spinner>
+            } @else {
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead class="bg-gray-50 dark:bg-gray-800">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Product</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Price</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Quantity</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                    @for (item of order?.items || []; track item.id) {
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center gap-2">
+                            <img [src]="item.image || 'assets/images/placeholder.png'" 
+                                [alt]="item.name" 
+                                class="w-12 h-12 object-cover rounded"/>
+                            <span class="text-sm text-gray-900 dark:text-white">{{item.name}}</span>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{item.price | currency:'USD'}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{item.quantity}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{item.price * item.quantity | currency:'USD'}}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
 
             <div class="mt-4">
               <h4>Order Summary</h4>
@@ -125,15 +130,13 @@ interface Order {
             </div>
 
             <div class="mt-4" *ngIf="order?.status === OrderStatus.PENDING">
-              <button pButton 
-                      label="Cancel Order" 
-                      class="p-button-danger"
-                      (click)="cancelOrder()">
-              </button>
+              <ui-button variant="destructive" size="md" (click)="cancelOrder()">
+                Cancel Order
+              </ui-button>
             </div>
           </div>
         </div>
-      </p-card>
+      </ui-card>
     </div>
   `
 })

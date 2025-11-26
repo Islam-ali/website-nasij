@@ -213,9 +213,9 @@
           <span>{{ 'navigation.boxs' | translate }}</span>
         </a>
       </div>
-      <span class="flex items-center gap-2 text-white/70">
-        <app-language-switcher class="w-full" [width]="'100%'"></app-language-switcher>
-      </span>
+      <div class="flex items-center gap-2">
+        <app-language-switcher class="w-full"></app-language-switcher>
+      </div>
       <a routerLink="/shop" (click)="toggleNavbar()"
         class="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 text-white text-sm font-semibold shadow-lg shadow-primary-500/30 hover:shadow-primary-500/40 transition-all duration-300">
         {{ 'navigation.startShopping' | translate }}
@@ -228,9 +228,13 @@
 <div class="h-[7rem]"></div>
 
 <!-- Enhanced Cart Drawer -->
-<p-drawer [(visible)]="cartOpen" [showCloseIcon]="false" position="right" styleClass="md:!w-96 lg:!w-1/3">
-  <ng-template pTemplate="header">
-    <div class="flex items-center justify-between w-full">
+@if (cartOpen) {
+<div class="fixed inset-0 z-[1100]">
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px]" (click)="cartOpen = false"></div>
+  <aside
+    class="absolute inset-y-0 right-0 w-full md:w-96 lg:w-1/3 bg-white dark:bg-dark-surface shadow-2xl flex flex-col">
+    <div
+      class="flex items-center justify-between w-full p-4 border-b border-gray-200 dark:border-dark-border transition-colors">
       <h3 class="text-xl font-bold text-gray-900 transition-colors duration-300"
         [class.dark:text-dark-text]="isDarkTheme()">{{ 'cart.shoppingCart' | translate }}</h3>
       <button (click)="cartOpen = false" class="text-gray-500 hover:text-gray-700 transition-colors duration-300"
@@ -238,48 +242,45 @@
         <i class="pi pi-times text-lg me-2"></i>
       </button>
     </div>
-  </ng-template>
-
-  <div class="p-2">
-    @if (cartItems().length === 0) {
-    <div class="text-center py-12">
-      <i style="font-size: 120px;"
-        class="pi pi-shopping-cart text-6xl text-gray-300 mb-4 transition-colors duration-300 me-2"
-        [class.dark:text-dark-textMuted]="isDarkTheme()"></i>
-      <p class="text-gray-500 text-lg mb-4 transition-colors duration-300"
-        [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.yourCartIsEmpty' | translate }}</p>
-      <a routerLink="/shop"
-        class="inline-block px-6 py-3 bg-gradient-to-r from-primary-800 to-primary-500 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
-        {{ 'cart.startShopping' | translate }}
-      </a>
-    </div>
-    } @else {
-    <div class="space-y-4 overflow-y-auto">
-      @for (item of cartItems(); track item.productId) {
-      <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
-        [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
-        <img [src]="item.image" fallback [alt]="item.productName" class="w-16 h-16 object-cover rounded-lg">
-        <div class="flex-1">
-          <h4 class="font-medium text-gray-900 text-sm mb-0 transition-colors duration-300"
-            [class.dark:text-dark-text]="isDarkTheme()">{{ item.productName | multiLanguage }}</h4>
-          <p class="text-sm text-gray-500 transition-colors duration-300"
-            [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.quantity' | translate }}: {{ item.quantity }}
-          </p>
-          <p class="text-lg font-bold text-primary-500">{{ (item.price - (item.discount || 0)) * item.quantity! |
-            currency }}</p>
+    <div class="flex-1 p-4 overflow-y-auto">
+      @if (cartItems().length === 0) {
+      <div class="text-center py-12">
+        <i style="font-size: 120px;"
+          class="pi pi-shopping-cart text-6xl text-gray-300 mb-4 transition-colors duration-300 me-2"
+          [class.dark:text-dark-textMuted]="isDarkTheme()"></i>
+        <p class="text-gray-500 text-lg mb-4 transition-colors duration-300"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.yourCartIsEmpty' | translate }}</p>
+        <a routerLink="/shop"
+          class="inline-block px-6 py-3 bg-gradient-to-r from-primary-800 to-primary-500 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
+          {{ 'cart.startShopping' | translate }}
+        </a>
+      </div>
+      } @else {
+      <div class="space-y-4">
+        @for (item of cartItems(); track item.productId) {
+        <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
+          [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
+          <img [src]="item.image" fallback [alt]="item.productName" class="w-16 h-16 object-cover rounded-lg">
+          <div class="flex-1">
+            <h4 class="font-medium text-gray-900 text-sm mb-0 transition-colors duration-300"
+              [class.dark:text-dark-text]="isDarkTheme()">{{ item.productName | multiLanguage }}</h4>
+            <p class="text-sm text-gray-500 transition-colors duration-300"
+              [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'cart.quantity' | translate }}: {{ item.quantity
+              }}
+            </p>
+            <p class="text-lg font-bold text-primary-500">{{ (item.price - (item.discount || 0)) * item.quantity! |
+              currency }}</p>
+          </div>
+          <button (click)="removeFromCart(item)" class="text-red-500 hover:text-red-700 transition-colors duration-300">
+            <i class="pi pi-trash"></i>
+          </button>
         </div>
-        <button (click)="removeFromCart(item)" class="text-red-500 hover:text-red-700 transition-colors duration-300">
-          <i class="pi pi-trash"></i>
-        </button>
+        }
       </div>
       }
     </div>
-    }
-  </div>
-
-  <ng-template pTemplate="footer">
     @if (cartItems().length > 0) {
-    <div class="p-2 border-t border-gray-200 transition-all duration-300"
+    <div class="p-4 border-t border-gray-200 transition-all duration-300"
       [class.dark:border-dark-border]="isDarkTheme()">
       <div class="flex justify-between items-center mb-4">
         <span class="text-lg font-medium text-gray-900 transition-colors duration-300"
@@ -300,13 +301,17 @@
       </div>
     </div>
     }
-  </ng-template>
-</p-drawer>
+  </aside>
+</div>
+}
 
 <!-- Enhanced Wishlist Drawer -->
-<p-drawer [(visible)]="wishlistOpen" [showCloseIcon]="false" position="right" styleClass="w-full md:w-96 lg:w-1/3">
-  <ng-template pTemplate="header">
-    <div class="flex items-center justify-between w-full">
+@if (wishlistOpen) {
+<div class="fixed inset-0 z-[1100]">
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px]" (click)="wishlistOpen = false"></div>
+  <aside class="absolute inset-y-0 right-0 w-full md:w-96 lg:w-1/3 bg-white dark:bg-dark-surface shadow-2xl flex flex-col">
+    <div
+      class="flex items-center justify-between w-full p-4 border-b border-gray-200 dark:border-dark-border transition-colors">
       <h3 class="text-xl font-bold text-gray-900 transition-colors duration-300"
         [class.dark:text-dark-text]="isDarkTheme()">{{ 'navigation.wishlist' | translate }}</h3>
       <button (click)="wishlistOpen = false" class="text-gray-500 hover:text-gray-700 transition-colors duration-300"
@@ -314,49 +319,43 @@
         <i class="pi pi-times text-lg"></i>
       </button>
     </div>
-  </ng-template>
 
-  <div class="p-6">
-    @if (wishlistItems().length === 0) {
-    <div class="text-center py-12">
-      <i style="font-size: 120px;" class="pi pi-heart text-6xl text-gray-300 mb-4 transition-colors duration-300"
-        [class.dark:text-dark-textMuted]="isDarkTheme()"></i>
-      <p class="text-gray-500 text-lg mb-4 transition-colors duration-300"
-        [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'navigation.yourWishlistIsEmpty' | translate }}</p>
-      <a routerLink="/shop"
-        class="inline-block px-6 py-3 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
-        {{ 'navigation.startShopping' | translate }}
-      </a>
-    </div>
-    } @else {
-    <div class="space-y-4 overflow-y-auto">
-      @for (item of wishlistItems(); track item.productId) {
-      <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
-        [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
-        <img [src]="item.product.images[0].filePath" fallback [alt]="item.product.name"
-          class="w-16 h-16 object-cover rounded-lg">
-        <div class="flex-1">
-          <h4 class="font-medium text-gray-900 transition-colors duration-300"
-            [class.dark:text-dark-text]="isDarkTheme()">{{ item.product.name }}</h4>
-          <p class="text-lg font-bold text-primary-500">{{ item.product.price | currency }}</p>
+    <div class="flex-1 p-6 overflow-y-auto">
+      @if (wishlistItems().length === 0) {
+      <div class="text-center py-12">
+        <i style="font-size: 120px;" class="pi pi-heart text-6xl text-gray-300 mb-4 transition-colors duration-300"
+          [class.dark:text-dark-textMuted]="isDarkTheme()"></i>
+        <p class="text-gray-500 text-lg mb-4 transition-colors duration-300"
+          [class.dark:text-dark-textSecondary]="isDarkTheme()">{{ 'navigation.yourWishlistIsEmpty' | translate }}</p>
+        <a routerLink="/shop"
+          class="inline-block px-6 py-3 bg-gradient-to-r from-primary-900 to-primary-600 text-white rounded-lg font-medium hover:from-primary-900 hover:to-primary-700 transition-all duration-300">
+          {{ 'navigation.startShopping' | translate }}
+        </a>
+      </div>
+      } @else {
+      <div class="space-y-4">
+        @for (item of wishlistItems(); track item.productId) {
+        <div class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg transition-all duration-300"
+          [class.dark:bg-dark-surfaceHover]="isDarkTheme()">
+          <img [src]="item.product.images[0].filePath" fallback [alt]="item.product.name"
+            class="w-16 h-16 object-cover rounded-lg">
+          <div class="flex-1">
+            <h4 class="font-medium text-gray-900 transition-colors duration-300"
+              [class.dark:text-dark-text]="isDarkTheme()">{{ item.product.name }}</h4>
+            <p class="text-lg font-bold text-primary-500">{{ item.product.price | currency }}</p>
+          </div>
+          <div class="flex flex-col space-y-2">
+            <button (click)="removeFromWishlist(item)"
+              class="text-red-500 hover:text-red-700 transition-colors duration-300">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
         </div>
-        <div class="flex flex-col space-y-2">
-          <!-- <button (click)="addToCart(item)" 
-                      class="text-green-500 hover:text-green-700 transition-colors">
-                <i class="pi pi-shopping-cart"></i>
-              </button> -->
-          <button (click)="removeFromWishlist(item)"
-            class="text-red-500 hover:text-red-700 transition-colors duration-300">
-            <i class="pi pi-trash"></i>
-          </button>
-        </div>
+        }
       </div>
       }
     </div>
-    }
-  </div>
 
-  <ng-template pTemplate="footer">
     @if (wishlistItems().length > 0) {
     <div class="p-6 border-t border-gray-200 transition-all duration-300"
       [class.dark:border-dark-border]="isDarkTheme()">
@@ -366,5 +365,6 @@
       </button>
     </div>
     }
-  </ng-template>
-</p-drawer>
+  </aside>
+</div>
+}

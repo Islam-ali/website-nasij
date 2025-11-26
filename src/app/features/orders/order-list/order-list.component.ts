@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
+import { UiButtonComponent, UiCardComponent, UiChipComponent, UiSpinnerComponent } from '../../../shared/ui';
 import { OrderStatus } from '../../../interfaces/product.interface';
 
 interface Order {
@@ -25,53 +22,61 @@ interface Order {
   imports: [
     CommonModule, 
     RouterModule, 
-    CardModule, 
-    ButtonModule,
-    TableModule,
-    TagModule
+    UiButtonComponent,
+    UiCardComponent,
+    UiChipComponent,
+    UiSpinnerComponent
   ],
   template: `
     <div class="p-4">
-      <p-card header="My Orders">
-        <p-table [value]="orders" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
-                [rowsPerPageOptions]="[5,10,25,50]" [paginator]="true" 
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [loading]="loading">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Order ID</th>
-              <th>Date</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-order>
-            <tr>
-              <td>{{order.id}}</td>
-              <td>{{order.date | date:'mediumDate'}}</td>
-              <td>{{order.items.length}} item(s)</td>
-              <td>{{order.total | currency:'USD'}}</td>
-              <td>
-                <p-tag [severity]="getSeverity(order.status)" [value]="order.status"></p-tag>
-              </td>
-              <td>
-                <button pButton pRipple 
-                        icon="pi pi-eye" 
-                        class="p-button-rounded p-button-text"
-                        [routerLink]="['/orders', order.id]">
-                </button>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="6" class="text-center">No orders found.</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </p-card>
+      <ui-card>
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold">My Orders</h2>
+        </div>
+        @if (loading) {
+          <ui-spinner></ui-spinner>
+        } @else {
+          @if (orders.length === 0) {
+            <div class="text-center py-12">
+              <p class="text-gray-500">No orders found.</p>
+            </div>
+          } @else {
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Items</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                  @for (order of orders; track order.id) {
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{order.id}}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{order.date | date:'mediumDate'}}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{order.items.length}} item(s)</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{order.total | currency:'USD'}}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <ui-chip [variant]="getSeverity(order.status)">{{order.status}}</ui-chip>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <ui-button variant="ghost" size="sm" [routerLink]="['/orders', order.id]">
+                          <i class="pi pi-eye mr-1"></i>
+                          View
+                        </ui-button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        }
+      </ui-card>
     </div>
   `,
   styles: [`
@@ -93,7 +98,7 @@ export class OrderListComponent implements OnInit {
     }, 1000);
   }
 
-  getSeverity(status: OrderStatus) {
+  getSeverity(status: OrderStatus): "primary" | "warning" | "success" | "default" | "danger" {
     switch (status) {
       case OrderStatus.DELIVERED:
         return 'success';
@@ -102,11 +107,11 @@ export class OrderListComponent implements OnInit {
       case OrderStatus.CANCELLED:
         return 'danger';
       case OrderStatus.POSTPONED:
-        return 'warn';
+        return 'warning';
       case OrderStatus.RETURNED:
         return 'danger';
       default:
-        return null;
+        return 'default';
     }
   }
 

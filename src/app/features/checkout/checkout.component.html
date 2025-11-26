@@ -1,4 +1,3 @@
-<p-toast></p-toast>
 
 <section class="min-h-screen bg-gray-50 dark:bg-gray-800 transition-all duration-500 text-gray-800 dark:text-gray-200">
   <!-- Background Pattern -->
@@ -31,11 +30,16 @@
             <!-- cupy order number -->
             <span class="font-bold px-2">{{'checkout.orderNumber' | translate}}: {{orderNumber}}</span>
             <!-- copy to clipboard -->
-            <button pButton pRipple icon="pi pi-copy" (click)="copyToClipboard(orderNumber)"></button>
+            <ui-button variant="ghost" size="sm" [iconOnly]="true" (click)="copyToClipboard(orderNumber)">
+              <i class="pi pi-copy"></i>
+            </ui-button>
           </p>
-          <button pButton pRipple [label]="'checkout.continueShopping' | translate" icon="pi pi-arrow-left"
-            class="bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white border-0 rounded-2xl px-8 py-4 font-semibold transition-all duration-300"
-            routerLink="/shop"></button>
+          <ui-button variant="primary" size="lg" routerLink="/shop">
+            <span class="flex w-full gap-2 ite">
+              <i class="pi pi-arrow-left mr-2"></i>
+              {{'checkout.continueShopping' | translate}}
+            </span>
+          </ui-button>
         </div>
       </div>
     </div>
@@ -58,7 +62,7 @@
             class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-primary-100 dark:border-primary-900/40 transition-all duration-300">
             <div class="flex items-center gap-3 mb-8">
               <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-2xl">
-                <i class="pi pi-user text-2xl text-blue-600 dark:text-blue-400"></i>
+                <i class="pi pi-user text-2xl text-primary-600 dark:text-primary-400"></i>
               </div>
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
                 {{'checkout.billingDetails' | translate}}</h2>
@@ -70,7 +74,7 @@
                   | translate}}*</label>
                 <input type="text" id="fullName" formControlName="fullName"
                   [class.border-red-300]="f['fullName'].touched && f['fullName'].errors"
-                  class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
+                  class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
                 <div *ngIf="f['fullName'].touched && f['fullName'].errors"
                   class="text-red-600 dark:text-red-400 text-sm mt-2 flex items-center gap-2">
                   <i class="pi pi-exclamation-circle"></i>
@@ -83,7 +87,7 @@
                   | translate}}*</label>
                 <input type="tel" id="phone" phoneNumber formControlName="phone"
                   [class.border-red-300]="f['phone'].touched && f['phone'].errors"
-                  class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
+                  class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500" />
                 <div *ngIf="f['phone'].touched && f['phone'].errors"
                   class="text-red-600 dark:text-red-400 text-sm mt-2 flex items-center gap-2">
                   <i class="pi pi-exclamation-circle"></i>
@@ -109,12 +113,17 @@
                 <label for="country"
                   class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.country'
                   | translate}}*</label>
-                <p-select [options]="countries()" formControlName="country" [optionLabel]=" 'name.'+ currentLanguage()"
-                  optionValue="_id" [placeholder]="'checkout.selectCountry' | translate"
-                  (onChange)="loadStates(); setShippingCost()"
+                <select 
+                  formControlName="country" 
+                  (change)="loadStates(); setShippingCost()"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.country')?.touched && checkoutForm.get('shippingAddress.country')?.errors"
-                  styleClass="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300">
-                </p-select>
+                  uiInput="lg"
+                  class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300 appearance-none pr-10 cursor-pointer">
+                  <option value="" disabled>{{'checkout.selectCountry' | translate}}</option>
+                  @for (country of countries(); track country._id) {
+                    <option [value]="country._id">{{getCountryName(country)}}</option>
+                  }
+                </select>
                 <div
                   *ngIf="checkoutForm.get('shippingAddress.country')?.touched && checkoutForm.get('shippingAddress.country')?.errors"
                   class="text-red-600 dark:text-red-400 text-sm mt-2 flex items-center gap-2">
@@ -126,12 +135,17 @@
                 <label for="state"
                   class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">{{'checkout.state'
                   | translate}}*</label>
-                <p-select [options]="states()" formControlName="state" [optionLabel]=" 'name.'+ currentLanguage()"
-                  optionValue="_id" filterBy="name.{{currentLanguage()}}" [filter]="true"
-                  [placeholder]="'checkout.selectState' | translate" (onChange)="setShippingCost()"
+                <select 
+                  formControlName="state" 
+                  (change)="setShippingCost()"
                   [class.border-red-300]="checkoutForm.get('shippingAddress.state')?.touched && checkoutForm.get('shippingAddress.state')?.errors"
-                  styleClass="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300">
-                </p-select>
+                  uiInput="lg"
+                  class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-4 focus:ring-green-500/20 dark:focus:ring-green-400/20 focus:border-green-500 dark:focus:border-green-400 transition-all duration-300 appearance-none pr-10 cursor-pointer">
+                  <option value="" disabled>{{'checkout.selectState' | translate}}</option>
+                  @for (state of states(); track state._id) {
+                    <option [value]="state._id">{{getStateName(state)}}</option>
+                  }
+                </select>
                 <div
                   *ngIf="checkoutForm.get('shippingAddress.state')?.touched && checkoutForm.get('shippingAddress.state')?.errors"
                   class="text-red-600 dark:text-red-400 text-sm mt-2 flex items-center gap-2">
@@ -228,7 +242,10 @@
                     {{'checkout.depositToggleHint' | translate}}
                   </p>
                 </div>
-                  <p-inputSwitch styleClass="relative" formControlName="isDeposit"></p-inputSwitch>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" formControlName="isDeposit" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600 dark:peer-checked:bg-primary-500"></div>
+                  </label>
               </div>
               }
               <!-- Payment Image Upload (shown when Vodafone Cash is selected) -->
@@ -280,18 +297,18 @@
               <div class="flex items-start">
                 <div class="flex items-center h-6">
                   <input id="acceptTerms" type="checkbox" formControlName="acceptTerms"
-                    class="h-5 w-5 text-blue-600 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 rounded">
+                    class="h-5 w-5 text-primary-600 dark:text-primary-400 focus:ring-primary-500 dark:focus:ring-primary-400 border-gray-300 dark:border-gray-600 rounded">
                 </div>
                 <div class="ms-4 text-base">
                   <label for="acceptTerms"
                     class="font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
                     {{'checkout.acceptTerms' | translate}}
                     <a href="#"
-                      class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors duration-300">{{'checkout.termsOfService'
+                      class="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 underline transition-colors duration-300">{{'checkout.termsOfService'
                       | translate}}</a>
                     {{'checkout.and' | translate}}
                     <a href="#"
-                      class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors duration-300">{{'checkout.privacyPolicy'
+                      class="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 underline transition-colors duration-300">{{'checkout.privacyPolicy'
                       | translate}}</a>
                   </label>
                   <div *ngIf="f['acceptTerms'].touched && f['acceptTerms'].errors"
@@ -303,17 +320,23 @@
               </div>
 
               <!-- Submit Button -->
-              <button type="submit" [disabled]="checkoutForm.invalid || loading"
-                class="w-full py-4 mt-8 disabled:opacity-50 disabled:cursor-not-allowed bg-primary-500 hover:bg-primary-600 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-2xl font-bold text-lg transition-all duration-300">
-                <span *ngIf="!loading" class="flex items-center justify-center gap-3">
-                  <i class="pi pi-shopping-cart text-xl"></i>
-                  {{'checkout.placeOrder' | translate}}
-                </span>
-                <span *ngIf="loading" class="flex items-center justify-center gap-3">
-                  <i class="pi pi-spin pi-spinner text-xl"></i>
+              <ui-button 
+                type="submit" 
+                variant="primary" 
+                size="lg"
+                [disabled]="checkoutForm.invalid || loading"
+                [loading]="loading"
+                [block]="true"
+                class="mt-8">
+                @if (!loading) {
+                  <span class="flex w-full gap-2 items-center">
+                    <i class="pi pi-shopping-cart mr-2"></i>
+                    {{'checkout.placeOrder' | translate}}
+                  </span>
+                } @else {
                   {{'checkout.processing' | translate}}
-                </span>
-              </button>
+                }
+              </ui-button>
             </div>
           </div>
         </div>
@@ -342,7 +365,7 @@
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">
                       {{item.productName | multiLanguage}}
                       <span *ngIf="item.itemType === 'Package'"
-                        class="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full">
+                        class="ml-2 px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs rounded-full">
                         {{'checkout.package' | translate}}
                       </span>
                     </h4>

@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { IWishlistItem, IWishlistState, IAddToWishlistRequest } from '../models/wishlist.interface';
-import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,6 @@ export class WishlistService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
   ) {
     // Load wishlist from storage on service initialization
     this.loadWishlistFromStorage();
@@ -42,11 +40,6 @@ export class WishlistService implements OnDestroy {
     
     if (existingItemIndex > -1) {
       // Item already in wishlist
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Already in Wishlist',
-        detail: 'This item is already in your wishlist.'
-      });
       return of(currentState);
     }
     
@@ -63,15 +56,7 @@ export class WishlistService implements OnDestroy {
     
     const updatedItems = [...currentState.items, newItem];
     
-    return this.updateWishlistState(updatedItems).pipe(
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Added to Wishlist',
-          detail: 'Item has been added to your wishlist.'
-        });
-      })
-    );
+    return this.updateWishlistState(updatedItems);
   }
 
   // Remove item from wishlist
@@ -81,15 +66,7 @@ export class WishlistService implements OnDestroy {
       item => !(item.productId === productId)
     );
     
-    return this.updateWishlistState(updatedItems).pipe(
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Removed',
-          detail: 'Item has been removed from your wishlist.'
-        });
-      })
-    );
+    return this.updateWishlistState(updatedItems);
   }
 
   // Move item from wishlist to cart
@@ -113,15 +90,7 @@ export class WishlistService implements OnDestroy {
 
   // Clear the entire wishlist
   clearWishlist(): Observable<IWishlistState> {
-    return this.updateWishlistState([]).pipe(
-      tap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Wishlist Cleared',
-          detail: 'Your wishlist has been cleared.'
-        });
-      })
-    );
+    return this.updateWishlistState([]);
   }
 
   // Update wishlist state and notify subscribers

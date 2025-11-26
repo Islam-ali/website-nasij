@@ -5,25 +5,17 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { TransferState, makeStateKey } from '@angular/core';
 
-// PrimeNG Modules
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { GalleriaModule } from 'primeng/galleria';
-import { RatingModule } from 'primeng/rating';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ChipModule } from 'primeng/chip';
-import { SkeletonModule } from 'primeng/skeleton';
-import { MessageService } from 'primeng/api';
-import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
-import { TooltipModule } from 'primeng/tooltip';
 import { IProduct, ProductStatus, ProductVariant, ProductVariantAttribute } from '../models/product.interface';
 import { ProductService } from '../services/product.service';
 import { CartService } from '../../cart/services/cart.service';
-import { TabsModule } from 'primeng/tabs';
 import { BaseResponse, pagination } from '../../../core/models/baseResponse';
-import { AccordionModule } from 'primeng/accordion';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiSpinnerComponent, 
+  UiChipComponent,
+  UiInputDirective
+} from '../../../shared/ui';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
 import { ProductCardComponent } from "../../../shared/components/product-card/product-card.component";
@@ -50,24 +42,12 @@ const FRONTEND_DOMAIN = 'https://pledgestores.com';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  providers: [MessageService],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    ButtonModule,
-    RippleModule,
-    RatingModule,
-    InputNumberModule,
-    GalleriaModule,
-    ChipModule,
-    SkeletonModule,
-    MessageModule,
-    ToastModule,
-    TooltipModule,
-    ProgressSpinnerModule,
-    TabsModule,
-    AccordionModule,
+    UiButtonComponent,
+    UiSpinnerComponent,
     ProductCardComponent,
     SafePipe,
     TranslateModule,
@@ -99,12 +79,14 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   images: ProductImage[] = [];
   responsiveOptions: any[];
   mappedVariants: {variant:string, attributes:ProductVariantAttribute[]}[] = [];
+  // Accordion state
+  openAccordionIndices = new Set<number>();
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
     private cartService: CartService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private translationService: TranslationService,
     private translate: TranslateService,
     private seoService: SeoService,
@@ -300,21 +282,17 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   addToCart(): void {
     if (this.product?.status !== ProductStatus.ACTIVE) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: this.translate.instant('common.warning'),
-        detail: this.translate.instant('products.notifications.not_available'),
-        life: 1000
-      });
+      this.toastService.warn(
+        this.translate.instant('products.notifications.not_available'),
+        this.translate.instant('common.warning')
+      );
       return;
     }
     if (this.checkCart()) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: this.translate.instant('common.warning'),
-        detail: this.translate.instant('products.notifications.select_variant'),
-        life: 1000
-      });
+      this.toastService.warn(
+        this.translate.instant('products.notifications.select_variant'),
+        this.translate.instant('common.warning')
+      );
       return;
     };
     if (!this.product) return;
@@ -331,34 +309,28 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
     this.cartService.addToCart(productToAdd);
 
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translate.instant('products.notifications.added_to_cart_summary'),
-      detail: this.translate.instant('products.notifications.added_to_cart_detail', {
+    this.toastService.success(
+      this.translate.instant('products.notifications.added_to_cart_detail', {
         quantity: this.quantity,
         product: this.getLocalizedProductName()
       }),
-      life: 1000
-    });
+      this.translate.instant('products.notifications.added_to_cart_summary')
+    );
   }
 
   checkout(): void {
     if (this.product?.status !== ProductStatus.ACTIVE) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: this.translate.instant('common.warning'),
-        detail: this.translate.instant('products.notifications.not_available'),
-        life: 1000
-      });
+      this.toastService.warn(
+        this.translate.instant('products.notifications.not_available'),
+        this.translate.instant('common.warning')
+      );
       return;
     }
     if (this.checkCart()) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: this.translate.instant('common.warning'),
-        detail: this.translate.instant('products.notifications.select_variant'),
-        life: 1000
-      });
+      this.toastService.warn(
+        this.translate.instant('products.notifications.select_variant'),
+        this.translate.instant('common.warning')
+      );
       return;
     }
 
@@ -385,12 +357,10 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   addToWishlist(): void {
     if (!this.product) return;
     // TODO: Implement wishlist functionality
-    this.messageService.add({
-      severity: 'info',
-      summary: this.translate.instant('products.notifications.wishlist_coming_soon_title'),
-      detail: this.translate.instant('products.notifications.wishlist_coming_soon_detail'),
-      life: 1000
-    });
+    this.toastService.info(
+      this.translate.instant('products.notifications.wishlist_coming_soon_detail'),
+      this.translate.instant('products.notifications.wishlist_coming_soon_title')
+    );
   }
 
   increaseQuantity(): void {
@@ -588,5 +558,31 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       return '';
     }
     return this.product.name[this.currentLanguage] || this.product.name.en || this.product.name.ar || '';
+  }
+
+  // Gallery navigation
+  previousImage(): void {
+    if (this.images.length > 0) {
+      this.activeIndex = (this.activeIndex - 1 + this.images.length) % this.images.length;
+    }
+  }
+
+  nextImage(): void {
+    if (this.images.length > 0) {
+      this.activeIndex = (this.activeIndex + 1) % this.images.length;
+    }
+  }
+
+  // Accordion methods
+  toggleAccordion(index: number): void {
+    if (this.openAccordionIndices.has(index)) {
+      this.openAccordionIndices.delete(index);
+    } else {
+      this.openAccordionIndices.add(index);
+    }
+  }
+
+  isAccordionOpen(index: number): boolean {
+    return this.openAccordionIndices.has(index);
   }
 }

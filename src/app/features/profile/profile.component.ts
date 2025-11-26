@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCardComponent, 
+  UiInputDirective
+} from '../../shared/ui';
 
 @Component({
   selector: 'app-profile',
@@ -13,52 +15,55 @@ import { MessageService } from 'primeng/api';
   imports: [
     CommonModule, 
     RouterModule, 
-    CardModule, 
-    ButtonModule, 
-    InputTextModule,
+    UiButtonComponent,
+    UiCardComponent,
+    UiInputDirective,
     FormsModule
   ],
   template: `
     <div class="p-4">
-      <p-card header="My Profile">
+      <ui-card>
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold">My Profile</h2>
+        </div>
         <div class="grid">
           <div class="col-12 md:col-6">
             <div class="field">
               <label for="name">Full Name</label>
-              <input id="name" type="text" pInputText [(ngModel)]="profile.name" />
+              <input id="name" type="text" uiInput="md" [(ngModel)]="profile.name" />
             </div>
             <div class="field mt-3">
               <label for="email">Email</label>
-              <input id="email" type="email" pInputText [(ngModel)]="profile.email" />
+              <input id="email" type="email" uiInput [(ngModel)]="profile.email" />
             </div>
             <div class="field mt-3">
               <label for="phone">Phone</label>
-              <input id="phone" type="tel" pInputText [(ngModel)]="profile.phone" />
+              <input id="phone" type="tel" uiInput [(ngModel)]="profile.phone" />
             </div>
             <div class="mt-4">
-              <button pButton label="Save Changes" (click)="saveProfile()"></button>
+              <ui-button variant="primary" (click)="saveProfile()">Save Changes</ui-button>
             </div>
           </div>
           <div class="col-12 md:col-6">
             <h4>Change Password</h4>
             <div class="field">
               <label for="currentPassword">Current Password</label>
-              <input id="currentPassword" type="password" pInputText [(ngModel)]="password.current" />
+              <input id="currentPassword" type="password" uiInput [(ngModel)]="password.current" />
             </div>
             <div class="field">
               <label for="newPassword">New Password</label>
-              <input id="newPassword" type="password" pInputText [(ngModel)]="password.new" />
+              <input id="newPassword" type="password" uiInput [(ngModel)]="password.new" />
             </div>
             <div class="field">
               <label for="confirmPassword">Confirm New Password</label>
-              <input id="confirmPassword" type="password" pInputText [(ngModel)]="password.confirm" />
+              <input id="confirmPassword" type="password" uiInput [(ngModel)]="password.confirm" />
             </div>
             <div class="mt-3">
-              <button pButton label="Change Password" (click)="changePassword()"></button>
+              <ui-button variant="primary" (click)="changePassword()">Change Password</ui-button>
             </div>
           </div>
         </div>
-      </p-card>
+      </ui-card>
     </div>
   `,
   styles: [`
@@ -84,35 +89,23 @@ export class ProfileComponent {
     confirm: ''
   };
 
-  constructor(private messageService: MessageService) {}
+  constructor(private toastService: UiToastService) {}
 
   saveProfile() {
     // TODO: Implement profile update logic
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Profile updated successfully!'
-    });
+    this.toastService.success('Profile updated successfully!', 'Success');
   }
 
   changePassword() {
     // TODO: Implement password change logic
     if (this.password.new !== this.password.confirm) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'New passwords do not match!'
-      });
+      this.toastService.error('New passwords do not match!', 'Error');
       return;
     }
     
     // Reset form
     this.password = { current: '', new: '', confirm: '' };
     
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Password changed successfully!'
-    });
+    this.toastService.success('Password changed successfully!', 'Success');
   }
 }

@@ -109,69 +109,6 @@ a {
   @apply w-10 h-10 border-4 border-white/30 dark:border-gray-600/30 border-t-white dark:border-t-gray-400 rounded-full animate-spin;
 }
 
-.p-inputtext {
-  @apply w-[inherit];
-}
-/* Essential PrimeNG Dark Mode Overrides using Tailwind */
-.dark .p-component {
-  @apply text-white;
-}
-
-.dark .p-dialog {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.dark .p-dialog .p-dialog-header {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.dark .p-dialog .p-dialog-content {
-  @apply bg-gray-800;
-}
-
-.dark .p-drawer {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.p-drawer .p-drawer-header {
-  @apply dark:bg-none dark:!bg-gray-800 dark:!border-gray-700;
-}
-
-.dark .p-drawer .p-drawer-content {
-  @apply bg-gray-800;
-}
-
-.dark .p-button {
-  @apply bg-gray-700 text-white border-gray-600 hover:bg-gray-600;
-}
-
-.dark .p-inputtext {
-  @apply bg-gray-800 text-white border-gray-600 focus:border-purple-400 focus:ring-purple-400;
-}
-
-.dark .p-dropdown {
-  @apply bg-gray-800 text-white border-gray-600;
-}
-
-.dark .p-dropdown-panel {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.dark .p-dropdown-item {
-  @apply text-white hover:bg-gray-700;
-}
-
-.dark .p-menu {
-  @apply bg-gray-800 border-gray-700;
-}
-
-.dark .p-menuitem-link {
-  @apply text-white hover:bg-gray-700;
-}
-
-.dark .p-tooltip {
-  @apply bg-gray-800 text-white border-gray-700;
-}
 
 
 

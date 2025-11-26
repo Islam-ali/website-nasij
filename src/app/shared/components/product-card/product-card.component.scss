@@ -1,0 +1,20 @@
+.product-card {
+  position: relative;
+  
+  // Simple hover effect
+  &:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+  }
+  
+  // Accessibility
+  &:focus-visible {
+    outline: 2px solid rgba(139, 92, 246, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+// RTL Support
+[dir="rtl"] .product-card {
+  direction: rtl;
+}
+

@@ -4,27 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 
-// PrimeNG Modules
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { ChipModule } from 'primeng/chip';
-import { SkeletonModule } from 'primeng/skeleton';
-import { MessageService } from 'primeng/api';
-import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
-import { TooltipModule } from 'primeng/tooltip';
-import { CardModule } from 'primeng/card';
-import { RatingModule } from 'primeng/rating';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-
 import { IPackage } from '../../interfaces/package.interface';
 import { PackageService } from './services/package.service';
 import { ComponentBase } from '../../core/directives/component-base.directive';
 import { BaseResponse } from '../../core/models/baseResponse';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiSpinnerComponent, 
+  UiChipComponent,
+  UiCardComponent,
+  UiInputDirective
+} from '../../shared/ui';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../core/directives';
@@ -34,25 +25,15 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-packages',
   standalone: true,
-  providers: [MessageService],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    ButtonModule,
-    RippleModule,
-    RatingModule,
-    ChipModule,
-    SkeletonModule,
-    MessageModule,
-    ToastModule,
-    TooltipModule,
-    ProgressSpinnerModule,
-    CardModule,
-    InputTextModule,
-    DropdownModule,
-    IconFieldModule,
-    InputIconModule,
+    UiButtonComponent,
+    UiSpinnerComponent,
+    UiChipComponent,
+    UiCardComponent,
+    UiInputDirective,
     TranslateModule,
     MultiLanguagePipe,
     FallbackImgDirective,
@@ -91,7 +72,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
 
   constructor(
     private packageService: PackageService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private activatedRoute: ActivatedRoute
   ) {
     super();
@@ -126,11 +107,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
         error: (err) => {
           this.error.set('Failed to load packages. Please try again later.');
           this.loading.set(false);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to load packages'
-          });
+          this.toastService.error('Failed to load packages', 'Error');
         }
       });
   }
@@ -144,11 +121,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
             this.packages.set(packages);
           },
           error: (err) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Search failed'
-            });
+            this.toastService.error('Search failed', 'Error');
           }
         });
     } else {
@@ -167,11 +140,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
             this.packages.set(packages);
           },
           error: (err) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Failed to filter packages'
-            });
+            this.toastService.error('Failed to filter packages', 'Error');
           }
         });
     }
@@ -248,20 +217,12 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
 
   addToCart(pkg: IPackage): void {
     // This will be implemented when we integrate with cart service
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Info',
-      detail: 'Package added to cart'
-    });
+    this.toastService.info('Package added to cart', 'Info');
   }
 
   addToWishlist(pkg: IPackage): void {
     // This will be implemented when we integrate with wishlist service
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Info',
-      detail: 'Package added to wishlist'
-    });
+    this.toastService.info('Package added to wishlist', 'Info');
   }
 
   onImageError(event: Event): void {

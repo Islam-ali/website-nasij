@@ -1,11 +1,81 @@
 @if (items.length > 0) {
-<div>
-    <p-carousel [value]="items" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
-        <ng-template let-product #item>
-            <div>
-                <app-product-card (clicked)="onItemClick.emit(product)" [product]="product"></app-product-card>
-            </div>
-        </ng-template>
-    </p-carousel>
+<div class="relative group w-full" #carouselContainer>
+  <div class="overflow-hidden rounded-lg w-full">
+    <div 
+      class="flex transition-transform duration-500 ease-in-out carousel-inner"
+      [style.direction]="isRTL ? 'rtl' : 'ltr'"
+      style="gap: 1rem;"
+      [style.transform]="isRTL ? ('translateX(calc(' + currentIndex + ' * ((100% + 1rem) / ' + itemsPerPage + ')))') : ('translateX(calc(-' + currentIndex + ' * ((100% + 1rem) / ' + itemsPerPage + ')))')"
+    >
+      @for (product of items; track product._id || product.id || $index) {
+        <div 
+          class="flex-shrink-0 carousel-item"
+          [style.width]="'calc((100% - (' + (itemsPerPage - 1) + ' * 1rem)) / ' + itemsPerPage + ')'"
+        >
+          <app-product-card 
+            (clicked)="onItemClick.emit(product)" 
+            [product]="product"
+            class="h-full w-full"
+          ></app-product-card>
+        </div>
+      }
+    </div>
+  </div>
+  
+  <!-- Navigation Buttons -->
+  @if (showArrows && items.length > itemsPerPage) {
+    <!-- Previous Button: Right side in RTL, Left side in LTR -->
+    <button 
+      type="button"
+      (click)="previous()"
+      class="absolute top-1/2 -translate-y-1/2 z-10 
+             bg-white dark:bg-gray-800 rounded-full p-3 
+             shadow-lg hover:shadow-xl transition-all duration-300
+             opacity-0 group-hover:opacity-100
+             disabled:opacity-50 disabled:cursor-not-allowed
+             hover:bg-gray-50 dark:hover:bg-gray-700"
+      [class.left-0]="!isRTL"
+      [class.right-0]="isRTL"
+      [disabled]="!canGoPrevious"
+      [attr.aria-label]="isRTL ? 'التالي' : 'Previous items'"
+    >
+      <i [class]="isRTL ? 'pi pi-chevron-right text-gray-700 dark:text-gray-300 text-lg' : 'pi pi-chevron-left text-gray-700 dark:text-gray-300 text-lg'"></i>
+    </button>
+    <!-- Next Button: Left side in RTL, Right side in LTR -->
+    <button 
+      type="button"
+      (click)="next()"
+      class="absolute top-1/2 -translate-y-1/2 z-10 
+             bg-white dark:bg-gray-800 rounded-full p-3 
+             shadow-lg hover:shadow-xl transition-all duration-300
+             opacity-0 group-hover:opacity-100
+             disabled:opacity-50 disabled:cursor-not-allowed
+             hover:bg-gray-50 dark:hover:bg-gray-700"
+      [class.right-0]="!isRTL"
+      [class.left-0]="isRTL"
+      [disabled]="!canGoNext"
+      [attr.aria-label]="isRTL ? 'السابق' : 'Next items'"
+    >
+      <i [class]="isRTL ? 'pi pi-chevron-left text-gray-700 dark:text-gray-300 text-lg' : 'pi pi-chevron-right text-gray-700 dark:text-gray-300 text-lg'"></i>
+    </button>
+  }
+
+  <!-- Indicators/Dots -->
+  @if (showIndicators && items.length > itemsPerPage && totalPages > 1) {
+    <div class="flex justify-center gap-2 mt-6">
+      @for (page of pagesArray; track $index) {
+        <button
+          type="button"
+          (click)="goToPage($index)"
+          class="rounded-full transition-all duration-300"
+          [class]="currentPage === $index 
+            ? 'w-8 h-2 bg-primary-600 dark:bg-primary-500' 
+            : 'w-2 h-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'"
+          [attr.aria-label]="'Go to page ' + ($index + 1)"
+          [attr.aria-current]="currentPage === $index ? 'true' : 'false'"
+        ></button>
+      }
+    </div>
+  }
 </div>
 }

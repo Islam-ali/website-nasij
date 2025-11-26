@@ -4,7 +4,6 @@ import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { ICartItem, ICartState, ICartSummary, IAddToCartRequest } from '../models/cart.interface';
-import { MessageService } from 'primeng/api';
 import { MultilingualText } from '../../../core/models/multi-language';
 import { ICountry, IState } from '../../../core/models/location.interface';
 import { ProductVariantAttribute } from '../../products/models/product.interface';
@@ -22,7 +21,6 @@ export class CartService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
   ) {
     // Load cart from storage on service initialization
     this.loadCartFromStorage();

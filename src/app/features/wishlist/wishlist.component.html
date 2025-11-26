@@ -9,7 +9,7 @@
   <div class="wishlist-content">
     <!-- Loading State -->
     <div *ngIf="loading" class="loading-overlay">
-      <p-progressSpinner></p-progressSpinner>
+      <ui-spinner></ui-spinner>
     </div>
 
     <!-- Wishlist Content -->
@@ -20,21 +20,24 @@
           <i class="pi pi-heart" style="font-size: 4rem; color: var(--primary-color)"></i>
           <h2>Your wishlist is empty</h2>
           <p>You haven't added any items to your wishlist yet.</p>
-          <button pButton label="Browse Products" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined"
-            (click)="continueShopping()">
-          </button>
+          <ui-button variant="outline" size="lg" (click)="continueShopping()">
+            <i class="pi pi-arrow-right ml-2"></i>
+            Browse Products
+          </ui-button>
         </div>
 
         <!-- Wishlist Items -->
         <ng-template #wishlistItem>
           <div>
             <div class="wishlist-actions mb-4">
-              <button pButton label="Continue Shopping" icon="pi pi-arrow-left" class="p-button-text"
-                (click)="continueShopping()">
-              </button>
-              <button pButton label="Clear Wishlist" icon="pi pi-trash" class="p-button-text p-button-danger"
-                (click)="clearWishlist()" [disabled]="loading">
-              </button>
+              <ui-button variant="ghost" size="md" (click)="continueShopping()">
+                <i class="pi pi-arrow-left mr-2"></i>
+                Continue Shopping
+              </ui-button>
+              <ui-button variant="destructive" size="md" (click)="clearWishlist()" [disabled]="loading">
+                <i class="pi pi-trash mr-2"></i>
+                Clear Wishlist
+              </ui-button>
             </div>
 
             <div class="wishlist-items">
@@ -89,24 +92,27 @@
                 </div>
 
                 <div class="item-actions">
-                  <button pButton label="Add to Cart" icon="pi pi-shopping-cart" class="p-button-outlined"
-                    (click)="$event.stopPropagation(); moveToCart(item)" [disabled]="!item?.product?.stock || loading">
-                  </button>
-                  <button pButton icon="pi pi-trash" class="p-button-text p-button-danger"
-                    (click)="$event.stopPropagation(); removeFromWishlist(item)" [disabled]="loading">
-                  </button>
+                  <ui-button variant="outline" size="md" (click)="$event.stopPropagation(); moveToCart(item)" [disabled]="!item?.product?.stock || loading">
+                    <i class="pi pi-shopping-cart mr-2"></i>
+                    Add to Cart
+                  </ui-button>
+                  <ui-button variant="destructive" size="md" [iconOnly]="true" (click)="$event.stopPropagation(); removeFromWishlist(item)" [disabled]="loading">
+                    <i class="pi pi-trash"></i>
+                  </ui-button>
                 </div>
               </div>
             </div>
 
             <div class="wishlist-footer mt-5">
-              <button pButton pRipple label="Continue Shopping" icon="pi pi-arrow-left" class="p-button-text"
-                (click)="continueShopping()">
-              </button>
+              <ui-button variant="ghost" size="md" (click)="continueShopping()">
+                <i class="pi pi-arrow-left mr-2"></i>
+                Continue Shopping
+              </ui-button>
 
-              <button pButton pRipple label="View Cart" icon="pi pi-shopping-cart" iconPos="right"
-                class="view-cart-button" [disabled]="loading" routerLink="/cart">
-              </button>
+              <ui-button variant="primary" size="md" [disabled]="loading" routerLink="/cart">
+                View Cart
+                <i class="pi pi-shopping-cart ml-2"></i>
+              </ui-button>
             </div>
           </div>
         </ng-template>

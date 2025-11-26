@@ -3,11 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { TopbarComponent } from './topbar/topbar.component';
 import { FooterComponent } from './footer/footer.component';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { LoadingService } from '../core/services/loading.service';
+import { UiToastContainerComponent, UiSpinnerComponent } from '../shared/ui';
 
 @Component({
   selector: 'app-layout',
@@ -17,25 +15,19 @@ import { LoadingService } from '../core/services/loading.service';
     RouterOutlet,
     TopbarComponent,
     FooterComponent,
-    ToastModule,
-    ProgressSpinnerModule
+    UiToastContainerComponent,
+    UiSpinnerComponent
   ],
-  providers: [MessageService],
   template: `
     <app-topbar></app-topbar>
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>
     <app-footer></app-footer>
-    <p-toast position="top-right"></p-toast>
+    <ui-toast-container position="top-right"></ui-toast-container>
     
     <div *ngIf="loading$ | async" class="loading-overlay">
-      <p-progressSpinner 
-        styleClass="w-2rem h-2rem" 
-        strokeWidth="4" 
-        fill="var(--surface-ground)" 
-        animationDuration=".5s">
-      </p-progressSpinner>
+      <ui-spinner size="lg"></ui-spinner>
     </div>
   `,
   styles: [`
@@ -77,7 +69,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     // private layoutService: LayoutService,
     private router: Router,
-    private messageService: MessageService
   ) {
     this.loading$ = this.loadingService.loading$;
     

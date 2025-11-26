@@ -5,15 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
 import { catchError, delay, finalize, map, take, takeUntil, tap } from 'rxjs/operators';
 
-// PrimeNG Modules
-import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
-import { MessagesModule } from 'primeng/messages';
-import { MessageService } from 'primeng/api';
+import { UiToastService, UiButtonComponent, UiSpinnerComponent, UiInputDirective } from '../../shared/ui';
 
 // Services
 import { CartService } from './services/cart.service';
@@ -34,13 +26,6 @@ import { FallbackImgDirective } from '../../core/directives';
     CommonModule,
     RouterModule,
     FormsModule,
-    ButtonModule,
-    InputNumberModule,
-    InputTextModule,
-    ProgressSpinnerModule,
-    ToastModule,
-    MessageModule,
-    MessagesModule,
     MultiLanguagePipe,
     CurrencyPipe,
     TranslateModule,
@@ -48,7 +33,6 @@ import { FallbackImgDirective } from '../../core/directives';
   ],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  providers: [MessageService]
 })
 export class CartComponent implements OnInit, OnDestroy {
   // Component state
@@ -109,7 +93,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   constructor(
     private cartService: CartService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private router: Router,
     private route: ActivatedRoute,
     private packageUrlService: PackageUrlService,
@@ -171,11 +155,7 @@ export class CartComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Error handling encoded data:', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to process item data from URL'
-      });
+      this.toastService.error('Failed to process item data from URL', 'Error');
     }
   }
 
@@ -194,19 +174,11 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.cartService.addPackageToCart(packageItem).subscribe({
       next: (cartState) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Package added to cart successfully'
-        });
+        this.toastService.success('Package added to cart successfully', 'Success');
       },
       error: (error) => {
         console.error('Error adding package to cart:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to add package to cart'
-        });
+        this.toastService.error('Failed to add package to cart', 'Error');
       }
     });
   }
@@ -225,19 +197,11 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.cartService.addToCart(productItem).subscribe({
       next: (cartState) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Product added to cart successfully'
-        });
+        this.toastService.success('Product added to cart successfully', 'Success');
       },
       error: (error) => {
         console.error('Error adding product to cart:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to add product to cart'
-        });
+        this.toastService.error('Failed to add product to cart', 'Error');
       }
     });
   }
@@ -268,12 +232,7 @@ export class CartComponent implements OnInit, OnDestroy {
     ),
       catchError((error: any) => {
         console.error('Error loading cart:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load cart. Please try again.',
-          life: 1000,
-        });
+        this.toastService.error('Failed to load cart. Please try again.', 'Error');
         this.loading = false;
         return of(null);
       })
@@ -287,12 +246,7 @@ export class CartComponent implements OnInit, OnDestroy {
     // In a real app, you would validate the cart and then navigate to checkout
     this.router.navigate(['/checkout']).catch(error => {
       console.error('Navigation error:', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to proceed to checkout. Please try again.',
-        life: 1000,
-      });
+      this.toastService.error('Failed to proceed to checkout. Please try again.', 'Error');
     }).finally(() => {
       this.loading = false;
     });
@@ -311,21 +265,11 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.updateShippingLocation(event.country, event.state!).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Updated',
-            detail: 'Shipping cost updated',
-            life: 1000,
-          });
+          this.toastService.success('Shipping cost updated', 'Updated');
         }),
         catchError((error: any) => {
           console.error('Error updating shipping location:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update shipping cost',
-            life: 1000,
-          });
+          this.toastService.error('Failed to update shipping cost', 'Error');
           return of(null);
         })
       ).subscribe();
@@ -344,21 +288,11 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.updateQuantity(undefined, newQuantity, item.packageId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Updated',
-            detail: 'Package quantity updated successfully',
-            life: 1000,
-          });
+          this.toastService.success('Package quantity updated successfully', 'Updated');
         }),
         catchError((error: any) => {
           console.error('Error updating package quantity:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update package quantity. Please try again.',
-            life: 1000,
-          });
+          this.toastService.error('Failed to update package quantity. Please try again.', 'Error');
           return of(null);
         }),
         finalize(() => {
@@ -370,21 +304,11 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.updateQuantity(item.productId, newQuantity, item.packageId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Updated',
-            detail: 'Product quantity updated successfully',
-            life: 1000,
-          });
+          this.toastService.success('Product quantity updated successfully', 'Updated');
         }),
         catchError((error: any) => {
           console.error('Error updating product quantity:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update product quantity. Please try again.',
-            life: 1000,
-          });
+          this.toastService.error('Failed to update product quantity. Please try again.', 'Error');
           return of(null);
         }),
         finalize(() => {
@@ -423,21 +347,11 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.removeItem(item.productId, item.selectedVariants, item.packageId).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Removed',
-            detail: 'Package removed from cart',
-            life: 1000,
-          });
+          this.toastService.success('Package removed from cart', 'Removed');
         }),
         catchError((error: any) => {
           console.error('Error removing package:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to remove package. Please try again.',
-            life: 1000,
-          });
+          this.toastService.error('Failed to remove package. Please try again.', 'Error');
           return of(null);
         }),
         finalize(() => {
@@ -450,21 +364,11 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.removeItem(item.productId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Removed',
-            detail: 'Product removed from cart',
-            life: 1000,
-          });
+          this.toastService.success('Product removed from cart', 'Removed');
         }),
         catchError((error: any) => {
           console.error('Error removing product:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to remove product. Please try again.',
-            life: 1000,
-          });
+          this.toastService.error('Failed to remove product. Please try again.', 'Error');
           return of(null);
         }),
         finalize(() => {
@@ -478,21 +382,11 @@ export class CartComponent implements OnInit, OnDestroy {
         this.cartService.removeItemByIndex(index).pipe(
           takeUntil(this.destroy$),
           tap(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Removed',
-              detail: 'Item removed from cart',
-              life: 1000,
-            });
+            this.toastService.success('Item removed from cart', 'Removed');
           }),
           catchError((error: any) => {
             console.error('Error removing item by index:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Failed to remove item. Please try again.',
-              life: 1000,
-            });
+            this.toastService.error('Failed to remove item. Please try again.', 'Error');
             return of(null);
           }),
           finalize(() => {
@@ -513,21 +407,11 @@ export class CartComponent implements OnInit, OnDestroy {
             this.cartService.removeItemByIndex(itemIndex).pipe(
               takeUntil(this.destroy$),
               tap(() => {
-                this.messageService.add({
-                  severity: 'success',
-                  summary: 'Removed',
-                  detail: 'Item removed from cart',
-                  life: 1000,
-                });
+                this.toastService.success('Item removed from cart', 'Removed');
               }),
               catchError((error: any) => {
                 console.error('Error removing item by index:', error);
-                this.messageService.add({
-                  severity: 'error',
-                  summary: 'Error',
-                  detail: 'Failed to remove item. Please try again.',
-                  life: 1000,
-                });
+                this.toastService.error('Failed to remove item. Please try again.', 'Error');
                 return of(null);
               }),
               finalize(() => {
@@ -548,12 +432,7 @@ export class CartComponent implements OnInit, OnDestroy {
   clearCart(): void {
     this.cartItems$.pipe(take(1)).subscribe(items => {
       if (items.length === 0) {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Info',
-          detail: 'Your cart is already empty',
-          life: 1000,
-        });
+        this.toastService.info('Your cart is already empty', 'Info');
         return;
       }
 
@@ -565,21 +444,11 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.clearCart().pipe(
         takeUntil(this.destroy$),
         tap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Cleared',
-            detail: 'Your cart has been cleared',
-            life: 1000
-          });
+          this.toastService.success('Your cart has been cleared', 'Cleared');
         }),
         catchError((error: any) => {
           console.error('Error clearing cart:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to clear cart. Please try again.',
-            life: 1000
-          });
+          this.toastService.error('Failed to clear cart. Please try again.', 'Error');
           return of(null);
         }),
         finalize(() => {
@@ -599,29 +468,14 @@ export class CartComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
       tap((isValid) => {
         if (isValid) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Voucher Applied',
-            detail: 'Your voucher has been applied successfully!',
-            life: 1000,
-          });
+          this.toastService.success('Your voucher has been applied successfully!', 'Voucher Applied');
         } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Invalid Voucher',
-            detail: 'The voucher code you entered is invalid or has expired.',
-            life: 1000,
-          });
+          this.toastService.error('The voucher code you entered is invalid or has expired.', 'Invalid Voucher');
         }
       }),
       catchError((error: any) => {
         console.error('Error applying voucher:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to apply voucher. Please try again.',
-          life: 1000,
-        });
+        this.toastService.error('Failed to apply voucher. Please try again.', 'Error');
         return of(false);
       }),
       finalize(() => {

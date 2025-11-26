@@ -1,19 +1,10 @@
 import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-
-// PrimeNG Modules
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { RippleModule } from 'primeng/ripple';
-import { RatingModule } from 'primeng/rating';
-import { MessageModule } from 'primeng/message';
 
 // Services
 import { environment } from '../../../../environments/environment';
 import { WishlistService } from '../../../features/wishlist/services/wishlist.service';
-import { MessageService } from 'primeng/api';
 import { IAddToWishlistRequest } from '../../../features/wishlist/models/wishlist.interface';
 import { EnumProductVariant, ProductVariant, ProductVariantAttribute } from '../../../features/products/models/product.interface';
 import { TranslationService } from '../../../core/services/translate.service';
@@ -23,6 +14,7 @@ import { ProductService } from '../../../features/products/services/product.serv
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 import { ProductStatus } from '../../../interfaces/product.interface';
 import { TranslateModule } from '@ngx-translate/core';
+import { UiToastService } from '../../ui';
 import { MultilingualText } from '../../../core/models/multi-language';
   @Component({
   selector: 'app-product-card',
@@ -30,12 +22,6 @@ import { MultilingualText } from '../../../core/models/multi-language';
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule,
-    ButtonModule,
-    TooltipModule,
-    RippleModule,
-    RatingModule,
-    MessageModule,
     MultiLanguagePipe,
     CurrencyPipe,
     FallbackImgDirective,
@@ -46,6 +32,7 @@ import { MultilingualText } from '../../../core/models/multi-language';
     TranslationService
   ],
   templateUrl: './product-card.component.html',
+  styleUrl: './product-card.component.scss'
 })
 export class ProductCardComponent implements OnInit, OnChanges {
   @Input() product!: any;
@@ -150,7 +137,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   constructor(
     private router: Router,
     private wishlistService: WishlistService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private translationService: TranslationService,
     public productService: ProductService
   ) {}
@@ -269,11 +256,11 @@ export class ProductCardComponent implements OnInit, OnChanges {
     this.wishlistService.addToWishlist(wishlistItem).subscribe({
       next: () => {
         this.loading = false;
-        this.messageService.add({ severity: 'success', summary: 'Added to Wishlist', detail: `${product.name} added to wishlist.` });
+        this.toastService.success(`${product.name} added to wishlist.`, 'Added to Wishlist');
       },
       error: (error) => {
         this.loading = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+        this.toastService.error(error.message || 'Unable to add to wishlist.', 'Error');
       }
     });
   }

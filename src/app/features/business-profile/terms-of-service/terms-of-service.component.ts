@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCardComponent, 
+  UiSpinnerComponent
+} from '../../../shared/ui';
 
 import { BusinessProfileService } from '../../../services/business-profile.service';
 import { Nl2brPipe } from '../../../core/pipes/nl2br.pipe';
@@ -19,15 +20,13 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [
     CommonModule,
-    ToastModule,
-    ButtonModule,
-    CardModule,
-    ProgressSpinnerModule,
+    UiButtonComponent,
+    UiCardComponent,
+    UiSpinnerComponent,
     SafePipe,
     MultiLanguagePipe,
     TranslateModule
   ],
-  providers: [MessageService],
   templateUrl: './terms-of-service.component.html',
   styleUrls: ['./terms-of-service.component.scss']
 })
@@ -37,7 +36,7 @@ export class TermsOfServiceComponent implements OnInit {
 
   constructor(
     private businessProfileService: BusinessProfileService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private router: Router
   ) {}
 
@@ -53,11 +52,7 @@ export class TermsOfServiceComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading business profile:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load terms of service'
-        });
+        this.toastService.error('Failed to load terms of service', 'Error');
         this.loading = false;
       }
     });

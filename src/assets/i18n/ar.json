@@ -310,6 +310,14 @@
     "filters": "البحث",
     "sort_by_label": "ترتيب حسب",
     "choose_sorting": "اختر خيار الترتيب",
+    "sort_options": {
+      "featured": "مميز",
+      "newest_first": "الأحدث أولاً",
+      "price_low_to_high": "السعر: من الأقل للأعلى",
+      "price_high_to_low": "السعر: من الأعلى للأقل",
+      "highest_rated": "الأعلى تقييماً",
+      "name_a_to_z": "الاسم: من أ إلى ي"
+    },
     "select_categories": "اختر الفئات...",
     "select_brands": "اختر العلامات التجارية...",
     "no_categories_available": "لا توجد فئات متاحة",

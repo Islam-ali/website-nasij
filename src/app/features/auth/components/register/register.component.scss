@@ -17,18 +17,8 @@ label {
   font-weight: 500;
 }
 
-input, p-password, .p-password {
+input {
   width: 100%;
-}
-
-.p-password {
-  display: block;
-  width: 100%;
-}
-
-.p-button {
-  padding: 0.75rem;
-  font-size: 1rem;
 }
 
 a {
@@ -61,9 +51,6 @@ a {
     font-weight: normal;
   }
   
-  .p-checkbox {
-    margin-right: 0.5rem;
-  }
 }
 
 .grid {
@@ -79,7 +66,4 @@ a {
     padding: 1rem;
   }
   
-  .p-card {
-    width: 100% !important;
-  }
 }

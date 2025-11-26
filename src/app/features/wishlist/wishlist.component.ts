@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Observable, Subject, Subscription, of, forkJoin } from 'rxjs';
 import { map, switchMap, takeUntil, catchError } from 'rxjs/operators';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { MessageService } from 'primeng/api';
-import { TooltipModule } from 'primeng/tooltip';
-import { RippleModule } from 'primeng/ripple';
-import { DividerModule } from 'primeng/divider';
+import { 
+  UiToastService, 
+  UiButtonComponent, 
+  UiCardComponent, 
+  UiSpinnerComponent,
+  UiDividerComponent
+} from '../../shared/ui';
 import { CartService } from '../cart/services/cart.service';
 import { IWishlistState, IWishlistItem } from './models/wishlist.interface';
 import { ProductService } from '../products/services/product.service';
@@ -25,12 +25,10 @@ import { CurrencyPipe } from '../../core/pipes/currency.pipe';
   imports: [
     CommonModule,
     RouterModule,
-    ButtonModule,
-    CardModule,
-    ProgressSpinnerModule,
-    TooltipModule,
-    RippleModule,
-    DividerModule,
+    UiButtonComponent,
+    UiCardComponent,
+    UiSpinnerComponent,
+    UiDividerComponent,
     CurrencyPipe
 ],
   templateUrl: './wishlist.component.html',
@@ -47,7 +45,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   constructor(
     private wishlistService: WishlistService,
     private cartService: CartService,
-    private messageService: MessageService,
+    private toastService: UiToastService,
     private router: Router,
     private productService: ProductService
   ) {
@@ -66,20 +64,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.wishlistService.removeFromWishlist(item.productId).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Item removed from wishlist.'
-        });
+        this.toastService.success('Item removed from wishlist.', 'Success');
         this.loading = false;
       },
       error: (error) => {
         console.error('Error removing from wishlist:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to remove item from wishlist. Please try again.'
-        });
+        this.toastService.error('Failed to remove item from wishlist. Please try again.', 'Error');
         this.loading = false;
       }
     });
@@ -88,11 +78,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   // Move item to cart
   moveToCart(item: IWishlistItem): void {
     if (!item.product || !item.selectedVariants) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'must select variants'
-      });
+      this.toastService.error('must select variants', 'Error');
       return;
     }
 
@@ -114,11 +100,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.wishlistService.removeFromWishlist(item.productId).subscribe({
           next: () => {
             this.loading = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Moved to Cart',
-              detail: 'Item has been moved to your cart.'
-            });
+            this.toastService.success('Item has been moved to your cart.', 'Moved to Cart');
           },
           error: (error) => {
             console.error('Error removing from wishlist:', error);
@@ -128,11 +110,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error adding to cart:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to add item to cart. Please try again.'
-        });
+        this.toastService.error('Failed to add item to cart. Please try again.', 'Error');
         this.loading = false;
       }
     });
@@ -204,19 +182,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: () => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Wishlist has been cleared.'
-        });
+        this.toastService.success('Wishlist has been cleared.', 'Success');
       },
       error: (error) => {
         console.error('Error clearing wishlist:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to clear wishlist. Please try again.'
-        });
+        this.toastService.error('Failed to clear wishlist. Please try again.', 'Error');
         this.loading = false;
       }
     });
