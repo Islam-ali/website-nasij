@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { 
-  UiToastService, 
-  UiButtonComponent, 
-  UiCardComponent, 
-  UiSpinnerComponent
+  UiToastService,
 } from '../../../shared/ui';
 
 import { BusinessProfileService } from '../../../services/business-profile.service';
@@ -19,9 +16,6 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [
     CommonModule,
-    UiButtonComponent,
-    UiCardComponent,
-    UiSpinnerComponent,
     SafePipe,
     MultiLanguagePipe,
     TranslateModule

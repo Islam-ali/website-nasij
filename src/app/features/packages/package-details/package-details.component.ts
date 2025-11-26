@@ -6,12 +6,7 @@ import { takeUntil, switchMap } from 'rxjs/operators';
 
 import { 
   UiToastService, 
-  UiButtonComponent, 
-  UiSpinnerComponent, 
-  UiChipComponent,
-  UiCardComponent,
-  UiInputDirective,
-  UiDividerComponent
+  UiButtonComponent,
 } from '../../../shared/ui';
 
 import { IPackage } from '../../../interfaces/package.interface';
@@ -43,11 +38,6 @@ interface PackageImage {
     RouterModule,
     FormsModule,
     UiButtonComponent,
-    UiSpinnerComponent,
-    UiChipComponent,
-    UiCardComponent,
-    UiInputDirective,
-    UiDividerComponent,
     TranslateModule,
     MultiLanguagePipe,
     FallbackImgDirective,
