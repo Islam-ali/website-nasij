@@ -6,7 +6,6 @@ import { takeUntil, Subject } from 'rxjs';
 import { ICartItem } from '../cart/models/cart.interface';
 import { CartService } from '../cart/services/cart.service';
 import { CheckoutService } from './services/checkout.service';
-import { ICheckout } from './models/checkout';
 import { AuthService } from '../auth/services/auth.service';
 import { PackageUrlService } from '../packages/services/package-url.service';
 import { ProductUrlService } from '../products/services/product-url.service';
@@ -14,11 +13,10 @@ import { environment } from '../../../environments/environment';
 import { 
   UiToastService, 
   UiButtonComponent,
-  UiInputDirective
 } from '../../shared/ui';
-import { PaymentMethod, PaymentStatus, OrderItemType } from './models/order.enum';
-import { ICreateOrder, IOrderItem, IShippingAddress } from './models/checkout';
-import { IArchived, OrderStatus } from '../../interfaces/product.interface';
+import { PaymentMethod, PaymentStatus } from './models/order.enum';
+import { ICreateOrder, IOrderItem } from './models/checkout';
+import { OrderStatus } from '../../interfaces/product.interface';
 import { ICountry } from '../../core/models/location.interface';
 import { IState } from '../../core/models/location.interface';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
@@ -37,7 +35,6 @@ import { secureDecodeUrl } from '../../core/utils/secure-query';
     FormsModule,
     RouterModule,
     UiButtonComponent,
-    UiInputDirective,
     MultiLanguagePipe,
     CurrencyPipe,
     TranslateModule,

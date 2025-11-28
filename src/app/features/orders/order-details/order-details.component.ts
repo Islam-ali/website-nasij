@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { UiButtonComponent, UiCardComponent, UiChipComponent, UiSpinnerComponent } from '../../../shared/ui';
+import { UiButtonComponent, UiCardComponent, UiSpinnerComponent } from '../../../shared/ui';
 import { OrderStatus } from '../../../interfaces/product.interface';
 
 interface OrderItem {
@@ -40,7 +40,6 @@ interface Order {
     RouterModule,
     UiButtonComponent,
     UiCardComponent,
-    UiChipComponent,
     UiSpinnerComponent
   ],
   template: `

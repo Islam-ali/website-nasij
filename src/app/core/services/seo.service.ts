@@ -15,6 +15,13 @@ interface SeoOptions {
   ogImage?: string;
   ogType?: string;
   hreflangs?: HreflangConfig[];
+  locale?: string; // 'en_US' or 'ar_EG'
+  alternateLocale?: string; // Alternate language locale
+  siteName?: string;
+  twitterSite?: string;
+  twitterCreator?: string;
+  facebookAppId?: string;
+  facebookPages?: string;
 }
 
 @Injectable({
@@ -31,38 +38,109 @@ export class SeoService {
   updateSeo(options: SeoOptions): void {
     if (!options) return;
   
-    const { title, description, keywords, canonicalUrl, ogImage, ogType, hreflangs } = options;
+    const { 
+      title, 
+      description, 
+      keywords, 
+      canonicalUrl, 
+      ogImage, 
+      ogType, 
+      hreflangs,
+      locale = 'en_US',
+      alternateLocale = 'ar_EG',
+      siteName = 'Pledge Stores',
+      twitterSite = '@pledge',
+      twitterCreator = '@pledge',
+      facebookAppId = '1234567890',
+      facebookPages = '1234567890'
+    } = options;
   
     if (isPlatformBrowser(this.platformId)) {
+      const imageUrl = ogImage || this.getDefaultOgImage();
+      const url = canonicalUrl || this.getCurrentUrl();
+      
+      // Basic SEO Meta Tags
       this.title.setTitle(title);
       this.meta.updateTag({ name: 'description', content: description });
-      this.meta.updateTag({ name: 'keywords', content: keywords || '' });
-      this.meta.updateTag({ name: 'robots', content: 'index, follow' });
-  
-      // Google Open Graph
+      if (keywords) {
+        this.meta.updateTag({ name: 'keywords', content: keywords });
+      }
+      this.meta.updateTag({ name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' });
+      this.meta.updateTag({ name: 'language', content: locale === 'en_US' ? 'English, Arabic' : 'Arabic, English' });
+      
+      // Open Graph / Facebook Meta Tags
       this.meta.updateTag({ property: 'og:title', content: title });
       this.meta.updateTag({ property: 'og:description', content: description });
       this.meta.updateTag({ property: 'og:type', content: ogType || 'website' });
-      this.meta.updateTag({ property: 'og:image', content: ogImage || this.getDefaultOgImage() });
-      this.meta.updateTag({ property: 'og:url', content: canonicalUrl || this.getCurrentUrl() });
-  
-      // Social platforms loop
-      this.meta.updateTag({ name: `twitter:title`, content: title });
-      this.meta.updateTag({ name: `twitter:description`, content: description });
-      this.meta.updateTag({ name: `twitter:image`, content: ogImage || this.getDefaultOgImage() });
-      this.meta.updateTag({ name: `twitter:url`, content: canonicalUrl || this.getCurrentUrl() });
-      this.meta.updateTag({ name: `twitter:site`, content: 'https://pledgestores.com' });
+      this.meta.updateTag({ property: 'og:image', content: imageUrl });
+      this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+      this.meta.updateTag({ property: 'og:image:height', content: '630' });
+      this.meta.updateTag({ property: 'og:image:alt', content: title });
+      this.meta.updateTag({ property: 'og:image:type', content: 'image/png' });
+      this.meta.updateTag({ property: 'og:image:secure_url', content: imageUrl });
+      this.meta.updateTag({ property: 'og:url', content: url });
+      this.meta.updateTag({ property: 'og:site_name', content: siteName });
+      this.meta.updateTag({ property: 'og:locale', content: locale });
+      if (alternateLocale) {
+        this.meta.updateTag({ property: 'og:locale:alternate', content: alternateLocale });
+      }
       
-
-      this.meta.updateTag({ name: `pinterest:title`, content: title });
-      this.meta.updateTag({ name: `pinterest:description`, content: description });
-      this.meta.updateTag({ name: `pinterest:image`, content: ogImage || this.getDefaultOgImage() });
-      this.meta.updateTag({ name: `pinterest:url`, content: canonicalUrl || this.getCurrentUrl() });
-      this.meta.updateTag({ name: `pinterest:site`, content: 'https://pledgestores.com' });
-
-      this.setCanonical(canonicalUrl || this.getCurrentUrl());
-      this.setHreflang(hreflangs);
+      // Facebook Specific Meta Tags
+      this.meta.updateTag({ property: 'fb:app_id', content: facebookAppId });
+      this.meta.updateTag({ property: 'fb:pages', content: facebookPages });
+      
+      // WhatsApp Meta Tags (uses Open Graph, but we ensure proper formatting)
+      // WhatsApp reads og:image, og:title, og:description, og:url
+      // Already set above, but we ensure image is properly formatted
+      
+      // Twitter Card Meta Tags
+      this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+      this.meta.updateTag({ name: 'twitter:title', content: title });
+      this.meta.updateTag({ name: 'twitter:description', content: description });
+      this.meta.updateTag({ name: 'twitter:image', content: imageUrl });
+      this.meta.updateTag({ name: 'twitter:image:alt', content: title });
+      this.meta.updateTag({ name: 'twitter:url', content: url });
+      this.meta.updateTag({ name: 'twitter:site', content: twitterSite });
+      this.meta.updateTag({ name: 'twitter:creator', content: twitterCreator });
+      
+      // LinkedIn Meta Tags
+      this.meta.updateTag({ property: 'linkedin:title', content: title });
+      this.meta.updateTag({ property: 'linkedin:description', content: description });
+      this.meta.updateTag({ property: 'linkedin:image', content: imageUrl });
+      this.meta.updateTag({ property: 'linkedin:url', content: url });
+      
+      // Pinterest Meta Tags
+      this.meta.updateTag({ property: 'pinterest:title', content: title });
+      this.meta.updateTag({ property: 'pinterest:description', content: description });
+      this.meta.updateTag({ property: 'pinterest:image', content: imageUrl });
+      this.meta.updateTag({ property: 'pinterest:url', content: url });
+      
+      // Update HTML lang and dir attributes
+      this.updateHtmlAttributes(locale);
+      
+      // Canonical URL and Hreflang
+      this.setCanonical(url);
+      this.setHreflang(hreflangs || this.getDefaultHreflangs());
     }
+  }
+  
+  private updateHtmlAttributes(locale: string): void {
+    if (!this.doc) return;
+    
+    const htmlElement = this.doc.documentElement;
+    const isArabic = locale.startsWith('ar');
+    
+    htmlElement.setAttribute('lang', isArabic ? 'ar' : 'en');
+    htmlElement.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
+  }
+  
+  private getDefaultHreflangs(): HreflangConfig[] {
+    const baseUrl = 'https://pledgestores.com';
+    return [
+      { lang: 'en', url: `${baseUrl}/en` },
+      { lang: 'ar', url: `${baseUrl}/ar` },
+      { lang: 'x-default', url: baseUrl }
+    ];
   }
   
   

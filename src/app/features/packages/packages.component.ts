@@ -11,10 +11,8 @@ import { BaseResponse } from '../../core/models/baseResponse';
 import { 
   UiToastService, 
   UiButtonComponent, 
-  UiSpinnerComponent, 
   UiChipComponent,
   UiCardComponent,
-  UiInputDirective
 } from '../../shared/ui';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
@@ -30,10 +28,8 @@ import { environment } from '../../../environments/environment';
     RouterModule,
     FormsModule,
     UiButtonComponent,
-    UiSpinnerComponent,
     UiChipComponent,
     UiCardComponent,
-    UiInputDirective,
     TranslateModule,
     MultiLanguagePipe,
     FallbackImgDirective,
