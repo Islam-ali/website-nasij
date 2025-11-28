@@ -224,7 +224,7 @@ export class SeoService {
   }
 
   private getDefaultOgImage(): string {
-    return 'https://pledgestores.com/assets/images/logo.png';
+    return 'https://pledgestores.com/images/logo.png';
   }
 }
 
