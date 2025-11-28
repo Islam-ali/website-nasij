@@ -46,6 +46,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   dragOffset = 0;
   private dragThreshold = 50; // Minimum drag distance to trigger slide
   private isHovered = false; // Track hover state for autoplay pause
+  private hasActualDrag = false; // Track if user actually dragged (not just clicked)
+  private dragStartTarget: HTMLElement | null = null; // Store the element that was clicked
   
   @ViewChild('carouselInner', { static: false }) carouselInner?: ElementRef<HTMLDivElement>;
   @ViewChild('carouselContainer', { static: false }) carouselContainer?: ElementRef<HTMLDivElement>;
@@ -382,7 +384,23 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   onDragStart(event: MouseEvent | TouchEvent): void {
     if (!isPlatformBrowser(this.platformId)) return;
     
+    // Check if the click is on a product card or its children (which should be clickable)
+    const clickedElement = event.target as HTMLElement;
+    const productCard = clickedElement.closest('app-product-card') as HTMLElement | null;
+    const isClickableElement = productCard || 
+                               (clickedElement.closest('a') as HTMLElement | null) || 
+                               (clickedElement.closest('button') as HTMLElement | null) ||
+                               (clickedElement.closest('[role="button"]') as HTMLElement | null);
+    
+    // If clicking on a clickable element, don't start drag - let the click event pass through
+    if (isClickableElement) {
+      // Store reference for potential click handling
+      this.dragStartTarget = productCard || clickedElement;
+      return;
+    }
+    
     this.isDragging = true;
+    this.hasActualDrag = false;
     this.startX = this.getEventX(event);
     this.currentX = this.startX;
     this.dragOffset = 0;
@@ -401,9 +419,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       document.addEventListener('touchend', this.onDocumentTouchEnd);
     }
     
-    // Prevent default to avoid text selection
-    event.preventDefault();
-    event.stopPropagation();
+    // Don't prevent default here - only prevent if user actually drags
+    // This allows click events to pass through if user just clicks without dragging
   }
 
   private onDocumentMouseMove = (event: MouseEvent) => {
@@ -441,9 +458,14 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     this.currentX = newX;
     this.dragOffset = this.currentX - this.startX;
     
-    // Prevent default scrolling
-    event.preventDefault();
-    event.stopPropagation();
+    // Only prevent default if user has actually dragged (moved more than 5px)
+    // This allows click events to pass through if user just clicks without dragging
+    if (Math.abs(this.dragOffset) > 5) {
+      this.hasActualDrag = true;
+      // Prevent default scrolling only when actually dragging
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 
   onDragEnd(): void {
@@ -452,6 +474,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     const itemWidth = this.calculateItemWidth();
     const threshold = itemWidth * 0.3; // 30% of item width
     const hadSignificantDrag = Math.abs(this.dragOffset) > threshold;
+    const hadDrag = this.hasActualDrag;
     
     // Determine if we should move to next/previous slide
     if (hadSignificantDrag) {
@@ -558,12 +581,22 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isDragging = false;
           this.startX = 0;
           this.currentX = 0;
+          this.hasActualDrag = false;
+          this.dragStartTarget = null;
         }
       };
       
       requestAnimationFrame(animate);
       return; // Exit early, state will be reset in animation
     }
+    
+    // Reset drag state
+    this.dragOffset = 0;
+    this.isDragging = false;
+    this.startX = 0;
+    this.currentX = 0;
+    this.hasActualDrag = false;
+    this.dragStartTarget = null;
     
     // Resume autoplay if enabled
     if (this.autoPlay) {
