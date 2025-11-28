@@ -17,22 +17,22 @@
     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
     
     <!-- Sale Badge -->
-    @if (isOnSale) {
-    <div class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg">
+    @if (isOnSale ) {
+    <div class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 ">
       <i class="pi pi-tag mr-1"></i>
       {{ discountPercentage }}% {{ 'products.off' | translate }}
     </div>
     }
 
     <!-- Stock Status Badge -->
-    @if (product.status && product.status !== productStatus.ACTIVE) {
-    <div class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg">
+    <!-- @if (product.status && product.status !== productStatus.ACTIVE) {
+    <div class="absolute top-3 right-3 bg-gray-400 text-red-500 text-xs font-bold px-3 py-1.5 rounded-full z-20 ">
       <i class="pi pi-times-circle mr-1"></i>
       {{ 'products.out_of_stock' | translate }}
     </div>
-    } 
+    }  -->
     <!-- @else if (product.status === productStatus.ACTIVE) {
-    <div class="absolute top-4 right-4 bg-orange-500 dark:bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20 shadow-lg transition-colors duration-300">
+    <div class="absolute top-4 right-4 bg-orange-500 dark:bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-full z-20  transition-colors duration-300">
       <i class="pi pi-exclamation-triangle mr-1"></i>
       Only {{ product.stock }} left
     </div>
@@ -76,7 +76,7 @@
                 <label [for]="'card-' + product._id + '-' + attribute._id"
                   class="relative cursor-pointer w-max rounded-lg overflow-hidden border-2 transition-all duration-200"
                   [ngClass]="{ 
-                    'border-primary-400 dark:border-primary-300 shadow-lg ring-2 ring-primary-300 dark:ring-primary-500': isVariantSelected(attribute),
+                    'border-primary-400 dark:border-primary-300  ring-2 ring-primary-300 dark:ring-primary-500': isVariantSelected(attribute),
                     'border-white/50 dark:border-gray-500 hover:border-white dark:hover:border-gray-400': !isVariantSelected(attribute) 
                   }"
                   (click)="$event.stopPropagation()">

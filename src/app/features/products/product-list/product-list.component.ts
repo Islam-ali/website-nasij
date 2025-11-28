@@ -144,6 +144,10 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
           this.totalRecords = response.data.pagination.total;
           this.loading = false;
           this.error = null;
+          // scroll to top if change page
+          if (this.first !== 0) {
+            this.scrollToTop();
+          }
         },
         error: () => {
           this.error = 'Failed to load products. Please try again later.';
@@ -205,7 +209,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
     this.first = targetPage * this.rows;
     this.loadProducts();
-    this.scrollToTop();
   }
 
   goToPage(page: number): void {
@@ -215,14 +218,12 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     }
     this.first = page * this.rows;
     this.loadProducts();
-    this.scrollToTop();
   }
 
   onRowsChange(rows: number): void {
     this.rows = rows;
     this.first = 0;
     this.loadProducts();
-    this.scrollToTop();
   }
 
   onSortChange(): void {
@@ -234,7 +235,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     this.first = event.first;
     this.rows = event.rows;
     this.loadProducts();
-    this.scrollToTop();
   }
 
   onFilterChange(): void {
