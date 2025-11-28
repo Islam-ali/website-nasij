@@ -100,7 +100,7 @@
           <div
             class="absolute top-full left-0 mt-3 w-[20rem] xl:w-[22rem] bg-white/95 dark:bg-dark-surface/95 rounded-2xl shadow-xl border border-primary-100/60 dark:border-primary-900/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md"
             [class.dark:shadow-[0_20px_40px_-25px_rgba(79,70,229,0.35)]]="isDarkTheme()">
-            <div class="py-3 px-3 grid grid-cols-1 gap-1 max-h-72 overflow-y-auto">
+            <div class="py-3 px-3 grid grid-cols-1 gap-1 max-h-72 overflow-y-auto" style="scrollbar-width: none;">
               @for (category of categories(); track category._id) {
               <a routerLink="/shop" [queryParams]="{category: category._id}"
                 class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"

@@ -13,7 +13,7 @@ export interface PaginationEvent {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50">
+    <div class="flex sm:flex-row items-center w-full justify-between gap-4 p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50">
       <!-- Rows Per Page Selector -->
       <div class="flex items-center gap-2">
         <!-- <span class="text-sm text-gray-600 dark:text-gray-300">Rows per page:</span> -->
@@ -28,9 +28,9 @@ export interface PaginationEvent {
       </div>
 
       <!-- Page Info -->
-      <div class="text-sm text-gray-600 dark:text-gray-300">
+      <!-- <div class="text-sm text-gray-600 dark:text-gray-300">
         {{ firstItem() }} - {{ lastItem() }} of {{ totalRecords }}
-      </div>
+      </div> -->
 
       <!-- Pagination Controls -->
       <div class="flex items-center gap-2">
