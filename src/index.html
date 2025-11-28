@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 
 <head>
   <meta charset="utf-8">
@@ -191,6 +191,42 @@
   <meta name="apple-mobile-web-app-title" content="Pledge">
   <meta name="application-name" content="Pledge">
   <meta name="mobile-web-app-capable" content="yes">
+  
+  <!-- Initialize Language and Direction from localStorage before Angular loads -->
+  <script>
+    (function() {
+      try {
+        var savedLanguage = localStorage.getItem('pledge-language') || 'ar';
+        var html = document.documentElement;
+        var body = document.body;
+        
+        if (savedLanguage === 'ar') {
+          html.setAttribute('dir', 'rtl');
+          html.setAttribute('lang', 'ar');
+          html.classList.add('rtl');
+          html.classList.remove('ltr');
+          if (body) {
+            body.classList.add('rtl');
+            body.classList.remove('ltr');
+          }
+        } else {
+          html.setAttribute('dir', 'ltr');
+          html.setAttribute('lang', 'en');
+          html.classList.add('ltr');
+          html.classList.remove('rtl');
+          if (body) {
+            body.classList.add('ltr');
+            body.classList.remove('rtl');
+          }
+        }
+      } catch (e) {
+        // Fallback to default if localStorage is not available
+        var html = document.documentElement;
+        html.setAttribute('dir', 'rtl');
+        html.setAttribute('lang', 'ar');
+      }
+    })();
+  </script>
 </head>
 
 <body>

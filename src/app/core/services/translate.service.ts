@@ -13,9 +13,15 @@ export class TranslationService {
     private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // // Set default language immediately for SSR compatibility
-    // this.translate.setDefaultLang(this.defaultLanguage);
-    // this.translate.use(this.defaultLanguage); // Ensure a language is set for SSR
+    // Set default language immediately for SSR compatibility
+    this.translate.setDefaultLang(this.defaultLanguage);
+    
+    // Subscribe to language changes to update direction
+    if (isPlatformBrowser(this.platformId)) {
+      this.translate.onLangChange.subscribe((event) => {
+        this.updateDocumentDirection(event.lang);
+      });
+    }
   }
 
   private initializeBrowserFeatures(): void {

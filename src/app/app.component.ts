@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
     private translationService: TranslationService
   ) { }
   ngOnInit(): void {
+    // Initialize language and direction immediately before loading business profile
+    if (isPlatformBrowser(this.platformId)) {
+      this.translationService.initBrowserFeatures();
+    }
     this.loadBusinessProfile();
   }
 
@@ -34,9 +38,6 @@ export class AppComponent implements OnInit {
         this.renderer.setStyle(document.body, 'overflow', 'auto');
         this.isLoading = false;
       }
-
-      // Initialize browser features after app is loaded
-      this.translationService.initBrowserFeatures();
     }
   }
 

@@ -1,6 +1,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { TranslationService } from './translate.service';
 
 interface HreflangConfig {
   lang: string;
@@ -32,7 +33,8 @@ export class SeoService {
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private translationService: TranslationService
   ) {}
 
   updateSeo(options: SeoOptions): void {
@@ -115,8 +117,8 @@ export class SeoService {
       this.meta.updateTag({ property: 'pinterest:image', content: imageUrl });
       this.meta.updateTag({ property: 'pinterest:url', content: url });
       
-      // Update HTML lang and dir attributes
-      this.updateHtmlAttributes(locale);
+      // Update HTML lang and dir attributes based on current language, not just locale
+      this.updateHtmlAttributes();
       
       // Canonical URL and Hreflang
       this.setCanonical(url);
@@ -124,14 +126,41 @@ export class SeoService {
     }
   }
   
-  private updateHtmlAttributes(locale: string): void {
-    if (!this.doc) return;
+  private updateHtmlAttributes(): void {
+    if (!this.doc || !isPlatformBrowser(this.platformId)) return;
+    
+    // Get current language from TranslationService, not from locale parameter
+    // Also check localStorage as fallback in case TranslationService is not ready yet
+    let currentLanguage: string;
+    try {
+      currentLanguage = this.translationService.getCurrentLanguage();
+    } catch (e) {
+      // Fallback to localStorage if TranslationService is not ready
+      currentLanguage = localStorage.getItem('pledge-language') || 'ar';
+    }
     
     const htmlElement = this.doc.documentElement;
-    const isArabic = locale.startsWith('ar');
+    const isArabic = currentLanguage === 'ar';
     
-    htmlElement.setAttribute('lang', isArabic ? 'ar' : 'en');
-    htmlElement.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
+    // Only update if different to avoid unnecessary DOM manipulation
+    const currentDir = htmlElement.getAttribute('dir');
+    const currentLang = htmlElement.getAttribute('lang');
+    
+    if (isArabic) {
+      if (currentDir !== 'rtl') {
+        htmlElement.setAttribute('dir', 'rtl');
+      }
+      if (currentLang !== 'ar') {
+        htmlElement.setAttribute('lang', 'ar');
+      }
+    } else {
+      if (currentDir !== 'ltr') {
+        htmlElement.setAttribute('dir', 'ltr');
+      }
+      if (currentLang !== 'en') {
+        htmlElement.setAttribute('lang', 'en');
+      }
+    }
   }
   
   private getDefaultHreflangs(): HreflangConfig[] {
