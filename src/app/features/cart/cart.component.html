@@ -18,17 +18,17 @@
     class="absolute bottom-20 left-1/4 w-12 h-12 bg-gradient-to-br from-green-400/20 to-emerald-400/20 dark:from-green-500/20 dark:to-emerald-500/20 rounded-full blur-xl animate-float"
     style="animation-delay: -4s;"></div>
 
-  <div class="w-full max-w-7xl px-4 md:px-5 lg:px-6 mx-auto relative z-10">
-    <div class="grid grid-cols-12 h-full">
+  <div class="w-full max-w-7xl px-3 sm:px-4 md:px-5 lg:px-6 mx-auto relative z-10">
+    <div class="grid grid-cols-12 h-full gap-4 sm:gap-6">
       <!-- Cart Items -->
       <div
-        class="col-span-12 lg:max-h-[calc(100vh)] overflow-y-auto lg:col-span-8 lg:pe-8 pt-14 pb-8 lg:py-24 w-full max-xl:max-w-3xl max-xl:mx-auto">
+        class="col-span-12 lg:max-h-[calc(100vh)] overflow-y-auto lg:col-span-8 lg:pe-4 xl:pe-8 pt-8 sm:pt-12 lg:pt-14 pb-6 sm:pb-8 lg:pb-8 lg:py-24 w-full max-xl:max-w-3xl max-xl:mx-auto">
         <!-- Cart Header -->
-        <div class="flex items-center justify-between pb-8 border-b border-gray-200 dark:border-gray-700">
-          <div class="flex items-center gap-3">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 lg:pb-8 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex items-center gap-2 sm:gap-3">
             <div
-              class="p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-2xl ">
-              <svg class="w-7 h-7 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor"
+              class="p-2 sm:p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl sm:rounded-2xl">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
@@ -36,27 +36,30 @@
               </svg>
             </div>
             <h2
-              class="font-manrope font-bold text-3xl leading-10 text-gray-900 dark:text-white transition-colors duration-300">
+              class="font-manrope font-bold text-xl sm:text-2xl lg:text-3xl leading-tight sm:leading-8 lg:leading-10 text-gray-900 dark:text-white transition-colors duration-300">
               {{ 'cart.shoppingCart' | translate }}</h2>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{{ 'common.total' |
+            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{{ 'common.total' |
               translate }} {{ 'common.items' | translate }}:</span>
-            <span class="font-semibold text-lg text-primary-600 dark:text-primary-400 transition-colors duration-300">
+            <span class="font-semibold text-base sm:text-lg text-primary-600 dark:text-primary-400 transition-colors duration-300">
               {{ (cartState$ | async)?.items?.length || 0 }}
             </span>
           </div>
         </div>
 
+        <!-- Divider -->
+        <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-6"></div>
+
         <!-- Scrollable Cart Items Container -->
-        <div class="pe-2 space-y-6">
+        <div class="pe-2 space-y-4 sm:space-y-6">
           <!-- Cart Items Header -->
           <div
-            class="z-10 grid grid-cols-12 mt-8 max-md:hidden pb-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-2xl p-4 ">
+            class="z-10 grid grid-cols-12 mt-4 sm:mt-6 lg:mt-8 max-md:hidden pb-4 sm:pb-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
             <div class="col-span-12 md:col-span-4">
               <h6
-                class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 flex items-center gap-2 transition-colors duration-300">
-                <i class="pi pi-box text-primary-600 dark:text-primary-400"></i>
+                class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 flex items-center gap-2 transition-colors duration-300">
+                <i class="pi pi-box text-primary-600 dark:text-primary-400 text-sm sm:text-base"></i>
                 {{ 'cart.cart_items' | translate }}
               </h6>
             </div>
@@ -64,17 +67,17 @@
               <div class="grid grid-cols-8">
                 <div class="col-span-4">
                   <h6
-                    class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
                     {{ 'common.quantity' | translate }}</h6>
                 </div>
                 <div class="col-span-2">
                   <h6
-                    class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
                     {{ 'common.total' | translate }}</h6>
                 </div>
                 <div class="col-span-2">
                   <h6
-                    class="font-manrope font-bold text-base leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
                     {{ 'common.action' | translate }}</h6>
                 </div>
               </div>
@@ -82,85 +85,92 @@
           </div>
 
           <!-- Cart Items List -->
-          <ng-container *ngIf="(cartItems$ | async) as cartItems; else emptyCart">
-            <div *ngFor="let item of cartItems; trackBy: trackByFn; let i = index"
-              class="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-5 py-6 border-b border-gray-200 dark:border-gray-700 group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4   transition-all duration-300">
-              <div class="w-36 md:max-w-[126px]">
+          @if ((cartItems$ | async); as cartItems) {
+            @for (item of cartItems; track trackByFn($index, item); let i = $index) {
+            <div
+              class="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-3 sm:gap-4 md:gap-5 py-4 sm:py-5 md:py-6 border-b border-gray-200 dark:border-gray-700 group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300">
+              <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 md:max-w-[126px]">
                 <img [src]="item.image || 'images/photo.png'" fallback [alt]="item.productName || 'Product'"
-                  class="mx-auto rounded-2xl w-full h-32 object-cover   transition-all duration-300 group-hover:scale-105">
+                  class="mx-auto rounded-xl sm:rounded-2xl w-full h-full object-cover transition-all duration-300 group-hover:scale-105">
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-6 w-full">
+              <div class="grid grid-cols-1 md:grid-cols-6 w-full gap-3 sm:gap-4">
                 <div class="w-full col-span-2">
-                  <div class="flex flex-col max-[500px]:items-start gap-1">
+                  <div class="flex flex-col max-[500px]:items-start gap-1 sm:gap-1.5">
                     <h6
-                      class="font-semibold text-base leading-7 text-gray-900 dark:text-white transition-colors duration-300">
+                      class="font-semibold text-sm sm:text-base leading-6 sm:leading-7 text-gray-900 dark:text-white transition-colors duration-300">
                       {{ item.productName | multiLanguage }}
-                      <span *ngIf="item.itemType === 'Package'"
-                        class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
+                      @if (item.itemType === 'Package') {
+                      <span
+                        class="ml-1.5 sm:ml-2 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
                         {{ 'cart.package' | translate }}
                       </span>
-                      <span *ngIf="item.itemType === 'Product'"
-                        class="ml-2 px-2 py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
+                      }
+                      @if (item.itemType === 'Product') {
+                      <span
+                        class="ml-1.5 sm:ml-2 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
                         {{ 'cart.product' | translate }}
                       </span>
+                      }
                     </h6>
 
                     <!-- Show color and size only for products -->
-                    <div *ngIf="item.itemType === 'Product' || !item.itemType">
+                    @if (item.itemType === 'Product' || !item.itemType) {
                       @if(item.selectedVariants && item.selectedVariants.length > 0) {
-                      @for(variant of item.selectedVariants; track variant._id) {
-                      <p
-                        class="font-medium m-0 text-gray-600 dark:text-gray-300 flex gap-1 transition-colors duration-300">
-                        <span class="font-bold text-gray-600 dark:text-gray-300">{{ 'products.' + variant.variant |
-                          translate }}: </span>
-                        <span class="font-medium text-gray-600 dark:text-gray-300 flex flex-1 items-center gap-2">
-                          {{ variant.value | multiLanguage }}</span>
-                      </p>
+                        @for(variant of item.selectedVariants; track variant._id) {
+                        <p
+                          class="font-medium m-0 text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex gap-1 transition-colors duration-300">
+                          <span class="font-bold text-gray-600 dark:text-gray-300">{{ 'products.' + variant.variant |
+                            translate }}: </span>
+                          <span class="font-medium text-gray-600 dark:text-gray-300 flex flex-1 items-center gap-2">
+                            {{ variant.value | multiLanguage }}</span>
+                        </p>
+                        }
                       }
-                      }
-                    </div>
+                    }
 
                     <!-- Show package items for packages -->
-                    <div *ngIf="item.itemType === 'Package' && item.packageItems && item.packageItems.length > 0"
-                      class="mt-2">
-                      <p class="font-bold text-sm text-gray-600 dark:text-gray-300 mb-1">{{ 'cart.package_items' |
-                        translate }}:</p>
-                      <div class="space-y-1">
-                        <div *ngFor="let packageItem of item.packageItems"
-                          class="text-xs text-gray-500 dark:text-gray-400">
-                          • {{ packageItem.productName| multiLanguage }} ({{ 'common.quantity' | translate }}: {{
-                          packageItem.quantity }})
+                    @if (item.itemType === 'Package' && item.packageItems && item.packageItems.length > 0) {
+                      <div class="mt-1.5 sm:mt-2">
+                        <p class="font-bold text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1">{{ 'cart.package_items' |
+                          translate }}:</p>
+                        <div class="space-y-0.5 sm:space-y-1">
+                          @for (packageItem of item.packageItems; track $index) {
+                          <div class="text-xs text-gray-500 dark:text-gray-400">
+                            • {{ packageItem.productName| multiLanguage }} ({{ 'common.quantity' | translate }}: {{
+                            packageItem.quantity }})
+                          </div>
+                          }
                         </div>
                       </div>
-                    </div>
+                    }
 
                     <h6
-                      class="font-medium text-base leading-7 text-gray-600 dark:text-gray-300 transition-colors duration-300">
+                      class="font-medium text-sm sm:text-base leading-6 sm:leading-7 text-gray-600 dark:text-gray-300 transition-colors duration-300">
                       {{ (item.price - (item.discount || 0)) * item.quantity | currency }}
                     </h6>
                   </div>
                 </div>
 
                 <!-- Quantity Controls -->
-                <div class="flex items-center max-[500px]:justify-start h-full max-md:mt-3 col-span-2">
+                <div class="flex items-center max-[500px]:justify-start h-full max-md:mt-2 sm:max-md:mt-3 col-span-2">
                   <div
-                    class="flex items-center h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full   transition-all duration-300 bg-white dark:bg-gray-800">
+                    class="flex items-center h-10 sm:h-11 md:h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800">
                     <button (click)="updateQuantity(item, item.quantity - 1)" [disabled]="loading || item.quantity <= 1"
-                      class="group rounded-l-full px-4 py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                      class="group rounded-l-full px-3 sm:px-4 py-1.5 sm:py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed">
                       <svg
-                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hov  er:stroke-purple-600 dark:group-hover:stroke-purple-400"
-                        xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
+                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-purple-600 dark:group-hover:stroke-purple-400 w-4 h-4 sm:w-5 sm:h-5"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" fill="none">
                         <path d="M16.5 11H5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                       </svg>
                     </button>
                     <input type="number" [(ngModel)]="item.quantity" (change)="updateQuantity(item, item.quantity)"
                       [disabled]="loading" min="1"
-                      class="w-16 text-center border-0 focus:ring-0 font-semibold text-gray-900 dark:text-white bg-transparent">
+                      class="w-12 sm:w-14 md:w-16 text-center border-0 focus:ring-0 font-semibold text-sm sm:text-base text-gray-900 dark:text-white bg-transparent">
                     <button (click)="updateQuantity(item, item.quantity + 1)" [disabled]="loading"
-                      class="group rounded-r-full px-4 py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                      class="group rounded-r-full px-3 sm:px-4 py-1.5 sm:py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed">
                       <svg
-                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-primary-600 dark:group-hover:stroke-primary-400"
-                        xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
+                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-primary-600 dark:group-hover:stroke-primary-400 w-4 h-4 sm:w-5 sm:h-5"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" fill="none">
                         <path d="M11 5.5V16.5M16.5 11H5.5" stroke="currentColor" stroke-width="1.6"
                           stroke-linecap="round" />
                       </svg>
@@ -169,18 +179,18 @@
                 </div>
 
                 <!-- Item Total -->
-                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-3 h-full">
-                  <p class="font-bold text-lg leading-8 text-gray-900 dark:text-white transition-colors duration-300">
+                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-2 sm:max-md:mt-3 h-full">
+                  <p class="font-bold text-base sm:text-lg leading-7 sm:leading-8 text-gray-900 dark:text-white transition-colors duration-300">
                     {{ (item.price - (item.discount || 0)) * item.quantity | currency }}
                   </p>
                 </div>
 
-                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-3 h-full">
+                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-2 sm:max-md:mt-3 h-full">
                   <!-- Remove Item Button -->
                   <button (click)="removeItem(item, i)" [disabled]="loading"
-                    class="p-3 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group  ">
+                    class="p-2 sm:p-2.5 md:p-3 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group">
                     <svg xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 group-hover:scale-110 transition-transform duration-300" fill="none"
+                      class="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform duration-300" fill="none"
                       viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -189,90 +199,101 @@
                 </div>
               </div>
             </div>
-          </ng-container>
+            }
+          } @else {
 
           <!-- Empty Cart State -->
-          <ng-template #emptyCart>
             <div
-              class="text-center py-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl border border-gray-200/50 dark:border-gray-700/50">
+              class="text-center py-12 sm:py-16 lg:py-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-gray-200/50 dark:border-gray-700/50">
               <div
-                class="p-6 bg-gradient-to-r from-gray-100 to-blue-100 dark:from-gray-700 dark:to-blue-900/30 rounded-full w-24 h-24 mx-auto mb-8 flex items-center justify-center ">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 dark:text-gray-500" fill="none"
+                class="p-4 sm:p-5 md:p-6 bg-gradient-to-r from-gray-100 to-blue-100 dark:from-gray-700 dark:to-blue-900/30 rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-6 sm:mb-8 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-gray-400 dark:text-gray-500" fill="none"
                   viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">{{
+              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 transition-colors duration-300">{{
                 'cart.yourCartIsEmpty' | translate }}</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-8 text-lg transition-colors duration-300">{{
+              <p class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 transition-colors duration-300">{{
                 'cart.start_adding_items' | translate }}</p>
-              <div class="mt-8">
+              <div class="mt-6 sm:mt-8">
                 <a routerLink="/products"
-                  class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-2xl font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300  transform hover:scale-105">
+                  class="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 transform hover:scale-105">
                   {{ 'cart.continue_shopping' | translate }}
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>  
                   </svg>
                 </a>
               </div>
             </div>
-          </ng-template>
+          }
         </div> <!-- End of Scrollable Cart Items Container -->
       </div>
 
+      <!-- Divider -->
+      <div class="col-span-12 lg:hidden border-t border-gray-200 dark:border-gray-700 my-4 sm:my-6"></div>
+
       <!-- Order Summary -->
       <div
-        class="sticky top-24 mt-6 z-40 col-span-12 lg:col-span-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm w-full max-xl:px-6 max-w-3xl xl:max-w-lg mx-auto lg:p-4 py-24 max-h-[calc(100vh-6rem)] rounded-3xl border border-gray-200/50 dark:border-gray-700/50">
+        class="sticky top-20 sm:top-24 mt-4 sm:mt-6 z-40 col-span-12 lg:col-span-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm w-full max-xl:px-4 sm:max-xl:px-6 max-w-3xl xl:max-w-lg mx-auto lg:p-3 xl:p-4 py-6 sm:py-8 md:py-12 lg:py-24 max-h-[calc(100vh-5rem)] sm:max-h-[calc(100vh-6rem)] rounded-2xl sm:rounded-3xl border border-gray-200/50 dark:border-gray-700/50">
         <h2
-          class="font-manrope font-bold text-3xl leading-10 text-gray-900 dark:text-white pb-8 border-b border-gray-300 dark:border-gray-600 transition-colors duration-300">
+          class="font-manrope font-bold text-xl sm:text-2xl lg:text-3xl leading-8 sm:leading-9 lg:leading-10 text-gray-900 dark:text-white pb-4 sm:pb-6 lg:pb-8 border-b border-gray-300 dark:border-gray-600 transition-colors duration-300">
           {{ 'cart.order_summary' | translate }}
         </h2>
-        <div class="mt-8">
+        <div class="mt-4 sm:mt-6 lg:mt-8">
           <form>
             <!-- Subtotal -->
-            <div class="flex items-center justify-between">
-              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
+            <div class="flex items-center justify-between py-2 sm:py-3">
+              <p class="font-medium text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
                 'cart.sub_total' | translate }}</p>
               <p
-                class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
+                class="font-semibold text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
                 {{ (cartSummary$ | async)?.subtotal | currency }}
               </p>
             </div>
 
+            <!-- Divider -->
+            <div class="border-t border-gray-200 dark:border-gray-700 my-3 sm:my-4"></div>
+
             <!-- Delivery Charge -->
-            <div class="flex items-center justify-between mt-4">
-              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
+            <div class="flex items-center justify-between py-2 sm:py-3">
+              <p class="font-medium text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
                 'cart.delivery_charge' | translate }}</p>
               <p
-                class="font-semibold text-sm leading-8 text-green-600 dark:text-green-400 transition-colors duration-300">
+                class="font-semibold text-xs sm:text-sm leading-6 sm:leading-7 lg:leading-8 text-green-600 dark:text-green-400 transition-colors duration-300">
                 {{'cart.shipping_calculated' | translate}}
               </p>
             </div>
 
+            <!-- Divider -->
+            <div class="border-t border-gray-200 dark:border-gray-700 my-3 sm:my-4 lg:my-6"></div>
+
             <!-- Total -->
-            <hr class="my-6 border-gray-300 dark:border-gray-600">
-            <div class="flex items-center justify-between">
-              <p class="font-medium text-xl leading-8 text-gray-900 dark:text-white transition-colors duration-300">
+            <div class="flex items-center justify-between py-2 sm:py-3">
+              <p class="font-medium text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">
                 {{ (cartState$ | async)?.items?.length || 0 }} {{ 'common.items' | translate }}
               </p>
               <p
-                class="font-semibold text-xl leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
+                class="font-semibold text-base sm:text-lg lg:text-xl leading-7 sm:leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
                 {{ (cartSummary$ | async)?.total | currency }}
               </p>
             </div>
 
+            <!-- Divider -->
+            <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-6 lg:my-8"></div>
+
             <!-- Checkout Button -->
             <button type="button" (click)="onCheckout()" [disabled]="loading || !(cartState$ | async)?.items?.length"
               [class.opacity-50]="loading || !(cartState$ | async)?.items?.length"
-              class="w-full py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-2xl font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 mt-8 disabled:opacity-50 disabled:cursor-not-allowed  transform hover:scale-105">
+              class="w-full py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105">
               {{ loading ? ('cart.processing' | translate) : ('cart.proceed_to_checkout' | translate) }}
             </button>
 
             <!-- Continue Shopping Link -->
-            <div class="mt-6 text-center">
+            <div class="mt-4 sm:mt-6 text-center">
               <a routerLink="/"
-                class="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 font-medium transition-colors duration-300">
+                class="text-xs sm:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 font-medium transition-colors duration-300">
                 {{ 'cart.or_continue_shopping' | translate }}
               </a>
             </div>
