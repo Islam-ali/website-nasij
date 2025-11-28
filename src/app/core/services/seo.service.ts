@@ -166,8 +166,8 @@ export class SeoService {
   private getDefaultHreflangs(): HreflangConfig[] {
     const baseUrl = 'https://pledgestores.com';
     return [
-      { lang: 'en', url: `${baseUrl}/en` },
-      { lang: 'ar', url: `${baseUrl}/ar` },
+      { lang: 'en', url: `${baseUrl}` },
+      { lang: 'ar', url: `${baseUrl}` },
       { lang: 'x-default', url: baseUrl }
     ];
   }
