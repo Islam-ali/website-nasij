@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
 // Services
@@ -20,8 +20,8 @@ import { MultilingualText } from '../../../core/models/multi-language';
   selector: 'app-product-card',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
+    NgClass,
     MultiLanguagePipe,
     CurrencyPipe,
     FallbackImgDirective,

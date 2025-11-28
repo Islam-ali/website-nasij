@@ -12,29 +12,37 @@
 .carousel-inner {
   will-change: transform;
   display: flex;
+  cursor: grab;
+  user-select: none;
+  // Gentle, smooth transition with calm easing function
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  // GPU acceleration for smoother animations
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  &.dragging {
+    cursor: grabbing;
+    transition: none !important; // Disable transition during drag for smooth movement
+  }
 }
 
 .carousel-item {
   flex-shrink: 0;
+  // GPU acceleration for items
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  // Ensure each item can handle its own hover independently
+  isolation: isolate;
 }
 
-// Make navigation buttons always visible on mobile
-@media (max-width: 768px) {
-  .group button {
-    opacity: 1 !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-  }
-  
-  .group.dark button {
-    background: rgba(31, 41, 55, 0.9) !important;
-  }
-}
+// Navigation controls are now always visible at the bottom
 
-// Smooth transitions
 .transition-transform {
   transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 500ms;
+  // Gentle easing function for calm, smooth motion (ease-out-quad)
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-duration: 800ms;
 }
 
 // Touch swipe support
@@ -43,4 +51,10 @@
     touch-action: pan-x;
   }
 }
+
+// Prevent text selection during drag
+.carousel-inner.dragging * {
+  pointer-events: none;
+}
+
 

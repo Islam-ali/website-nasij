@@ -11,6 +11,16 @@
     outline: 2px solid rgba(139, 92, 246, 0.5);
     outline-offset: 2px;
   }
+  
+  // Optimize images to prevent large image warnings
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    // Ensure images don't exceed their container
+    object-fit: contain;
+    // Prevent layout shift
+    display: block;
+  }
 }
 
 // RTL Support

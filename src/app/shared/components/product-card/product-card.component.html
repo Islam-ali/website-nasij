@@ -6,7 +6,11 @@
     <img [src]="getProductImageUrl()" 
       [alt]="product.name | multiLanguage" 
       fallback="images/photo.png"
-      width="600" height="800" 
+      width="600" 
+      height="800"
+      loading="lazy"
+      fetchpriority="low"
+      decoding="async"
       class="w-full h-full object-contain object-center scale-95 transition-transform duration-500 group-hover:scale-105" />
     
     <!-- Gradient Overlay -->
@@ -85,6 +89,11 @@
                   <div class="w-8 h-8 rounded-lg overflow-hidden">
                     <img [src]="getImageUrl(attribute.image.filePath)" 
                       [alt]="attribute.value | multiLanguage"
+                      width="32"
+                      height="32"
+                      loading="lazy"
+                      fetchpriority="low"
+                      decoding="async"
                       class="w-full h-full object-cover cursor-pointer transition-transform duration-200 hover:scale-110">
                   </div>
                 </label>

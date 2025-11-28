@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Observable, Subject, Subscription, of, forkJoin } from 'rxjs';
-import { map, switchMap, takeUntil, catchError } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { 
   UiToastService, 
   UiButtonComponent, 
-  UiCardComponent, 
   UiSpinnerComponent,
-  UiDividerComponent
 } from '../../shared/ui';
 import { CartService } from '../cart/services/cart.service';
 import { IWishlistState, IWishlistItem } from './models/wishlist.interface';
@@ -16,7 +14,6 @@ import { ProductService } from '../products/services/product.service';
 import { WishlistService } from './services/wishlist.service';
 import { IAddToCartRequest } from '../cart/models/cart.interface';
 import { environment } from '../../../environments/environment';
-import { MultilingualText } from '../../core/models/multi-language';
 import { CurrencyPipe } from '../../core/pipes/currency.pipe';
 
 @Component({  
@@ -26,9 +23,7 @@ import { CurrencyPipe } from '../../core/pipes/currency.pipe';
     CommonModule,
     RouterModule,
     UiButtonComponent,
-    UiCardComponent,
     UiSpinnerComponent,
-    UiDividerComponent,
     CurrencyPipe
 ],
   templateUrl: './wishlist.component.html',

@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 interface GalleriaImage {
   itemImageSrc: string;
@@ -12,7 +12,7 @@ interface GalleriaImage {
 @Component({
   selector: 'app-galleria',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgClass],
   templateUrl: './galleria.component.html',
   styleUrls: ['./galleria.component.scss']
 })

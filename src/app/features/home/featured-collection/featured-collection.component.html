@@ -4,19 +4,19 @@
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-16 max-w-2xl mx-auto">
             @if (collection.sectionTitle) {
-            <span data-aos="fade-up"
+            <span
                 class="text-primary-400 dark:text-primary-400 font-medium transition-colors duration-300">
                 <span class="block">{{collection.sectionTitle | multiLanguage}}</span>
             </span>
             }
             @if (collection.sectionSubtitle) {
-            <h2 data-aos="fade-up"
+            <h2
                 class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
                 <span class="block">{{collection.sectionSubtitle | multiLanguage}}</span>
             </h2>
             }
             @if (collection.description) {
-            <p data-aos="fade-up"
+            <p
                 class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
                 <span class="block">{{collection.description | multiLanguage}}</span>
             </p>
@@ -26,27 +26,27 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8"
                 [ngClass]="{'grid-cols-1 md:grid-cols-1 max-w-sm': collection.collections.length === 1, 'grid-cols-1 md:grid-cols-2 max-w-7xl mx-auto': collection.collections.length > 1}">
                 @for (item of collection.collections; track item.title) {
-                <div data-aos="zoom-in"
+                <div
                     class="group relative overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-900/50 hover:shadow-2xl dark:hover:shadow-gray-900/70 transition-all duration-500">
                     <img [src]="item.image.filePath" [alt]="item.image.fileName" fallback
                         class="w-full h-[400px] object-cover group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-8">
                         @if (item.title) {
-                        <h3 data-aos="fade-down" data-aos-delay="100"
+                        <h3
                             class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
                             <span class="block">{{item.title | multiLanguage}}</span>
                         </h3>
                         }
                         @if (item.description) {
-                        <p data-aos="fade-up" data-aos-delay="100"
+                        <p
                             class="text-white/90 dark:text-white/80 mb-6 transition-colors duration-300">
                             <span class="block">{{item.description | multiLanguage}}</span>
                         </p>
                         }
                         @if (item.buttonText) {
-                        <button data-aos="fade-up" [routerLink]="item.buttonLink" [queryParams]="item.queryParams"
-                            data-aos-delay="100"
+                        <button [routerLink]="item.buttonLink" [queryParams]="item.queryParams"
+                           
                             class="bg-white dark:bg-gray-100 text-gray-900 dark:text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105">
                             <span class="block">{{item.buttonText | multiLanguage}}</span>
                         </button>

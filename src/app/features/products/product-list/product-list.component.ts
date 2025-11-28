@@ -12,7 +12,6 @@ import { ProductCardComponent } from "../../../shared/components/product-card/pr
 import { IProductQueryParams } from '../models/product.interface';
 import { ICategory } from '../../../interfaces/category.interface';
 import { IProduct } from '../models/product.interface';
-import AOS from 'aos';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
@@ -49,7 +48,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   products: IProduct[] = [];
   loading = true;
   error: string | null = null;
-  aosInitialized = false;
   domain = environment.domain;
   // Pagination
   totalRecords = 0;
@@ -94,21 +92,9 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   ngAfterViewInit(): void {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-out-cubic',
-      once: true,
-      offset: 60,
-      delay: 200,
-    });
-    this.aosInitialized = true;
   }
 
   ngAfterViewChecked(): void {
-    if (this.aosInitialized) {
-      AOS.refresh();
-      AOS.refreshHard();
-    }
   }
 
   ngOnInit(): void {

@@ -13,12 +13,12 @@
     class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
-        <span data-aos="fade-up"
+        <span
           class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
           <i class="pi pi-star-fill me-2"></i>
           {{ 'home.shop_by_category' | translate }}
         </span>
-        <h2 data-aos="fade-up"
+        <h2
           class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
           <span
             class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">{{ 'home.categories' | translate }}</span>
@@ -34,7 +34,7 @@
         <div
           class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[250px] lg:auto-rows-[280px]">
           @for (category of categories; track category._id; let i = $index) {
-          <div data-aos="fade-up"
+          <div
             class="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 transition-all duration-300"
            >
             <div class="w-full h-full relative overflow-hidden">
@@ -48,11 +48,11 @@
               <div class="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
                 <!-- Category Name -->
                 <div class="mb-3">
-                  <h3 data-aos="fade-down"
+                  <h3
                     class="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 leading-tight drop-shadow-lg transition-colors duration-300">
                     {{category.name | multiLanguage}}
                   </h3>
-                  <div data-aos="fade-up" class="flex items-center gap-2">
+                  <div class="flex items-center gap-2">
                     <div
                       class="w-2 h-2 bg-primary-400 dark:bg-primary-400 rounded-full animate-pulse transition-colors duration-300">
                     </div>
@@ -122,19 +122,19 @@
   <section class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
-          <span data-aos="fade-up"
+          <span
           class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
           <i class="pi pi-star-fill me-2"></i>
           {{ 'home.packages' | translate }}
         </span>
-        <h2 data-aos="fade-up"
+        <h2
         class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
         <span
           class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">{{ 'home.our_packages' | translate }}</span>
       </h2>
       </div>
       <app-carousel 
-        data-aos="fade-up" 
+        
         (onItemClick)="navigateToPackage($event)" 
         [items]="packages"
         [itemsPerView]="4"
@@ -152,23 +152,23 @@
   <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-16">
-        <span data-aos="fade-up"
+        <span
           class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
           <i class="pi pi-star-fill me-2"></i>
           {{ 'home.featured_products' | translate }}
         </span>
-        <h2 data-aos="fade-up"
+        <h2
           class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
           <span
             class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">{{ 'home.trending_now' | translate }}</span>
         </h2>
-        <p data-aos="fade-up" class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
+        <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
           {{ 'home.discover_popular' | translate }}
         </p>
       </div>
 
       <app-carousel 
-        data-aos="fade-up" 
+        
         (onItemClick)="navigateToProduct($event)" 
         [items]="featuredProducts"
         [itemsPerView]="4"

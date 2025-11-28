@@ -13,7 +13,7 @@
               <i class="pi pi-shopping-bag text-white text-xl"></i>
             </div>
             <div>
-              <h1 data-aos="fade-down" data-aos-delay="100"
+              <h1
                 class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary-900 via-primary-600 to-primary-400 dark:from-white dark:via-primary-300 dark:to-white bg-clip-text text-transparent transition-all duration-300">
                 {{ 'products.discover_products' | translate }}
               </h1>
@@ -22,7 +22,7 @@
               </div>
             </div>
           </div>
-          <p data-aos="fade-down" data-aos-delay="200"
+          <p
             class="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
             {{ 'products.showing_products' | translate: {current: products.length, total: totalRecords} }}
           </p>
@@ -236,7 +236,7 @@
     <div class="space-y-12">
       <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         @for (product of products; track product._id) {
-        <app-product-card data-aos="fade-up" [product]="product" (clicked)="navigateToProduct(product)"></app-product-card>
+        <app-product-card [product]="product" (clicked)="navigateToProduct(product)"></app-product-card>
         }
       </div>
 

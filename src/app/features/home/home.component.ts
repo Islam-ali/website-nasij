@@ -11,7 +11,6 @@ import { CarouselComponent } from "../../shared/components/carousel/carousel.com
 import { CategoryService } from '../products/services/category.service';
 import { ICategory } from '../../interfaces/category.interface';
 import { environment } from '../../../environments/environment';
-import AOS from 'aos';
 import { HeroSectionComponent } from "./hero-section/hero-section.component";
 import { FeaturedCollectionComponent } from "./featured-collection/featured-collection.component";
 import { BannarComponent } from "./bannar/bannar.component";
@@ -54,7 +53,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   loadingCategories = true;
   domain = environment.domain;  
   router = inject(Router);
-  aosInitialized = false;
   packages: IPackage[] = [];
   businessProfile: IBusinessProfile | null = null;
   platformId = inject(PLATFORM_ID);
@@ -75,22 +73,8 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.getBusinessProfile();
   }
   ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) { 
-    AOS.init({
-      duration: 800,
-      easing: 'ease-out-cubic',
-      once: true,
-      offset: 60,
-      delay: 200,
-    });
-    this.aosInitialized = true;
-  }}
+  }
   ngAfterViewChecked(): void {
-    // إعادة تحديث AOS لما العناصر تتغير
-    if (this.aosInitialized && isPlatformBrowser(this.platformId)) {
-      AOS.refresh();
-      AOS.refreshHard();
-    }
   }
   private loadCategories() {
     this.categoryService.listCategories().subscribe({
