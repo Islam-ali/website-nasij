@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 export interface PaginationEvent {
   first: number;
@@ -11,15 +12,15 @@ export interface PaginationEvent {
 @Component({
   selector: 'ui-pagination',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="flex flex-col sm:flex-row items-center w-full justify-between gap-4 p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50">
       <!-- Rows Per Page Selector -->
       <div class="flex items-center gap-2 order-2 sm:order-1">
         <!-- <span class="text-sm text-gray-600 dark:text-gray-300">Rows per page:</span> -->
         <select
-          [value]="rowsPerPage()"
-          (change)="onRowsPerPageChange($event)"
+          [ngModel]="rowsPerPage()"
+          (ngModelChange)="onRowsPerPageChange($event)"
           class="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400">
           @for (option of rowsPerPageOptions; track option) {
             <option [value]="option">{{ option }}</option>
@@ -150,9 +151,8 @@ export class UiPaginationComponent {
   isLastPage = computed(() => this.currentPage() >= this.totalPages());
 
 
-  onRowsPerPageChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const newRows = parseInt(target.value, 10);
+  onRowsPerPageChange(value: string | number): void {
+    const newRows = typeof value === 'string' ? parseInt(value, 10) : value;
     this.emitPageChange(0, newRows);
   }
 
