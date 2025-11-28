@@ -1,5 +1,5 @@
 <!-- Enhanced Hero Section - Full Image Grid with Tailwind Dark Mode -->
-<section class="hero-section relative overflow-hidden transition-all duration-300 bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800">
+<section class="hero-section relative overflow-hidden transition-all duration-300 dark:from-gray-900 dark:to-gray-900">
     <div class="w-full max-w-7xl mx-auto px-2 py-8">
         <!-- skeleton loader -->
          @if (isLoading) {
@@ -25,7 +25,7 @@
         <!-- Dynamic Grid Layout -->
         <div class="grid gap-6 min-h-max " [ngClass]="getGridClasses(heroes.length)">
             @for (hero of heroes; let i = $index; track i) {
-            <div (click)="navigateTo(hero.buttonLink)" class="relative cursor-pointer group overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-900/50 h-full transition-all duration-300 hover:shadow-2xl dark:hover:shadow-gray-900/70"
+            <div (click)="navigateTo(hero.buttonLink)" class="relative cursor-pointer group overflow-hidden rounded-2xl h-full transition-all duration-300"
                  [ngClass]="getTileClasses(i, heroes.length)">
                 <img [src]="hero.image.filePath" [alt]="hero.title | multiLanguage" 
                      fallback
@@ -74,7 +74,7 @@
         </div> -->
 
         <!-- Fashion Badge -->
-        <div class="absolute top-4 left-4 rounded-full px-4 py-2 shadow-lg backdrop-blur-sm transition-all duration-300 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200">
+        <div class="absolute top-4 left-4 rounded-full px-4 py-2 backdrop-blur-sm transition-all duration-300 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200">
             <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span class="text-sm font-medium">{{ 'home.trending_now' | translate }}</span>
@@ -83,7 +83,7 @@
 
         <!-- Sale Badge -->
         <!-- <div
-            class="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full px-4 py-2 shadow-lg transform rotate-12">
+            class="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full px-4 py-2 transform rotate-12">
             <span class="text-sm font-bold">SALE 50%</span>
         </div> -->
     </div>

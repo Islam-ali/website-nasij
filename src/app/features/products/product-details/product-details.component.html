@@ -1,4 +1,3 @@
-
 <div
   class=" min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500 pb-10">
   <!-- Background Pattern -->
@@ -20,7 +19,8 @@
     style="animation-delay: -4s;"></div>
 
   <!-- Loading Skeleton -->
-  <div *ngIf="loading"
+  @if (loading) {
+  <div
     class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start w-full max-w-7xl px-4 mx-auto py-8 relative z-10 overflow-hidden">
     <div class="col-span-1 w-full">
       <div
@@ -71,18 +71,22 @@
       </div>
     </div>
   </div>
-
+  }
   <!-- Error State -->
-  <div *ngIf="error" class="text-center py-20 relative z-10">
+  @if (error) {
+  <div class="text-center py-20 relative z-10">
     <div class="max-w-md mx-auto">
       <div class="mb-8">
         <div
           class="w-32 h-32 bg-gradient-to-br from-red-200 to-red-300 dark:from-red-700 dark:to-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
           <i class="pi pi-exclamation-triangle text-5xl text-red-500 dark:text-red-400"></i>
         </div>
-        <h3 class="text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">{{
+        <h3
+          class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">
+          {{
           'products.product_not_found' | translate }}</h3>
-        <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed text-lg transition-colors duration-300">
+        <p
+          class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed text-sm sm:text-base lg:text-lg transition-colors duration-300">
           {{ 'products.product_removed' | translate }}
         </p>
       </div>
@@ -98,9 +102,10 @@
       </div>
     </div>
   </div>
-
+  }
   <!-- Product Details Content -->
-  <div *ngIf="product && !loading" class="max-w-7xl mx-auto px-4 py-8 relative z-10 overflow-hidden">
+  @if (product && !loading) {
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
     <!-- Breadcrumb Navigation -->
     <nav class="mb-8" aria-label="Breadcrumb">
       <ol class="flex items-center gap-2 text-sm">
@@ -129,20 +134,23 @@
     </nav>
 
     <!-- Main Product Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start w-full overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start w-full overflow-hidden">
       <!-- Product Images -->
       <div class="col-span-1 w-full overflow-hidden">
         <div
           class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl overflow-hidden border-2 border-gray-200/50 dark:border-gray-700/50 transition-all duration-500">
           <div class="product-gallery">
             <!-- Main Image -->
-            <div class="relative w-full h-96 lg:h-[600px] flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 transition-all duration-500 group mb-4 rounded-2xl overflow-hidden">
+            <div
+              class="relative w-full h-64 sm:h-80 md:h-96 lg:h-[600px] flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 transition-all duration-500 group mb-3 sm:mb-4 rounded-xl sm:rounded-2xl overflow-hidden">
               <img [src]="images[activeIndex]?.itemImageSrc" [alt]="images[activeIndex]?.alt || product.name"
-                class="max-h-full max-w-full object-contain p-6 transition-all duration-700 group-hover:scale-110"
+                class="max-h-full max-w-full object-contain p-3 sm:p-4 md:p-6 transition-all duration-700 group-hover:scale-110"
                 [ngClass]="{ 'opacity-100': imageLoaded, 'opacity-0': !imageLoaded }" (load)="onImageLoad()" />
-              <div *ngIf="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
+              @if (!imageLoaded) {
+              <div class="absolute inset-0 flex items-center justify-center">
                 <ui-spinner></ui-spinner>
               </div>
+              }
               <!-- Zoom Overlay -->
               <div
                 class="absolute inset-0 bg-black/0 z-10 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -151,42 +159,41 @@
                   <i class="pi pi-search-plus text-2xl text-gray-700 dark:text-gray-300"></i>
                 </div>
               </div>
-              
+
               <!-- Navigation Buttons -->
               @if (images.length > 1) {
-                <button (click)="previousImage()" 
-                  class="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110">
-                  <i class="pi pi-chevron-left text-xl text-gray-700 dark:text-gray-300"></i>
-                </button>
-                <button (click)="nextImage()"
-                  class="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110">
-                  <i class="pi pi-chevron-right text-xl text-gray-700 dark:text-gray-300"></i>
-                </button>
+              <button (click)="previousImage()"
+                class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-50 p-2 sm:p-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110">
+                <i class="pi pi-chevron-left text-base sm:text-xl text-gray-700 dark:text-gray-300"></i>
+              </button>
+              <button (click)="nextImage()"
+                class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-50 p-2 sm:p-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110">
+                <i class="pi pi-chevron-right text-base sm:text-xl text-gray-700 dark:text-gray-300"></i>
+              </button>
               }
             </div>
             <!-- Thumbnails -->
             @if (images.length > 1) {
-              <div class="flex gap-3 overflow-x-auto pb-2">
-                @for (img of images; track $index) {
-                  <div
-                    class="flex-shrink-0 w-24 h-24 flex items-center justify-center bg-white dark:bg-gray-800 border-2 rounded-2xl overflow-hidden hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300 group cursor-pointer"
-                    [ngClass]="{ 
+            <div class="flex gap-2 sm:gap-3 overflow-x-auto pb-2">
+              @for (img of images; track $index) {
+              <div
+                class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center bg-white dark:bg-gray-800 border-2 rounded-xl sm:rounded-2xl overflow-hidden hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300 group cursor-pointer"
+                [ngClass]="{ 
                       'border-primary-500 dark:border-primary-400 ring-2 ring-primary-200 dark:ring-primary-800': activeIndex === $index, 
                       'border-gray-200 dark:border-gray-700 hover:ring-2 hover:ring-gray-200 dark:hover:ring-gray-700': activeIndex !== $index 
-                    }"
-                    (click)="activeIndex = $index">
-                    <img [src]="img.thumbnailImageSrc" [alt]="img.alt || product.name + ' thumbnail'"
-                      class="max-h-full max-w-full object-contain p-2 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                }
+                    }" (click)="activeIndex = $index">
+                <img [src]="img.thumbnailImageSrc" [alt]="img.alt || product.name + ' thumbnail'"
+                  class="max-h-full max-w-full object-contain p-2 transition-transform duration-300 group-hover:scale-110" />
               </div>
+              }
+            </div>
             }
           </div>
         </div>
 
         <!-- Image Counter -->
-        <div class="mt-4 text-center">
-          <span class="text-sm text-gray-600 dark:text-gray-400">
+        <div class="mt-2 sm:mt-4 text-center">
+          <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
             {{ 'products.image_counter' | translate: {current: activeIndex + 1, total: images.length} }}
           </span>
         </div>
@@ -195,46 +202,46 @@
       <!-- Product Info -->
       <div class="col-span-1 w-full overflow-hidden">
         <div
-          class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl p-8 border-2 border-gray-200/50 dark:border-gray-700/50 transition-all duration-500">
+          class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-2 border-gray-200/50 dark:border-gray-700/50 transition-all duration-500">
           <!-- Product Header -->
-          <div class="product-header mb-8">
-            <!-- Brand Badge -->
-            <div class="flex items-center justify-between mb-6">
-              <div *ngIf="product.brand">
-                <span
-                  class="inline-flex items-center px-6 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200 border-2 border-blue-200 dark:border-blue-800 transition-all duration-300 hover:scale-105">
-                  <i class="pi pi-tag me-2 text-lg"></i>
-                  {{ product.brand.name | multiLanguage }}
-                </span>
-              </div>
-
+          <div class="product-header mb-4 sm:mb-6 lg:mb-8">
+            <!-- Brand and Status Badges -->
+            <div class="flex items-center justify-between flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-5 lg:mb-6">
+              @if (product?.brand) {
               <span
-                class="font-semibold text-sm flex items-center transition-colors duration-300 px-3 py-1 rounded-full"
+                class="inline-flex items-center px-3 sm:px-4 md:px-6 py-1 rounded-full text-xs sm:text-sm font-semibold bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200 border-2 border-blue-200 dark:border-blue-800 transition-all duration-300 hover:scale-105">
+                <i class="pi pi-tag me-1 sm:me-2 text-sm sm:text-base md:text-lg"></i>
+                {{ product?.brand?.name | multiLanguage }}
+              </span>
+              }
+              <span class="font-semibold text-xs sm:text-sm flex items-center transition-colors duration-300 px-2 sm:px-3 py-1 rounded-full"
                 [ngClass]="{
-    'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30': product.status === productStatus.ACTIVE,
-    'text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30': product.status === productStatus.INACTIVE,
-    'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30': product.status === productStatus.OUT_OF_STOCK
-  }">
+      'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30': product.status === productStatus.ACTIVE,
+      'text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30': product.status === productStatus.INACTIVE,
+      'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30': product.status === productStatus.OUT_OF_STOCK
+    }">
                 <i class="pi pi-circle-fill me-2 text-xs"></i>
                 {{ 'productStatus.' + product.status | translate }}
               </span>
             </div>
+          </div>
 
-            <!-- Product Title -->
-            <h1
-              class="text-4xl lg:text-5xl font-bold mb-6 text-gray-900 dark:text-white leading-tight transition-colors duration-300">
-              {{ product.name | multiLanguage }}
-            </h1>
+          <!-- Product Title -->
+          <h1
+            class="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4 lg:mb-6 text-gray-900 dark:text-white leading-tight transition-colors duration-300">
+            {{ product.name | multiLanguage }}
+          </h1>
 
-            <!-- Product Description -->
-            <div *ngIf="product.description"
-              class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed text-lg transition-colors duration-300">
-              <p class="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">{{
-                product.description | multiLanguage }}</p>
-            </div>
-
-            <!-- Rating and Stock Status -->
-            <!-- <div
+          <!-- Product Description -->
+          @if (product?.description) {
+          <div 
+            class="text-gray-600 dark:text-gray-300 mb-4 sm:mb-5 lg:mb-6 leading-relaxed text-sm sm:text-base lg:text-lg transition-colors duration-300">
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">{{
+              product.description | multiLanguage }}</p>
+          </div>
+          }
+          <!-- Rating and Stock Status -->
+          <!-- <div
               class="flex items-center justify-between mb-8 p-4 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-2xl border border-gray-200 dark:border-gray-700">
               <div class="flex items-center space-x-4">
                 <div class="flex items-center">
@@ -260,79 +267,90 @@
               </span>
             </div> -->
 
-            <!-- Price Section -->
-            <div
-              class="product-price mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-3xl border-2 border-purple-200/50 dark:border-purple-700/50">
-              <div class="flex flex-wrap gap-4 items-baseline mb-4">
-                <span class="text-5xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                  {{ effectivePrice | currency }}
-                </span>
-                <span *ngIf="hasDiscount"
-                  class="line-through text-3xl text-gray-400 dark:text-gray-500 transition-colors duration-300">
-                  {{ basePrice | currency }}
-                </span>
-                <div *ngIf="hasDiscount"
-                  class="bg-gradient-to-r from-red-500 to-pink-500 dark:from-red-600 dark:to-pink-600 text-white text-sm font-bold px-6 py-3 rounded-full animate-pulse transition-all duration-300 transform hover:scale-105">
-                  <i class="pi pi-tag me-2"></i>
-                  {{ getDiscountPercentage(basePrice, product.discountPrice) }}% OFF
-                </div>
+          <!-- Price Section -->
+          <div
+            class="product-price mb-4 sm:mb-6 lg:mb-8 p-4 sm:p-5 md:p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl sm:rounded-3xl border-2 border-purple-200/50 dark:border-purple-700/50">
+            <div class="flex flex-wrap gap-2 sm:gap-3 md:gap-4 items-baseline mb-3 sm:mb-4">
+              <span
+                class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                {{ effectivePrice | currency }}
+              </span>
+              @if (hasDiscount) {
+              <span 
+                class="line-through text-xl sm:text-2xl lg:text-3xl text-gray-400 dark:text-gray-500 transition-colors duration-300">
+                {{ basePrice | currency }}
+              </span>
+              }
+              @if (hasDiscount) {
+              <div 
+                class="bg-gradient-to-r from-red-500 to-pink-500 dark:from-red-600 dark:to-pink-600 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 rounded-full animate-pulse transition-all duration-300 transform hover:scale-105">
+                <i class="pi pi-tag me-1 sm:me-2"></i>
+                {{ getDiscountPercentage(basePrice, product.discountPrice) }}% OFF
               </div>
-              <p *ngIf="hasDiscount"
-                class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center transition-colors duration-300">
-                <i class="pi pi-check-circle me-2 text-lg"></i>
-                {{ 'packages.you_save_amount' | translate: {amount: (product.discountPrice) | currency} }}
-              </p>
+              }
             </div>
+            @if (hasDiscount) {
+            <p 
+              class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center transition-colors duration-300">
+              <i class="pi pi-check-circle me-2 text-lg"></i>
+              {{ 'packages.you_save_amount' | translate: {amount: (product.discountPrice) | currency} }}
+            </p>
+            }
           </div>
 
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-5 lg:my-6"></div>
+
           <!-- Product Options -->
-          <form class="space-y-8 mb-8">
-            <!-- Color Selection -->
-            @if (product.variants && product.variants.length > 0) {
-            <div class="space-y-4">
-              <div class="flex flex-col gap-4">
-                @for (variant of mappedVariants; track $index) {
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
-                  {{ variant.variant | translate }}
-                </h3>
-                <div class="flex flex-wrap gap-4">
-                  @for (attribute of variant.attributes; track $index) {
-                  @if (!attribute.image) {
-                  <label [for]="attribute._id" class="relative cursor-pointer w-max group">
-                    <input type="radio" [id]="attribute._id" [value]="attribute" name="variant"
-                      (change)="onVariantSelect(attribute)" class="sr-only" />
-                    <div
-                      class="p-[2px] rounded-2xl border-2 transition-all duration-300 text-center min-w-[80px] shadow-xl hover:shadow-2xl transform hover:scale-105"
-                      [ngClass]="{ 
+          <form class="space-y-4 sm:space-y-6 lg:space-y-8 mb-4 sm:mb-6 lg:mb-8">
+          <!-- Color Selection -->
+          @if (product.variants && product.variants.length > 0) {
+          <div class="space-y-3 sm:space-y-4">
+            <div class="flex flex-col gap-3 sm:gap-4">
+              @for (variant of mappedVariants; track $index) {
+              <h3
+                class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
+                {{ variant.variant | translate }}
+              </h3>
+              <div class="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
+                @for (attribute of variant.attributes; track $index) {
+                @if (!attribute.image) {
+                <label [for]="attribute._id" class="relative cursor-pointer w-max group">
+                  <input type="radio" [id]="attribute._id" [value]="attribute" name="variant"
+                    (change)="onVariantSelect(attribute)" class="sr-only" />
+                  <div
+                    class="p-[2px] rounded-xl sm:rounded-2xl border-2 transition-all duration-300 text-center min-w-[60px] sm:min-w-[70px] md:min-w-[80px] shadow-lg sm:shadow-xl hover:shadow-2xl transform hover:scale-105"
+                    [ngClass]="{ 
                           'border-primary-500 dark:border-primary-400 bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelected(attribute),
                           'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800': !isVariantSelected(attribute) 
                         }">
-                      <span class="font-bold px-2 py-1 block text-lg">{{ attribute.value | multiLanguage }}</span>
-                    </div>
-                  </label>
-                  }@else {
-                  <label [for]="attribute._id"
-                    class="relative cursor-pointer w-max group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
-                    [ngClass]="{ 
-                    'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelected(attribute),
+                    <span class="font-bold px-2 py-1 block text-sm sm:text-base lg:text-lg">{{ attribute.value |
+                      multiLanguage }}</span>
+                  </div>
+                </label>
+                }@else {
+                <label [for]="attribute._id"
+                  class="relative cursor-pointer w-max group rounded-lg sm:rounded-xl overflow-hidden border-2 sm:border-4 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+                  [ngClass]="{ 
+                    'border-primary-500 dark:border-primary-400 shadow-2xl ring-2 sm:ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelected(attribute),
                     'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': !isVariantSelected(attribute) 
                   }">
-                    <input type="radio" [id]="attribute._id" [value]="attribute" name="color"
-                      (change)="onVariantSelect(attribute)" class="sr-only" />
-                    <div class="w-16 h-16 rounded-xl overflow-hidden">
-                      <img [src]="getImageUrl(attribute.image.filePath)" [alt]="attribute.value"
-                        class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
-                    </div>
-                  </label>
-                  }
-                  }
-                </div>
+                  <input type="radio" [id]="attribute._id" [value]="attribute" name="color"
+                    (change)="onVariantSelect(attribute)" class="sr-only" />
+                  <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg sm:rounded-xl overflow-hidden">
+                    <img [src]="getImageUrl(attribute.image.filePath)" [alt]="attribute.value"
+                      class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
+                  </div>
+                </label>
+                }
                 }
               </div>
+              }
             </div>
-            }
-            <!-- Size Selection -->
-            <!-- @if (product.sizes && product.sizes.length > 0) {
+          </div>
+          }
+          <!-- Size Selection -->
+          <!-- @if (product.sizes && product.sizes.length > 0) {
             <div class="space-y-4">
               <label
                 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
@@ -357,118 +375,128 @@
               </div>
             </div>
             } -->
-            <!-- Quantity Selection -->
-            <div class="space-y-4 w-full">
-              <label
-                class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-                <i class="pi pi-sort-numeric-up me-2 text-primary-600 dark:text-primary-400"></i>
-                {{ 'products.quantity' | translate }}
-              </label>
-              <div class="flex items-center space-x-6">
-                <div class="flex items-center h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800">
-                  <button (click)="decreaseQuantity()" [disabled]="quantity <= 1"
-                    class="group rounded-l-full px-4 py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="pi pi-minus text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"></i>
-                  </button>
-                  <input type="number" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1" [max]="product.stock"
-                    class="w-16 text-center border-0 focus:ring-0 font-semibold text-gray-900 dark:text-white bg-transparent">
-                  <button (click)="increaseQuantity()" [disabled]="product.stock && quantity >= product.stock"
-                    class="group rounded-r-full px-4 py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="pi pi-plus text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400"></i>
-                  </button>
-                </div>
+          <!-- Quantity Selection -->
+          <div class="space-y-2 sm:space-y-3 md:space-y-4 w-full">
+            <label
+              class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
+              <i class="pi pi-sort-numeric-up me-2 text-primary-600 dark:text-primary-400"></i>
+              {{ 'products.quantity' | translate }}
+            </label>
+            <div class="flex items-center space-x-3 sm:space-x-4 md:space-x-6">
+              <div
+                class="flex items-center h-10 sm:h-11 md:h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800">
+                <button (click)="decreaseQuantity()" [disabled]="quantity <= 1"
+                  class="group rounded-l-full px-3 sm:px-4 py-1.5 sm:py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <i
+                    class="pi pi-minus text-sm sm:text-base text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"></i>
+                </button>
+                <input type="number" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" [min]="1"
+                  [max]="product.stock"
+                  class="w-12 sm:w-14 md:w-16 text-center border-0 focus:ring-0 font-semibold text-sm sm:text-base text-gray-900 dark:text-white bg-transparent">
+                <button (click)="increaseQuantity()" [disabled]="product.stock && quantity >= product.stock"
+                  class="group rounded-r-full px-3 sm:px-4 py-1.5 sm:py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <i
+                    class="pi pi-plus text-sm sm:text-base text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400"></i>
+                </button>
               </div>
             </div>
+          </div>
           </form>
 
-          <!-- Action Buttons -->
-          <div class="space-y-6">
-            <div class="grid grid-cols-1 gap-4">
-              <button type="button"
-                class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                [disabled]="product.stock === 0" (click)="addToCart()"
-                >
-                <i class="pi pi-shopping-cart me-2"></i>
-                {{ 'products.add_to_cart' | translate }}
-              </button>
-              <!-- Buy Now Button -->
-              <button type="button"
-                class="w-full py-4 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed border-2 rounded-xl border-primary-500/90 dark:border-primary-500/90 text-primary-500/90 dark:text-primary-500/90 transform hover:scale-105 transition-all duration-300"
-                [disabled]="product.stock === 0" (click)="checkout()">
-                <i class="pi pi-shopping-cart me-2"></i>
-                {{ 'products.buy_now' | translate }}
-              </button>
-            </div>
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-5 lg:my-6"></div>
 
-            <!-- Additional Actions -->
-            <div class="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
-              <!-- <button type="button"
+          <!-- Action Buttons -->
+          <div class="space-y-4 sm:space-y-5 lg:space-y-6">
+          <div class="grid grid-cols-1 gap-3 sm:gap-4">
+            <button type="button"
+              class="w-full py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg lg:text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              [disabled]="product.stock === 0" (click)="addToCart()">
+              <i class="pi pi-shopping-cart me-2"></i>
+              {{ 'products.add_to_cart' | translate }}
+            </button>
+            <!-- Buy Now Button -->
+            <button type="button"
+              class="w-full py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg lg:text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed border-2 rounded-lg sm:rounded-xl border-primary-500/90 dark:border-primary-500/90 text-primary-500/90 dark:text-primary-500/90 transform hover:scale-105 transition-all duration-300"
+              [disabled]="product.stock === 0" (click)="checkout()">
+              <i class="pi pi-shopping-cart me-2"></i>
+              {{ 'products.buy_now' | translate }}
+            </button>
+          </div>
+
+          <!-- Additional Actions -->
+          <div class="flex items-center justify-between pt-4 sm:pt-5 lg:pt-6 border-t border-gray-200 dark:border-gray-700">
+            <!-- <button type="button"
                 class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
                 <i class="pi pi-heart text-xl"></i>
                 <span class="text-sm font-medium">Add to Wishlist</span>
               </button> -->
-              <button type="button" (click)="share()"
-                class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
-                <i class="pi pi-share-alt text-xl me-2"></i>
-                <span class="text-sm font-medium">{{ 'products.share' | translate }}</span>
-              </button>
-              <!-- <button type="button"
+            <button type="button" (click)="share()"
+              class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
+              <i class="pi pi-share-alt text-xl me-2"></i>
+              <span class="text-sm font-medium">{{ 'products.share' | translate }}</span>
+            </button>
+            <!-- <button type="button"
                 class="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
                 <i class="pi pi-flag text-xl"></i>
                 <span class="text-sm font-medium">Report</span>
               </button> -->
-            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Product Details Tabs -->
-    <div class="mt-20">
+    <!-- Product Details Accordion -->
+    <div class="mt-8 sm:mt-12 lg:mt-20">
       <div
-        class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 overflow-hidden shadow-2xl dark:shadow-gray-900/50 transition-all duration-500 hover:shadow-3xl dark:hover:shadow-gray-900/70">
+        class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 overflow-hidden shadow-xl sm:shadow-2xl dark:shadow-gray-900/50 transition-all duration-500 hover:shadow-2xl sm:hover:shadow-3xl dark:hover:shadow-gray-900/70">
         <div class="product-accordion space-y-2">
           @for (detail of product.details; track $index) {
-          <div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
-            <button 
-              type="button"
-              (click)="toggleAccordion($index)"
-              class="w-full px-6 py-4 text-left text-xl font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 flex items-center justify-between">
+          <div class="border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl overflow-hidden">
+            <button type="button" (click)="toggleAccordion($index)"
+              class="w-full px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 text-left text-sm sm:text-base md:text-lg lg:text-xl font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 flex items-center justify-between">
               <span>{{ detail.name }}</span>
-              <i class="pi" [ngClass]="{'pi-chevron-down': !isAccordionOpen($index), 'pi-chevron-up': isAccordionOpen($index)}"></i>
+              <i class="pi"
+                [ngClass]="{'pi-chevron-down': !isAccordionOpen($index), 'pi-chevron-up': isAccordionOpen($index)}"></i>
             </button>
-            <div *ngIf="isAccordionOpen($index)" class="p-8 bg-gray-50 dark:bg-gray-900/50 transition-colors duration-300">
+            @if (isAccordionOpen($index)) {
+            <div 
+              class="p-3 sm:p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900/50 transition-colors duration-300">
               <div class="w-full">
                 <div
-                  class="ql-editor text-gray-700 dark:text-gray-300 transition-colors duration-300 text-lg leading-relaxed"
+                  class="ql-editor text-gray-700 dark:text-gray-300 transition-colors duration-300 text-sm sm:text-base lg:text-lg leading-relaxed"
                   [innerHTML]="detail.value | safe:'html'"></div>
               </div>
             </div>
+            }
           </div>
           }
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Related Products -->
-  @if (relatedProducts.length > 0) {
-  <div class="mt-24 max-w-7xl mx-auto px-4 relative z-10 overflow-hidden">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">{{
-        'products.you_may_also_like' | translate }}
-      </h2>
-      <p class="text-gray-600 dark:text-gray-300 text-xl transition-colors duration-300">{{
-        'products.discover_more_products' | translate }}
-      </p>
-    </div>
-    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full overflow-hidden">
-      @for (relatedProduct of relatedProducts; track $index) {
-      <div class="transform hover:scale-105 transition-transform duration-300">
-        <app-product-card [product]="relatedProduct" (clicked)="navigateToProduct($event)"></app-product-card>
+    <!-- Related Products -->
+    @if (relatedProducts.length > 0) {
+    <div class="mt-12 sm:mt-16 lg:mt-24 max-w-7xl mx-auto px-3 sm:px-4 relative z-10 overflow-hidden">
+      <div class="text-center mb-8 sm:mb-12 lg:mb-16">
+        <h2
+          class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
+          {{
+          'products.you_may_also_like' | translate }}
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 text-base sm:text-lg lg:text-xl transition-colors duration-300">{{
+          'products.discover_more_products' | translate }}
+        </p>
       </div>
-      }
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 w-full overflow-hidden">
+        @for (relatedProduct of relatedProducts; track $index) {
+        <div class="transform hover:scale-105 transition-transform duration-300">
+          <app-product-card [product]="relatedProduct" (clicked)="navigateToProduct($event)"></app-product-card>
+        </div>
+        }
+      </div>
     </div>
+    }
   </div>
   }
-</div>

@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal, Inject, PLATFORM_ID, Attribute } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -13,8 +13,6 @@ import {
   UiToastService, 
   UiButtonComponent, 
   UiSpinnerComponent, 
-  UiChipComponent,
-  UiInputDirective
 } from '../../../shared/ui';
 import { ComponentBase } from '../../../core/directives/component-base.directive';
 import { IAddToCartRequest } from '../../cart/models/cart.interface';
@@ -43,7 +41,7 @@ const FRONTEND_DOMAIN = 'https://pledgestores.com';
   selector: 'app-product-details',
   standalone: true,
   imports: [
-    CommonModule,
+    NgClass,
     RouterModule,
     FormsModule,
     UiButtonComponent,

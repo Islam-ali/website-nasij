@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4" [dir]="isRTL ? 'rtl' : 'ltr'">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-gray-900 py-8 px-4" [dir]="isRTL ? 'rtl' : 'ltr'">
   <!-- Header Section -->
   <div class="max-w-4xl mx-auto mb-12">
     <div class="text-center relative">
@@ -258,7 +258,7 @@
           <div class="divide-y divide-gray-100 dark:divide-gray-800">
             <div class="p-6 flex flex-col sm:flex-row sm:items-center gap-6" *ngFor="let item of order.items">
               <div class="relative">
-                <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-gray-100 via-white to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 flex items-center justify-center overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700">
+                <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-gray-100 via-white to-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700">
                   <img
                     *ngIf="item.itemId && item.itemId.images && item.itemId.images.length > 0"
                     [src]="getImageUrl(item.itemId.images[0].filePath)"
