@@ -1,9 +1,8 @@
-<div class="bg-background-color text-primary">
-
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500 pb-10">
   <!-- Loading State -->
-  <div *ngIf="loading()" class="loading-container">
-    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+  @if (loading()) {
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
         <div class="flex flex-col items-center">
           <div class="w-full max-w-xl sticky top-">
             <div class="relative bg-white shadow-xl rounded-2xl p-6 border border-box-border">
@@ -19,223 +18,283 @@
         </div>
       </div>
     </div>
-  </div>
-
+  }
+  
   <!-- Error State -->
-  <div *ngIf="error() && !loading()" class="error-container">
-    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 text-center">
-      <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-4"></i>
-      <h3 class="text-xl font-semibold text-primary mb-2">
-        {{ 'packages.something_went_wrong' | translate }}
-      </h3>
-      <p class="text-secondary mb-4">{{ error() }}</p>
-      <ui-button 
-        variant="primary"
-        (click)="loadPackage()"
-      >
-        <i class="pi pi-refresh mr-2"></i>
-        {{ 'packages.try_again' | translate }}
-      </ui-button>
+  @if (error() && !loading()) {
+  <div class="text-center py-20 relative z-10">
+    <div class="max-w-md mx-auto">
+      <div class="mb-8">
+        <div class="w-32 h-32 bg-gradient-to-br from-red-200 to-red-300 dark:from-red-700 dark:to-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+          <i class="pi pi-exclamation-triangle text-5xl text-red-500 dark:text-red-400"></i>
+        </div>
+        <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-gray-900 dark:text-white transition-colors duration-300">
+          {{ 'packages.something_went_wrong' | translate }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed text-sm sm:text-base lg:text-lg transition-colors duration-300">{{ error() }}</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <ui-button 
+            variant="primary"
+            size="lg"
+            (click)="loadPackage()"
+          >
+            <i class="pi pi-refresh mr-2"></i>
+            {{ 'packages.try_again' | translate }}
+          </ui-button>
+        </div>
+      </div>
     </div>
   </div>
+  }
 
   <!-- Package Details Content -->
-  <div *ngIf="!loading() && !error() && package()" class="package-content">
-    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        <!-- Package Images -->
-        <div class="flex flex-col items-center">
-          <div class="w-full max-w-xl sticky top-28">
-            <div class="relative bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-box-border dark:border-gray-600 overflow-hidden">
-              <div class="absolute top-4 right-4 z-10">
-                <span class="bg-primary-500 dark:bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                  <i class="pi pi-images text-xs"></i>
-                  {{ 'packages.photos' | translate: {count: images.length || 1} }}
-                </span>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <img 
-                  *ngFor="let image of images.slice(0, 4); let i = index"
-                  [alt]="'Selected ' + (package().name || '') + ' ' + (i + 1)" 
-                  class="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105" 
-                  [src]="image.itemImageSrc"
-                  fallback
-                  (error)="onImageError($event)"
-                  (click)="openImageModal(image.itemImageSrc)"
-                />
-                <img 
-                  *ngIf="images.length === 0"
-                  [src]="getMainImage()" 
-                  [alt]="package().name || ''"
-                  class="w-full h-auto object-cover rounded-lg col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
-                  fallback
-                  (error)="onImageError($event)"
-                  (click)="openImageModal(getMainImage())"
-                />
-              </div>
+  @if (!loading() && !error() && package()) {
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start w-full overflow-hidden">
+      <!-- Package Images -->
+      <div class="col-span-1 w-full overflow-hidden">
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-gray-200/50 dark:border-gray-700/50 transition-all duration-500">
+          <div class="relative p-3 sm:p-4 md:p-6">
+            <div class="absolute top-3 sm:top-4 right-3 sm:right-4 z-10">
+              <span class="bg-primary-500 dark:bg-primary-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-1">
+                <i class="pi pi-images text-xs"></i>
+                {{ 'packages.photos' | translate: {count: images.length || 1} }}
+              </span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+              @for (image of images.slice(0, 4); track $index) {
+              <img 
+                [alt]="'Selected ' + (package().name || '') + ' ' + ($index + 1)" 
+                class="w-full h-auto object-cover rounded-lg sm:rounded-xl cursor-pointer transition-transform duration-300 hover:scale-105" 
+                [src]="image.itemImageSrc"
+                fallback
+                (error)="onImageError($event)"
+                (click)="openImageModal(image.itemImageSrc)"
+              />
+              }
+              @if (images.length === 0) {
+              <img 
+                [src]="getMainImage()" 
+                [alt]="package().name || ''"
+                class="w-full h-auto object-cover rounded-lg sm:rounded-xl col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
+                fallback
+                (error)="onImageError($event)"
+                (click)="openImageModal(getMainImage())"
+              />
+              }
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Package Info -->
-        <div class="space-y-10">
+      <!-- Package Info -->
+      <div class="col-span-1 w-full overflow-hidden">
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border-2 border-gray-200/50 dark:border-gray-700/50 transition-all duration-500">
           <!-- Package Header -->
-          <div class="relative">
-            <div class="absolute -top-2 -left-2 w-4 h-4 bg-primary rounded-full opacity-20"></div>
-            <div class="absolute -top-1 -left-1 w-2 h-2 bg-primary rounded-full opacity-40"></div>
-            <h1 class="text-5xl font-extrabold text-primary mb-3 tracking-tight relative z-10">{{ package().name | multiLanguage }}</h1>
-            <p class="text-lg text-secondary dark:text-gray-400 leading-relaxed relative z-10">{{ package().description | multiLanguage }}</p>
-            <div class="my-4">
-              <button type="button" (click)="share()" class="bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                <i class="pi pi-share-alt text-xs me-2"></i>
+          <div class="mb-4 sm:mb-6 lg:mb-8">
+            <h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4 lg:mb-6 text-gray-900 dark:text-white leading-tight transition-colors duration-300">
+              {{ package().name | multiLanguage }}
+            </h1>
+            @if (package().description) {
+            <div class="text-gray-600 dark:text-gray-300 mb-4 sm:mb-5 lg:mb-6 leading-relaxed text-sm sm:text-base lg:text-lg transition-colors duration-300">
+              <p class="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                {{ package().description | multiLanguage }}
+              </p>
+            </div>
+            }
+            <div class="mb-4 sm:mb-5 lg:mb-6">
+              <button type="button" (click)="share()" class="bg-primary-500 dark:bg-primary-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-1 hover:bg-primary-600 dark:hover:bg-primary-700 transition-all duration-300">
+                <i class="pi pi-share-alt text-xs sm:text-sm me-1 sm:me-2"></i>
                 {{ 'products.share' | translate }}
               </button>
             </div>
           </div>
 
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-5 lg:my-6"></div>
+
           <!-- Package Items with Variants -->
-          <div class="space-y-8">
-            <div *ngFor="let item of (package()?.items || [])" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-box-border dark:border-gray-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-              <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-bold text-primary flex items-center gap-2">
-                  <i class="pi pi-box text-lg text-primary"></i>
+          <div class="space-y-4 sm:space-y-6 lg:space-y-8 mb-4 sm:mb-6 lg:mb-8">
+            @for (item of (package().items || []); track item.productId._id) {
+            <div class="bg-white dark:bg-gray-800 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl shadow-md border border-gray-200 dark:border-gray-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div class="flex items-center justify-between flex-wrap gap-2 sm:gap-3 mb-3 sm:mb-4 lg:mb-6">
+                <h3 class="text-base sm:text-lg lg:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <i class="pi pi-box text-sm sm:text-base lg:text-lg text-primary-600 dark:text-primary-400"></i>
                   {{ item.productId.name | multiLanguage }}
-                  <span *ngIf="item.quantity > 1" class="text-base font-medium text-secondary">({{ 'packages.select_quantity' | translate: {quantity: item.quantity} }})</span>
+                  @if (item.quantity > 1) {
+                  <span class="text-xs sm:text-sm md:text-base font-medium text-gray-600 dark:text-gray-400">
+                    ({{ 'packages.select_quantity' | translate: {quantity: item.quantity} }})
+                  </span>
+                  }
                 </h3>
-                <span class=" text-gray-600 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
+                <span class="text-gray-600 dark:text-gray-400 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
                   <i class="pi pi-check-circle text-xs"></i>
                   {{ 'packages.required' | translate }}
                 </span>
               </div>
 
               <!-- Variants Selection by Quantity -->
-              <div *ngIf="item.productId.variants && item.productId.variants.length > 0" class="space-y-6">
-                <div *ngFor="let qty of getQuantityArray(getSelectedQuantity(item.productId._id)); let qtyIndex = index" class="space-y-6">
+              @if (item.productId.variants && item.productId.variants.length > 0) {
+              <div class="space-y-4 sm:space-y-5 lg:space-y-6">
+                @for (qty of getQuantityArray(getSelectedQuantity(item.productId._id)); track qtyIndex; let qtyIndex = $index) {
+                <div class="space-y-4 sm:space-y-5 lg:space-y-6">
                   <!-- Product Image for this quantity -->
                   <div class="relative">
                     <img 
                       [alt]="item.productId.name + ' ' + (qtyIndex + 1)" 
-                      class="w-full h-48 object-contain rounded-lg mb-4 border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
+                      class="w-full h-32 sm:h-40 md:h-48 object-contain rounded-lg sm:rounded-xl mb-3 sm:mb-4 border border-gray-200 dark:border-gray-600 transition-transform duration-300 ease-in-out hover:scale-105" 
                       [src]="getVariantImageForQuantity(item.productId._id, qtyIndex + 1)"
                       fallback
                     />
-                    <div class="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-semibold">
+                    <div class="absolute top-2 start-2 bg-primary-500 dark:bg-primary-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs font-semibold">
                       {{ item.productId.name | multiLanguage }} {{ qtyIndex + 1 }}
                     </div>
                   </div>
 
                   <!-- Dynamic Variants Selection -->
                   @if (item.productId.variants && item.productId.variants.length > 0) {
-                    <div class="space-y-4">
-                      <div class="flex flex-col gap-4">
-                        @for (variant of getMappedVariantsForProduct(item.productId._id); track $index) {
-                          <h3 class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
-                            {{'products.' + variant.variant | translate}}
-                          </h3>
-                          <div class="flex flex-wrap gap-4">
-                            @for (attribute of variant.attributes; track $index) {
-                              @if (!attribute.image) {
-                                <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group">
-                                  <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
-                                  <div class="p-[2px] rounded-2xl border-2 transition-all duration-300 text-center min-w-[80px] shadow-xl hover:shadow-2xl transform hover:scale-105" [ngClass]="{ 'border-primary-500 dark:border-primary-400 bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
-                                    <span class="font-bold px-2 py-1 block text-lg">{{ attribute.value | multiLanguage }}</span>
-                                  </div>
-                                </label>
-                              }@else {
-                                <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group rounded-xl overflow-hidden border-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110" [ngClass]="{ 'border-primary-500 dark:border-primary-400 shadow-2xl ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
-                                  <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
-                                  <div class="w-16 h-16 rounded-xl overflow-hidden">
-                                    <img [src]="getImageUrl(attribute.image.filePath)" fallback [alt]="attribute.value" class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
-                                  </div>
-                                </label>
-                              }
-                            }
+                  <div class="space-y-3 sm:space-y-4">
+                    <div class="flex flex-col gap-3 sm:gap-4">
+                      @for (variant of getMappedVariantsForProduct(item.productId._id); track $index) {
+                      <h3 class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
+                        {{'products.' + variant.variant | translate}}
+                      </h3>
+                      <div class="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
+                        @for (attribute of variant.attributes; track $index) {
+                        @if (!attribute.image) {
+                        <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group">
+                          <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
+                          <div class="p-[2px] rounded-xl sm:rounded-2xl border-2 transition-all duration-300 text-center min-w-[60px] sm:min-w-[70px] md:min-w-[80px] shadow-lg sm:shadow-xl hover:shadow-2xl transform hover:scale-105" [ngClass]="{ 'border-primary-500 dark:border-primary-400 bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-500 dark:to-primary-500 text-white ring-2 sm:ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
+                            <span class="font-bold px-2 py-1 block text-sm sm:text-base lg:text-lg">{{ attribute.value | multiLanguage }}</span>
                           </div>
+                        </label>
+                        }@else {
+                        <label [for]="attribute._id + '_' + qtyIndex" class="relative cursor-pointer w-max group rounded-lg sm:rounded-xl overflow-hidden border-2 sm:border-4 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110" [ngClass]="{ 'border-primary-500 dark:border-primary-400 shadow-2xl ring-2 sm:ring-4 ring-primary-200 dark:ring-primary-800': isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute), 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500': !isVariantSelectedForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute) }">
+                          <input type="radio" [id]="attribute._id + '_' + qtyIndex" [value]="attribute" name="variant_{{item.productId._id}}_{{qtyIndex}}" (change)="onVariantSelectForQuantity(item.productId._id, qtyIndex + 1, variant.variant, attribute)" class="sr-only" />
+                          <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg sm:rounded-xl overflow-hidden">
+                            <img [src]="getImageUrl(attribute.image.filePath)" fallback [alt]="attribute.value" class="w-full h-full object-cover p-1 cursor-pointer transition-transform duration-300 hover:scale-110">
+                          </div>
+                        </label>
+                        }
                         }
                       </div>
+                      }
                     </div>
+                  </div>
                   }
                 </div>
+                }
               </div>
+              }
 
               <!-- Fallback for items without variants -->
-              <div *ngIf="!item.productId.variants || item.productId.variants.length === 0" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              @if (!item.productId.variants || item.productId.variants.length === 0) {
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-center">
                 <img 
                   [alt]="item.productId.name" 
-                  class="w-full h-48 object-contain rounded-lg border border-box-border transition-transform duration-300 ease-in-out hover:scale-105" 
+                  class="w-full h-32 sm:h-40 md:h-48 object-contain rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-600 transition-transform duration-300 ease-in-out hover:scale-105" 
                   [src]="(item.productId.images[0].filePath) || 'images/photo.png'"
                   fallback
                   (error)="onImageError($event)"
                 />
                 <div>
-                  <p class="text-sm ">{{'packages.this_item_is_included_in_your_package' | translate}}</p>
+                  <p class="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">{{'packages.this_item_is_included_in_your_package' | translate}}</p>
                 </div>
+              </div>
+              }
+            </div>
+            }
+          </div>
+
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-5 lg:my-6"></div>
+
+          <!-- Quantity Selection -->
+          <div class="mb-4 sm:mb-6 lg:mb-8">
+            <label class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center mb-3 sm:mb-4">
+              <i class="pi pi-sort-numeric-up me-2 text-primary-600 dark:text-primary-400"></i>
+              {{ 'products.quantity' | translate }}
+            </label>
+            <div class="flex items-center space-x-3 sm:space-x-4 md:space-x-6">
+              <div class="flex items-center h-10 sm:h-11 md:h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800">
+                <button 
+                  class="group rounded-l-full px-3 sm:px-4 py-1.5 sm:py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  (click)="decreaseQuantity()"
+                  [disabled]="quantity <= 1"
+                >
+                  <i class="pi pi-minus text-sm sm:text-base text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"></i>
+                </button>
+                <input type="number" [value]="quantity" [min]="1" [max]="package().stock || 1"
+                  class="w-12 sm:w-14 md:w-16 text-center border-0 focus:ring-0 font-semibold text-sm sm:text-base text-gray-900 dark:text-white bg-transparent"
+                  readonly
+                />
+                <button 
+                  class="group rounded-r-full px-3 sm:px-4 py-1.5 sm:py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  (click)="increaseQuantity()"
+                  [disabled]="quantity >= (package().stock || 1)"
+                >
+                  <i class="pi pi-plus text-sm sm:text-base text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400"></i>
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- Quantity and Actions -->
-          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 dark:border-gray-600 p-8 rounded-2xl shadow-lg border border-box-border">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-4">
-                <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
-                  <button 
-                    class="px-3 py-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-l-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    (click)="decreaseQuantity()"
-                    [disabled]="quantity <= 1"
-                  >
-                    <i class="pi pi-minus text-sm"></i>
-                  </button>
-                  <span class="px-4 py-2 font-semibold text-lg">{{ quantity }}</span>
-                  <button 
-                    class="px-3 py-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:scale-105 rounded-r-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    (click)="increaseQuantity()"
-                    [disabled]="quantity >= (package().stock || 1)"
-                  >
-                    <i class="pi pi-plus text-sm"></i>
-                  </button>
-                </div>
-                <div *ngIf="getSavings() > 0" class="flex flex-col gap-1">
-                <p class="text-sm text-green-600 dark:text-green-400 font-semibold flex items-center gap-1">
-                  <i class="pi pi-check-circle text-xs"></i>
-                  {{ 'packages.you_save_amount' | translate: {amount: (getSavings().toFixed(2) | currency)} }}
-                </p>
-                <p class="text-sm text-secondary dark:text-gray-400 flex items-center gap-1">
-                  <i class="pi pi-tag text-xs"></i>
-                  <span class="line-through">{{ getTotalValue().toFixed(2) | currency }}</span>
-                </p>
-                </div>
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-5 lg:my-6"></div>
+
+          <!-- Price Summary -->
+          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-200 dark:border-gray-600 mb-4 sm:mb-6 lg:mb-8">
+            <div class="space-y-3 sm:space-y-4">
+              <!-- Total Value (if discount exists) -->
+              @if (getSavings() > 0) {
+              <div class="flex items-center justify-between pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-600">
+                <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{{ 'packages.original_price' | translate }}</span>
+                <span class="text-sm sm:text-base text-gray-600 dark:text-gray-400 line-through font-medium">{{ getTotalValue().toFixed(2) | currency }}</span>
               </div>
-              <div class="text-right">
-                <p class="text-sm text-secondary dark:text-gray-400 flex items-center justify-end gap-1">
+              <div class="flex items-center justify-between pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-600">
+                <span class="text-xs sm:text-sm text-green-600 dark:text-green-400 font-semibold flex items-center gap-1">
+                  <i class="pi pi-check-circle text-xs"></i>
+                  {{ 'packages.you_save' | translate }}
+                </span>
+                <span class="text-sm sm:text-base text-green-600 dark:text-green-400 font-semibold">{{ getSavings().toFixed(2) | currency }}</span>
+              </div>
+              }
+              
+              <!-- Total Price -->
+              <div class="flex items-center justify-between pt-2 sm:pt-3">
+                <span class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
                   {{ 'packages.total_price' | translate }}
-                </p>
-                <p class="text-4xl font-extrabold text-primary">{{ getPackageTotalPrice().toFixed(2) | currency }}</p>
+                </span>
+                <span class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-600 dark:text-primary-400">{{ getPackageTotalPrice().toFixed(2) | currency }}</span>
               </div>
             </div>
-            <div class="grid grid-cols-1 gap-4 mt-8">
-                <button type="button"
-                  class="w-full py-5 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                  [disabled]="!package().stock || package().stock === 0" (click)="addToCart()">
-                  <i class="pi pi-shopping-cart mr-3"></i>
-                  {{ 'products.add_to_cart' | translate }}
-                </button>
-  
-                <!-- Buy Now Button -->
-                 
-                <button type="button"
-                class="w-full py-4 text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed border-2 rounded-xl border-primary-500/90 dark:border-primary-500/90 text-primary-500/90 dark:text-primary-500/90 transform hover:scale-105 transition-all duration-300"
-                  [disabled]="!package().stock || package().stock === 0" (click)="buyNow()">
-                  <i class="pi pi-shopping-cart mr-3"></i>
-                  {{ 'packages.buy_now' | translate }}
-                </button>
-              </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-5 lg:my-6"></div>
+
+          <!-- Action Buttons -->
+          <div class="space-y-3 sm:space-y-4">
+            <button type="button"
+              class="w-full py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg lg:text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-400 to-primary-600 dark:from-primary-500 dark:to-primary-500 hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 text-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              [disabled]="!package().stock || package().stock === 0" (click)="addToCart()">
+              <i class="pi pi-shopping-cart me-2"></i>
+              {{ 'products.add_to_cart' | translate }}
+            </button>
+
+            <!-- Buy Now Button -->
+            <button type="button"
+              class="w-full py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg lg:text-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed border-2 rounded-lg sm:rounded-xl border-primary-500/90 dark:border-primary-500/90 text-primary-500/90 dark:text-primary-500/90 transform hover:scale-105 transition-all duration-300"
+              [disabled]="!package().stock || package().stock === 0" (click)="buyNow()">
+              <i class="pi pi-shopping-cart me-2"></i>
+              {{ 'packages.buy_now' | translate }}
+            </button>
           </div>
         </div>
       </div>
-
     </div>
   </div>
+  }
 </div>
 
 <style>
