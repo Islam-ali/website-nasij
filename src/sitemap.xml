@@ -1,46 +1,273 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pledgestores.com/</loc>
-    <lastmod>2025-11-07</lastmod>
+    <loc>https://pledgestores.com</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <changefreq>daily</changefreq>
   </url>
   <url>
     <loc>https://pledgestores.com/shop</loc>
-    <lastmod>2025-11-07</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pledgestores.com/packages</loc>
-    <lastmod>2025-11-07</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/about</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pledgestores.com/track-order</loc>
-    <lastmod>2025-11-07</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pledgestores.com/privacy-policy</loc>
-    <lastmod>2025-11-07</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pledgestores.com/terms-of-service</loc>
-    <lastmod>2025-11-07</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pledgestores.com/faq</loc>
-    <lastmod>2025-11-07</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2025-11-30</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/69152ec3382cc7512781e0fb/medical%20posters</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/69152de1382cc7512781e0c9/engineering%20posters</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/691524e2382cc7512781e0bc/medicosis%20stickers%20pack</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/691523e6382cc7512781e0b0/arabic%20stickers%20pack</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/69152356382cc7512781e0a3/palast%20ine%20stickers%20pack</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6915228ce6677c9de3d4fc4b/Girly%20stickers%20pack</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/691521fee6677c9de3d4fc3e/wazakker%20stickers%20pack</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/69151692e6677c9de3d4fc1d/study%20hard%20stickers%20pack</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6902457db8a45426c03e8bf5/Adaby%20Subject%20Stickers</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/690244ac0040f82498553411/Math%20Subjects%20Stickers</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/690244450040f82498553400/Science%20Subjects%20Stickers</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/690242180040f824985533b0/adaby%20stickers</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6902402f0040f82498553377/Medical%20Stickers</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/69021f7d1657d7b7517408cf/Quran%20bookmark</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6902135c3e58158c2d47458c/Pi%20notebook</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/690212583e58158c2d47457f/engineering%20notebook</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6902116a3e58158c2d474572/DOCTOR%20Notebook%201</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6902115b3e58158c2d474565/camel%20notebook</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/690210e73e58158c2d474558/its%20ok%20notebook</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/6902105c3e58158c2d47454b/Lab%20coat%20notebook</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/69020fb83e58158c2d47453e/Human%20heart%20notebook</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68e3dab12c7df3bc56e77545/Mathematics%20Stickers</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68e3d75b2c7df3bc56e7741d/Noor%20frame</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dff4e353bca3a65bcec480/Pledge%20Planner</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dff39f53bca3a65bcec46c/3%20Thanawy%20Planner%20(Science)</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dff38353bca3a65bcec458/3%20Thanawy%20Planner%20(%20Math)</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dff30553bca3a65bcec438/3%20Thanawy%20Literature%20Planner</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dff06353bca3a65bcec3cb/3%20thanawy%20Literature%20Planner%20(%20Azhar)</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dfead053bca3a65bcec322/3%20thanawy%20Science%20Planner%20(%20Azhar)</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dfac1249821ae0dd1250a1/Ajran%20Group</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68dfab2249821ae0dd12506b/Pledge%20List</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/shop/68df8c2f49821ae0dd124f94/Pledge%20Journal</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/packages/68e3dd15f650d8ab79143aaf</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/packages/68e3ddd6bb903de36107b2c9</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/packages/6902191c3e58158c2d4745b6</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/packages/6908c2f861616fdf352f5c7c</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pledgestores.com/packages/691d72543f745e86f205bbe2</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>
-
