@@ -9,6 +9,7 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
   
 @Component({
   selector: 'app-bannar',
+  standalone: true,
   imports: [CommonModule , RouterModule, MultiLanguagePipe, FallbackImgDirective],
   templateUrl: './bannar.component.html',
 })

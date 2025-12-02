@@ -1,47 +1,50 @@
 <div class="wishlist-container">
   <div class="wishlist-header">
     <h1>My Wishlist</h1>
-    <p *ngIf="wishlistItems.length" class="item-count">
+    @if (wishlistItems.length) {
+    <p class="item-count">
       {{ wishlistItems.length }} {{ wishlistItems.length === 1 ? 'item' : 'items' }}
     </p>
+    }
   </div>
 
   <div class="wishlist-content">
     <!-- Loading State -->
-    <div *ngIf="loading" class="loading-overlay">
+    @if (loading) {
+    <div class="loading-overlay">
       <ui-spinner></ui-spinner>
     </div>
+    }
 
     <!-- Wishlist Content -->
-    <ng-container *ngIf="!loading">
-      <ng-container>
-        <!-- Empty State -->
-        <div *ngIf="wishlistItems.length === 0; else wishlistItem" class="empty-wishlist">
-          <i class="pi pi-heart" style="font-size: 4rem; color: var(--primary-color)"></i>
-          <h2>Your wishlist is empty</h2>
-          <p>You haven't added any items to your wishlist yet.</p>
-          <ui-button variant="outline" size="lg" (click)="continueShopping()">
-            <i class="pi pi-arrow-right ml-2"></i>
-            Browse Products
+    @if (!loading) {
+      <!-- Empty State -->
+      @if (wishlistItems.length === 0) {
+      <div class="empty-wishlist">
+        <i class="pi pi-heart" style="font-size: 4rem; color: var(--primary-color)"></i>
+        <h2>Your wishlist is empty</h2>
+        <p>You haven't added any items to your wishlist yet.</p>
+        <ui-button variant="outline" size="lg" (click)="continueShopping()">
+          <i class="pi pi-arrow-right ml-2"></i>
+          Browse Products
+        </ui-button>
+      </div>
+      } @else {
+      <div>
+        <div class="wishlist-actions mb-4">
+          <ui-button variant="ghost" size="md" (click)="continueShopping()">
+            <i class="pi pi-arrow-left mr-2"></i>
+            Continue Shopping
+          </ui-button>
+          <ui-button variant="destructive" size="md" (click)="clearWishlist()" [disabled]="loading">
+            <i class="pi pi-trash mr-2"></i>
+            Clear Wishlist
           </ui-button>
         </div>
 
-        <!-- Wishlist Items -->
-        <ng-template #wishlistItem>
-          <div>
-            <div class="wishlist-actions mb-4">
-              <ui-button variant="ghost" size="md" (click)="continueShopping()">
-                <i class="pi pi-arrow-left mr-2"></i>
-                Continue Shopping
-              </ui-button>
-              <ui-button variant="destructive" size="md" (click)="clearWishlist()" [disabled]="loading">
-                <i class="pi pi-trash mr-2"></i>
-                Clear Wishlist
-              </ui-button>
-            </div>
-
-            <div class="wishlist-items">
-              <div *ngFor="let item of wishlistItems; trackBy: trackByItem" class="wishlist-item">
+        <div class="wishlist-items">
+          @for (item of wishlistItems; track trackByItem($index, item)) {
+          <div class="wishlist-item">
                 <div class="item-image" (click)="viewProduct(item)">
                   <img [src]="getProductImage(item)" [alt]="item?.product?.name || 'Product'" class="product-image" />
                 </div>
@@ -49,15 +52,18 @@
                 <div class="item-details" (click)="viewProduct(item)">
                   <h3 class="product-name">{{ item?.product?.name || 'Product' }}</h3>
                   <div class="product-price">
-                    <span *ngIf="item?.product?.discountPrice" class="discounted-price">
+                    @if (item?.product?.discountPrice) {
+                    <span class="discounted-price">
                       {{ getDisplayPrice(item) | currency }}
                     </span>
-                    <span *ngIf="item?.product?.discountPrice" class="original-price">
+                    <span class="original-price">
                       {{ item?.product?.price | currency }}
                     </span>
-                    <span *ngIf="!item?.product?.discountPrice">
+                    } @else {
+                    <span>
                       {{ getDisplayPrice(item) | currency }}
                     </span>
+                    }
                   </div>
                   <p class="stock-status" [class.in-stock]="isInStock(item)" [class.out-of-stock]="!isInStock(item)">
                     {{ isInStock(item) ? 'In Stock' : 'Out of Stock' }}
@@ -101,22 +107,22 @@
                   </ui-button>
                 </div>
               </div>
-            </div>
+          }
+        </div>
 
-            <div class="wishlist-footer mt-5">
-              <ui-button variant="ghost" size="md" (click)="continueShopping()">
-                <i class="pi pi-arrow-left mr-2"></i>
-                Continue Shopping
-              </ui-button>
+        <div class="wishlist-footer mt-5">
+          <ui-button variant="ghost" size="md" (click)="continueShopping()">
+            <i class="pi pi-arrow-left mr-2"></i>
+            Continue Shopping
+          </ui-button>
 
-              <ui-button variant="primary" size="md" [disabled]="loading" routerLink="/cart">
-                View Cart
-                <i class="pi pi-shopping-cart ml-2"></i>
-              </ui-button>
-            </div>
-          </div>
-        </ng-template>
-      </ng-container>
-    </ng-container>
+          <ui-button variant="primary" size="md" [disabled]="loading" routerLink="/cart">
+            View Cart
+            <i class="pi pi-shopping-cart ml-2"></i>
+          </ui-button>
+        </div>
+      </div>
+      }
+    }
   </div>
 </div>

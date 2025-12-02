@@ -8,41 +8,55 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm tracking-wide">
         <div class="flex flex-wrap items-center gap-4">
-          <a *ngIf="businessProfile?.contactInfo?.phone" [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone"
+          @if (businessProfile?.contactInfo?.phone) {
+          <a [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone"
             target="_blank" class="flex items-center gap-2 hover:text-white transition-colors">
             <i class="pi pi-whatsapp text-white/80"></i>
             <span dir="ltr">{{businessProfile?.contactInfo?.phone}}</span>
           </a>
-          <span *ngIf="businessProfile?.contactInfo?.email" class="hidden sm:flex items-center gap-2 text-white/80">
+          }
+          @if (businessProfile?.contactInfo?.email) {
+          <span class="hidden sm:flex items-center gap-2 text-white/80">
             <i class="pi pi-envelope"></i>
             {{businessProfile?.contactInfo?.email}}
           </span>
+          }
           <span class="hidden lg:flex items-center gap-2 text-white/70">
             <i class="pi pi-clock"></i>
             {{ 'navigation.support24h' | translate }}
           </span>
         </div>
         <div class="flex items-center gap-3">
-          <a *ngIf="businessProfile?.socialMedia?.facebook" [href]="businessProfile!.socialMedia!.facebook!"
+          @if (businessProfile?.socialMedia?.facebook) {
+          <a [href]="businessProfile!.socialMedia!.facebook!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-facebook"></i>
           </a>
-          <a *ngIf="businessProfile?.socialMedia?.twitter" [href]="businessProfile!.socialMedia!.twitter!"
+          }
+          @if (businessProfile?.socialMedia?.twitter) {
+          <a [href]="businessProfile!.socialMedia!.twitter!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-twitter"></i>
           </a>
-          <a *ngIf="businessProfile?.socialMedia?.instagram" [href]="businessProfile!.socialMedia!.instagram!"
+          }
+          @if (businessProfile?.socialMedia?.instagram) {
+          <a [href]="businessProfile!.socialMedia!.instagram!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-instagram"></i>
           </a>
-          <a *ngIf="businessProfile?.socialMedia?.linkedin" [href]="businessProfile!.socialMedia!.linkedin!"
+          }
+          @if (businessProfile?.socialMedia?.linkedin) {
+          <a [href]="businessProfile!.socialMedia!.linkedin!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-linkedin"></i>
           </a>
-          <a *ngIf="businessProfile?.socialMedia?.tiktok" [href]="businessProfile!.socialMedia!.tiktok!" target="_blank"
+          }
+          @if (businessProfile?.socialMedia?.tiktok) {
+          <a [href]="businessProfile!.socialMedia!.tiktok!" target="_blank"
             class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-tiktok"></i>
           </a>
+          }
         </div>
       </div>
     </div>
@@ -162,10 +176,12 @@
           [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
           <i class="pi pi-shopping-cart text-primary-500 transition-colors duration-300"
             [class.dark:text-primary-300]="isDarkTheme()"></i>
-          <span *ngIf="cartItemCount() > 0"
+          @if (cartItemCount() > 0) {
+          <span
             class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-primary-600 text-white text-[10px] rounded-full flex items-center justify-center shadow-md">
             {{ cartItemCount() }}
           </span>
+          }
         </button>
 
         <a routerLink="/track-order" routerLinkActive="!border-primary-400 !text-primary-600"
@@ -186,7 +202,8 @@
   </div>
 
   <!-- Mobile Navigation -->
-  <div class="lg:hidden" [class.hidden]="!navbarOpen()">
+  @if (navbarOpen()) {
+  <div class="lg:hidden">
     <div class="px-4 py-6 bg-white border-t border-primary-100 transition-all duration-300 space-y-3"
       [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:border-dark-border]="isDarkTheme()">
       <div class="space-y-3">
@@ -222,6 +239,7 @@
       </a>
     </div>
   </div>
+  }
 </header>
 
 <!-- Spacer for fixed navbar -->

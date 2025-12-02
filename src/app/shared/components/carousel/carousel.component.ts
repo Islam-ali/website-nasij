@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-carousel',
+  standalone: true,
   imports: [CommonModule, ProductCardComponent],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.scss'
@@ -411,6 +412,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     
     // Add event listeners to document to track drag even outside element
+    if (!isPlatformBrowser(this.platformId)) return;
     if (event instanceof MouseEvent) {
       document.addEventListener('mousemove', this.onDocumentMouseMove);
       document.addEventListener('mouseup', this.onDocumentMouseUp);

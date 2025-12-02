@@ -1,31 +1,37 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'ui-form-field',
   standalone: true,
-  imports: [NgIf],
+  imports: [],
   template: `
     <div class="flex flex-col gap-1">
+      @if (label) {
       <label
-        *ngIf="label"
         class="text-sm font-medium text-gray-700 dark:text-gray-300"
         [attr.for]="forId"
       >
         {{ label }}
-        <span *ngIf="required" class="text-red-500" aria-hidden="true">*</span>
+        @if (required) {
+        <span class="text-red-500" aria-hidden="true">*</span>
+        }
       </label>
+      }
 
       <div>
         <ng-content></ng-content>
       </div>
 
-      <p *ngIf="hint && !error" class="text-xs text-gray-500 dark:text-gray-400">
+      @if (hint && !error) {
+      <p class="text-xs text-gray-500 dark:text-gray-400">
         {{ hint }}
       </p>
-      <p *ngIf="error" class="text-xs text-red-500 dark:text-red-400">
+      }
+      @if (error) {
+      <p class="text-xs text-red-500 dark:text-red-400">
         {{ error }}
       </p>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, signal, ViewChild, ElementRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, signal, ViewChild, ElementRef, inject, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil, switchMap } from 'rxjs/operators';
@@ -84,7 +84,9 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   private packageUrlService = inject(PackageUrlService);
   private cartService = inject(CartService);
   private translationService = inject(TranslationService);
-  constructor() {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     super();
   }
 
@@ -370,6 +372,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   }
 
   createRippleEffect(event: any): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     const button = event.target.closest('.color-swatch');
     if (!button) return;
 
@@ -1165,6 +1168,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
   share(): void {
     if (!this.package()) return;
+    if (!isPlatformBrowser(this.platformId)) return;
     const url = window.location.href;
     navigator.share({
       url: url

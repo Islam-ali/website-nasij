@@ -412,6 +412,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   share(): void {
     if (!this.product) return;
+    if (!isPlatformBrowser(this.platformId)) return;
     const url = window.location.href;
     navigator.share({
       url: url

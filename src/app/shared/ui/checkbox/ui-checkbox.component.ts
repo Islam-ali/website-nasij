@@ -5,12 +5,12 @@ import {
   Input,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'ui-checkbox',
   standalone: true,
-  imports: [NgClass, NgIf],
+  imports: [NgClass],
   template: `
     <label
       class="group flex cursor-pointer items-start gap-3"
@@ -31,8 +31,8 @@ import { NgClass, NgIf } from '@angular/common';
               value
           }"
         >
+          @if (value) {
           <svg
-            *ngIf="value"
             class="h-3.5 w-3.5"
             viewBox="0 0 20 20"
             fill="none"
@@ -41,15 +41,18 @@ import { NgClass, NgIf } from '@angular/common';
           >
             <path d="M6 10.5l2.5 2.5L14 8" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
+          }
         </span>
       </span>
       <span class="space-y-1 leading-tight">
         <span class="block text-sm font-medium text-gray-900 dark:text-white">
           {{ label }}
         </span>
-        <span *ngIf="description" class="block text-sm text-gray-500 dark:text-gray-400">
+        @if (description) {
+        <span class="block text-sm text-gray-500 dark:text-gray-400">
           {{ description }}
         </span>
+        }
       </span>
     </label>
   `,

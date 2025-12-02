@@ -26,9 +26,11 @@ import { UiToastContainerComponent, UiSpinnerComponent } from '../shared/ui';
     <app-footer></app-footer>
     <ui-toast-container position="top-right"></ui-toast-container>
     
-    <div *ngIf="loading$ | async" class="loading-overlay">
+    @if (loading$ | async) {
+    <div class="loading-overlay">
       <ui-spinner size="lg"></ui-spinner>
     </div>
+    }
   `,
   styles: [`
     .main-content {

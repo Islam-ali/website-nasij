@@ -30,8 +30,12 @@
             class="w-full sm:w-auto px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
             [disabled]="loading || !orderNumber.trim()"
           >
-            <i class="fas fa-search text-sm sm:text-base" *ngIf="!loading"></i>
-            <i class="fas fa-spinner fa-spin text-sm sm:text-base" *ngIf="loading"></i>
+            @if (!loading) {
+            <i class="fas fa-search text-sm sm:text-base"></i>
+            }
+            @if (loading) {
+            <i class="fas fa-spinner fa-spin text-sm sm:text-base"></i>
+            }
             <span class="hidden sm:inline">{{ loading ? ('orderTracking.searching' | translate) : ('orderTracking.trackOrder' | translate) }}</span>
             <span class="sm:hidden">{{ loading ? ('orderTracking.searching' | translate) : ('orderTracking.trackOrder' | translate) }}</span>
           </button>
@@ -41,15 +45,18 @@
   </div>
 
   <!-- Error Message -->
-  <div class="max-w-2xl mx-auto mb-4 sm:mb-6 md:mb-8" *ngIf="error">
+  @if (error) {
+  <div class="max-w-2xl mx-auto mb-4 sm:mb-6 md:mb-8">
     <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 text-center">
       <i class="fas fa-exclamation-triangle text-red-500 text-lg sm:text-xl mb-2"></i>
       <p class="text-sm sm:text-base text-red-700 dark:text-red-300 font-medium">{{ error }}</p>
     </div>
   </div>
+  }
 
   <!-- Results Section -->
-  <div class="max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10" *ngIf="showResults && order">
+  @if (showResults && order) {
+  <div class="max-w-6xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10">
     <!-- Order Summary -->
     <section class="bg-white/95 dark:bg-gray-900/80 backdrop-blur rounded-xl sm:rounded-2xl md:rounded-3xl border border-primary-100/60 dark:border-primary-800/50 overflow-hidden">
       <div class="bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 px-4 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-5 md:py-6 lg:py-8">
@@ -136,15 +143,19 @@
                   {{ 'paymentMethod.' + order.paymentMethod | translate }}
                 </span></span>
               </p>
-              <p *ngIf="hasOutstandingBalance()" class="flex items-center gap-1.5 sm:gap-2 text-primary-600 dark:text-primary-300">
+              @if (hasOutstandingBalance()) {
+              <p class="flex items-center gap-1.5 sm:gap-2 text-primary-600 dark:text-primary-300">
                 <i class="pi pi-exclamation-circle text-primary-500 text-sm sm:text-base"></i>
                 <span class="break-words">{{ 'orderTracking.remainingBalance' | translate }}:
                 <span class="font-semibold">{{ getOutstandingAmount() | currency }}</span></span>
               </p>
-              <p *ngIf="!hasOutstandingBalance()" class="flex items-center gap-1.5 sm:gap-2 text-primary-600 dark:text-primary-300">
+              }
+              @if (!hasOutstandingBalance()) {
+              <p class="flex items-center gap-1.5 sm:gap-2 text-primary-600 dark:text-primary-300">
                 <i class="pi pi-check-circle text-primary-500 text-sm sm:text-base"></i>
                 {{ 'orderTracking.paidBadge' | translate }}
               </p>
+              }
             </div>
           </div>
 
@@ -193,12 +204,14 @@
               <i class="pi pi-map-marker text-primary-500 text-base sm:text-lg md:text-xl"></i>
               {{ 'orderTracking.timelineHeading' | translate }}
             </h4>
-            <span class="text-xs sm:text-sm font-semibold text-primary-600 dark:text-primary-300" *ngIf="shouldShowTimeline()">
+            @if (shouldShowTimeline()) {
+            <span class="text-xs sm:text-sm font-semibold text-primary-600 dark:text-primary-300">
               {{ 'orderTracking.currentStage' | translate }} : 
               <span class="font-semibold px-3 py-1 rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300 w-fit">
                   {{ 'orderTracking.status.' + order.status | translate }}
               </span>
             </span>
+            }
           </div>
           <div class="p-4 sm:p-6 md:p-8">
             @if(shouldShowTimeline()) {
@@ -260,20 +273,24 @@
             </h4>
           </div>
           <div class="divide-y divide-gray-100 dark:divide-gray-800">
-            <div class="p-4 sm:p-5 md:p-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 md:gap-6" *ngFor="let item of order.items">
+            @for (item of order.items; track $index) {
+            <div class="p-4 sm:p-5 md:p-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 md:gap-6">
               <div class="relative flex-shrink-0">
                 <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl bg-gradient-to-br from-gray-100 via-white to-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700">
+                  @if (item.itemId && item.itemId.images && item.itemId.images.length > 0) {
                   <img
-                    *ngIf="item.itemId && item.itemId.images && item.itemId.images.length > 0"
                     [src]="getImageUrl(item.itemId.images[0].filePath)"
                     [alt]="item.itemId ? (item.itemId.name | multiLanguage) : ''"
                     class="w-full h-full object-cover"
                     (error)="onImageError($event)"
                     (load)="onImageLoad($event)"
                   >
-                  <div *ngIf="!item.itemId || !item.itemId.images || item.itemId.images.length === 0" class="w-full h-full flex items-center justify-center text-2xl sm:text-3xl text-gray-400 dark:text-gray-500">
+                  }
+                  @if (!item.itemId || !item.itemId.images || item.itemId.images.length === 0) {
+                  <div class="w-full h-full flex items-center justify-center text-2xl sm:text-3xl text-gray-400 dark:text-gray-500">
                     <i class="fas fa-box"></i>
                   </div>
+                  }
                 </div>
                 <span class="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-semibold shadow-md"
                       [ngClass]="item.itemType === 'Package' ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300' : 'bg-primary-200 text-primary-800 dark:bg-primary-900/30 dark:text-primary-100'">
@@ -310,6 +327,7 @@
                 </div>
               </div>
             </div>
+            }
           </div>
         </section>
         }
@@ -464,9 +482,11 @@
       </button>
     </div>
   </div>
+  }
 
   <!-- No Results Message -->
-  <div class="max-w-2xl mx-auto px-3 sm:px-4" *ngIf="showResults && !order">
+  @if (showResults && !order) {
+  <div class="max-w-2xl mx-auto px-3 sm:px-4">
     <div class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl border border-primary-100 dark:border-primary-900/50 p-6 sm:p-8 md:p-12 text-center">
       <i class="fas fa-search text-gray-400 text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-5 md:mb-6"></i>
       <h5 class="text-xl sm:text-2xl font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">{{ 'orderNotFound' | translate }}</h5>
@@ -479,5 +499,6 @@
         {{ 'newSearch' | translate }}
       </button>
     </div>
-  </div>  
+  </div>
+  }
 </div>  

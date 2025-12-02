@@ -6,6 +6,7 @@ import { FallbackImgDirective } from "../../../core/directives";
 
 @Component({
   selector: 'app-feature',
+  standalone: true,
   imports: [MultiLanguagePipe, FallbackImgDirective],
   templateUrl: './feature.component.html',
 })

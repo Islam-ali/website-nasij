@@ -91,30 +91,38 @@ import { environment } from '../../../environments/environment';
           <h4 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.follow_us' | translate }}</h4>
           <div class="space-y-3 sm:space-y-4">
             <div class="flex flex-wrap gap-3 sm:gap-4">
-              <a *ngIf="businessProfile?.socialMedia?.facebook" 
+              @if (businessProfile?.socialMedia?.facebook) {
+              <a 
                  [href]="businessProfile!.socialMedia!.facebook!" 
                  target="_blank" rel="noopener noreferrer" 
                  class="w-9 h-9 sm:w-10 sm:h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-facebook text-white text-sm sm:text-base"></i>
               </a>
-              <a *ngIf="businessProfile?.socialMedia?.twitter" 
+              }
+              @if (businessProfile?.socialMedia?.twitter) {
+              <a 
                  [href]="businessProfile!.socialMedia!.twitter!" 
                  target="_blank" rel="noopener noreferrer" 
                  class="w-9 h-9 sm:w-10 sm:h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-twitter text-white text-sm sm:text-base"></i>
               </a>
-              <a *ngIf="businessProfile?.socialMedia?.instagram" 
+              }
+              @if (businessProfile?.socialMedia?.instagram) {
+              <a 
                  [href]="businessProfile!.socialMedia!.instagram!" 
                  target="_blank" rel="noopener noreferrer" 
                  class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-instagram text-white text-sm sm:text-base"></i>
               </a>
-              <a *ngIf="businessProfile?.socialMedia?.tiktok" 
+              }
+              @if (businessProfile?.socialMedia?.tiktok) {
+              <a 
                  [href]="businessProfile!.socialMedia!.tiktok!" 
                  target="_blank" rel="noopener noreferrer" 
                  class="w-9 h-9 sm:w-10 sm:h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
                 <i class="pi pi-tiktok text-white text-sm sm:text-base"></i>
               </a>
+              }
             </div>
           </div>
         </div>

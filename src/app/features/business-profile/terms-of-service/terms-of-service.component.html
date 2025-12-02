@@ -2,15 +2,18 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <!-- Loading State -->
-    <div *ngIf="loading" class="flex justify-center items-center py-12">
+    @if (loading) {
+    <div class="flex justify-center items-center py-12">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
         <p class="text-gray-600">{{ 'termsOfService.loading' | translate }}</p>
       </div>
     </div>
+    }
 
     <!-- Content -->
-    <div *ngIf="!loading" class="space-y-8">
+    @if (!loading) {
+    <div class="space-y-8">
       <!-- Header -->
       <div class="text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full mb-6">
@@ -37,25 +40,25 @@
         </div>
 
         <div class="p-8">
-          <div *ngIf="businessProfile?.termsOfService; else noContent" class="prose prose-lg max-w-none">
+          @if (businessProfile?.termsOfService) {
+          <div class="prose prose-lg max-w-none">
             <div class="ql-editor" [innerHTML]="businessProfile!.termsOfService | multiLanguage | safe:'html'"></div>
-
           </div>
-          
-          <ng-template #noContent>
-            <div class="text-center py-12">
-              <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="pi pi-file text-3xl text-gray-400"></i>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ 'termsOfService.notAvailable' | translate }}</h3>
-              <p class="text-gray-600">{{ 'termsOfService.notSetup' | translate }}</p>
+          } @else {
+          <div class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="pi pi-file text-3xl text-gray-400"></i>
             </div>
-          </ng-template>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ 'termsOfService.notAvailable' | translate }}</h3>
+            <p class="text-gray-600">{{ 'termsOfService.notSetup' | translate }}</p>
+          </div>
+          }
         </div>
       </div>
 
       <!-- Contact Information -->
-      <div *ngIf="businessProfile?.contactInfo" class="bg-white rounded-2xl shadow-xl p-8">
+      @if (businessProfile?.contactInfo) {
+      <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-2xl font-bold text-gray-900 mb-6">{{ 'termsOfService.contactUs' | translate }}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="flex items-center gap-4">
@@ -89,6 +92,8 @@
           </div>
         </div>
       </div>
+      }
     </div>
+    }
   </div>
 </div> 

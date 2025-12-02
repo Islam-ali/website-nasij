@@ -115,12 +115,14 @@ interface Order {
           <div class="col-12 md:col-4">
             <div class="mb-4">
               <h4>Shipping Address</h4>
-              <p *ngIf="order?.shippingAddress">
+              @if (order?.shippingAddress) {
+              <p>
                 {{order?.shippingAddress?.name}}<br>
                 {{order?.shippingAddress?.address}}<br>
                 {{order?.shippingAddress?.city}}, {{order?.shippingAddress?.state}} {{order?.shippingAddress?.zip}}<br>
                 {{order?.shippingAddress?.country}}
               </p>
+              }
             </div>
 
             <div>
@@ -128,11 +130,13 @@ interface Order {
               <p>{{order?.paymentMethod || 'Credit Card'}}</p>
             </div>
 
-            <div class="mt-4" *ngIf="order?.status === OrderStatus.PENDING">
+            @if (order?.status === OrderStatus.PENDING) {
+            <div class="mt-4">
               <ui-button variant="destructive" size="md" (click)="cancelOrder()">
                 Cancel Order
               </ui-button>
             </div>
+            }
           </div>
         </div>
       </ui-card>

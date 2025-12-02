@@ -14,9 +14,11 @@
 
 
   <!-- Loading State -->
-  <div *ngIf="loading()" class="max-w-7xl mx-auto px-4 py-8">
+  @if (loading()) {
+  <div class="max-w-7xl mx-auto px-4 py-8">
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <div *ngFor="let item of [1,2,3,4,5,6,7,8]" class="animate-pulse space-y-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
+      @for (item of [1,2,3,4,5,6,7,8]; track $index) {
+      <div class="animate-pulse space-y-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
         <div class="h-48 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
         <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
         <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
@@ -26,11 +28,14 @@
           <div class="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
         </div>
       </div>
+      }
     </div>
   </div>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error() && !loading()" class="max-w-7xl mx-auto px-4 py-12">
+  @if (error() && !loading()) {
+  <div class="max-w-7xl mx-auto px-4 py-12">
     <div class="flex flex-col items-center text-center">
       <i class="pi pi-exclamation-triangle mb-4 text-5xl text-rose-500"></i>
       <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
@@ -47,11 +52,14 @@
       </ui-button>
     </div>
   </div>
+  }
 
   <!-- Packages Grid -->
-  <div *ngIf="!loading() && !error()" class="max-w-7xl mx-auto px-4 py-8">
+  @if (!loading() && !error()) {
+  <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- No Packages Found -->
-    <div *ngIf="packages().length === 0" class="flex flex-col items-center py-16 text-center">
+    @if (packages().length === 0) {
+    <div class="flex flex-col items-center py-16 text-center">
       <i class="pi pi-box mb-5 text-6xl text-slate-400"></i>
       <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
         {{ 'packages.no_packages_found' | translate }}
@@ -60,10 +68,13 @@
         {{ 'packages.try_adjusting_search' | translate }}
       </p> -->
     </div>
+    }
 
     <!-- Packages Grid -->
-    <div *ngIf="packages().length > 0" class="grid grid-cols-1 gap-8 md:grid-cols-2">
-      <div *ngFor="let package of packages()" class="group h-full">
+    @if (packages().length > 0) {
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      @for (package of packages(); track package._id) {
+      <div class="group h-full">
         <ui-card class="h-full overflow-hidden rounded-[28px] border border-slate-200 bg-white text-slate-900 shadow-lg shadow-slate-200/50 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:shadow-slate-900/40">
           <div class="flex flex-col md:flex-row">
             <!-- Package Image -->
@@ -77,10 +88,12 @@
               />
               
               <!-- Discount Badge -->
-              <div *ngIf="package.discountPrice" class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-lg shadow-rose-400/50">
+              @if (package.discountPrice) {
+              <div class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-white shadow-lg shadow-rose-400/50">
                 <i class="pi pi-tag text-sm"></i>
                 {{ getDiscountPercentage(package) }}%
               </div>
+              }
 
               <!-- Stock Badge -->
               <!-- <div 
@@ -112,7 +125,8 @@
 
               <!-- Rating and meta -->
               <div class="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-300">
-                <div class="flex items-center gap-2" *ngIf="package.averageRating > 0">
+                @if (package.averageRating > 0) {
+                <div class="flex items-center gap-2">
                   <div class="flex items-center gap-1">
                     @for (star of getRatingStars(package.averageRating); track $index) {
                       <i class="pi" 
@@ -129,6 +143,7 @@
                     ({{ package.reviewCount }} reviews)
                   </span>
                 </div>
+                }
                 <div class="flex items-center gap-2">
                   <i class="pi pi-box text-primary-500 dark:text-primary-300"></i>
                   <span>
@@ -138,22 +153,27 @@
               </div>
 
               <!-- Tags -->
-              <div class="flex flex-wrap gap-2" *ngIf="getTags(package).length > 0">
+              @if (getTags(package).length > 0) {
+              <div class="flex flex-wrap gap-2">
+                @for (tag of getTags(package); track $index) {
                 <ui-chip 
-                  *ngFor="let tag of getTags(package)" 
                   variant="default"
                   class="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200">
                   {{ tag }}
                 </ui-chip>
+                }
               </div>
+              }
 
               <!-- Price & CTA -->
               <div class="mt-auto flex flex-col gap-4 rounded-[24px] bg-slate-100 p-4 text-slate-700 dark:bg-slate-800/70 dark:text-slate-100">
                 <div class="flex items-end justify-between">
                   <div class="flex flex-col text-nowrap text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-400">
-                    <span *ngIf="package.discountPrice" class="text-sm font-medium tracking-normal text-slate-400 line-through dark:text-slate-500">
+                    @if (package.discountPrice) {
+                    <span class="text-sm font-medium tracking-normal text-slate-400 line-through dark:text-slate-500">
                       {{ package.price.toFixed(2) | currency }}
                     </span>
+                    }
                   </div>
                   <div class="text-right">
                     <div class="text-xl text-nowrap font-bold text-primary-500 dark:text-primary-200">
@@ -174,10 +194,13 @@
           </div>
           </ui-card>
       </div>
+      }
     </div>
+    }
 
     <!-- Load More Button -->
-    <div *ngIf="packages().length > 10" class="text-center mt-8">
+    @if (packages().length > 10) {
+    <div class="text-center mt-8">
       <ui-button 
         variant="outline" 
         size="lg">
@@ -185,5 +208,7 @@
         {{ 'packages.load_more_packages' | translate }}
       </ui-button>
     </div>
+    }
   </div>
+  }
 </div>

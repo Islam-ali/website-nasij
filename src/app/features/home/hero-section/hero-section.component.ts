@@ -9,6 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-hero-section',
+  standalone: true,
   imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective, TranslateModule],
   templateUrl: './hero-section.component.html',
 })

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link' | 'danger' | 'warning';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -7,7 +7,7 @@ type ButtonSize = 'sm' | 'md' | 'lg';
 @Component({
   selector: 'ui-button',
   standalone: true,
-  imports: [NgClass, NgIf],
+  imports: [NgClass],
   template: `
     <button
       [attr.type]="type"
@@ -15,7 +15,8 @@ type ButtonSize = 'sm' | 'md' | 'lg';
       [ngClass]="computedClasses"
       [disabled]="disabled || loading"
     >
-      <span *ngIf="loading" class="inline-flex">
+      @if (loading) {
+      <span class="inline-flex">
         <svg
           class="size-4 animate-spin text-current"
           viewBox="0 0 24 24"
@@ -37,6 +38,7 @@ type ButtonSize = 'sm' | 'md' | 'lg';
           ></path>
         </svg>
       </span>
+      }
       <span class="inline-flex items-center" [class.sr-only]="iconOnly">
         <ng-content></ng-content>
       </span>

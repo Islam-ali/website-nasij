@@ -9,6 +9,7 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
   
 @Component({
   selector: 'app-featured-collection',
+  standalone: true,
   imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective],
   templateUrl: './featured-collection.component.html',
 })
