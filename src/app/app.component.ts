@@ -3,12 +3,11 @@ import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core
 import { RouterOutlet } from '@angular/router';
 import { BusinessProfileService } from './services/business-profile.service';
 import { TranslationService } from './core/services/translate.service';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet, TranslateModule],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   providers: [BusinessProfileService]
 })

@@ -2,7 +2,9 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, withInMemoryScrolling, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+// Note: provideClientHydration is commented out because SSR is not working yet
+// Uncomment it once SSR is fixed (NG0401)
+// import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateLoader } from '@ngx-translate/core';
@@ -24,7 +26,7 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withComponentInputBinding()
     ), 
-    provideClientHydration(withEventReplay()),
+    // provideClientHydration(withEventReplay()), // Commented out until SSR works
     provideHttpClient(withFetch()),
     provideAnimationsAsync(),
     importProvidersFrom(
