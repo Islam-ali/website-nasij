@@ -9,7 +9,6 @@ import { renderApplication } from '@angular/platform-server';
 import * as https from 'node:https';
 import * as http from 'node:http';
 import { URL } from 'node:url';
-
 import bootstrap from './main.server';
 
 const distFolder = join(process.cwd(), 'dist/pledge-website/browser');
@@ -248,8 +247,13 @@ function run(): void {
       res.setHeader('Content-Type', 'text/html');
       res.send(html);
     } catch (error) {
-      console.error('SSR render error:', error);
-      res.status(500).send('Internal server error');
+      console.error('SSR render error for', req.originalUrl, ':', error);
+      if (error instanceof Error) {
+        console.error('Error stack:', error.stack);
+      }
+      // Send the index.html as fallback so the client can hydrate
+      res.setHeader('Content-Type', 'text/html');
+      res.send(indexHtml);
     }
   });
 

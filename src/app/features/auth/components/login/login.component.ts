@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgIf } from '@angular/common';
 import { NgClass } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ILoginCredentials } from '../../models/auth.interface';
@@ -40,7 +40,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastService: UiToastService
+    private toastService: UiToastService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -50,13 +51,15 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+   if(isPlatformBrowser(this.platformId)) {
     // Check for saved credentials if "remember me" was checked
     const savedEmail = localStorage.getItem('saved_email');
-    if (savedEmail) {
-      this.loginForm.patchValue({
-        email: savedEmail,
-        rememberMe: true
-      });
+      if (savedEmail) {
+        this.loginForm.patchValue({
+          email: savedEmail,
+          rememberMe: true
+        });
+      }
     }
   }
 
@@ -73,12 +76,13 @@ export class LoginComponent implements OnInit {
     };
 
     // Save email if "remember me" is checked
+    if(isPlatformBrowser(this.platformId)) {
     if (this.loginForm.value.rememberMe) {
       localStorage.setItem('saved_email', credentials.email);
     } else {
       localStorage.removeItem('saved_email');
     }
-
+    }
     this.authService.login(credentials).subscribe({
       next: () => {
         this.router.navigate(['/']);

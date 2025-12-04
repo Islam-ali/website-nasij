@@ -20,9 +20,11 @@ export class LoginService {
   }
 
   logout() {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem('user_pledge');
-    this.user.next(null);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(this.tokenKey);
+      localStorage.removeItem('user_pledge');
+      this.user.next(null);
+    }
   }
 
   getUser() {
@@ -30,15 +32,22 @@ export class LoginService {
   }
 
   saveToken(token: string) {
-    localStorage.setItem(this.tokenKey, token);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.tokenKey, token);
+    }
   }
 
   getToken() {
-    return localStorage.getItem(this.tokenKey);
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem(this.tokenKey);
+    }
+    return null;
   }
 
   saveUser(user: User) {
-    localStorage.setItem('user_pledge', JSON.stringify(user));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('user_pledge', JSON.stringify(user));
+    }
   }
 
   isLoggedIn() {

@@ -2,16 +2,16 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 // app.routes.server.ts
 export const serverRoutes: ServerRoute[] = [
-  // Safe static/public routes only
-  { path: '', renderMode: RenderMode.Prerender },
-  { path: 'shop', renderMode: RenderMode.Prerender },
-  { path: 'about', renderMode: RenderMode.Prerender },
-  { path: 'cart', renderMode: RenderMode.Prerender },        // OK if cart is in memory only
-  { path: 'wishlist', renderMode: RenderMode.Prerender },    // same
-  { path: 'privacy-policy', renderMode: RenderMode.Prerender },
-  { path: 'terms-of-service', renderMode: RenderMode.Prerender },
-  { path: 'faq', renderMode: RenderMode.Prerender },
-  { path: '404', renderMode: RenderMode.Prerender },
+  // Use Server mode for all routes to ensure SSR works
+  { path: '', renderMode: RenderMode.Server },
+  { path: 'shop', renderMode: RenderMode.Server },
+  { path: 'about', renderMode: RenderMode.Server },
+  { path: 'cart', renderMode: RenderMode.Server },
+  { path: 'wishlist', renderMode: RenderMode.Server },
+  { path: 'privacy-policy', renderMode: RenderMode.Server },
+  { path: 'terms-of-service', renderMode: RenderMode.Server },
+  { path: 'faq', renderMode: RenderMode.Server },
+  { path: '404', renderMode: RenderMode.Server },
 
   // Dynamic or authenticated → Server (SSR on-demand)
   { path: 'shop/:id/:slug', renderMode: RenderMode.Server },

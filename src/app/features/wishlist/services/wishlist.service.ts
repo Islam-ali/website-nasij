@@ -1,9 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { IWishlistItem, IWishlistState, IAddToWishlistRequest } from '../models/wishlist.interface';
-
+import { isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +17,7 @@ export class WishlistService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Load wishlist from storage on service initialization
     this.loadWishlistFromStorage();
@@ -118,6 +119,7 @@ export class WishlistService implements OnDestroy {
   // Load wishlist from localStorage
   private loadWishlistFromStorage(): void {
     try {
+      if (isPlatformBrowser(this.platformId)) {
       const savedWishlist = localStorage.getItem(this.WISHLIST_STORAGE_KEY);
       if (savedWishlist) {
         const parsedWishlist = JSON.parse(savedWishlist);
@@ -137,6 +139,7 @@ export class WishlistService implements OnDestroy {
           });
         }
       }
+      }
     } catch (error) {
       console.error('Error loading wishlist from storage:', error);
       // Reset to initial state if there's an error
@@ -146,10 +149,12 @@ export class WishlistService implements OnDestroy {
 
   // Save wishlist to localStorage
   private saveWishlistToStorage(wishlist: IWishlistState): void {
-    try {
-      localStorage.setItem(this.WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
-    } catch (error) {
-      console.error('Error saving wishlist to storage:', error);
+    if (isPlatformBrowser(this.platformId)) { 
+      try {
+        localStorage.setItem(this.WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
+      } catch (error) {
+        console.error('Error saving wishlist to storage:', error);
+      }
     }
   }
 

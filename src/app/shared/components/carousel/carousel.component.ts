@@ -138,7 +138,9 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.resizeObserver) {
         this.resizeObserver.disconnect();
       }
-      window.removeEventListener('resize', this.handleResize);
+      if (isPlatformBrowser(this.platformId)) {
+        window.removeEventListener('resize', this.handleResize);
+      }
       // Remove document listeners
       this.removeDocumentListeners();
       // Unsubscribe from language changes

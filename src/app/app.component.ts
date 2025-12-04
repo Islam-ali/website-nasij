@@ -25,6 +25,12 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.translationService.initBrowserFeatures();
     }
+    
+    // During SSR, don't block rendering on business profile load
+    if (!isPlatformBrowser(this.platformId)) {
+      this.isLoading = false;
+    }
+    
     this.loadBusinessProfile();
   }
 
@@ -47,7 +53,13 @@ export class AppComponent implements OnInit {
         this.init();
       },
       error: (error) => {
-        this.isLoading = true;
+        // Don't block rendering on error, especially during SSR
+        if (isPlatformBrowser(this.platformId)) {
+          this.isLoading = true;
+        } else {
+          // During SSR, allow rendering even if business profile fails
+          this.isLoading = false;
+        }
       }
     });
   }

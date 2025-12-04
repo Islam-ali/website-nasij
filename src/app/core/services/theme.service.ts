@@ -46,6 +46,7 @@ export class ThemeService {
   }
 
   private getIsDark(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     const savedMode = localStorage.getItem(this.THEME_KEY) as ThemeMode || (this.getSystemPrefersDark() ? 'dark' : 'light');
     return savedMode === 'dark';
   }

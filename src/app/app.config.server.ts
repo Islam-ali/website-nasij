@@ -4,6 +4,7 @@ import { provideServerRouting } from '@angular/ssr';
 import { appConfig } from './app.config';
 import { serverRoutes } from './app.routes.server';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
 
 
 const serverConfig: ApplicationConfig = {
@@ -11,6 +12,8 @@ const serverConfig: ApplicationConfig = {
     provideServerRendering(),
     provideServerRouting(serverRoutes),
     provideNoopAnimations(),
+    // Override HTTP client without withFetch() for SSR
+    provideHttpClient(),
   ]
 };
 export const config = mergeApplicationConfig(appConfig, serverConfig);

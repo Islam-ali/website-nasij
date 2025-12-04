@@ -37,7 +37,12 @@
             "assets": [
               { "glob": "**/*", "input": "public" },
               { "glob": "**/*", "input": "src/assets" },
-              { "glob": ".htaccess", "input": "src", "output": "/" }
+              { "glob": ".htaccess", "input": "src", "output": "/" },
+              {
+                "glob": "**/*",
+                "input": "src/i18n",
+                "output": "/i18n/"
+              }
             ],
             "styles": [
               "node_modules/quill/dist/quill.snow.css",

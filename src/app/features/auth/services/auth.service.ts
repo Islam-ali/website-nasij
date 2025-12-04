@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { IUser, IAuthResponse, ILoginCredentials, IRegisterData } from '../models/auth.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.currentUserSubject = new BehaviorSubject<IUser | null>(this.getUserFromToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
@@ -38,7 +40,10 @@ export class AuthService {
   }
 
   get token(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.TOKEN_KEY) || null;
+    }
+    return null;
   }
 
   login(credentials: ILoginCredentials): Observable<IAuthResponse> {
@@ -54,13 +59,17 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+    }
     this.currentUserSubject.next(null);
     this.router.navigate(['/auth/login']);
   }
 
   private handleAuthentication(response: IAuthResponse): void {
-    localStorage.setItem(this.TOKEN_KEY, response.token);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.TOKEN_KEY, response.token);
+    }
     this.currentUserSubject.next(response.user);
   }
 

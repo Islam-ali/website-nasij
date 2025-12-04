@@ -28,7 +28,6 @@ import { MultilingualText } from '../../../core/models/multi-language';
     TranslateModule
 ],
   providers: [
-    { provide: Window, useValue: window },
     TranslationService
   ],
   templateUrl: './product-card.component.html',

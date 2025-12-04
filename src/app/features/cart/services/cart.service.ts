@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { ICartItem, ICartState, ICartSummary, IAddToCartRequest } from '../model
 import { MultilingualText } from '../../../core/models/multi-language';
 import { ICountry, IState } from '../../../core/models/location.interface';
 import { ProductVariantAttribute } from '../../products/models/product.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class CartService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Load cart from storage on service initialization
     this.loadCartFromStorage();
@@ -317,7 +319,8 @@ export class CartService implements OnDestroy {
   // Load cart from localStorage
   private loadCartFromStorage(): void {
     try {
-      const savedCart = localStorage.getItem(this.CART_STORAGE_KEY);
+      if (isPlatformBrowser(this.platformId)) {
+        const savedCart = localStorage.getItem(this.CART_STORAGE_KEY);
       if (savedCart) {
         const parsedCart = JSON.parse(savedCart);
         
@@ -336,6 +339,7 @@ export class CartService implements OnDestroy {
           });
         }
       }
+      }
     } catch (error) {
       // Reset to initial state if there's an error
       this.cartState.next(this.getInitialCartState());
@@ -345,7 +349,9 @@ export class CartService implements OnDestroy {
   // Save cart to localStorage
   private saveCartToStorage(cart: ICartState): void {
     try {
-      localStorage.setItem(this.CART_STORAGE_KEY, JSON.stringify(cart));
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem(this.CART_STORAGE_KEY, JSON.stringify(cart));
+      }
     } catch (error) {
       console.error('Error saving cart to storage:', error);
     }

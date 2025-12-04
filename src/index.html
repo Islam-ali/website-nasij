@@ -201,7 +201,11 @@
   <script>
     (function () {
       try {
-        var savedLanguage = localStorage.getItem('pledge-language') || 'ar';
+        if (typeof localStorage !== 'undefined') {
+          var savedLanguage = localStorage.getItem('pledge-language') || 'ar';
+        } else {
+          var savedLanguage = 'ar';
+        }
         var html = document.documentElement;
         var body = document.body;
 
@@ -226,9 +230,11 @@
         }
       } catch (e) {
         // Fallback to default if localStorage is not available
-        var html = document.documentElement;
-        html.setAttribute('dir', 'rtl');
-        html.setAttribute('lang', 'ar');
+        if(typeof document !== 'undefined') {
+          var html = document.documentElement;
+          html.setAttribute('dir', savedLanguage === 'ar' ? 'rtl' : 'ltr');
+          html.setAttribute('lang', savedLanguage);
+        }
       }
     })();
   </script>
@@ -236,11 +242,13 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDVT6EQ7TQ"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
 
-    gtag('config', 'G-LDVT6EQ7TQ');
+      gtag('config', 'G-LDVT6EQ7TQ');
+    }
   </script>
 </head>
 
