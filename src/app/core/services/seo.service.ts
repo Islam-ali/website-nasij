@@ -57,7 +57,6 @@ export class SeoService {
       facebookPages = '1234567890'
     } = options;
   
-    if (isPlatformBrowser(this.platformId)) {
       const imageUrl = ogImage || this.getDefaultOgImage();
       const url = canonicalUrl || this.getCurrentUrl();
       
@@ -123,7 +122,6 @@ export class SeoService {
       // Canonical URL and Hreflang
       this.setCanonical(url);
       this.setHreflang(hreflangs || this.getDefaultHreflangs());
-    }
   }
   
   private updateHtmlAttributes(): void {

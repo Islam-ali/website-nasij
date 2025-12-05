@@ -1,68 +1,11 @@
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  
-  # If an existing asset or directory is requested go to it as it is
-  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
-  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
-  RewriteRule ^ - [L]
-
-  # If the requested resource doesn't exist, use index.html
-  RewriteRule ^ /index.html [L]
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/pledgestores/public_html/ssr"
+PassengerBaseURI "/"
+PassengerNodejs "/home/pledgestores/nodevenv/public_html/ssr/22/bin/node"
+PassengerAppType node
+PassengerStartupFile dist/pledge-website/server/main.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
 </IfModule>
-
-# Enable GZIP compression
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml
-</IfModule>
-
-# Browser Caching
-<IfModule mod_expires.c>
-  ExpiresActive On
-  
-  # Images
-  ExpiresByType image/jpg "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/gif "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
-  ExpiresByType image/x-icon "access plus 1 year"
-  
-  # CSS and JavaScript
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType text/javascript "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
-  
-  # Fonts
-  ExpiresByType font/woff "access plus 1 year"
-  ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType application/font-woff "access plus 1 year"
-  ExpiresByType application/font-woff2 "access plus 1 year"
-  
-  # HTML
-  ExpiresByType text/html "access plus 0 seconds"
-</IfModule>
-
-# Security Headers
-<IfModule mod_headers.c>
-  # Prevent clickjacking
-  Header always set X-Frame-Options "SAMEORIGIN"
-  
-  # XSS Protection
-  Header always set X-XSS-Protection "1; mode=block"
-  
-  # Content Type Options
-  Header always set X-Content-Type-Options "nosniff"
-  
-  # Referrer Policy
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
-
-# Disable directory browsing
-Options -Indexes
-
-# Error Documents
-ErrorDocument 404 /index.html
-ErrorDocument 403 /index.html
-ErrorDocument 500 /index.html
-
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END
