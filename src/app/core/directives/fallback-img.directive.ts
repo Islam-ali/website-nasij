@@ -17,6 +17,27 @@ export class FallbackImgDirective implements OnInit {
   ngOnInit(): void {
     // Add domain before src if it's a relative path
     this.addDomainToSrc();
+    // Add performance attributes
+    this.addPerformanceAttributes();
+  }
+
+  private addPerformanceAttributes(): void {
+    const element = this.el.nativeElement;
+    
+    // Add loading="lazy" if not already present
+    if (!element.hasAttribute('loading')) {
+      this.renderer.setAttribute(element, 'loading', 'lazy');
+    }
+    
+    // Add decoding="async" for better performance
+    if (!element.hasAttribute('decoding')) {
+      this.renderer.setAttribute(element, 'decoding', 'async');
+    }
+    
+    // Add fetchpriority="auto" if not specified
+    if (!element.hasAttribute('fetchpriority')) {
+      this.renderer.setAttribute(element, 'fetchpriority', 'auto');
+    }
   }
 
   private addDomainToSrc(): void {

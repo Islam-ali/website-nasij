@@ -190,13 +190,38 @@ export class SeoService {
   private setCanonical(url: string): void {
     if (!url || !this.doc) return;
 
+    // Normalize URL - remove trailing slash, query params, fragments
+    const normalizedUrl = this.normalizeCanonicalUrl(url);
+
     let link = this.doc.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
     if (!link) {
       link = this.doc.createElement('link');
       link.setAttribute('rel', 'canonical');
       this.doc.head.appendChild(link);
     }
-    link.setAttribute('href', url);
+    link.setAttribute('href', normalizedUrl);
+  }
+
+  private normalizeCanonicalUrl(url: string): string {
+    try {
+      const urlObj = new URL(url);
+      // Remove www
+      if (urlObj.hostname.startsWith('www.')) {
+        urlObj.hostname = urlObj.hostname.replace('www.', '');
+      }
+      // Ensure HTTPS
+      urlObj.protocol = 'https:';
+      // Remove trailing slash (except for root)
+      if (urlObj.pathname !== '/' && urlObj.pathname.endsWith('/')) {
+        urlObj.pathname = urlObj.pathname.slice(0, -1);
+      }
+      // Remove query params and fragments for canonical
+      urlObj.search = '';
+      urlObj.hash = '';
+      return urlObj.toString();
+    } catch {
+      return url;
+    }
   }
 
   private setHreflang(hreflangs?: HreflangConfig[]): void {

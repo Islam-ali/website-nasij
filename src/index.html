@@ -10,9 +10,16 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=1">
   <link rel="canonical" href="https://pledgestores.com">
   <meta name="google-site-verification" content="5Ome2PWbelKFDkNE0Fy1-L9m7z2-yRifrHbpURIKAYE">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts - Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts - Load with display=swap to prevent render-blocking -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </noscript>
 
   <!-- Alternate Languages -->
   <link rel="alternate" hreflang="en" href="https://pledgestores.com">
@@ -240,17 +247,21 @@
     })();
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDVT6EQ7TQ"></script>
+  <!-- Google tag (gtag.js) - Defer loading -->
   <script>
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
-
       gtag('config', 'G-LDVT6EQ7TQ');
     }
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDVT6EQ7TQ" defer></script>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="images/logo.png" as="image" type="image/png">
+  <link rel="dns-prefetch" href="https://api.pledgestores.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 </head>
 
 <body>
