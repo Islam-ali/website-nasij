@@ -22,6 +22,8 @@ import { MultiLanguagePipe } from '../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../core/directives/fallback-img.directive';
 import { BusinessProfileService } from '../../services/business-profile.service';
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
+import { SeoService } from '../../core/services/seo.service';
+import { TranslationService } from '../../core/services/translate.service';
 
 @Component({
   selector: 'app-home',
@@ -62,15 +64,45 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private toastService: UiToastService,
     private categoryService: CategoryService,
     private packageService: PackageService,
-    private businessProfileService: BusinessProfileService
+    private businessProfileService: BusinessProfileService,
+    private seoService: SeoService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit() {
+    this.updateSeo();
     this.loadFeaturedProducts();
     this.loadNewArrivals();
     this.loadCategories();
     this.loadPackages();
     this.getBusinessProfile();
+  }
+
+  private updateSeo(): void {
+    const currentLang = this.translationService.getCurrentLanguage();
+    const isArabic = currentLang === 'ar';
+    
+    const keywords = isArabic 
+      ? 'Pledge, منتجات طلابية, استيكرز, براويز, بوكسات, طلاب الأزهر, طلاب الجامعات, طلاب علمي, طلاب أدبي, طلاب طب, منتجات ملهمة, هدايا طلابية, منتجات تعليمية, بوكس القرآن, مفكرات, قرطاسية, مصر, القاهرة'
+      : 'Pledge, student products, stickers, frames, notebooks, Quran box, Al-Azhar students, university students, science students, literature students, medical students, inspirational products, study accessories, student gifts, educational products, Egypt, Cairo, student supplies, stationery';
+    
+    const title = isArabic
+      ? 'Pledge - منتجات ملهمة للطلاب | استيكرز، براويز، بوكسات | طلاب الأزهر والجامعات'
+      : 'Pledge - Inspiring Student Products | Stickers, Frames, Boxes | Al-Azhar & University Students';
+    
+    const description = isArabic
+      ? 'في Pledge بنحوّل كل لحظة في رحلتك الدراسية لذكرى تعيش معاك. من استيكرز ملهمة، لبراويز أنيقة، لبوكسات مخصوصة لطلبة الأزهر وطلاب الجامعات (علمي علوم – أدبي – طب)، هتلاقي كل اللي بيعبر عنك في مكان واحد. منتجات طلابية عالية الجودة، هدايا ملهمة، وقرطاسية مميزة.'
+      : 'At Pledge, we transform every moment of your academic journey into a lasting memory. From inspiring stickers, elegant frames, to special boxes for Al-Azhar students and university students (Science, Literature, Medicine), find everything that expresses you in one place. High-quality student products, inspiring gifts, and unique stationery.';
+
+    this.seoService.updateSeo({
+      title,
+      description,
+      keywords,
+      canonicalUrl: 'https://pledgestores.com',
+      ogType: 'website',
+      locale: isArabic ? 'ar_EG' : 'en_US',
+      alternateLocale: isArabic ? 'en_US' : 'ar_EG'
+    });
   }
   ngAfterViewInit(): void {
   }

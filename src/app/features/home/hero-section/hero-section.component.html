@@ -32,11 +32,19 @@
                      class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-4 left-4 right-4 text-white">
+                    @if (i === 0) {
+                    <h1 class="font-bold mb-2 text-white" 
+                        [ngClass]="getTitleClasses(heroes.length, i)" 
+                       >
+                        <span class="block" >{{hero.title | multiLanguage}}</span>
+                    </h1>
+                    } @else {
                     <h3 class="font-bold mb-2 text-white" 
                         [ngClass]="getTitleClasses(heroes.length, i)" 
                        >
                         <span class="block" >{{hero.title | multiLanguage}}</span>
                     </h3>
+                    }
                     <p class="opacity-90 mb-3 text-gray-100" 
                        [ngClass]="getSubtitleClasses(heroes.length, i)" 
                       >

@@ -513,10 +513,23 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       ? `${environment.domain}/${product.images[0].filePath}`
       : `${environment.domain}/assets/images/logo.png`;
 
+    // Build comprehensive keywords including product name, tags, category, and general keywords
+    const baseKeywords = this.currentLanguage === 'ar'
+      ? 'منتجات طلابية, استيكرز, براويز, بوكسات, طلاب الأزهر, طلاب الجامعات, منتجات ملهمة, هدايا طلابية'
+      : 'student products, stickers, frames, boxes, Al-Azhar students, university students, inspirational products, student gifts';
+    
+    const productKeywords = [
+      localizedName,
+      ...(product.tags || []),
+      product.category?.name?.[this.currentLanguage] || product.category?.name?.en || '',
+      product.brand?.name?.[this.currentLanguage] || product.brand?.name?.en || '',
+      baseKeywords
+    ].filter(k => k && k.trim()).join(', ');
+
     this.seoService.updateSeo({
-      title: `${localizedName} | pledgestores.com`,
+      title: `${localizedName} | ${this.currentLanguage === 'ar' ? 'منتجات طلابية' : 'Student Products'} | pledgestores.com`,
       description,
-      keywords: product.tags?.join(', '),
+      keywords: productKeywords,
       canonicalUrl,
       ogImage,
       ogType: 'product',

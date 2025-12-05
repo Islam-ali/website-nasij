@@ -63,9 +63,10 @@ export class SeoService {
       // Basic SEO Meta Tags
       this.title.setTitle(title);
       this.meta.updateTag({ name: 'description', content: description });
-      if (keywords) {
-        this.meta.updateTag({ name: 'keywords', content: keywords });
-      }
+      
+      // Always set keywords - use provided keywords or generate default based on language
+      const finalKeywords = keywords || this.getDefaultKeywords();
+      this.meta.updateTag({ name: 'keywords', content: finalKeywords });
       this.meta.updateTag({ name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' });
       this.meta.updateTag({ name: 'language', content: locale === 'en_US' ? 'English, Arabic' : 'Arabic, English' });
       
@@ -248,6 +249,15 @@ export class SeoService {
 
   private getDefaultOgImage(): string {
     return 'https://pledgestores.com/images/logo.png';
+  }
+
+  private getDefaultKeywords(): string {
+    const currentLang = this.translationService.getCurrentLanguage();
+    const isArabic = currentLang === 'ar';
+    
+    return isArabic
+      ? 'Pledge, منتجات طلابية, استيكرز, براويز, بوكسات, طلاب الأزهر, طلاب الجامعات, طلاب علمي, طلاب أدبي, طلاب طب, منتجات ملهمة, هدايا طلابية, منتجات تعليمية, بوكس القرآن, مفكرات, قرطاسية, مصر, القاهرة'
+      : 'Pledge, student products, stickers, frames, notebooks, Quran box, Al-Azhar students, university students, science students, literature students, medical students, inspirational products, study accessories, student gifts, educational products, Egypt, Cairo, student supplies, stationery';
   }
 }
 

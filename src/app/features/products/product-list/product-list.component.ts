@@ -16,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { environment } from '../../../../environments/environment';
+import { SeoService } from '../../../core/services/seo.service';
 import { 
   UiToastService, 
   UiButtonComponent, 
@@ -81,7 +82,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     private fb: FormBuilder,
     @Inject(PLATFORM_ID) private platformId: Object,
     private translationService: TranslationService,
-    private toastService: UiToastService
+    private toastService: UiToastService,
+    private seoService: SeoService
   ) {
     this.filterForm = this.fb.group({
       searchQuery: [''],
@@ -98,6 +100,7 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   ngOnInit(): void {
+    this.updateSeo();
     this.loadCategories();
     this.loadBrands();
     this.loadSizesAndColors();
@@ -108,8 +111,54 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
         this.updateFiltersFromQueryParams(params);
+        this.updateSeo(); // Update SEO when filters change
       })
     );
+  }
+
+  private updateSeo(): void {
+    const currentLang = this.translationService.getCurrentLanguage();
+    const isArabic = currentLang === 'ar';
+    const searchQuery = this.filterForm.get('searchQuery')?.value || '';
+    const categoryId = this.route.snapshot.queryParams['category'];
+    
+    let keywords = isArabic 
+      ? 'منتجات طلابية, استيكرز, براويز, بوكسات, طلاب الأزهر, طلاب الجامعات, منتجات ملهمة, هدايا طلابية, قرطاسية, مصر'
+      : 'student products, stickers, frames, boxes, Al-Azhar students, university students, inspirational products, student gifts, stationery, Egypt';
+    
+    if (searchQuery) {
+      keywords += `, ${searchQuery}`;
+    }
+    
+    const title = isArabic
+      ? searchQuery 
+        ? `نتائج البحث عن "${searchQuery}" - منتجات طلابية | Pledge`
+        : 'اكتشف منتجاتنا - استيكرز، براويز، بوكسات | Pledge'
+      : searchQuery
+        ? `Search Results for "${searchQuery}" - Student Products | Pledge`
+        : 'Discover Our Products - Stickers, Frames, Boxes | Pledge';
+    
+    const description = isArabic
+      ? searchQuery
+        ? `اكتشف مجموعة واسعة من المنتجات الطلابية: استيكرز ملهمة، براويز أنيقة، بوكسات مخصوصة. ${searchQuery ? `نتائج البحث عن: ${searchQuery}` : ''} منتجات عالية الجودة لطلاب الأزهر والجامعات.`
+        : 'اكتشف مجموعة واسعة من المنتجات الطلابية: استيكرز ملهمة، براويز أنيقة، بوكسات مخصوصة لطلاب الأزهر والجامعات. منتجات عالية الجودة وهدايا ملهمة.'
+      : searchQuery
+        ? `Discover a wide range of student products: inspiring stickers, elegant frames, special boxes. ${searchQuery ? `Search results for: ${searchQuery}` : ''} High-quality products for Al-Azhar and university students.`
+        : 'Discover a wide range of student products: inspiring stickers, elegant frames, special boxes for Al-Azhar and university students. High-quality products and inspiring gifts.';
+
+    const canonicalUrl = searchQuery || categoryId
+      ? `https://pledgestores.com/shop${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}${categoryId ? `?category=${categoryId}` : ''}`
+      : 'https://pledgestores.com/shop';
+
+    this.seoService.updateSeo({
+      title,
+      description,
+      keywords,
+      canonicalUrl,
+      ogType: 'website',
+      locale: isArabic ? 'ar_EG' : 'en_US',
+      alternateLocale: isArabic ? 'en_US' : 'ar_EG'
+    });
   }
 
   ngOnDestroy(): void {
