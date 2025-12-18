@@ -78,7 +78,7 @@ function generateSitemap(products: any[], baseUrl: string): string {
 }
 
 function run(): void {
-  const port = Number(process.env['PORT'] || 4000);
+  const port = Number(process.env['PORT'] || 4200);
   const app = express();
 
   app.use(compression());
@@ -241,7 +241,7 @@ function run(): void {
       // Return minimal sitemap even on error
       try {
         const baseUrl = process.env['BASE_URL'] || process.env['NX_BASE_URL'] || 
-          (req ? `${req.protocol}://${req.get('host')}` : 'http://localhost:4000');
+          (req ? `${req.protocol}://${req.get('host')}` : 'http://localhost:4200');
         const minimalSitemap = generateSitemap([], baseUrl);
         res.setHeader('Content-Type', 'application/xml; charset=utf-8');
         res.send(minimalSitemap);

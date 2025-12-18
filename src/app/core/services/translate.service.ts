@@ -111,4 +111,66 @@ export class TranslationService {
     };
     return languageNames[language] || language;
   }
+
+  // Check if translations are loaded for a specific language
+  isTranslationReady(lang?: string): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      // On server, assume translations are ready
+      return true;
+    }
+
+    const languageToCheck = lang || this.translate.currentLang || this.defaultLanguage;
+    const translations = this.translate.translations[languageToCheck];
+    
+    // Check if translations exist and have content
+    return translations && Object.keys(translations).length > 0;
+  }
+
+  // Wait for translations to be ready
+  waitForTranslations(): Promise<void> {
+    return new Promise((resolve) => {
+      if (!isPlatformBrowser(this.platformId)) {
+        resolve();
+        return;
+      }
+
+      const currentLang = this.translate.currentLang || this.defaultLanguage;
+      
+      // Check if already loaded
+      if (this.isTranslationReady(currentLang)) {
+        resolve();
+        return;
+      }
+
+      // Try to get a translation key to trigger loading
+      // Use a common key that should exist in all translation files
+      const testKey = 'common.loading';
+      
+      // Wait for translation to load
+      const subscription = this.translate.get(testKey).subscribe({
+        next: () => {
+          // Translation loaded successfully
+          subscription.unsubscribe();
+          resolve();
+        },
+        error: () => {
+          // Even if there's an error, check if translations are loaded
+          subscription.unsubscribe();
+          if (this.isTranslationReady(currentLang)) {
+            resolve();
+          } else {
+            // Wait a bit more and resolve anyway
+            setTimeout(() => resolve(), 500);
+          }
+        }
+      });
+
+      // Timeout after 5 seconds to prevent infinite waiting
+      setTimeout(() => {
+        subscription.unsubscribe();
+        // Resolve anyway to not block the app
+        resolve();
+      }, 5000);
+    });
+  }
 }
