@@ -1229,8 +1229,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       : `Discover ${localizedName} package with premium quality products on pledgestores.com.`;
     const canonicalUrl = `${FRONTEND_DOMAIN}/packages/${packageData._id}`;
     const ogImage = packageData.images?.length
-      ? `${this.domain}/${packageData.images[0].filePath}`
-      : `${this.domain}/assets/images/logo.png`;
+      ? `${FRONTEND_DOMAIN}/${packageData.images[0].filePath}`
+      : `${FRONTEND_DOMAIN}/assets/images/logo.png`;
 
     // Build comprehensive keywords including package name, tags, and general keywords
     const baseKeywords = this.currentLanguage === 'ar'

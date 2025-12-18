@@ -521,8 +521,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       : `Discover ${localizedName} with premium quality on pledgestores.com.`;
     const canonicalUrl = `${FRONTEND_DOMAIN}/shop/${product._id}`;
     const ogImage = product.images?.length
-      ? `${environment.domain}/${product.images[0].filePath}`
-      : `${environment.domain}/assets/images/logo.png`;
+      ? `${FRONTEND_DOMAIN}/${product.images[0].filePath}`
+      : `${FRONTEND_DOMAIN}/assets/images/logo.png`;
 
     // Build comprehensive keywords including product name, tags, category, and general keywords
     const baseKeywords = this.currentLanguage === 'ar'
