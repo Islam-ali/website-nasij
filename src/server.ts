@@ -87,22 +87,22 @@ function run(): void {
   app.use(express.static(distFolder, { index: false, maxAge: '1y' }));
 
   // Canonical URL redirects - redirect www to non-www and ensure HTTPS
-  app.use((req, res, next) => {
-    const host = req.get('host');
-    const protocol = req.protocol;
+  // app.use((req, res, next) => {
+  //   const host = req.get('host');
+  //   const protocol = req.protocol;
     
-    // Redirect www to non-www
-    if (host && host.startsWith('www.')) {
-      return res.redirect(301, `${protocol}://${host.replace('www.', '')}${req.originalUrl}`);
-    }
+  //   // Redirect www to non-www
+  //   if (host && host.startsWith('www.')) {
+  //     return res.redirect(301, `${protocol}://${host.replace('www.', '')}${req.originalUrl}`);
+  //   }
     
-    // Redirect HTTP to HTTPS in production
-    if (process.env['NODE_ENV'] === 'production' && protocol === 'http') {
-      return res.redirect(301, `https://${host}${req.originalUrl}`);
-    }
+  //   // Redirect HTTP to HTTPS in production
+  //   if (process.env['NODE_ENV'] === 'production' && protocol === 'http') {
+  //     return res.redirect(301, `https://${host}${req.originalUrl}`);
+  //   }
     
-    next();
-  });
+  //   next();
+  // });
 
   // Sitemap route - must be before the catch-all route
   app.get('/sitemap.xml', async (req, res) => {

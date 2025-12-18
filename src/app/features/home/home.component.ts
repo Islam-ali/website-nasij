@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       title,
       description,
       keywords,
-      canonicalUrl: 'https://pledgestores.com',
+      canonicalUrl: 'https://www.pledgestores.com',
       ogType: 'website',
       locale: isArabic ? 'ar_EG' : 'en_US',
       alternateLocale: isArabic ? 'en_US' : 'ar_EG'
@@ -190,7 +190,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.router.navigate(['/packages', pkg._id]);
   }
   navigateToProduct(product: any) {
-    this.router.navigate(['/shop', product._id, this.slugify(product.name)]);
+    this.router.navigate(['/shop', product._id, this.slugify(product.name.en)]);
   }
   navigateToCategory(category: ICategory) {
     this.router.navigate(['/shop'], { queryParams: { category: category._id } });

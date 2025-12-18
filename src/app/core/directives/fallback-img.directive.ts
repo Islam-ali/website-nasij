@@ -47,7 +47,8 @@ export class FallbackImgDirective implements OnInit {
     const currentSrc = element.getAttribute('src');
 
     if (currentSrc && !this.isAbsoluteUrl(currentSrc)) {
-      // If it's a relative URL, prepend the domain
+      // If it's an assets path, ensure it starts with / (absolute from root)
+      // Otherwise, prepend the domain
       const fullUrl = this.buildFullUrl(currentSrc);
       this.renderer.setAttribute(element, 'src', fullUrl);
       this.hasAddedDomain = true;
@@ -59,7 +60,16 @@ export class FallbackImgDirective implements OnInit {
     return /^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:');
   }
 
+  private isAssetsPath(url: string): boolean {
+    // Check if path starts with /assets/ or assets/
+    return url.startsWith('/assets/') || url.startsWith('assets/') || url.startsWith('./assets/');
+  }
+
   private buildFullUrl(src: string): string {
+    // If it's an assets path, return as absolute path from root (no domain)
+    if (this.isAssetsPath(src)) {
+      return src.startsWith('/') ? src : `/${src}`;
+    }
     // Remove leading slash if exists to avoid double slashes
     const cleanSrc = src.startsWith('/') ? src : '/' + src;
     return environment.domain + cleanSrc;
@@ -68,13 +78,27 @@ export class FallbackImgDirective implements OnInit {
   @HostListener('error')
   onError(): void {
     const element = this.el.nativeElement;
+    
+    // Prevent infinite loop - check if we're already trying to load the fallback
+    const currentSrc = element.src || element.getAttribute('src') || '';
+    if (currentSrc.includes('/assets/images/photo.png') || currentSrc.includes('assets/images/photo.png')) {
+      // Already trying fallback, stop to prevent infinite loop
+      return;
+    }
+
+    // Build fallback URL
     const fallbackUrl = this.isAbsoluteUrl(this.fallback) 
       ? this.fallback 
       : this.buildFullUrl(this.fallback);
 
-    // Prevent infinite loop if fallback also fails
-    if (element.src !== fallbackUrl) {
-      this.renderer.setAttribute(element, 'src', fallbackUrl);
+    // Only set fallback if it's different from current src
+    if (currentSrc !== fallbackUrl && !currentSrc.includes(fallbackUrl)) {
+      try {
+        this.renderer.setAttribute(element, 'src', fallbackUrl);
+      } catch (error) {
+        // Silently fail to prevent console errors
+        console.warn('Failed to set fallback image:', error);
+      }
     }
   }
 }

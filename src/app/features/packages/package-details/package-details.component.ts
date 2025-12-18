@@ -22,6 +22,7 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives';
 import { CurrencyPipe } from '../../../core/pipes';
 import { environment } from '../../../../environments/environment';
+import { SeoService } from '../../../core/services/seo.service';
 
 interface PackageImage {
   itemImageSrc: string;
@@ -29,6 +30,8 @@ interface PackageImage {
   alt: string;
   title: string;
 }
+
+const FRONTEND_DOMAIN = 'https://www.pledgestores.com';
 
 @Component({
   selector: 'app-package-details',
@@ -84,6 +87,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   private packageUrlService = inject(PackageUrlService);
   private cartService = inject(CartService);
   private translationService = inject(TranslationService);
+  private seoService = inject(SeoService);
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
@@ -146,28 +150,41 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       }
     });
 
-    // Fallback to regular package loading from route params
-    this.route.params
-      .pipe(
-        takeUntil(this.destroy$),
-        switchMap(params => {
-          const packageId = params['id'];
-          return this.packageService.getPackage(packageId);
-        })
-      )
-      .subscribe({
-        next: (response: BaseResponse<IPackage>) => {
-          this.package.set(response.data);
-          this.initializeVariants();
-          this.setupImages();
-          this.loading.set(false);
-        },
-        error: (err) => {
-          this.error.set('Failed to load package details. Please try again later.');
-          this.loading.set(false);
-          this.toastService.error('Failed to load package details', 'Error');
-        }
-      });
+    // Check if package was resolved by the resolver
+    const resolvedPackage = this.route.snapshot.data['package'] as IPackage | null;
+    
+    if (resolvedPackage) {
+      // Package was already loaded by the resolver
+      this.package.set(resolvedPackage);
+      this.initializeVariants();
+      this.setupImages();
+      this.updateSeo(resolvedPackage);
+      this.loading.set(false);
+    } else {
+      // Fallback: load package manually if resolver didn't run
+      this.route.params
+        .pipe(
+          takeUntil(this.destroy$),
+          switchMap(params => {
+            const packageId = params['id'];
+            return this.packageService.getPackage(packageId);
+          })
+        )
+        .subscribe({
+          next: (response: BaseResponse<IPackage>) => {
+            this.package.set(response.data);
+            this.initializeVariants();
+            this.setupImages();
+            this.updateSeo(response.data);
+            this.loading.set(false);
+          },
+          error: (err) => {
+            this.error.set('Failed to load package details. Please try again later.');
+            this.loading.set(false);
+            this.toastService.error('Failed to load package details', 'Error');
+          }
+        });
+    }
   }
 
   private handleEncodedPackageData(encodedData: any): void {
@@ -180,6 +197,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
             this.package.set(response.data);
             this.initializeVariants();
             this.setupImages();
+            this.updateSeo(response.data);
             this.loading.set(false);
             
             // Pre-fill form with encoded data if available
@@ -305,16 +323,27 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   getMainImage(): string {
     const packageData = this.package();
     if (!packageData || !packageData.images || packageData.images.length === 0) {
-      return 'assets/images/placeholder.jpg';
+      return '/assets/images/photo.png';
     }
     const imagePath = packageData.images[0]?.filePath;
-    return imagePath ? `${this.domain}${imagePath}` : 'assets/images/placeholder.jpg';
+    if (!imagePath) return '/assets/images/photo.png';
+    // If path starts with 'assets/', return as absolute path from root
+    if (imagePath.startsWith('assets/') || imagePath.startsWith('/assets/') || imagePath.startsWith('./assets/')) {
+      return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    }
+    return `${this.domain}/${imagePath}`;
   }
 
   // Helper method to add domain prefix to file paths
   getImageUrl(imagePath: string): string {
-    if (!imagePath) return 'assets/images/placeholder.jpg';
+    if (!imagePath) return '/assets/images/photo.png';
     if (imagePath.startsWith('http')) return imagePath;
+    // If path starts with 'assets/', return as absolute path from root (no domain)
+    if (imagePath.startsWith('assets/') || imagePath.startsWith('/assets/') || imagePath.startsWith('./assets/')) {
+      // Ensure it starts with / for absolute path from root
+      return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    }
+    // For other paths, add domain
     return `${this.domain}/${imagePath}`;
   }
 
@@ -638,10 +667,10 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
 
   getVariantImageForQuantity(productId: string, quantity: number): string {
     const packageData = this.package();
-    if (!packageData) return 'images/photo.png';
+    if (!packageData) return '/assets/images/photo.png';
     
     const item = packageData.items.find(i => i.productId._id === productId);
-    if (!item) return 'images/photo.png';
+    if (!item) return '/assets/images/photo.png';
     
     // Try to find image based on selected variants
     const selectedVariants = this.selectedVariantsByQuantity[productId]?.[quantity];
@@ -654,7 +683,8 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
       }
     }
     // Fallback to product main image
-    return this.getImageUrl(item.productId.images[0]?.filePath || 'images/photo.png');
+    const productImage = item.productId.images?.[0]?.filePath;
+    return productImage ? this.getImageUrl(productImage) : '/assets/images/photo.png';
   }
 
   getVariantImage(productId: string, variantType: string, value: MultilingualText): string | null {
@@ -798,7 +828,7 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     }
 
     // ثالثاً: استخدم صورة المنتج الافتراضية
-    return product.images?.[0]?.filePath || 'assets/images/placeholder.jpg';
+    return product.images?.[0]?.filePath || '/assets/images/photo.png';
   }
 
   getItemTotalPrice(item: any): number {
@@ -1021,6 +1051,13 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     return imagePath ? this.getImageUrl(imagePath) : undefined;
   }
 
+  getProductImagePath(item: any): string {
+    if (!item || !item.productId || !item.productId.images || item.productId.images.length === 0) {
+      return '/assets/images/photo.png';
+    }
+    return item.productId.images[0].filePath || '/assets/images/photo.png';
+  }
+
   getVariantImageForItem(productId: string, variant: string, value: string | MultilingualText): string | undefined {
     const packageData = this.package();
     if (!packageData) return undefined;
@@ -1129,7 +1166,16 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
     if (target) {
-      target.src = 'images/photo.png';
+      // Prevent infinite loop if fallback also fails
+      const currentSrc = target.src || target.getAttribute('src') || '';
+      if (!currentSrc.includes('/assets/images/photo.png') && !currentSrc.includes('assets/images/photo.png')) {
+        try {
+          target.src = '/assets/images/photo.png';
+        } catch (error) {
+          // Silently fail to prevent console errors
+          console.warn('Failed to set fallback image:', error);
+        }
+      }
     }
   }
 
@@ -1172,6 +1218,70 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
     const url = window.location.href;
     navigator.share({
       url: url
+    });
+  }
+
+  private updateSeo(packageData: IPackage): void {
+    const localizedName = packageData.name?.[this.currentLanguage] || packageData.name?.en || '';
+    const localizedSummary = packageData.description?.[this.currentLanguage] || packageData.description?.en || '';
+    const description = localizedSummary
+      ? localizedSummary.replace(/<[^>]+>/g, '').substring(0, 160)
+      : `Discover ${localizedName} package with premium quality products on pledgestores.com.`;
+    const canonicalUrl = `${FRONTEND_DOMAIN}/packages/${packageData._id}`;
+    const ogImage = packageData.images?.length
+      ? `${this.domain}/${packageData.images[0].filePath}`
+      : `${this.domain}/assets/images/logo.png`;
+
+    // Build comprehensive keywords including package name, tags, and general keywords
+    const baseKeywords = this.currentLanguage === 'ar'
+      ? 'حزم منتجات, بوكسات, منتجات طلابية, استيكرز, براويز, طلاب الأزهر, طلاب الجامعات, منتجات ملهمة, هدايا طلابية'
+      : 'product packages, boxes, student products, stickers, frames, Al-Azhar students, university students, inspirational products, student gifts';
+    
+    const packageKeywords = [
+      localizedName,
+      ...(packageData.tags || []),
+      baseKeywords
+    ].filter(k => k && k.trim()).join(', ');
+
+    this.seoService.updateSeo({
+      title: `${localizedName} | ${this.currentLanguage === 'ar' ? 'حزم منتجات' : 'Product Packages'}`,
+      description,
+      keywords: packageKeywords,
+      canonicalUrl,
+      ogImage,
+      ogType: 'product',
+      hreflangs: [
+        { lang: 'en', url: `${FRONTEND_DOMAIN}/packages/${packageData._id}` },
+        { lang: 'ar', url: `${FRONTEND_DOMAIN}/packages/${packageData._id}` },
+        { lang: 'x-default', url: canonicalUrl }
+      ]
+    });
+
+    // Structured data for Package
+    const packagePrice = packageData.price - (packageData.discountPrice || 0);
+    this.seoService.injectStructuredData({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: localizedName,
+      image: ogImage,
+      description,
+      sku: packageData._id || packageData.id,
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'EGP',
+        price: packagePrice.toFixed(2),
+        availability: packageData.isActive && packageData.stock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+        url: canonicalUrl
+      },
+      aggregateRating: packageData.averageRating && packageData.reviewCount
+        ? {
+            '@type': 'AggregateRating',
+            ratingValue: packageData.averageRating,
+            reviewCount: packageData.reviewCount
+          }
+        : undefined
     });
   }
 } 

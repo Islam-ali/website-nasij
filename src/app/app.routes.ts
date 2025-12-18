@@ -3,6 +3,9 @@ import { LayoutComponent } from './layout/layout.component';
 import { authGuard } from './core/guards/auth.guard';
 import { ErrorComponent } from './core/components/error/error.component';
 import { NotFoundComponent } from './core/components/not-found/not-found.component';
+import { businessProfileResolver } from './core/resolvers/business-profile.resolver';
+import { productResolver } from './core/resolvers/product.resolver';
+import { packageResolver } from './core/resolvers/package.resolver';
 
 export const routes: Routes = [
   {
@@ -37,6 +40,9 @@ export const routes: Routes = [
         loadComponent: () => import('./features/products/product-details/product-details.component')
           .then(m => m.ProductDetailsComponent)
           .catch(() => ErrorComponent),
+        resolve: {
+          product: productResolver
+        },
         data: { breadcrumb: 'Product Details' }
       },
       {
@@ -60,6 +66,9 @@ export const routes: Routes = [
         loadComponent: () => import('./features/packages/package-details/package-details.component')
           .then(m => m.PackageDetailsComponent)
           .catch(() => ErrorComponent),
+        resolve: {
+          package: packageResolver
+        },
         data: { breadcrumb: 'Package Details' }
       },
       {

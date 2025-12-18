@@ -147,8 +147,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
         : 'Discover a wide range of student products: inspiring stickers, elegant frames, special boxes for Al-Azhar and university students. High-quality products and inspiring gifts.';
 
     const canonicalUrl = searchQuery || categoryId
-      ? `https://pledgestores.com/shop${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}${categoryId ? `?category=${categoryId}` : ''}`
-      : 'https://pledgestores.com/shop';
+      ? `https://www.pledgestores.com/shop${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}${categoryId ? `?category=${categoryId}` : ''}`
+      : 'https://www.pledgestores.com/shop';
 
     this.seoService.updateSeo({
       title,

@@ -35,7 +35,7 @@ interface ProductImage {
   title: string;
 }
 
-const FRONTEND_DOMAIN = 'https://pledgestores.com';
+const FRONTEND_DOMAIN = 'https://www.pledgestores.com';
 
 @Component({
   selector: 'app-product-details',
@@ -109,15 +109,26 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.route.paramMap
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(params => {
-      const productId = params.get('id');
-      if (productId) {
-        this.loadProduct(productId);
-      }
-    });
+    // Check if product was resolved by the resolver
+    const resolvedProduct = this.route.snapshot.data['product'] as IProduct | null;
+    
+    if (resolvedProduct) {
+      // Product was already loaded by the resolver
+      this.product = resolvedProduct;
+      this.transferState.set(ProductDetailsComponent.PRODUCT_STATE_KEY, this.product);
+      this.afterProductLoaded();
+      this.loading = false;
+    } else {
+      // Fallback: load product manually if resolver didn't run
+      this.route.paramMap
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(params => {
+          const productId = params.get('id');
+          if (productId) {
+            this.loadProduct(productId);
+          }
+        });
+    }
   }
 
   toggleWishlist(): void {
@@ -527,7 +538,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     ].filter(k => k && k.trim()).join(', ');
 
     this.seoService.updateSeo({
-      title: `${localizedName} | ${this.currentLanguage === 'ar' ? 'منتجات طلابية' : 'Student Products'} | pledgestores.com`,
+      title: `${localizedName} | ${this.currentLanguage === 'ar' ? 'منتجات طلابية' : 'Student Products'}`,
       description,
       keywords: productKeywords,
       canonicalUrl,
@@ -549,7 +560,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       sku: product.sku || product._id,
       offers: {
         '@type': 'Offer',
-        priceCurrency: 'SAR',
+        priceCurrency: 'EGP',
         price: (this.getVariantBasePrice() - (product.discountPrice || 0)).toFixed(2),
         availability: product.status === ProductStatus.ACTIVE
           ? 'https://schema.org/InStock'
