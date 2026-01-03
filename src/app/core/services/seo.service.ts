@@ -163,7 +163,7 @@ export class SeoService {
   }
   
   private getDefaultHreflangs(): HreflangConfig[] {
-    const baseUrl = 'https://pledgestores.com';
+    const baseUrl = 'https://www.pledgestores.com';
     return [
       { lang: 'en', url: `${baseUrl}` },
       { lang: 'ar', url: `${baseUrl}` },
@@ -244,11 +244,11 @@ export class SeoService {
     if (isPlatformBrowser(this.platformId)) {
       return this.doc.location.href;
     }
-    return 'https://pledgestores.com';
+    return 'https://www.pledgestores.com';
   }
 
   private getDefaultOgImage(): string {
-    return 'https://pledgestores.com/images/logo.png';
+    return 'https://www.pledgestores.com/images/logo.png';
   }
 
   private getDefaultKeywords(): string {

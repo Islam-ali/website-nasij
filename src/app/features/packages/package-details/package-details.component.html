@@ -66,22 +66,22 @@
               <img 
                 [alt]="'Selected ' + (package().name || '') + ' ' + ($index + 1)" 
                 class="w-full h-auto object-cover rounded-lg sm:rounded-xl cursor-pointer transition-transform duration-300 hover:scale-105" 
-                [src]="image.itemImageSrc"
+                [src]="getImageUrl(image.itemImageSrc)"
                 fallback
                 (error)="onImageError($event)"
                 (click)="openImageModal(image.itemImageSrc)"
               />
               }
-              @if (images.length === 0) {
+              <!-- @if (images.length === 0) {
               <img 
-                [src]="getMainImage()" 
+                [src]="getImageUrl(getMainImage())" 
                 [alt]="package().name || ''"
                 class="w-full h-auto object-cover rounded-lg sm:rounded-xl col-span-2 cursor-pointer transition-transform duration-300 hover:scale-105"
                 fallback
                 (error)="onImageError($event)"
                 (click)="openImageModal(getMainImage())"
               />
-              }
+              } -->
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@
                 <img 
                   [alt]="item.productId.name" 
                   class="w-full h-32 sm:h-40 md:h-48 object-contain rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-600 transition-transform duration-300 ease-in-out hover:scale-105" 
-                  [src]="(item.productId.images[0].filePath) || 'images/photo.png'"
+                  [src]="getImageUrl(getProductImagePath(item))"
                   fallback
                   (error)="onImageError($event)"
                 />

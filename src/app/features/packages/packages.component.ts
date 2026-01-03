@@ -172,7 +172,7 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
     const imagePath = pkg.images && pkg.images.length > 0 
       ? pkg.images[0]?.filePath
       : null;
-    return imagePath ? `${this.domain}/${imagePath}` : 'assets/images/placeholder.jpg';
+    return imagePath ? `${this.domain}/${imagePath}` : '/assets/images/photo.png';
   }
 
   getDiscountPercentage(pkg: IPackage): number {
@@ -224,7 +224,10 @@ export class PackagesComponent extends ComponentBase implements OnInit, OnDestro
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
     if (target) {
-      target.src = 'assets/images/placeholder.jpg';
+      // Prevent infinite loop if fallback also fails
+      if (target.src && !target.src.includes('/assets/images/photo.png')) {
+        target.src = '/assets/images/photo.png';
+      }
     }
   }
 }

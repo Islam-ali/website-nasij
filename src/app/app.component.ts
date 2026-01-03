@@ -20,17 +20,23 @@ export class AppComponent implements OnInit {
     private businessProfileService: BusinessProfileService,
     private translationService: TranslationService
   ) { }
-  ngOnInit(): void {
-    // Initialize language and direction immediately before loading business profile
+  async ngOnInit(): Promise<void> {
+    // Initialize language and direction immediately
     if (isPlatformBrowser(this.platformId)) {
       this.translationService.initBrowserFeatures();
     }
     
-    // During SSR, don't block rendering on business profile load
+    // During SSR, don't block rendering
     if (!isPlatformBrowser(this.platformId)) {
       this.isLoading = false;
+      this.loadBusinessProfile();
+      return;
     }
     
+    // Wait for translations to be ready before showing the app
+    await this.translationService.waitForTranslations();
+    
+    // After translations are ready, load business profile
     this.loadBusinessProfile();
   }
 
