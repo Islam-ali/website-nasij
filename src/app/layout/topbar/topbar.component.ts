@@ -15,6 +15,8 @@ import { CategoryService } from '../../features/products/services/category.servi
 import { BaseResponse } from '../../core/models/baseResponse';
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { BusinessProfileService } from '../../services/business-profile.service';
+import { MenuLinkService } from '../../services/menu-link.service';
+import { IMenuLink, IDropdownItem, MenuLinkType } from '../../interfaces/menu-link.interface';
 import { ThemeService } from '../../core/services/theme.service';
 import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
@@ -47,6 +49,9 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   navbarOpen = signal(false);
   searchForm: boolean = false;
   categories = signal<ICategory[]>([]);
+  menuLinks = signal<IMenuLink[]>([]);
+  dropdownItems = signal<Map<string, IDropdownItem[]>>(new Map());
+  openMobileDropdown = signal<string | null>(null); // Track which dropdown is open in mobile
   isDarkTheme = computed(() => this.themeService.isDark());
   searchQuery = '';
   cartItems = signal<ICartItem[]>([]);
@@ -59,6 +64,22 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   businessProfile: IBusinessProfile | null = null;
   toggleNavbar(): void {
     this.navbarOpen.set(!this.navbarOpen());
+    // Close dropdowns when closing navbar
+    if (!this.navbarOpen()) {
+      this.openMobileDropdown.set(null);
+    }
+  }
+
+  toggleMobileDropdown(key: string): void {
+    if (this.openMobileDropdown() === key) {
+      this.openMobileDropdown.set(null);
+    } else {
+      this.openMobileDropdown.set(key);
+    }
+  }
+
+  isMobileDropdownOpen(key: string): boolean {
+    return this.openMobileDropdown() === key;
   }
   constructor(
     private authService: AuthService,
@@ -67,6 +88,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     private toastService: UiToastService,
     private router: Router,
     private businessProfileService: BusinessProfileService,
+    private menuLinkService: MenuLinkService,
     public themeService: ThemeService
   ) {
     super();
@@ -88,6 +110,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   ngOnInit(): void {
     console.log('Topbar component initialized');
     this.loadCategories();
+    this.loadMenuLinks();
     this.loadCart();
     this.loadWishlist();
     this.subscriptions.add(
@@ -325,6 +348,45 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
 
   getImageUrl(filePath: string): string {
     return `${this.domain}/${filePath}`;
+  }
+
+  loadMenuLinks(): void {
+    this.menuLinkService.getActiveMenuLinks().pipe(
+      takeUntil(this.destroy$),
+      tap((menuLinks: IMenuLink[]) => {
+        this.menuLinks.set(menuLinks);
+        // Load dropdown items for dropdown type menu links
+        menuLinks.forEach(menuLink => {
+          if (menuLink.type === MenuLinkType.DROPDOWN && menuLink.dropdownConfig) {
+            this.loadDropdownItems(menuLink.key, menuLink.dropdownConfig);
+            console.log('Dropdown items loaded for menu link:', menuLink, this.dropdownItems());
+          }
+        });
+      })
+    ).subscribe();
+  }
+
+  loadDropdownItems(key: string, config: any): void {
+    this.menuLinkService.fetchDropdownItems(config).pipe(
+      takeUntil(this.destroy$),
+      tap((items: IDropdownItem[]) => {
+        const currentMap = this.dropdownItems();
+        currentMap.set(key, items);
+        this.dropdownItems.set(new Map(currentMap));
+        console.log('Dropdown items loaded for menu link:', key, items, this.dropdownItems());
+      }),
+      catchError((error) => {
+        console.error(`Error loading dropdown items for ${key}:`, error);
+        return of([]);
+      })
+    ).subscribe();
+  }
+
+  getDropdownItems(key: string): IDropdownItem[] {
+    return this.dropdownItems().get(key) || [];
+  }
+  navigateTo(url: string): void {
+    this.router.navigateByUrl(url);
   }
 
   getBusinessProfile() {

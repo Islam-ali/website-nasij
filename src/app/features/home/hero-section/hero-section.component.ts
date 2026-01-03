@@ -7,11 +7,12 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../../environments/environment';
+import { SafePipe } from "../../../core/pipes/safe.pipe";
 
 @Component({
   selector: 'app-hero-section',
   standalone: true,
-  imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective, TranslateModule],
+  imports: [CommonModule, RouterModule, MultiLanguagePipe, FallbackImgDirective, TranslateModule, SafePipe],
   templateUrl: './hero-section.component.html',
 })
 export class HeroSectionComponent implements OnInit {

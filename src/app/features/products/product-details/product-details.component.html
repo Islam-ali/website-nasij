@@ -143,9 +143,14 @@
             <!-- Main Image -->
             <div
               class="relative w-full h-64 sm:h-80 md:h-96 lg:h-[600px] flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 transition-all duration-500 group mb-3 sm:mb-4 rounded-xl sm:rounded-2xl overflow-hidden">
-              <img [src]="images[activeIndex].itemImageSrc" [alt]="images[activeIndex].alt || product.name"
+              <img 
+                [src]="images[activeIndex]?.itemImageSrc + '?v=' + imageKey" 
+                [alt]="images[activeIndex]?.alt || (product ? (product.name | multiLanguage) : '')"
+                [attr.data-key]="imageKey"
                 class="max-h-full max-w-full object-contain p-3 sm:p-4 md:p-6 transition-all duration-700 group-hover:scale-110"
-                [ngClass]="{ 'opacity-100': imageLoaded, 'opacity-0': !imageLoaded }" (load)="onImageLoad()" />
+                [ngClass]="{ 'opacity-100': imageLoaded, 'opacity-0': !imageLoaded }" 
+                (load)="onImageLoad()" 
+                (error)="onImageError()" />
               @if (!imageLoaded) {
               <div class="absolute inset-0 flex items-center justify-center">
                 <ui-spinner></ui-spinner>

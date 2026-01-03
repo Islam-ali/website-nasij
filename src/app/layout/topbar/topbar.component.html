@@ -91,7 +91,7 @@
 
       <!-- Desktop Navigation -->
       <nav class="hidden lg:flex items-center gap-2 xl:gap-4">
-        <a routerLink="/" routerLinkActive="text-primary-600" [routerLinkActiveOptions]="{exact: true}"
+        <!-- <a routerLink="/" routerLinkActive="text-primary-600" [routerLinkActiveOptions]="{exact: true}"
           class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
           <span>{{ 'navigation.home' | translate }}</span>
           <span
@@ -101,8 +101,49 @@
         <a routerLink="/shop" routerLinkActive="text-primary-600"
           class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
           <span>{{ 'navigation.shop' | translate }}</span>
-        </a>
-        @if (categories().length > 0) {
+        </a> -->
+        
+        <!-- Dynamic Menu Links -->
+        @for (menuLink of menuLinks(); track menuLink._id) {
+          @if (menuLink.type === 'text') {
+            <a [routerLink]="menuLink.url" routerLinkActive="text-primary-600"
+              class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
+              <span>{{ menuLink.title | multiLanguage }}</span>
+            </a>
+          } @else if (menuLink.type === 'dropdown') {
+            <div class="relative group">
+              <button
+                class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300 flex items-center gap-2">
+                <span>{{ menuLink.title | multiLanguage }}</span>
+                <i style="font-size: 12px;" class="pi pi-chevron-down transition-transform duration-300 group-hover:-rotate-180"></i>
+                <span
+                  class="absolute inset-x-4 -bottom-0.5 h-0.5 bg-primary-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+              </button>
+              <div
+                class="absolute top-full left-0 mt-3 w-[20rem] xl:w-[22rem] bg-white/95 dark:bg-dark-surface/95 rounded-2xl shadow-xl border border-primary-100/60 dark:border-primary-900/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 backdrop-blur-md"
+                [class.dark:shadow-[0_20px_40px_-25px_rgba(79,70,229,0.35)]]="isDarkTheme()">
+                <div class="py-3 px-3 grid grid-cols-1 gap-1 max-h-72 overflow-y-auto" style="scrollbar-width: none;">
+                  @for (item of getDropdownItems(menuLink.key); track item.value) {
+                  <a href="javascript:void(0)" class="cursor-pointer" (click)="navigateTo(item.url)"
+                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
+                    [class.dark:text-dark-textSecondary]="isDarkTheme()"
+                    [class.dark:hover:bg-primary-500\10]="isDarkTheme()"
+                    [class.dark:hover:text-primary-300]="isDarkTheme()">
+                    <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-500\10 text-primary-500">
+                      <i class="pi pi-circle-fill text-[10px]"></i>
+                    </span>
+                    <div class="flex-1">
+                      <p class="font-medium">{{ item.label | multiLanguage }}</p>
+                    </div>
+                  </a>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        }
+        
+        <!-- @if (categories().length > 0) {
         <div class="relative group">
           <button
             class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300 flex items-center gap-2">
@@ -140,7 +181,7 @@
         <a routerLink="/packages" routerLinkActive="text-primary-600"
           class="relative px-4 py-2 text-sm font-medium text-gray-600 dark:text-dark-textSecondary rounded-xl transition-all duration-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-500\10 dark:hover:text-primary-300">
           <span>{{ 'navigation.boxs' | translate }}</span>
-        </a>
+        </a> -->
 
       </nav>
 
@@ -208,28 +249,49 @@
     <div class="px-4 py-6 bg-white border-t border-primary-100 transition-all duration-300 space-y-3"
       [class.dark:bg-dark-surface]="isDarkTheme()" [class.dark:border-dark-border]="isDarkTheme()">
       <div class="space-y-3">
-        <a routerLink="/" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
-          [routerLinkActiveOptions]="{exact: true}"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
-          [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
-          <i class="pi pi-home me-2"></i>
-          <span>{{ 'navigation.home' | translate }}</span>
-        </a>
-        <a routerLink="/shop" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
-          [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
-          <i class="pi pi-shopping-bag me-2"></i>
-          <span>{{ 'navigation.shop' | translate }}</span>
-        </a>
-        <a routerLink="/packages" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
-          [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
-          [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
-          <i class="pi pi-box me-2"></i>
-          <span>{{ 'navigation.boxs' | translate }}</span>
-        </a>
+        <!-- Dynamic Menu Links -->
+        @for (menuLink of menuLinks(); track menuLink._id) {
+          @if (menuLink.type === 'text') {
+            <a [routerLink]="menuLink.url" (click)="toggleNavbar()" routerLinkActive="text-primary-600"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
+              [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
+              [class.dark:hover:bg-primary-500\10]="isDarkTheme()">
+              <span>{{ menuLink.title | multiLanguage }}</span>
+            </a>
+          } @else if (menuLink.type === 'dropdown') {
+            <div class="space-y-2">
+              <button (click)="toggleMobileDropdown(menuLink.key)"
+                class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors duration-300"
+                [class.dark:text-dark-textSecondary]="isDarkTheme()" [class.dark:hover:text-primary-300]="isDarkTheme()"
+                [class.dark:hover:bg-primary-500\10]="isDarkTheme()"
+                [class.text-primary-600]="isMobileDropdownOpen(menuLink.key)"
+                [class.bg-primary-50]="isMobileDropdownOpen(menuLink.key)"
+                [class.dark:bg-primary-500\10]="isMobileDropdownOpen(menuLink.key) && isDarkTheme()">
+                <div class="flex items-center gap-3">
+                  <span>{{ menuLink.title | multiLanguage }}</span>
+                </div>
+                <i class="pi pi-chevron-down text-sm transition-transform duration-300"
+                  [class.rotate-180]="isMobileDropdownOpen(menuLink.key)"></i>
+              </button>
+              @if (isMobileDropdownOpen(menuLink.key)) {
+                <div class="pl-4 pr-2 space-y-1 border-l-2 border-primary-200 dark:border-primary-800 ml-4">
+                  @for (item of getDropdownItems(menuLink.key); track item.value) {
+                    <a [routerLink]="item.url" (click)="toggleNavbar()" 
+                      class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200"
+                      [class.dark:text-dark-textSecondary]="isDarkTheme()"
+                      [class.dark:hover:bg-primary-500\10]="isDarkTheme()"
+                      [class.dark:hover:text-primary-300]="isDarkTheme()">
+                      <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary-500\10 text-primary-500">
+                        <i class="pi pi-circle-fill text-[6px]"></i>
+                      </span>
+                      <span class="font-medium">{{ item.label | multiLanguage }}</span>
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          }
+        }
       </div>
       <div class="flex items-center gap-2">
         <app-language-switcher class="w-full"></app-language-switcher>

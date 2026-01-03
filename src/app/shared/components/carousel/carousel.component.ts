@@ -109,11 +109,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // Initialize transform string
-      this.updateTransformString();
-      // Calculate item width after view init with multiple attempts
-      // Use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
+      // Initialize transform string - defer to avoid ExpressionChangedAfterItHasBeenCheckedError
       Promise.resolve().then(() => {
+        this.updateTransformString();
+        // Calculate item width after view init with multiple attempts
         this.calculateItemWidthPixels();
         this.updateTransformString();
         if (this.itemWidth === 0) {
@@ -239,8 +238,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     
     // Recalculate item width after itemsPerPage changes
-    // Update transform string immediately
-    this.updateTransformString();
     // Use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
     Promise.resolve().then(() => {
       this.calculateItemWidthPixels();
@@ -288,7 +285,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   
   private goToIndex(index: number): void {
     this.currentIndex = index;
-    this.updateTransformString();
+    // Update transform string - use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
+    Promise.resolve().then(() => {
+      this.updateTransformString();
+    });
     this.onSlideChange.emit(this.currentIndex);
     if (this.autoPlay) {
       this.resetAutoPlay();
@@ -576,8 +576,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isHorizontalDrag = true;
       }
       this.hasActualDrag = true;
-      // Update transform string during drag
-      this.updateTransformString();
+      // Update transform string during drag - update immediately for smooth dragging
+      if (isPlatformBrowser(this.platformId)) {
+        this.transformString = this.getTransform();
+      }
       // Prevent default scrolling only when actually dragging horizontally
       if (event instanceof TouchEvent) {
         event.preventDefault();
@@ -691,9 +693,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       this.startX = 0;
       this.currentX = 0;
       
-      // Force change detection to update the transform
-      this.cdr.detectChanges();
-      
       return; // Exit early, state will be reset in animation
     } else {
       // Smoothly return to original position if drag wasn't significant
@@ -720,8 +719,10 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         const easeOutQuad = 1 - (1 - progress) * (1 - progress);
         
         this.dragOffset = startOffset * (1 - easeOutQuad);
-        // Update transform string during animation
-        this.updateTransformString();
+        // Update transform string during animation - update immediately for smooth animation
+        if (isPlatformBrowser(this.platformId)) {
+          this.transformString = this.getTransform();
+        }
         
         if (progress < 1) {
           requestAnimationFrame(animate);
@@ -818,18 +819,31 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     
     if (calculatedWidth > 0 && Math.abs(this.itemWidth - calculatedWidth) > 0.1) {
       this.itemWidth = calculatedWidth;
-      // Update transform string to avoid ExpressionChangedAfterItHasBeenCheckedError
-      this.updateTransformString();
-      // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
-      // Only use setTimeout in browser environment
-      if (isPlatformBrowser(this.platformId)) {
-        setTimeout(() => this.cdr.detectChanges(), 0);
-      }
+      // Update transform string - use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
+      Promise.resolve().then(() => {
+        this.updateTransformString();
+      });
     }
   }
 
   private updateTransformString(): void {
-    this.transformString = this.getTransform();
+    // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+    // This ensures the update happens after the current change detection cycle
+    if (isPlatformBrowser(this.platformId)) {
+      // Use requestAnimationFrame for smoother updates during animations
+      if (this.isDragging) {
+        // During drag, update immediately for smooth dragging
+        this.transformString = this.getTransform();
+      } else {
+        // For non-drag updates, defer to next tick to avoid change detection errors
+        Promise.resolve().then(() => {
+          this.transformString = this.getTransform();
+          this.cdr.markForCheck();
+        });
+      }
+    } else {
+      this.transformString = this.getTransform();
+    }
   }
 
   getTransform(): string {

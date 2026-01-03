@@ -31,13 +31,13 @@
                 <!-- Video or Image -->
                 @if (hero.video?.filePath) {
                     <video 
-                        [src]="getVideoUrl(hero.video?.filePath || '')" 
+                        [src]="getVideoUrl(hero.video?.filePath || '') | safe:'resourceUrl'" 
                         class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
                         autoplay
                         muted
                         loop
                         playsinline
-                        [poster]="hero.image?.filePath"
+                        [poster]="getVideoUrl(hero.video?.filePath || '')"
                         [attr.aria-label]="(hero.title | multiLanguage)"
                     >
                         Your browser does not support the video tag.

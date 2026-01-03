@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -66,6 +66,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   loading = true;
   error: string | null = null;
   imageLoaded = false;
+  imageKey = 0; // Key to force image reload
   quantity = 1;
   relatedProducts: IProduct[] = [];
   activeIndex = 0;
@@ -89,6 +90,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     private translate: TranslateService,
     private seoService: SeoService,
     private transferState: TransferState,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     super();
@@ -105,30 +107,68 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   onImageLoad() {
+    // Force change detection to update the UI
     this.imageLoaded = true;
+    this.cdr.detectChanges();
+  }
+
+  onImageError() {
+    // If image fails to load, show it anyway to avoid infinite loading
+    this.imageLoaded = true;
+    this.cdr.detectChanges();
   }
 
   ngOnInit(): void {
-    // Check if product was resolved by the resolver
-    const resolvedProduct = this.route.snapshot.data['product'] as IProduct | null;
-    
-    if (resolvedProduct) {
-      // Product was already loaded by the resolver
-      this.product = resolvedProduct;
-      this.transferState.set(ProductDetailsComponent.PRODUCT_STATE_KEY, this.product);
-      this.afterProductLoaded();
-      this.loading = false;
-    } else {
-      // Fallback: load product manually if resolver didn't run
-      this.route.paramMap
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(params => {
-          const productId = params.get('id');
-          if (productId) {
+    // Listen to route parameter changes to handle navigation within same component
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const productId = params.get('id');
+        if (productId) {
+          // Check if this is a different product
+          const isDifferentProduct = !this.product || this.product._id !== productId;
+          
+          if (isDifferentProduct) {
+            // Reset state for new product
+            this.resetProductState();
+            
+            // Try to get product from resolver first (only on initial load when no product exists)
+            if (!this.product) {
+              const resolvedProduct = this.route.snapshot.data['product'] as IProduct | null;
+              if (resolvedProduct && resolvedProduct._id === productId) {
+                // Product was loaded by resolver on initial load
+                this.product = resolvedProduct;
+                this.transferState.set(ProductDetailsComponent.PRODUCT_STATE_KEY, this.product);
+                this.afterProductLoaded();
+                this.loading = false;
+                return;
+              }
+            }
+            
+            // Load product manually (for navigation within same component or if resolver didn't run)
             this.loadProduct(productId);
           }
-        });
-    }
+        }
+      });
+  }
+
+  private resetProductState(): void {
+    this.product = null;
+    this.selectedColor = null;
+    this.selectedSize = null;
+    this.selectedVariantAttributes = [];
+    this.quantity = 1;
+    this.currentImageIndex = 0;
+    this.activeIndex = 0;
+    this.images = [];
+    this.loading = true;
+    this.error = null;
+    this.imageLoaded = false;
+    this.imageKey++; // Force image reload by changing key
+    this.isInWishlist = false;
+    this.relatedProducts = [];
+    this.mappedVariants = [];
+    this.openAccordionIndices.clear();
   }
 
   toggleWishlist(): void {
@@ -152,6 +192,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   private loadProduct(productId: string): void {
     this.loading = true;
     this.error = null;
+    // Reset image loaded state before loading new product
+    this.imageLoaded = false;
 
     this.productService.getProductById(productId).pipe(
       takeUntil(this.destroy$)
@@ -175,7 +217,46 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     if (!this.product) {
       return;
     }
+    // Reset image loaded state before preparing new images
+    this.imageLoaded = false;
+    this.currentImageIndex = 0;
+    this.activeIndex = 0;
+    this.imageKey++; // Force image reload by changing key
     this.prepareImages();
+    
+    // Force change detection to update the UI immediately
+    this.cdr.detectChanges();
+    
+    // Check if image is already cached and handle it
+    if (this.images.length > 0 && isPlatformBrowser(this.platformId)) {
+      const img = new Image();
+      const imageUrl = this.images[0].itemImageSrc + '?v=' + this.imageKey;
+      
+      // Check if image is complete (cached)
+      img.onload = () => {
+        // Image loaded successfully
+        this.imageLoaded = true;
+        this.cdr.detectChanges();
+      };
+      
+      img.onerror = () => {
+        // Image failed to load, show it anyway
+        this.imageLoaded = true;
+        this.cdr.detectChanges();
+      };
+      
+      // Set src to trigger load check
+      img.src = imageUrl;
+      
+      // If image is already complete (cached), trigger onload manually
+      if (img.complete) {
+        setTimeout(() => {
+          this.imageLoaded = true;
+          this.cdr.detectChanges();
+        }, 50);
+      }
+    }
+    
     this.loadRelatedProducts(this.product._id);
     this.mappedVariants = this.productService.getUniqueAttributes(this.product.variants);
     this.autoSelectDefaultVariants();
@@ -396,7 +477,13 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   // }
 
   navigateToProduct(product: any): void {
-    this.router.navigate(['/shop', product._id , product.name.en]);
+    // Scroll to top when navigating to new product
+    this.scrollToTop();
+    // Navigate to the new product
+    this.router.navigate(['/shop', product._id, product.name?.en || product.name || 'product']).then(() => {
+      // Force reload by navigating with onSameUrlNavigation
+      // The paramMap subscription will handle the reload
+    });
   }
 
   getVariantOptions(variant: any): string {
