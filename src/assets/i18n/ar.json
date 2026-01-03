@@ -288,6 +288,14 @@
     "no_categories_found": "لم يتم العثور على فئات",
     "categories_will_appear": "ستظهر الفئات هنا بمجرد إضافتها."
   },
+  "reviews": {
+    "customer_reviews": "تقييمات العملاء",
+    "what_customers_say": "ماذا يقول عملاؤنا",
+    "real_feedback": "تعليقات حقيقية من عملاء حقيقيين يحبون منتجاتنا",
+    "featured": "مميز",
+    "review_image": "صورة التقييم",
+    "video_not_supported": "المتصفح الخاص بك لا يدعم علامة الفيديو."
+  },
   "products": {
     "title": "المنتجات",
     "description": "تصفح مجموعة واسعة من منتجاتنا",

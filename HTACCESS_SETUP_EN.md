@@ -77,7 +77,7 @@ ng build --configuration=development
 ```
 
 ### 3. Server Deployment
-After building, upload contents of `dist/pledge-website/browser/` to your server.
+After building, upload contents of `dist/store-website/browser/` to your server.
 
 Make sure `.htaccess` file is in the root with `index.html`.
 
@@ -140,10 +140,10 @@ Extra protection for your site:
 After building, use a local server:
 ```bash
 # Using http-server
-npx http-server dist/pledge-website/browser -p 8080
+npx http-server dist/store-website/browser -p 8080
 
 # Or using serve
-npx serve -s dist/pledge-website/browser
+npx serve -s dist/store-website/browser
 ```
 
 ### 2. Test Different Routes
@@ -189,8 +189,8 @@ Should see: `Content-Encoding: gzip`
 - [ ] `.htaccess` file in `src/`
 - [ ] Updated `angular.json` to copy `.htaccess`
 - [ ] Built project: `ng build --configuration=production`
-- [ ] Verified `.htaccess` exists in `dist/pledge-website/browser/`
-- [ ] Uploaded all `dist/pledge-website/browser/` files to server
+- [ ] Verified `.htaccess` exists in `dist/store-website/browser/`
+- [ ] Uploaded all `dist/store-website/browser/` files to server
 - [ ] Tested different routes
 - [ ] Tested reload on different routes
 - [ ] Verified security headers work

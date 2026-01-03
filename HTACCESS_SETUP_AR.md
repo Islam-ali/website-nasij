@@ -77,7 +77,7 @@ ng build --configuration=development
 ```
 
 ### 3. الرفع على السيرفر (Deployment)
-بعد البناء، ارفع محتويات مجلد `dist/pledge-website/browser/` إلى السيرفر.
+بعد البناء، ارفع محتويات مجلد `dist/store-website/browser/` إلى السيرفر.
 
 تأكد أن ملف `.htaccess` موجود في الجذر (root) مع `index.html`.
 
@@ -140,10 +140,10 @@ location / {
 بعد البناء، استخدم سيرفر محلي:
 ```bash
 # باستخدام http-server
-npx http-server dist/pledge-website/browser -p 8080
+npx http-server dist/store-website/browser -p 8080
 
 # أو باستخدام serve
-npx serve -s dist/pledge-website/browser
+npx serve -s dist/store-website/browser
 ```
 
 ### 2. اختبر Routes مختلفة
@@ -189,8 +189,8 @@ curl -H "Accept-Encoding: gzip" -I http://your-domain.com/main.js
 - [ ] ملف `.htaccess` في `src/`
 - [ ] تحديث `angular.json` لنسخ `.htaccess`
 - [ ] عمل build للمشروع: `ng build --configuration=production`
-- [ ] التأكد من وجود `.htaccess` في `dist/pledge-website/browser/`
-- [ ] رفع جميع ملفات `dist/pledge-website/browser/` إلى السيرفر
+- [ ] التأكد من وجود `.htaccess` في `dist/store-website/browser/`
+- [ ] رفع جميع ملفات `dist/store-website/browser/` إلى السيرفر
 - [ ] اختبار Routes مختلفة
 - [ ] اختبار Reload على Routes مختلفة
 - [ ] التحقق من عمل الأمان Headers

@@ -15,6 +15,7 @@ import { HeroSectionComponent } from "./hero-section/hero-section.component";
 import { FeaturedCollectionComponent } from "./featured-collection/featured-collection.component";
 import { BannarComponent } from "./bannar/bannar.component";
 import { FeatureComponent } from "./feature/feature.component";
+import { ReviewsComponent } from "./reviews/reviews.component";
 import { PackageService } from '../packages/services/package.service';
 import { IPackage } from '../../interfaces/package.interface';
 import { TranslateModule } from '@ngx-translate/core';
@@ -37,6 +38,7 @@ import { TranslationService } from '../../core/services/translate.service';
     FeaturedCollectionComponent,
     BannarComponent,
     FeatureComponent,
+    ReviewsComponent,
     TranslateModule,
     MultiLanguagePipe,
     FallbackImgDirective

@@ -18,7 +18,7 @@ export class MultiLanguagePipe implements PipeTransform, OnDestroy {
     if (!value) return '';
     // platform browser
     if (isPlatformBrowser(this.platformId)) {
-      const currentLang = localStorage.getItem('pledge-language') || 'ar';
+      const currentLang = localStorage.getItem('lang-store') || 'ar';
       return value[currentLang as keyof MultilingualText] || value.ar || '';
     }
     return value.ar || '';

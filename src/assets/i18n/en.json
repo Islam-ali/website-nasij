@@ -288,6 +288,14 @@
     "no_categories_found": "No Categories Found",
     "categories_will_appear": "Categories will appear here once they are added."
   },
+  "reviews": {
+    "customer_reviews": "Customer Reviews",
+    "what_customers_say": "What Our Customers Say",
+    "real_feedback": "Real feedback from real customers who love our products",
+    "featured": "Featured",
+    "review_image": "Review image",
+    "video_not_supported": "Your browser does not support the video tag."
+  },
   "products": {
     "title": "Products",
     "description": "Browse our wide selection of products",

@@ -1,5 +1,5 @@
 {
-  "name": "pledge-website",
+  "name": "store-website",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -11,10 +11,10 @@
     "generate:sitemap": "node tools/sitemap-builder.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr": "ng run pledge-website:server:production && node dist/pledge-website/server/main.js",
-    "serve:ssr:pledge-website": "node dist/pledge-website/server/main.js",
-    "build:ssr": "ng build --configuration production && ng run pledge-website:server:production && npm run generate:sitemap",
-    "prerender": "ng run pledge-website:prerender"
+    "serve:ssr": "ng build --configuration development && ng run store-website:server:development && node dist/store-website/server/main.js",
+    "serve:ssr:store-website": "node dist/store-website/server/main.js",
+    "build:ssr": "ng build --configuration production && ng run store-website:server:production && npm run generate:sitemap",
+    "prerender": "ng run store-website:prerender"
   },
   "private": true,
   "dependencies": {

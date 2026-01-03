@@ -33,7 +33,7 @@ export class CurrencyPipe implements PipeTransform {
     // Get current language
     let currentLang = 'ar';
     if (isPlatformBrowser(this.platformId)) {
-      currentLang = localStorage.getItem('pledge-language') || 'ar';
+      currentLang = localStorage.getItem('lang-store') || 'ar';
     }
 
     // Return formatted value with currency symbol based on language

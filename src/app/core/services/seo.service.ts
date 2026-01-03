@@ -135,7 +135,7 @@ export class SeoService {
       currentLanguage = this.translationService.getCurrentLanguage();
     } catch (e) {
       // Fallback to localStorage if TranslationService is not ready
-      currentLanguage = localStorage.getItem('pledge-language') || 'ar';
+      currentLanguage = localStorage.getItem('lang-store') || 'ar';
     }
     
     const htmlElement = this.doc.documentElement;

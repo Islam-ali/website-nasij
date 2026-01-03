@@ -12,7 +12,7 @@ import { TranslationService } from './core/services/translate.service';
   providers: [BusinessProfileService]
 })
 export class AppComponent implements OnInit {
-  title = 'pledge-website';
+  title = 'store-website';
   isLoading: boolean = true;
   constructor(
     private renderer: Renderer2,

@@ -123,8 +123,8 @@ loadStates(): void {
 3. All changes are reactive and immediate
 
 ## Files Modified
-- `pledge-website/src/app/features/checkout/checkout.component.ts`
-- `pledge-website/src/app/features/checkout/checkout.component.html`
+- `store-website/src/app/features/checkout/checkout.component.ts`
+- `store-website/src/app/features/checkout/checkout.component.html`
 
 ### 7. Auto-set First Country
 ```typescript

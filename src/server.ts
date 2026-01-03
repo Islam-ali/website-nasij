@@ -11,11 +11,29 @@ import * as http from 'node:http';
 import { URL } from 'node:url';
 import bootstrap from './main.server';
 
-const distFolder = join(process.cwd(), 'dist/pledge-website/browser');
+const distFolder = join(process.cwd(), 'dist/store-website/browser');
+
+// Check if browser build exists
+if (!existsSync(distFolder)) {
+  console.error(`❌ Error: Browser build not found at ${distFolder}`);
+  console.error(`   Please run: ng build --configuration production`);
+  console.error(`   Or use: npm run build:ssr`);
+  process.exit(1);
+}
+
 const indexFile = existsSync(join(distFolder, 'index.original.html'))
   ? 'index.original.html'
   : 'index.html';
-const indexHtml = readFileSync(join(distFolder, indexFile), 'utf8');
+
+const indexFilePath = join(distFolder, indexFile);
+if (!existsSync(indexFilePath)) {
+  console.error(`❌ Error: index.html not found at ${indexFilePath}`);
+  console.error(`   Please run: ng build --configuration production`);
+  console.error(`   Or use: npm run build:ssr`);
+  process.exit(1);
+}
+
+const indexHtml = readFileSync(indexFilePath, 'utf8');
 
 // Helper function to escape XML special characters
 function escapeXml(unsafe: string): string {
@@ -127,7 +145,7 @@ function run(): void {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                'User-Agent': 'Pledge-Website-Sitemap-Generator/1.0',
+                'User-Agent': 'store-website-Sitemap-Generator/1.0',
               },
               timeout: timeout,
             };

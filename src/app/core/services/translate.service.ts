@@ -29,7 +29,7 @@ export class TranslationService {
     if (!isPlatformBrowser(this.platformId)) return;
 
     // Get saved language from localStorage or use browser language
-    const savedLanguage = localStorage.getItem('pledge-language');
+    const savedLanguage = localStorage.getItem('lang-store');
     // const browserLanguage = this.getBrowserLanguage();
 
     const languageToUse = savedLanguage || this.defaultLanguage;
@@ -54,7 +54,7 @@ export class TranslationService {
 
       // Only access localStorage on browser platform
       if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem('pledge-language', language);
+        localStorage.setItem('lang-store', language);
         this.updateDocumentDirection(language);
       }
     }

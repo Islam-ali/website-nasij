@@ -202,10 +202,10 @@ export class CheckoutComponent {
 - واجهة متسقة في كلا اللغتين
 
 ### 📁 **الملفات المحدثة:**
-- `pledge-website/src/assets/i18n/en.json`
-- `pledge-website/src/assets/i18n/ar.json`
-- `pledge-website/src/app/features/checkout/checkout.component.ts`
-- `pledge-website/src/app/features/checkout/checkout.component.html`
+- `store-website/src/assets/i18n/en.json`
+- `store-website/src/assets/i18n/ar.json`
+- `store-website/src/app/features/checkout/checkout.component.ts`
+- `store-website/src/app/features/checkout/checkout.component.html`
 
 ### 🎯 **النتيجة:**
 صفحة الدفع الآن تدعم الترجمة الكاملة بين العربية والإنجليزية مع:

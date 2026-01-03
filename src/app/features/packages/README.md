@@ -1,7 +1,7 @@
 # Package Module - Website Integration
 
 ## نظرة عامة
-Package Module يوفر واجهة كاملة لعرض الحزم في pledge-website، مع إمكانية عرض قائمة الحزم وتفاصيلها وإضافةها للسلة.
+Package Module يوفر واجهة كاملة لعرض الحزم في store-website، مع إمكانية عرض قائمة الحزم وتفاصيلها وإضافةها للسلة.
 
 ## المكونات
 
@@ -226,7 +226,7 @@ this.packageService.getPackage(packageId).subscribe(package => {
 ## هيكل الملفات
 
 ```
-pledge-website/src/app/features/packages/
+store-website/src/app/features/packages/
 ├── packages.component.ts
 ├── packages.component.html
 ├── packages.component.scss
