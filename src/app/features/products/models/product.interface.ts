@@ -48,10 +48,11 @@ export interface IProduct {
   sizes: MultilingualText[];
   gender?: string;
   season?: string;
-  details: { name: string; value: string }[];
-  seoTitle?: string;
-  seoDescription?: string;
+  details: { name: MultilingualText; value: MultilingualText }[];
+  seoTitle?: MultilingualText;
+  seoDescription?: MultilingualText;
   seoKeywords?: string[];
+  seoImage?: IArchived;
   averageRating?: number;
   reviewCount?: number;
   soldCount?: number;

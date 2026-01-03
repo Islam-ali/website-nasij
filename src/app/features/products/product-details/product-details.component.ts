@@ -514,20 +514,17 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
   }
 
   private updateSeo(product: IProduct): void {
-    const localizedName = product.name?.[this.currentLanguage] || product.name?.en || '';
-    const localizedSummary = product.description?.[this.currentLanguage] || product.description?.en || '';
+    const localizedName = product.seoTitle?.[this.currentLanguage] || product.seoTitle?.en || '';
+    const localizedSummary = product.seoDescription?.[this.currentLanguage] || product.seoDescription?.en || '';
     const description = localizedSummary
       ? localizedSummary.replace(/<[^>]+>/g, '').substring(0, 160)
       : `Discover ${localizedName} with premium quality on pledgestores.com.`;
     const canonicalUrl = `${FRONTEND_DOMAIN}/shop/${product._id}`;
-    const ogImage = product.images?.length
-      ? `${FRONTEND_DOMAIN}/${product.images[0].filePath}`
-      : `${FRONTEND_DOMAIN}/assets/images/logo.png`;
+    const ogImage = product.seoImage?.filePath ? `${FRONTEND_DOMAIN}/${product.seoImage.filePath}` : 
+   `${FRONTEND_DOMAIN}/${product.images[0]?.filePath}`;
 
     // Build comprehensive keywords including product name, tags, category, and general keywords
-    const baseKeywords = this.currentLanguage === 'ar'
-      ? 'منتجات طلابية, استيكرز, براويز, بوكسات, طلاب الأزهر, طلاب الجامعات, منتجات ملهمة, هدايا طلابية'
-      : 'student products, stickers, frames, boxes, Al-Azhar students, university students, inspirational products, student gifts';
+    const baseKeywords = product.seoKeywords || [];
     
     const productKeywords = [
       localizedName,
@@ -535,10 +532,10 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       product.category?.name?.[this.currentLanguage] || product.category?.name?.en || '',
       product.brand?.name?.[this.currentLanguage] || product.brand?.name?.en || '',
       baseKeywords
-    ].filter(k => k && k.trim()).join(', ');
+    ].filter(k => k && k.toString().trim()).join(', ');
 
     this.seoService.updateSeo({
-      title: `${localizedName} | ${this.currentLanguage === 'ar' ? 'منتجات طلابية' : 'Student Products'}`,
+      title: `${localizedName} | ${product.seoTitle?.[this.currentLanguage] || product.seoTitle?.en || ''}`,
       description,
       keywords: productKeywords,
       canonicalUrl,
@@ -557,7 +554,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       name: localizedName,
       image: ogImage,
       description,
-      sku: product.sku || product._id,
+      sku: product._id,
       offers: {
         '@type': 'Offer',
         priceCurrency: 'EGP',

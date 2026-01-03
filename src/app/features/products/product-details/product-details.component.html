@@ -151,15 +151,6 @@
                 <ui-spinner></ui-spinner>
               </div>
               }
-              <!-- Zoom Overlay -->
-              <div
-                class="absolute inset-0 bg-black/0 z-10 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <div
-                  class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full p-4 transform scale-0 group-hover:scale-100 transition-all duration-300">
-                  <i class="pi pi-search-plus text-2xl text-gray-700 dark:text-gray-300"></i>
-                </div>
-              </div>
-
               <!-- Navigation Buttons -->
               @if (images.length > 1) {
               <button (click)="previousImage()"
@@ -422,7 +413,7 @@
           <div class="border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl overflow-hidden">
             <button type="button" (click)="toggleAccordion($index)"
               class="w-full px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 text-left text-sm sm:text-base md:text-lg lg:text-xl font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300 flex items-center justify-between">
-              <span>{{ detail.name }}</span>
+              <span>{{ detail.name | multiLanguage }}</span>
               <i class="pi"
                 [ngClass]="{'pi-chevron-down': !isAccordionOpen($index), 'pi-chevron-up': isAccordionOpen($index)}"></i>
             </button>
@@ -432,7 +423,7 @@
               <div class="w-full">
                 <div
                   class="ql-editor text-gray-700 dark:text-gray-300 transition-colors duration-300 text-sm sm:text-base lg:text-lg leading-relaxed"
-                  [innerHTML]="detail.value | safe:'html'"></div>
+                  [innerHTML]="detail.value | multiLanguage | safe:'html'"></div>
               </div>
             </div>
             }

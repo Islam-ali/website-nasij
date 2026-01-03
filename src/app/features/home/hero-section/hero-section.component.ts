@@ -6,6 +6,7 @@ import { HeroSection } from './hero-section';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 import { TranslateModule } from '@ngx-translate/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-hero-section',
@@ -29,6 +30,9 @@ export class HeroSectionComponent implements OnInit {
       this.heroes = response.data;
       this.isLoading = false;
     });
+  }
+  getVideoUrl(filePath: string): string {
+    return `${environment.domain}/${filePath}`;
   }
 
   // Compute grid container classes based on total count

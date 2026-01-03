@@ -239,8 +239,8 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
     this.subscriptions.add(
       this.productService.getProducts({ limit: 100 }).subscribe({
         next: (response: BaseResponse<{ products: IProduct[]; pagination: pagination }>) => {
-          this.sizes = [...new Set(response.data.products.flatMap((p) => p.sizes?.map((s) => s.en) || []))];
-          this.colors = [...new Set(response.data.products.flatMap((p) => p.colors?.map((c) => c.en) || []))];
+          this.sizes = [...new Set(response.data.products.flatMap((p) => p.variants?.flatMap((v) => v.attributes?.filter((a) => a.variant === 'size').map((a) => a.value.en) || [])) || [])];
+          this.colors = [...new Set(response.data.products.flatMap((p) => p.variants?.flatMap((v) => v.attributes?.filter((a) => a.variant === 'color').map((a) => a.value.en) || [])) || [])];
         },
         error: (err) => {
           console.error('Error loading sizes and colors:', err);

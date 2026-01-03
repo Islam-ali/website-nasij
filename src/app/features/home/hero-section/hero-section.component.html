@@ -28,9 +28,28 @@
             @for (hero of heroes; let i = $index; track i) {
             <div (click)="navigateTo(hero.buttonLink)" class="relative cursor-pointer group overflow-hidden rounded-2xl h-full transition-all duration-300"
                  [ngClass]="getTileClasses(i, heroes.length)">
-                <img [src]="hero.image.filePath" [alt]="hero.title | multiLanguage" 
-                     fallback
-                     class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
+                <!-- Video or Image -->
+                @if (hero.video?.filePath) {
+                    <video 
+                        [src]="getVideoUrl(hero.video?.filePath || '')" 
+                        class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        [poster]="hero.image?.filePath"
+                        [attr.aria-label]="(hero.title | multiLanguage)"
+                    >
+                        Your browser does not support the video tag.
+                    </video>
+                } @else if (hero.image?.filePath) {
+                    <img 
+                        [src]="hero.image?.filePath" 
+                        [alt]="hero.title | multiLanguage" 
+                        fallback
+                        class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                    >
+                }
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-4 left-4 right-4 text-white">
                     @if (i === 0) {

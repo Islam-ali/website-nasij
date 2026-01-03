@@ -5,7 +5,8 @@ export interface HeroSection {
     _id: string;
     title: MultilingualText;
     subTitle: MultilingualText;
-    image: IArchived;
+    image?: IArchived;
+    video?: IArchived;
     buttonName: MultilingualText;
     buttonLink: string;
     isAlways: boolean;
