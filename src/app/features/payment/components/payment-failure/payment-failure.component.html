@@ -1,0 +1,28 @@
+<div class="payment-failure-container">
+  <div class="failure-content">
+    <div class="failure-icon">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2" fill="none"/>
+        <path d="M12 8v4M12 16h.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    
+    <h1>{{ ('payment.failure.title' | translate) || 'Payment Failed' }}</h1>
+    <p class="failure-message">
+      {{ ('payment.failure.message' | translate) || 'Unfortunately, your payment could not be processed. Please try again.' }}
+    </p>
+
+    <div class="actions">
+      <button class="btn-primary" (click)="retryPayment()">
+        {{ ('payment.retry' | translate) || 'Try Again' }}
+      </button>
+      <button class="btn-secondary" (click)="goToCheckout()">
+        {{ ('payment.backToCheckout' | translate) || 'Back to Checkout' }}
+      </button>
+      <button class="btn-tertiary" (click)="contactSupport()">
+        {{ ('payment.contactSupport' | translate) || 'Contact Support' }}
+      </button>
+    </div>
+  </div>
+</div>
+

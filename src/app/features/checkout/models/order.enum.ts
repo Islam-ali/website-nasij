@@ -16,10 +16,22 @@ export enum PaymentMethod {
   PAYPAL = 'paypal',
   STRIPE = 'stripe',
   WALLET = 'wallet',
-  VODAFONE_CASH = 'vodafone_cash'
+  VODAFONE_CASH = 'vodafone_cash',
+  PAYMOB = 'paymob'
 }
 
 export enum OrderItemType {
   PRODUCT = 'Product',
   PACKAGE = 'Package'
+}
+
+export enum PaymentGateway {
+  PAYMOB = 'paymob',
+  VODAFONE_CASH = 'vodafone_cash',
+  CASH = 'cash'
+}
+
+export enum PaymentMethodType {
+  CARD = 'card',
+  WALLET = 'wallet',
 }

@@ -244,6 +244,49 @@ export class ProductCardComponent implements OnInit, OnChanges {
     return 'assets/images/photo.png';
   }
 
+  // Generate SEO-friendly alt text for product image
+  getImageAltText(): string {
+    if (!this.product) return 'Product image';
+    
+    const productName = this.product.name ? 
+      (typeof this.product.name === 'string' ? this.product.name : 
+       (this.product.name[this.currentLanguage] || this.product.name.en || 'Product')) : 
+      'Product';
+    
+    // Include variant information if available
+    const variantInfo = this.selectedVariantAttributes
+      .filter(attr => attr.variant === 'color')
+      .map(attr => {
+        const value = typeof attr.value === 'string' ? attr.value : 
+                     (attr.value?.[this.currentLanguage] || attr.value?.en || '');
+        return value;
+      })
+      .join(', ');
+    
+    if (variantInfo) {
+      return `${productName} - ${variantInfo}`;
+    }
+    
+    return productName;
+  }
+
+  // Generate SEO-friendly alt text for variant image
+  getVariantImageAltText(attribute: ProductVariantAttribute): string {
+    if (!this.product) return 'Product variant';
+    
+    const productName = this.product.name ? 
+      (typeof this.product.name === 'string' ? this.product.name : 
+       (this.product.name[this.currentLanguage] || this.product.name.en || 'Product')) : 
+      'Product';
+    
+    const variantValue = typeof attribute.value === 'string' ? attribute.value : 
+                        (attribute.value?.[this.currentLanguage] || attribute.value?.en || '');
+    
+    const variantType = attribute.variant || 'variant';
+    
+    return `${productName} - ${variantType} ${variantValue}`;
+  }
+
   // add to wishlist
   addToWishlist(product: any): void {
     this.loading = true;

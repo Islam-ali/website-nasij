@@ -14,16 +14,6 @@ import { UiButtonComponent } from '../../../shared/ui';
         <h1>Page Not Found</h1>
         <h2>Oops! The page you're looking for doesn't exist.</h2>
         <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
-        <div class="helpful-links">
-          <h3>You might be looking for:</h3>
-          <ul>
-            <li><a routerLink="/">Home Page</a></li>
-            <li><a routerLink="/shop">Shop - Browse Products</a></li>
-            <li><a routerLink="/packages">Packages</a></li>
-            <li><a routerLink="/about">About Us</a></li>
-            <li><a routerLink="/faq">FAQ</a></li>
-          </ul>
-        </div>
         <div class="action-buttons">
           <ui-button variant="primary" routerLink="/">
             <i class="pi pi-home mr-2"></i>

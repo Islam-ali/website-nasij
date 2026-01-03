@@ -1,12 +1,56 @@
 :host {
   display: block;
   width: 100%;
+  position: relative;
 }
 
-// Ensure smooth scrolling
-.overflow-hidden {
+.carousel-wrapper {
+  position: relative;
+  padding: 0.5rem;
+  
+  // Add gradient overlay on edges for better visual indication
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3rem;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+  }
+  
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.95), transparent);
+    opacity: 0;
+  }
+  
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.95), transparent);
+    opacity: 0;
+  }
+  
+  // Show gradient when can scroll
+  &:has(.can-scroll-left)::before {
+    opacity: 1;
+  }
+  
+  &:has(.can-scroll-right)::after {
+    opacity: 1;
+  }
+}
+
+// Ensure smooth scrolling - only hide horizontal overflow
+.carousel-container {
   -webkit-overflow-scrolling: touch;
   position: relative;
+  overflow-x: hidden;
+  overflow-y: visible; // Allow vertical overflow for cards
+  width: 100%;
+  border-radius: 0.75rem;
 }
 
 .carousel-inner {
@@ -14,47 +58,348 @@
   display: flex;
   cursor: grab;
   user-select: none;
-  // Gentle, smooth transition with calm easing function
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  // Ensure items are visible
+  width: 100%;
+  min-width: fit-content;
+  // Optimized smooth transition with better easing
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   // GPU acceleration for smoother animations
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+  // Smooth snap scrolling
+  scroll-snap-type: x mandatory;
+  // Add subtle padding for better visual spacing
+  padding: 0.5rem 0;
   
   &.dragging {
     cursor: grabbing;
     transition: none !important; // Disable transition during drag for smooth movement
+    // Remove scale during drag for better performance
+    transform: translateZ(0);
+    
+    // Add visual feedback during drag
+    .carousel-item {
+      opacity: 0.95;
+    }
+  }
+  
+  // Smooth entrance animation
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateZ(0) translateY(15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0) translateY(0) scale(1);
   }
 }
 
 .carousel-item {
   flex-shrink: 0;
+  max-width: 280px;
+  min-width: 0; // Allow items to shrink if needed
   // GPU acceleration for items
   transform: translateZ(0);
   backface-visibility: hidden;
   // Ensure each item can handle its own hover independently
   isolation: isolate;
+  // Ensure items are visible
+  visibility: visible;
+  opacity: 1;
+  // Smooth snap point
+  scroll-snap-align: start;
+  // Enhanced transitions for items
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  // Add padding for better spacing
+  padding: 0.25rem;
+  
+  // Enhanced hover effect on items
+  &:hover {
+    z-index: 10;
+    transform: translateZ(0) translateY(-4px);
+  }
+  
+  // Active state for better feedback
+  &:active {
+    transform: translateZ(0) translateY(-2px);
+  }
+  
+  // Responsive max-width
+  @media (min-width: 640px) {
+    max-width: 300px;
+    padding: 0.375rem;
+  }
+  
+  @media (min-width: 1024px) {
+    max-width: 320px;
+    padding: 0.5rem;
+  }
 }
 
-// Navigation controls are now always visible at the bottom
+// Enhanced Navigation controls
+.navigation-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  
+  // Add ripple effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.1) translateY(-2px);
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    
+    &::before {
+      width: 100px;
+      height: 100px;
+    }
+    
+    i {
+      color: #6366f1;
+      transform: scale(1.1);
+    }
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.95) translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: #f3f4f6;
+  }
+  
+  i {
+    font-size: 1.125rem;
+    color: #4b5563;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Enhanced Indicators
+.indicators-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+}
+
+.indicators {
+  display: flex;
+  gap: 0.625rem;
+  align-items: center;
+  padding: 0.25rem;
+}
+
+.indicator {
+  height: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  background: #e5e7eb;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  
+  .indicator-dot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: inherit;
+    transition: all 0.3s ease;
+  }
+  
+  &.active {
+    width: 2.5rem;
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    
+    .indicator-dot {
+      background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    }
+  }
+  
+  &:not(.active) {
+    width: 0.5rem;
+    
+    &:hover {
+      width: 1.25rem;
+      background: #9ca3af;
+      
+      .indicator-dot {
+        background: #9ca3af;
+      }
+    }
+  }
+  
+  // Add pulse animation for active indicator
+  &.active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: inherit;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+  }
+}
 
 .transition-transform {
   transition-property: transform;
-  // Gentle easing function for calm, smooth motion (ease-out-quad)
+  // Optimized easing function for smooth motion
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transition-duration: 800ms;
+  transition-duration: 0.4s;
 }
 
-// Touch swipe support
+// Touch swipe support - allow vertical scrolling
 @media (hover: none) and (pointer: coarse) {
-  .overflow-hidden {
-    touch-action: pan-x;
+  .overflow-x-hidden {
+    touch-action: pan-y pan-x; // Allow both vertical scroll and horizontal swipe
+  }
+  
+  .carousel-inner {
+    touch-action: pan-y; // Allow vertical scroll by default
+  }
+  
+  .carousel-inner.dragging {
+    touch-action: pan-x; // Only allow horizontal when dragging
   }
 }
 
 // Prevent text selection during drag
 .carousel-inner.dragging * {
   pointer-events: none;
+  user-select: none;
+}
+
+// Performance optimizations
+.carousel-item {
+  // Optimize rendering
+  content-visibility: auto;
+  contain-intrinsic-size: 280px;
+  
+  @media (min-width: 640px) {
+    contain-intrinsic-size: 300px;
+  }
+  
+  @media (min-width: 1024px) {
+    contain-intrinsic-size: 320px;
+  }
+}
+
+// Smooth scroll behavior
+@supports (scroll-behavior: smooth) {
+  .carousel-inner {
+    scroll-behavior: smooth;
+  }
+}
+
+// Dark mode enhancements
+@media (prefers-color-scheme: dark) {
+  .carousel-wrapper {
+    &::before {
+      background: linear-gradient(to right, rgba(17, 24, 39, 0.95), transparent);
+    }
+    
+    &::after {
+      background: linear-gradient(to left, rgba(17, 24, 39, 0.95), transparent);
+    }
+  }
+  
+  .nav-button {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    }
+    
+    i {
+      color: #e5e7eb;
+    }
+  }
+  
+  .indicators-wrapper {
+    background: rgba(31, 41, 55, 0.9);
+  }
+  
+  .indicator {
+    background: #4b5563;
+    
+    &:not(.active):hover {
+      background: #6b7280;
+      
+      .indicator-dot {
+        background: #6b7280;
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .carousel-inner,
+  .carousel-item,
+  .nav-button,
+  .indicator {
+    transition: none;
+    animation: none;
+  }
 }
 
 

@@ -1,0 +1,43 @@
+<div class="payment-success-container">
+  <div class="success-content">
+    <div class="success-icon">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2" fill="none"/>
+        <path d="M8 12l2 2 4-4" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    
+    <h1>{{ 'payment.success.title' | translate }}</h1>
+    <p class="success-message">
+      {{ 'payment.success.message' | translate }}
+    </p>
+
+    @if (loading()) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>{{ 'payment.loadingOrder' | translate }}</p>
+      </div>
+    }
+
+    @if (orderNumber() && !loading()) {
+      <div class="order-info">
+        <p class="order-label">{{ 'payment.orderNumber' | translate }}:</p>
+        <p class="order-number">{{ orderNumber() }}</p>
+      </div>
+    }
+
+    <div class="actions">
+      <button class="btn-primary" (click)="viewOrder()">
+        {{ 'payment.viewOrder' | translate }}
+      </button>
+      <button class="btn-secondary" (click)="continueShopping()">
+        {{ 'payment.continueShopping' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+

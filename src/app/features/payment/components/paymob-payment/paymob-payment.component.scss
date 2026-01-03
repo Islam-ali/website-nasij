@@ -1,0 +1,210 @@
+.paymob-payment-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .payment-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 0.95rem;
+    }
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 3rem 1rem;
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .error-container {
+    text-align: center;
+    padding: 2rem;
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-radius: 8px;
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      color: #c53030;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #742a2a;
+      margin-bottom: 1.5rem;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+  }
+
+  .payment-content {
+    .iframe-container {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      min-height: 600px;
+
+      iframe {
+        display: block;
+        width: 100%;
+        border: none;
+      }
+    }
+
+    .payment-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+  }
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .btn-retry,
+  .btn-new-window {
+    background: #007bff;
+    color: white;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  .btn-cancel {
+    background: #6c757d;
+    color: white;
+
+    &:hover {
+      background: #545b62;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .paymob-payment-container {
+    background: #1a1a1a;
+    color: #e0e0e0;
+
+    .payment-header {
+      h2 {
+        color: #e0e0e0;
+      }
+
+      .subtitle {
+        color: #999;
+      }
+    }
+
+    .error-container {
+      background: #2d1b1b;
+      border-color: #4a2c2c;
+
+      h3 {
+        color: #fc8181;
+      }
+
+      p {
+        color: #feb2b2;
+      }
+    }
+
+    .payment-content {
+      .iframe-container {
+        border-color: #333;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .paymob-payment-container {
+    margin: 1rem;
+    padding: 1rem;
+
+    .payment-content {
+      .iframe-container {
+        min-height: 500px;
+      }
+
+      .payment-actions {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    .error-container {
+      .error-actions {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+

@@ -1,6 +1,6 @@
 @if (items.length > 0) {
 <div 
-  class="relative w-full" 
+  class="relative w-full carousel-wrapper" 
   #carouselContainer
   [attr.role]="'region'"
   [attr.aria-label]="ariaLabel"
@@ -9,15 +9,15 @@
   (mouseenter)="onMouseEnter($event)"
   (mouseleave)="onMouseLeave($event)"
 >
-  <div class="overflow-hidden rounded-lg w-full">
+  <div class="overflow-x-hidden overflow-y-visible rounded-xl w-full carousel-container">
     <div 
       #carouselInner
       class="flex transition-transform carousel-inner"
       [style.direction]="isRTL ? 'rtl' : 'ltr'"
       [style.transition-duration]="transitionDuration + 'ms'"
       [style.transition-timing-function]="transitionEasing"
-      style="gap: 1rem;"
-      [style.transform]="getTransform()"
+      style="gap: 1rem; touch-action: pan-y;"
+      [style.transform]="transformString"
       (mousedown)="onDragStart($event)"
       (touchstart)="onDragStart($event)"
       [class.dragging]="isDragging"
@@ -44,51 +44,48 @@
     </div>
   </div>
   
-  <!-- Navigation Controls (Arrows + Dots) -->
+  <!-- Enhanced Navigation Controls (Arrows + Dots) -->
   @if ((showArrows || showIndicators) && items.length > itemsPerPage && totalPages > 1) {
-    <div class="flex items-center justify-center gap-4 mt-6">
+    <div class="navigation-controls">
       <!-- Previous Button -->
       @if (showArrows) {
         <button 
           type="button"
           (click)="previous()"
-          class="bg-white dark:bg-gray-800 rounded-full p-2.5 
-                 shadow-md hover:shadow-lg transition-all duration-300
-                 disabled:opacity-50 disabled:cursor-not-allowed
-                 hover:bg-gray-50 dark:hover:bg-gray-700
-                 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          class="nav-button nav-button-prev"
           [disabled]="!canGoPrevious"
           [attr.aria-label]="isRTL ? 'السابق' : 'Previous slide'"
           [attr.aria-controls]="'carousel-content'"
           [attr.aria-disabled]="!canGoPrevious"
         >
-          <i [class]="(isRTL ? 'pi pi-chevron-right' : 'pi pi-chevron-left') + ' text-base ' + (canGoPrevious ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-600')"></i>
+          <i [class]="(isRTL ? 'pi pi-chevron-right' : 'pi pi-chevron-left')"></i>
         </button>
       }
 
-      <!-- Indicators/Dots -->
+      <!-- Enhanced Indicators/Dots -->
       @if (showIndicators) {
         <div 
-          class="flex justify-center gap-2"
+          class="indicators-wrapper"
           role="tablist"
           [attr.aria-label]="'Carousel navigation'"
         >
-          @for (page of pagesArray; track $index) {
-            <button
-              type="button"
-              (click)="goToPage($index)"
-              class="rounded-full transition-all duration-300
-                     focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-              [class]="currentPage === $index 
-                ? 'w-8 h-2 bg-primary-600 dark:bg-primary-500' 
-                : 'w-2 h-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'"
-              [attr.role]="'tab'"
-              [attr.aria-label]="'Go to slide ' + ($index + 1) + ' of ' + totalPages"
-              [attr.aria-selected]="currentPage === $index ? 'true' : 'false'"
-              [attr.aria-controls]="'carousel-content'"
-              [attr.tabindex]="currentPage === $index ? 0 : -1"
-            ></button>
-          }
+          <div class="indicators">
+            @for (page of pagesArray; track $index) {
+              <button
+                type="button"
+                (click)="goToPage($index)"
+                class="indicator"
+                [class.active]="currentPage === $index"
+                [attr.role]="'tab'"
+                [attr.aria-label]="'Go to slide ' + ($index + 1) + ' of ' + totalPages"
+                [attr.aria-selected]="currentPage === $index ? 'true' : 'false'"
+                [attr.aria-controls]="'carousel-content'"
+                [attr.tabindex]="currentPage === $index ? 0 : -1"
+              >
+                <span class="indicator-dot"></span>
+              </button>
+            }
+          </div>
         </div>
       }
 
@@ -97,17 +94,13 @@
         <button 
           type="button"
           (click)="next()"
-          class="bg-white dark:bg-gray-800 rounded-full p-2.5 
-                 shadow-md hover:shadow-lg transition-all duration-300
-                 disabled:opacity-50 disabled:cursor-not-allowed
-                 hover:bg-gray-50 dark:hover:bg-gray-700
-                 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          class="nav-button nav-button-next"
           [disabled]="!canGoNext"
           [attr.aria-label]="isRTL ? 'التالي' : 'Next slide'"
           [attr.aria-controls]="'carousel-content'"
           [attr.aria-disabled]="!canGoNext"
         >
-          <i [class]="(isRTL ? 'pi pi-chevron-left' : 'pi pi-chevron-right') + ' text-base ' + (canGoNext ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-600')"></i>
+          <i [class]="(isRTL ? 'pi pi-chevron-left' : 'pi pi-chevron-right')"></i>
         </button>
       }
     </div>

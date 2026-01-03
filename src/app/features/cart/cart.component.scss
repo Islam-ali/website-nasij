@@ -1,11 +1,11 @@
-// Cart Container
+// Enhanced Cart Container
 .cart-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem;
 }
 
-// Empty Cart State
+// Enhanced Empty Cart State
 .empty-cart {
   text-align: center;
   padding: 3rem 1rem;
@@ -21,7 +21,7 @@
   }
 }
 
-// Cart Items
+// Enhanced Cart Items
 .cart-items {
   .product-image {
     width: 80px;
@@ -29,6 +29,12 @@
     object-fit: cover;
     border-radius: 4px;
     border: 1px solid var(--surface-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
   }
   
   .product-name {
@@ -43,6 +49,12 @@
     border: 1px solid var(--surface-300);
     border-radius: 6px;
     width: fit-content;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
     
     .quantity {
       min-width: 2.5rem;
@@ -57,6 +69,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.2s ease;
+      
+      &:active {
+        transform: scale(0.95);
+      }
     }
   }
   
@@ -72,9 +89,14 @@
   }
 }
 
-// Order Summary
+// Enhanced Order Summary
 .summary-item {
   margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateX(4px);
+  }
 }
 
 // Responsive Styles
@@ -82,18 +104,108 @@
   .cart-container {
     padding: 1rem;
   }
-  
 }
 
-
-// Animation for cart updates
+// Enhanced Animations
 @keyframes highlightUpdate {
-  0% { background-color: rgba(147, 197, 253, 0); }
-  20% { background-color: rgba(147, 197, 253, 0.3); }
-  100% { background-color: rgba(147, 197, 253, 0); }
+  0% { 
+    background-color: rgba(147, 197, 253, 0);
+    transform: scale(1);
+  }
+  20% { 
+    background-color: rgba(147, 197, 253, 0.3);
+    transform: scale(1.02);
+  }
+  100% { 
+    background-color: rgba(147, 197, 253, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+  66% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .highlight-update {
   animation: highlightUpdate 1.5s ease-out;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+// Smooth scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #6366f1, #8b5cf6);
+  border-radius: 10px;
+  
+  &:hover {
+    background: linear-gradient(to bottom, #4f46e5, #7c3aed);
+  }
+}
+
+// Enhanced focus states
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+// Loading shimmer effect
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+// Card entrance animation
+@for $i from 1 through 10 {
+  .cart-item:nth-child(#{$i}) {
+    animation: slideInUp 0.5s ease-out #{$i * 0.1}s both;
+  }
 }
 

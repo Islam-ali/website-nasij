@@ -21,7 +21,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() showIndicators: boolean = true;
   @Input() autoPlay: boolean = false;
   @Input() autoPlayInterval: number = 5000; // 5 seconds
-  @Input() transitionDuration: number = 800; // Transition duration in ms
+  @Input() transitionDuration: number = 400; // Transition duration in ms (optimized)
   @Input() transitionEasing: string = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // Easing function
   @Input() loop: boolean = false; // Enable infinite loop
   @Input() pauseOnHover: boolean = true; // Pause autoplay on hover
@@ -43,16 +43,28 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   // Drag functionality
   isDragging = false;
   startX = 0;
+  startY = 0;
   currentX = 0;
+  currentY = 0;
   dragOffset = 0;
-  private dragThreshold = 50; // Minimum drag distance to trigger slide
+  // Removed unused dragThreshold - using DRAG_THRESHOLD_RATIO instead
   private isHovered = false; // Track hover state for autoplay pause
   private hasActualDrag = false; // Track if user actually dragged (not just clicked)
   private dragStartTarget: HTMLElement | null = null; // Store the element that was clicked
+  private isHorizontalDrag = false; // Track if drag is horizontal (carousel) or vertical (scroll)
+  private dragStartTime = 0; // Track drag start time for velocity calculation
   
   @ViewChild('carouselInner', { static: false }) carouselInner?: ElementRef<HTMLDivElement>;
   @ViewChild('carouselContainer', { static: false }) carouselContainer?: ElementRef<HTMLDivElement>;
   private itemWidth = 0; // Cached item width in pixels
+  transformString = 'translateX(0)'; // Cached transform string to avoid ExpressionChangedAfterItHasBeenCheckedError
+  
+  // Constants
+  private readonly GAP_PX = 16; // 1rem = 16px
+  private readonly DRAG_THRESHOLD_RATIO = 0.25; // 25% of item width
+  private readonly MOMENTUM_THRESHOLD = 0.3; // Velocity threshold for momentum
+  private readonly MIN_DRAG_DISTANCE = 10; // Minimum pixels for drag detection
+  private readonly VERTICAL_SCROLL_THRESHOLD = 15; // Pixels to detect vertical scroll
   
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -97,13 +109,19 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
+      // Initialize transform string
+      this.updateTransformString();
       // Calculate item width after view init with multiple attempts
       // Use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
       Promise.resolve().then(() => {
         this.calculateItemWidthPixels();
+        this.updateTransformString();
         if (this.itemWidth === 0) {
           // Retry if calculation failed
-          setTimeout(() => this.calculateItemWidthPixels(), 100);
+          setTimeout(() => {
+            this.calculateItemWidthPixels();
+            this.updateTransformString();
+          }, 100);
         }
       });
     }
@@ -119,7 +137,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         
         // Reset currentIndex when RTL changes to avoid visual glitches
         if (this.items.length > 0) {
-          const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+          const maxIndex = this.getMaxIndex();
           this.currentIndex = Math.min(this.currentIndex, maxIndex);
         }
         
@@ -131,39 +149,43 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId)) {
-      if (this.autoPlayTimer) {
-        clearInterval(this.autoPlayTimer);
-      }
-      if (this.resizeObserver) {
-        this.resizeObserver.disconnect();
-      }
-      if (isPlatformBrowser(this.platformId)) {
-        window.removeEventListener('resize', this.handleResize);
-      }
-      // Remove document listeners
-      this.removeDocumentListeners();
-      // Unsubscribe from language changes
-      if (this.languageChangeSubscription) {
-        this.languageChangeSubscription.unsubscribe();
-      }
-      // Disconnect dir observer
-      if (this.dirObserver) {
-        this.dirObserver.disconnect();
-      }
+    if (!isPlatformBrowser(this.platformId)) return;
+    
+    // Clean up autoplay timer
+    this.stopAutoPlay();
+    
+    // Clean up resize observer
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    
+    // Remove document listeners
+    this.removeDocumentListeners();
+    
+    // Unsubscribe from language changes
+    if (this.languageChangeSubscription) {
+      this.languageChangeSubscription.unsubscribe();
+    }
+    
+    // Disconnect dir observer
+    if (this.dirObserver) {
+      this.dirObserver.disconnect();
     }
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   handleResize() {
     if (!isPlatformBrowser(this.platformId)) return;
     this.updateRTL();
     this.updateItemsPerPage();
     // Recalculate item width on resize
-    setTimeout(() => this.calculateItemWidthPixels(), 100);
+    setTimeout(() => {
+      this.calculateItemWidthPixels();
+      this.updateTransformString();
+    }, 100);
   }
 
-  @HostListener('document:DOMContentLoaded', ['$event'])
+  @HostListener('document:DOMContentLoaded')
   handleDOMContentLoaded() {
     if (!isPlatformBrowser(this.platformId)) return;
     this.updateRTL();
@@ -193,33 +215,41 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     
     // Ensure itemsPerPage doesn't exceed items length
+    // But allow scrolling even if itemsPerPage equals items.length
     this.itemsPerPage = Math.min(this.itemsPerPage, this.items.length);
     
-    // If itemsPerPage equals or exceeds items length, show all items (no scroll)
+    // Calculate total pages for indicators
+    // Since we move by 1 item at a time, total pages = total scrollable positions
+    // Always allow scrolling to see all items
+    // When itemsPerPage = 1, we can scroll through all items (items.length positions)
+    // When itemsPerPage > 1, we can scroll through (items.length - itemsPerPage + 1) positions
     if (this.itemsPerPage >= this.items.length) {
-      this.itemsPerPage = this.items.length;
-      this.totalPages = 1;
-      this.currentIndex = 0;
-      return;
+      // If itemsPerPage >= items.length, we can still scroll through all items one by one
+      this.totalPages = this.items.length;
+    } else {
+      // Calculate scrollable positions: we can show items from index 0 to (items.length - itemsPerPage)
+      const scrollablePositions = this.items.length - this.itemsPerPage + 1;
+      this.totalPages = Math.max(1, scrollablePositions);
     }
     
-    // Calculate total pages for indicators (move by 1 item at a time)
-    const scrollableItems = Math.max(0, this.items.length - this.itemsPerPage);
-    this.totalPages = scrollableItems > 0 ? scrollableItems + 1 : 1;
-    
     // Ensure currentIndex is valid
-    const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+    const maxIndex = this.getMaxIndex();
     if (this.currentIndex > maxIndex) {
       this.currentIndex = maxIndex;
     }
     
     // Recalculate item width after itemsPerPage changes
+    // Update transform string immediately
+    this.updateTransformString();
     // Use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
-    Promise.resolve().then(() => this.calculateItemWidthPixels());
+    Promise.resolve().then(() => {
+      this.calculateItemWidthPixels();
+      this.updateTransformString();
+    });
   }
 
   next(): void {
-    const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+    const maxIndex = this.getMaxIndex();
     // Move by one item at a time
     let nextIndex = Math.min(this.currentIndex + 1, maxIndex);
     
@@ -229,16 +259,12 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     
     if (nextIndex !== this.currentIndex && (nextIndex <= maxIndex || this.loop)) {
-      this.currentIndex = nextIndex;
-      this.onSlideChange.emit(this.currentIndex);
-      if (this.autoPlay) {
-        this.resetAutoPlay();
-      }
+      this.goToIndex(nextIndex);
     }
   }
 
   previous(): void {
-    const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+    const maxIndex = this.getMaxIndex();
     let prevIndex = Math.max(0, this.currentIndex - 1);
     
     if (this.loop && this.currentIndex === 0) {
@@ -247,24 +273,25 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     
     if (prevIndex !== this.currentIndex || (this.loop && this.currentIndex === 0)) {
-      this.currentIndex = prevIndex;
-      this.onSlideChange.emit(this.currentIndex);
-      if (this.autoPlay) {
-        this.resetAutoPlay();
-      }
+      this.goToIndex(prevIndex);
     }
   }
 
   goToPage(pageIndex: number): void {
-    const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
+    const maxIndex = this.getMaxIndex();
     // Move by one item at a time
     const targetIndex = Math.min(pageIndex, maxIndex);
     if (targetIndex !== this.currentIndex) {
-      this.currentIndex = targetIndex;
-      this.onSlideChange.emit(this.currentIndex);
-      if (this.autoPlay) {
-        this.resetAutoPlay();
-      }
+      this.goToIndex(targetIndex);
+    }
+  }
+  
+  private goToIndex(index: number): void {
+    this.currentIndex = index;
+    this.updateTransformString();
+    this.onSlideChange.emit(this.currentIndex);
+    if (this.autoPlay) {
+      this.resetAutoPlay();
     }
   }
 
@@ -278,8 +305,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get canGoNext(): boolean {
-    const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
-    return this.loop || this.currentIndex < maxIndex;
+    return this.loop || this.currentIndex < this.getMaxIndex();
+  }
+  
+  private getMaxIndex(): number {
+    return Math.max(0, this.items.length - this.itemsPerPage);
   }
 
   get pagesArray(): number[] {
@@ -363,8 +393,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       case 'End':
         event.preventDefault();
-        const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
-        this.goToPage(maxIndex);
+        this.goToPage(this.getMaxIndex());
         break;
     }
   }
@@ -402,11 +431,34 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     
+    // For touch events, don't start dragging immediately - wait to see if it's horizontal
+    // This allows vertical scrolling to work normally
+    if (event instanceof TouchEvent) {
+      // Just store the initial position, don't set isDragging yet
+      this.startX = this.getEventX(event);
+      this.startY = this.getEventY(event);
+      this.currentX = this.startX;
+      this.currentY = this.startY;
+      this.dragOffset = 0;
+      this.hasActualDrag = false;
+      this.isHorizontalDrag = false;
+      
+      // Add passive listener to detect direction
+      document.addEventListener('touchmove', this.onDocumentTouchMove, { passive: true });
+      document.addEventListener('touchend', this.onDocumentTouchEnd);
+      return;
+    }
+    
+    // For mouse events, start dragging immediately
     this.isDragging = true;
     this.hasActualDrag = false;
+    this.isHorizontalDrag = false;
     this.startX = this.getEventX(event);
+    this.startY = this.getEventY(event);
     this.currentX = this.startX;
+    this.currentY = this.startY;
     this.dragOffset = 0;
+    this.dragStartTime = performance.now();
     
     // Stop autoplay during drag
     if (this.autoPlay) {
@@ -415,16 +467,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     
     // Add event listeners to document to track drag even outside element
     if (!isPlatformBrowser(this.platformId)) return;
-    if (event instanceof MouseEvent) {
-      document.addEventListener('mousemove', this.onDocumentMouseMove);
-      document.addEventListener('mouseup', this.onDocumentMouseUp);
-    } else {
-      document.addEventListener('touchmove', this.onDocumentTouchMove, { passive: false });
-      document.addEventListener('touchend', this.onDocumentTouchEnd);
-    }
+    document.addEventListener('mousemove', this.onDocumentMouseMove);
+    document.addEventListener('mouseup', this.onDocumentMouseUp);
     
-    // Don't prevent default here - only prevent if user actually drags
-    // This allows click events to pass through if user just clicks without dragging
+    // Don't prevent default here - only prevent if user actually drags horizontally
+    // This allows click events and vertical scroll to pass through
   }
 
   private onDocumentMouseMove = (event: MouseEvent) => {
@@ -437,12 +484,65 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   private onDocumentTouchMove = (event: TouchEvent) => {
+    // First check: determine if this is horizontal or vertical movement
+    if (!this.isDragging && this.startX !== 0) {
+      const deltaX = Math.abs(this.getEventX(event) - this.startX);
+      const deltaY = Math.abs(this.getEventY(event) - this.startY);
+      
+      // If vertical movement is greater, it's a scroll - don't interfere
+      if (deltaY > deltaX && deltaY > this.VERTICAL_SCROLL_THRESHOLD) {
+        // Clear everything and allow normal scroll
+        this.startX = 0;
+        this.startY = 0;
+        this.removeDocumentListeners();
+        return;
+      }
+      
+      // If horizontal movement is greater, start carousel drag
+      if (deltaX > deltaY && deltaX > this.VERTICAL_SCROLL_THRESHOLD) {
+        this.isDragging = true;
+        this.isHorizontalDrag = true;
+        this.hasActualDrag = true;
+        this.dragStartTime = performance.now();
+        
+        // Stop autoplay during drag
+        if (this.autoPlay) {
+          this.stopAutoPlay();
+        }
+        
+        // Remove passive listener and add non-passive one to prevent scroll
+        document.removeEventListener('touchmove', this.onDocumentTouchMove);
+        document.addEventListener('touchmove', this.onDocumentTouchMoveNonPassive, { passive: false });
+        
+        // Now handle the drag
+        this.onDragMove(event);
+        return;
+      }
+      
+      // Not enough movement yet, continue waiting
+      return;
+    }
+    
+    // If already dragging horizontally, continue
+    if (this.isDragging && this.isHorizontalDrag) {
+      this.onDragMove(event);
+    }
+  };
+
+  private onDocumentTouchMoveNonPassive = (event: TouchEvent) => {
     this.onDragMove(event);
   };
 
   private onDocumentTouchEnd = (event: TouchEvent) => {
-    this.onDragEnd();
-    this.removeDocumentListeners();
+    // Only call onDragEnd if we were actually dragging
+    if (this.isDragging) {
+      this.onDragEnd();
+    } else {
+      // Just clean up if we weren't dragging
+      this.startX = 0;
+      this.startY = 0;
+      this.removeDocumentListeners();
+    }
   };
 
   private removeDocumentListeners(): void {
@@ -450,6 +550,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     document.removeEventListener('mousemove', this.onDocumentMouseMove);
     document.removeEventListener('mouseup', this.onDocumentMouseUp);
     document.removeEventListener('touchmove', this.onDocumentTouchMove);
+    document.removeEventListener('touchmove', this.onDocumentTouchMoveNonPassive);
     document.removeEventListener('touchend', this.onDocumentTouchEnd);
   }
 
@@ -457,18 +558,41 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.isDragging || !isPlatformBrowser(this.platformId)) return;
     
     const newX = this.getEventX(event);
+    const newY = this.getEventY(event);
     if (newX === 0 && this.startX === 0) return; // Invalid event
     
     this.currentX = newX;
+    this.currentY = newY;
     this.dragOffset = this.currentX - this.startX;
     
-    // Only prevent default if user has actually dragged (moved more than 5px)
-    // This allows click events to pass through if user just clicks without dragging
-    if (Math.abs(this.dragOffset) > 5) {
+    // Check if this is a horizontal drag (for carousel) or vertical (for scroll)
+    const deltaX = Math.abs(this.dragOffset);
+    const deltaY = Math.abs(newY - this.startY);
+    
+    // Only treat as drag if horizontal movement is greater than vertical
+    // This allows vertical scrolling to work normally
+    if (deltaX > deltaY && deltaX > this.MIN_DRAG_DISTANCE) {
+      if (!this.isHorizontalDrag) {
+        this.isHorizontalDrag = true;
+      }
       this.hasActualDrag = true;
-      // Prevent default scrolling only when actually dragging
-      event.preventDefault();
+      // Update transform string during drag
+      this.updateTransformString();
+      // Prevent default scrolling only when actually dragging horizontally
+      if (event instanceof TouchEvent) {
+        event.preventDefault();
+      }
       event.stopPropagation();
+    } else if (deltaY > deltaX && deltaY > this.VERTICAL_SCROLL_THRESHOLD) {
+      // Vertical scroll detected, cancel drag and allow scroll
+      this.isDragging = false;
+      this.hasActualDrag = false;
+      this.isHorizontalDrag = false;
+      this.dragOffset = 0;
+      this.startX = 0;
+      this.startY = 0;
+      this.removeDocumentListeners();
+      return;
     }
   }
 
@@ -476,9 +600,15 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.isDragging || !isPlatformBrowser(this.platformId)) return;
     
     const itemWidth = this.calculateItemWidth();
-    const threshold = itemWidth * 0.3; // 30% of item width
+    // Improved threshold: smaller for better responsiveness
+    const threshold = itemWidth * this.DRAG_THRESHOLD_RATIO;
     const hadSignificantDrag = Math.abs(this.dragOffset) > threshold;
-    const hadDrag = this.hasActualDrag;
+    
+    // Calculate velocity for momentum scrolling
+    const dragDuration = this.dragStartTime > 0 ? performance.now() - this.dragStartTime : 0;
+    const velocity = dragDuration > 0 ? Math.abs(this.dragOffset) / dragDuration : 0;
+    const hasMomentum = velocity > this.MOMENTUM_THRESHOLD;
+    const maxIndex = this.getMaxIndex();
     
     // Determine if we should move to next/previous slide
     if (hadSignificantDrag) {
@@ -492,7 +622,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         // In RTL: dragging right (positive) goes to next, dragging left (negative) goes to previous
         if (dragDirection) {
           // Dragging right in RTL = next
-          const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
           targetIndex = Math.min(this.currentIndex + 1, maxIndex);
         } else {
           // Dragging left in RTL = previous
@@ -505,19 +634,41 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
           targetIndex = Math.max(0, this.currentIndex - 1);
         } else {
           // Dragging left in LTR = next
-          const maxIndex = Math.max(0, this.items.length - this.itemsPerPage);
           targetIndex = Math.min(this.currentIndex + 1, maxIndex);
         }
       }
       
+      // Ensure targetIndex doesn't exceed maxIndex
+      targetIndex = Math.min(targetIndex, maxIndex);
+      
       // Check if target index is valid and different
-      if (targetIndex === this.currentIndex) {
+      if (targetIndex === this.currentIndex && !hasMomentum) {
         // No change needed, just reset drag
         this.dragOffset = 0;
         this.isDragging = false;
         this.startX = 0;
+        this.startY = 0;
         this.currentX = 0;
+        this.currentY = 0;
+        this.dragStartTime = 0;
         return;
+      }
+      
+      // If has momentum, move one more item in the drag direction
+      if (hasMomentum && targetIndex === this.currentIndex) {
+        if (this.dragOffset > 0) {
+          if (this.isRTL) {
+            targetIndex = Math.min(targetIndex + 1, maxIndex);
+          } else {
+            targetIndex = Math.max(targetIndex - 1, 0);
+          }
+        } else {
+          if (this.isRTL) {
+            targetIndex = Math.max(targetIndex - 1, 0);
+          } else {
+            targetIndex = Math.min(targetIndex + 1, maxIndex);
+          }
+        }
       }
       
       // Animate smoothly from current drag position to target position
@@ -530,9 +681,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
       
-      // Update currentIndex first
-      this.currentIndex = targetIndex;
-      this.onSlideChange.emit(this.currentIndex);
+      // Update to target index
+      this.goToIndex(targetIndex);
       
       // Reset drag offset immediately to prevent jumping
       // The CSS transition will handle the smooth movement
@@ -542,14 +692,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       this.currentX = 0;
       
       // Force change detection to update the transform
-      if (isPlatformBrowser(this.platformId)) {
-        this.cdr.detectChanges();
-      }
-      
-      // Reset autoplay if enabled
-      if (this.autoPlay) {
-        this.resetAutoPlay();
-      }
+      this.cdr.detectChanges();
       
       return; // Exit early, state will be reset in animation
     } else {
@@ -577,34 +720,27 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         const easeOutQuad = 1 - (1 - progress) * (1 - progress);
         
         this.dragOffset = startOffset * (1 - easeOutQuad);
+        // Update transform string during animation
+        this.updateTransformString();
         
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
-          this.dragOffset = 0;
-          this.isDragging = false;
-          this.startX = 0;
-          this.currentX = 0;
-          this.hasActualDrag = false;
-          this.dragStartTarget = null;
+        this.dragOffset = 0;
+        this.isDragging = false;
+        this.startX = 0;
+        this.startY = 0;
+        this.currentX = 0;
+        this.currentY = 0;
+        this.hasActualDrag = false;
+        this.isHorizontalDrag = false;
+        this.dragStartTarget = null;
+        this.dragStartTime = 0;
         }
       };
       
       requestAnimationFrame(animate);
       return; // Exit early, state will be reset in animation
-    }
-    
-    // Reset drag state
-    this.dragOffset = 0;
-    this.isDragging = false;
-    this.startX = 0;
-    this.currentX = 0;
-    this.hasActualDrag = false;
-    this.dragStartTarget = null;
-    
-    // Resume autoplay if enabled
-    if (this.autoPlay) {
-      this.startAutoPlay();
     }
   }
 
@@ -617,13 +753,44 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     return 0;
   }
 
+  private getEventY(event: MouseEvent | TouchEvent): number {
+    if (event instanceof MouseEvent) {
+      return event.clientY;
+    } else if (event.touches && event.touches.length > 0) {
+      return event.touches[0].clientY;
+    }
+    return 0;
+  }
+
   private calculateItemWidth(): number {
     if (!isPlatformBrowser(this.platformId)) return 0;
-    const container = document.querySelector('.carousel-inner');
+    
+    // Try to use cached itemWidth first
+    if (this.itemWidth > 0) {
+      return this.itemWidth;
+    }
+    
+    // Try to get from carouselInner if available
+    if (this.carouselInner?.nativeElement) {
+      const container = this.carouselInner.nativeElement;
+      const containerWidth = container.clientWidth;
+      
+      if (containerWidth > 0 && container.children.length > 0) {
+        const firstItem = container.children[0] as HTMLElement;
+        if (firstItem) {
+          const rect = firstItem.getBoundingClientRect();
+          if (rect.width > 0) {
+            return rect.width;
+          }
+        }
+      }
+    }
+    
+    // Fallback: query selector
+    const container = document.querySelector('.carousel-inner') as HTMLElement;
     if (!container) return 0;
     const containerWidth = container.clientWidth;
-    const gap = 16; // 1rem = 16px
-    return (containerWidth - (gap * (this.itemsPerPage - 1))) / this.itemsPerPage;
+    return (containerWidth - (this.GAP_PX * (this.itemsPerPage - 1))) / this.itemsPerPage;
   }
 
   private calculateItemWidthPixels(): void {
@@ -634,11 +801,25 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     
     if (containerWidth === 0) return; // Container not ready yet
     
-    const gap = 16; // 1rem = 16px
-    const calculatedWidth = (containerWidth - (gap * (this.itemsPerPage - 1))) / this.itemsPerPage;
+    // Try to get actual width from DOM first
+    let calculatedWidth = 0;
+    if (container.children.length > 0) {
+      const firstItem = container.children[0] as HTMLElement;
+      if (firstItem) {
+        const rect = firstItem.getBoundingClientRect();
+        calculatedWidth = rect.width;
+      }
+    }
+    
+    // Fallback to calculation if DOM width not available
+    if (calculatedWidth <= 0) {
+      calculatedWidth = (containerWidth - (this.GAP_PX * (this.itemsPerPage - 1))) / this.itemsPerPage;
+    }
     
     if (calculatedWidth > 0 && Math.abs(this.itemWidth - calculatedWidth) > 0.1) {
       this.itemWidth = calculatedWidth;
+      // Update transform string to avoid ExpressionChangedAfterItHasBeenCheckedError
+      this.updateTransformString();
       // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
       // Only use setTimeout in browser environment
       if (isPlatformBrowser(this.platformId)) {
@@ -647,34 +828,124 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  private updateTransformString(): void {
+    this.transformString = this.getTransform();
+  }
+
   getTransform(): string {
-    // PrimeNG-style: Move by full item width (snap-to-item)
+    // Move by exactly one item width + gap at a time
     // Don't modify state in getter - this causes ExpressionChangedAfterItHasBeenCheckedError
-    // Use pixel-based calculation if available, otherwise use calc()
-    if (isPlatformBrowser(this.platformId) && this.itemWidth > 0) {
-      const gap = 16; // 1rem = 16px
-      // Move by full item width + gap for snap-to-item behavior
-      const moveDistance = (this.itemWidth + gap) * this.currentIndex;
+    if (isPlatformBrowser(this.platformId) && this.carouselInner?.nativeElement) {
+      const container = this.carouselInner.nativeElement;
+      const containerWidth = container.clientWidth;
+      
+      if (containerWidth === 0) return 'translateX(0)';
+      
+      // Get actual item width from DOM - use getBoundingClientRect for precise measurement
+      let actualItemWidth = 0;
+      
+      if (container.children.length > 0) {
+        const firstItem = container.children[0] as HTMLElement;
+        if (firstItem) {
+          // Use getBoundingClientRect for more accurate width measurement
+          const rect = firstItem.getBoundingClientRect();
+          actualItemWidth = rect.width;
+        }
+      }
+      
+      // Fallback: use cached itemWidth or calculate it
+      if (actualItemWidth <= 0) {
+        actualItemWidth = this.itemWidth;
+      }
+      
+      if (actualItemWidth <= 0) {
+        actualItemWidth = (containerWidth - (this.GAP_PX * (this.itemsPerPage - 1))) / this.itemsPerPage;
+      }
+      
+      // Calculate the exact distance to move: one item width + gap
+      // This is the actual space one item occupies (width + gap between items)
+      const oneItemMove = actualItemWidth + this.GAP_PX;
+      
+      // Calculate total content width
+      const totalContentWidth = oneItemMove * this.items.length - this.GAP_PX;
+      
+      // Calculate maximum transform to show the last item(s)
+      const maxIndex = this.getMaxIndex();
+      
+      // Calculate maxTransform: ensure we can reach the last item(s)
+      // The key is to ensure we can scroll to maxIndex to show the last itemsPerPage items
+      // maxIndex = items.length - itemsPerPage
+      // So we need to scroll by maxIndex items: oneItemMove * maxIndex
+      const maxTransform = oneItemMove * maxIndex;
+      
+      // Move by exactly one item width + gap for each index
+      // Each movement = oneItemMove (itemWidth + gap)
+      const moveDistance = oneItemMove * this.currentIndex;
+      
+      // Clamp to prevent going beyond the end, but ensure we can reach maxIndex
+      // Important: Allow movement up to maxTransform to show all items
+      let clampedDistance = Math.min(moveDistance, maxTransform);
+      
+      // Ensure we can always reach maxIndex (critical for showing last items)
+      // If currentIndex is at maxIndex, ensure we can move to maxTransform
+      if (this.currentIndex >= maxIndex) {
+        clampedDistance = maxTransform;
+      }
+      
       const baseTransform = this.isRTL 
-        ? `translateX(${moveDistance}px)`
-        : `translateX(-${moveDistance}px)`;
+        ? `translateX(${Math.round(clampedDistance)}px)`
+        : `translateX(-${Math.round(clampedDistance)}px)`;
       
       if (this.isDragging && this.dragOffset !== 0) {
-        // dragOffset is already in the correct direction for both RTL and LTR
-        return `${baseTransform} translateX(${this.dragOffset}px)`;
+        // When dragging, allow temporary movement with elastic bounds
+        const totalOffset = this.isRTL 
+          ? clampedDistance + this.dragOffset
+          : -clampedDistance + this.dragOffset;
+        
+        // Apply elastic resistance at boundaries (bounce effect)
+        let clampedOffset = 0;
+        if (this.isRTL) {
+          if (totalOffset < 0) {
+            // Beyond start - apply resistance
+            clampedOffset = totalOffset * 0.3 - clampedDistance;
+          } else if (totalOffset > maxTransform) {
+            // Beyond end - apply resistance
+            clampedOffset = (totalOffset - maxTransform) * 0.3 + maxTransform - clampedDistance;
+          } else {
+            clampedOffset = totalOffset - clampedDistance;
+          }
+        } else {
+          if (totalOffset > 0) {
+            // Beyond start - apply resistance
+            clampedOffset = totalOffset * 0.3 + clampedDistance;
+          } else if (totalOffset < -maxTransform) {
+            // Beyond end - apply resistance
+            clampedOffset = (totalOffset + maxTransform) * 0.3 - maxTransform + clampedDistance;
+          } else {
+            clampedOffset = totalOffset + clampedDistance;
+          }
+        }
+        
+        return `${baseTransform} translateX(${Math.round(clampedOffset)}px)`;
       }
       
       return baseTransform;
     }
     
-    // Fallback to calc() if itemWidth not calculated yet
-    // Move by full item (100% / itemsPerPage + gap)
+    // Fallback to calc() if container not ready yet
+    // Move by exactly one item width + gap at a time
+    const maxIndex = this.getMaxIndex();
+    const clampedIndex = Math.min(this.currentIndex, maxIndex);
+    
+    // Calculate single item move: (100% + gap) / itemsPerPage
+    // This represents the actual space one item takes (width + gap)
+    const singleItemMove = `((100% + 1rem) / ${this.itemsPerPage})`;
+    
     const baseTransform = this.isRTL 
-      ? `translateX(calc(${this.currentIndex} * ((100% + 1rem) / ${this.itemsPerPage})))`
-      : `translateX(calc(-${this.currentIndex} * ((100% + 1rem) / ${this.itemsPerPage})))`;
+      ? `translateX(calc(${clampedIndex} * ${singleItemMove}))`
+      : `translateX(calc(-${clampedIndex} * ${singleItemMove}))`;
     
     if (this.isDragging && this.dragOffset !== 0) {
-      // dragOffset is already in the correct direction for both RTL and LTR
       return `${baseTransform} translateX(${this.dragOffset}px)`;
     }
     

@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, signal, computed, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil, Subject } from 'rxjs';
 import { ICartItem } from '../cart/models/cart.interface';
 import { CartService } from '../cart/services/cart.service';
@@ -14,7 +14,7 @@ import {
   UiToastService, 
   UiButtonComponent,
 } from '../../shared/ui';
-import { PaymentMethod, PaymentStatus } from './models/order.enum';
+import { PaymentMethod, PaymentMethodType, PaymentStatus } from './models/order.enum';
 import { ICreateOrder, IOrderItem } from './models/checkout';
 import { OrderStatus } from '../../interfaces/product.interface';
 import { ICountry } from '../../core/models/location.interface';
@@ -25,6 +25,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PhoneNumberDirective } from '../../core/directives/phone-number.directive';
 import { FallbackImgDirective } from '../../core/directives';
 import { secureDecodeUrl } from '../../core/utils/secure-query';
+import { PaymobService, WalletType } from '../payment/services/paymob.service';
 
 @Component({
   selector: 'app-checkout',
@@ -80,6 +81,25 @@ export class CheckoutComponent implements OnInit {
     return currentPaymentMethod === PaymentMethod.VODAFONE_CASH || isDeposit;
   });
 
+  // Paymob payment method (card or wallet)
+  paymobPaymentMethod = signal<PaymentMethodType>(PaymentMethodType.CARD);
+
+  // Computed property to check if Paymob wallet fields should be shown
+  isPaymobWallet = computed(() => {
+    return this.paymentMethod() === PaymentMethod.PAYMOB && 
+           this.paymobPaymentMethod() === PaymentMethodType.WALLET;
+  });
+
+  // Wallet type options
+  readonly WalletType = WalletType;
+  readonly PaymentMethodType = PaymentMethodType;
+  walletTypes = [
+    { value: WalletType.VODAFONE, label: 'Vodafone' },
+    { value: WalletType.ORANGE, label: 'Orange' },
+    { value: WalletType.ETISALAT, label: 'Etisalat' },
+    { value: WalletType.WE, label: 'WE' },
+  ];
+
   // File upload properties
   selectedFile: File | null = null;
   paymentImagePreview: string | null = null;
@@ -96,6 +116,7 @@ export class CheckoutComponent implements OnInit {
   paymentMethods = [
     { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
+    { label: 'Paymob', value: PaymentMethod.PAYMOB },
     // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
     // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
     // { label: 'PayPal', value: PaymentMethod.PAYPAL }
@@ -110,6 +131,8 @@ export class CheckoutComponent implements OnInit {
     private toastService: UiToastService,
     private packageUrlService: PackageUrlService,
     private productUrlService: ProductUrlService,
+    private paymobService: PaymobService,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
   ) { }
@@ -131,6 +154,20 @@ export class CheckoutComponent implements OnInit {
       takeUntil(this.destroy$)
     ).subscribe(value => {
       this.depositOrder.set(!!value);
+    });
+
+    // Subscribe to Paymob payment method changes
+    this.checkoutForm.get('paymobPaymentMethod')?.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
+      this.paymobPaymentMethod.set(value);
+      // Clear wallet fields when switching to card
+      if (value === PaymentMethodType.CARD) {
+        this.checkoutForm.patchValue({
+          walletPhoneNumber: '',
+          walletType: null
+        });
+      }
     });
 
     this.depositOrder.set(!!this.checkoutForm.get('isDeposit')?.value);
@@ -347,6 +384,11 @@ export class CheckoutComponent implements OnInit {
       paymentMethod: [PaymentMethod.CASH],
       paymentImage: [''], // For Vodafone Cash screenshot
       isDeposit: [false],
+      // Paymob payment method (card or wallet)
+      paymobPaymentMethod: [PaymentMethodType.CARD],
+      // Wallet fields (for Paymob wallet payments)
+      walletPhoneNumber: [''],
+      walletType: [null],
 
       // Order Notes
       notes: [''],
@@ -425,22 +467,38 @@ export class CheckoutComponent implements OnInit {
 
     // Create order items using new structure
     const orderItems: IOrderItem[] = this.checkoutService.convertCartItemsToOrderItems(this.cartItems());
-
+    
+    // Calculate subtotal from order items (same way backend does it)
+    // Each item: (price - discountPrice) * quantity
+    const calculatedSubtotal = orderItems.reduce((sum, item) => {
+      const itemPrice = item.price || 0;
+      const discountAmount = item.discountPrice || 0;
+      const finalPrice = Math.max(0, itemPrice - discountAmount);
+      return sum + (finalPrice * (item.quantity || 1));
+    }, 0);
+    
     // Get customer ID from auth service (optional)
     const currentUser = this.authService.currentUserValue;
     const customerId = currentUser?._id || undefined; // Don't use fallback, let it be undefined for guest orders
-    // Create order data using backend DTO structure
+    
+    // Calculate totals
+    const tax = this.calculateTax();
+    const shippingCost = this.shippingCost();
+    const discount = 0; // Can be calculated from coupons
+    const calculatedTotal = calculatedSubtotal + tax + shippingCost - discount;
+    
+    // Prepare order data
     const orderData: ICreateOrder = {
       customerId: customerId, // This can be undefined for guest orders
       items: orderItems,
       status: OrderStatus.PENDING,
       
-      // Additional fields from backend DTO
-      subtotal: Number(this.cartTotal()),
-      tax: this.calculateTax(),
-      shippingCost: this.shippingCost(),
-      discount: 0, // Can be calculated from coupons
-      total: Number(this.orderTotal()),
+      // Additional fields from backend DTO - use calculated values
+      subtotal: Number(calculatedSubtotal.toFixed(2)),
+      tax: tax,
+      shippingCost: shippingCost,
+      discount: discount,
+      total: Number(calculatedTotal.toFixed(2)),
       paymentStatus: PaymentStatus.PENDING,
       orderStatus: OrderStatus.PENDING,
       paymentMethod: formValue.paymentMethod,
@@ -460,14 +518,113 @@ export class CheckoutComponent implements OnInit {
       },
       notes: formValue.notes || ''
     };
+
+    // If Paymob payment method, initiate payment first without creating order
+    if (formValue.paymentMethod === PaymentMethod.PAYMOB) {
+      try {
+        const paymobPaymentMethod = formValue.paymobPaymentMethod || PaymentMethodType.CARD;
+
+        // Validate wallet fields if wallet payment is selected
+        if (paymobPaymentMethod === PaymentMethodType.WALLET) {
+          if (!formValue.walletPhoneNumber || !formValue.walletType) {
+            this.toastService.error(
+              'All wallet detail fields are mandatory',
+              this.translate.instant('common.error')
+            );
+            this.loading = false;
+            return;
+          }
+
+          // Validate phone number format (Egyptian: starts with 01, 11 digits)
+          const phoneRegex = /^01[0-9]{9}$/;
+          if (!phoneRegex.test(formValue.walletPhoneNumber)) {
+            this.toastService.error(
+              'Phone number must be in Egyptian format: starts with 01, length 11 digits',
+              this.translate.instant('common.error')
+            );
+            this.loading = false;
+            return;
+          }
+        }
+
+        // Convert amount to cents - use calculated total from order data
+        const amountInCents = Math.round(calculatedTotal * 100);
+
+        // Prepare payment request
+        const paymentRequest: any = {
+          amount: amountInCents,
+          currency: 'EGP',
+          paymentMethod: paymobPaymentMethod,
+          firstName: formValue.fullName?.split(' ')[0] || '',
+          lastName: formValue.fullName?.split(' ').slice(1).join(' ') || '',
+          email: formValue.email || '',
+          phoneNumber: formValue.phone || '',
+          metadata: {
+            orderData: orderData, // Store order data to create after payment success
+            email: formValue.email || '',
+            shippingAddress: orderData.shippingAddress,
+          }
+        };
+
+        // Add wallet-specific fields only for wallet payments
+        if (paymobPaymentMethod === PaymentMethodType.WALLET) {
+          paymentRequest.phone_number = formValue.walletPhoneNumber;
+          paymentRequest.wallet_type = formValue.walletType;
+        }
+
+        // Initiate payment with order data in metadata (order will be created after successful payment)
+        // URLs will be set by backend from configuration
+        this.paymobService.initiatePayment(paymentRequest).subscribe({
+          next: (response: any) => {
+            // Prepare query params
+            const queryParams: any = {
+              transactionId: response.transactionId,
+              amount: calculatedTotal,
+              currency: 'EGP'
+            };
+
+            // Add iframeUrl for card payments or redirectUrl for wallet payments
+            if (paymobPaymentMethod === PaymentMethodType.WALLET && response.redirectUrl) {
+              queryParams.redirectUrl = encodeURIComponent(response.redirectUrl);
+            } else if (paymobPaymentMethod === PaymentMethodType.CARD && response.iframeUrl) {
+              queryParams.iframeUrl = encodeURIComponent(response.iframeUrl);
+            }
+
+            // Redirect to Paymob payment page with transaction details
+            this.router.navigate(['/payment/paymob'], { queryParams });
+          },
+          error: (error: any) => {
+            console.error('Paymob payment initiation error:', error);
+            this.loading = false;
+            this.toastService.error(
+              error.error?.message || error.message || 'Failed to initiate payment. Please try again.',
+              this.translate.instant('common.error')
+            );
+          }
+        });
+        return;
+      } catch (error: any) {
+        console.error('Paymob payment initiation error:', error);
+        this.loading = false;
+        this.toastService.error(
+          error.message || 'Failed to initiate payment. Please try again.',
+          this.translate.instant('common.error')
+        );
+        return;
+      }
+    }
+
+    // For other payment methods, create order immediately
     this.checkoutService.createOrder(orderData).subscribe({
-      next: (response:any) => {
+      next: async (response:any) => {
+
+        // For other payment methods, show success message
         this.loading = false;
         this.success = true;
         if (!this.isBuyNow) {
           this.cartService.clearCart().subscribe();
         }
-        this.orderNumber = response.data.orderNumber;
+        this.orderNumber = response.data?.orderNumber || response.orderNumber || '';
         // Clear cart so all subscribers (Topbar, Cart page) update
         // window scroll to top
         if (isPlatformBrowser(this.platformId)) {

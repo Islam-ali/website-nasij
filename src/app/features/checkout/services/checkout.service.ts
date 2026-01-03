@@ -45,6 +45,10 @@ export class CheckoutService {
   // Convert cart items to order items (including packages)
   convertCartItemsToOrderItems(cartItems: ICartItem[]): IOrderItem[] {
     return cartItems.map(item => {
+      // discountPrice should be the discount amount (not the discounted price)
+      // If item.discount exists, use it; otherwise discount amount is 0
+      const discountAmount = Number(item.discount) || 0;
+      
       // Check if item is a package (has packageId)
       if (item.packageId && item.itemType === 'Package') {
         return {
@@ -52,7 +56,7 @@ export class CheckoutService {
           itemId: item.packageId,
           quantity: Number(item.quantity),
           price: Number(item.price),
-          discountPrice: Number(item.discount) || Number(item.price),
+          discountPrice: discountAmount, // Discount amount, not discounted price
           packageItems: this.cleanPackageItems(item.packageItems || [])
         };
       } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
@@ -62,7 +66,7 @@ export class CheckoutService {
           itemId: item.productId,
           quantity: Number(item.quantity),
           price: Number(item.price),
-          discountPrice: Number(item.discount) || Number(item.price),
+          discountPrice: discountAmount, // Discount amount, not discounted price
           selectedVariants: item.selectedVariants
         };
       } else {

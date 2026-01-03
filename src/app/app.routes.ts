@@ -112,6 +112,30 @@ export const routes: Routes = [
         data: { breadcrumb: 'Checkout' }
       },
       {
+        path: 'payment/paymob',
+        loadComponent: () => import('./features/payment/components/paymob-payment/paymob-payment.component')
+          .then(m => m.PaymobPaymentComponent)
+          .catch(() => ErrorComponent),
+        title: 'Paymob Payment',
+        data: { breadcrumb: 'Payment' }
+      },
+      {
+        path: 'payment/success',
+        loadComponent: () => import('./features/payment/components/payment-success/payment-success.component')
+          .then(m => m.PaymentSuccessComponent)
+          .catch(() => ErrorComponent),
+        title: 'Payment Success',
+        data: { breadcrumb: 'Payment Success' }
+      },
+      {
+        path: 'payment/failure',
+        loadComponent: () => import('./features/payment/components/payment-failure/payment-failure.component')
+          .then(m => m.PaymentFailureComponent)
+          .catch(() => ErrorComponent),
+        title: 'Payment Failed',
+        data: { breadcrumb: 'Payment Failed' }
+      },
+      {
         path: 'profile',
         loadComponent: () => import('./features/profile/profile.component')
           .then(m => m.ProfileComponent)

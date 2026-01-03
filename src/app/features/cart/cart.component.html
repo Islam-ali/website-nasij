@@ -1,51 +1,60 @@
 <section
-  class="relative z-10 min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500">
-  <!-- Background Pattern -->
-  <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
+  class="relative z-10 min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500 overflow-hidden">
+  <!-- Enhanced Background Pattern -->
+  <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none">
     <div class="absolute inset-0"
-      style="background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0); background-size: 40px 40px;">
+      style="background-image: radial-gradient(circle at 2px 2px, currentColor 1.5px, transparent 0); background-size: 50px 50px;">
     </div>
   </div>
 
-  <!-- Floating Elements -->
+  <!-- Enhanced Floating Elements with More Variety -->
   <div
-    class="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-pink-400/20 dark:from-purple-500/20 dark:to-pink-500/20 rounded-full blur-xl animate-float">
+    class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-purple-400/25 to-pink-400/25 dark:from-purple-500/20 dark:to-pink-500/20 rounded-full blur-2xl animate-float">
   </div>
   <div
-    class="absolute top-40 right-20 w-16 h-16 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 dark:from-blue-500/20 dark:to-cyan-500/20 rounded-full blur-xl animate-float"
+    class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-blue-400/25 to-cyan-400/25 dark:from-blue-500/20 dark:to-cyan-500/20 rounded-full blur-2xl animate-float"
     style="animation-delay: -2s;"></div>
   <div
-    class="absolute bottom-20 left-1/4 w-12 h-12 bg-gradient-to-br from-green-400/20 to-emerald-400/20 dark:from-green-500/20 dark:to-emerald-500/20 rounded-full blur-xl animate-float"
+    class="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-br from-green-400/25 to-emerald-400/25 dark:from-green-500/20 dark:to-emerald-500/20 rounded-full blur-2xl animate-float"
     style="animation-delay: -4s;"></div>
+  <div
+    class="absolute top-1/2 right-1/3 w-16 h-16 bg-gradient-to-br from-orange-400/20 to-amber-400/20 dark:from-orange-500/15 dark:to-amber-500/15 rounded-full blur-xl animate-float"
+    style="animation-delay: -1s;"></div>
 
   <div class="w-full max-w-7xl px-3 sm:px-4 md:px-5 lg:px-6 mx-auto relative z-10">
     <div class="grid grid-cols-12 h-full gap-4 sm:gap-6">
       <!-- Cart Items -->
       <div
         class="col-span-12 lg:max-h-[calc(100vh)] overflow-y-auto lg:col-span-8 lg:pe-4 xl:pe-8 pt-8 sm:pt-12 lg:pt-14 pb-6 sm:pb-8 lg:pb-8 lg:py-24 w-full max-xl:max-w-3xl max-xl:mx-auto">
-        <!-- Cart Header -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 lg:pb-8 border-b border-gray-200 dark:border-gray-700">
-          <div class="flex items-center gap-2 sm:gap-3">
-            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">{{ 'cart.title' | translate }}</h1>
+        <!-- Enhanced Cart Header -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 pb-6 sm:pb-8 lg:pb-10 border-b-2 border-gray-200/80 dark:border-gray-700/80 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-sm">
+          <div class="flex items-center gap-3 sm:gap-4">
             <div
-              class="p-2 sm:p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl sm:rounded-2xl">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor"
+              class="p-3 sm:p-4 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 dark:from-primary-600 dark:via-primary-700 dark:to-primary-800 rounded-2xl shadow-lg shadow-primary-500/25 dark:shadow-primary-600/20 transform transition-transform duration-300 hover:scale-110 hover:rotate-3">
+              <svg class="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
                 </path>
               </svg>
             </div>
-            <h2
-              class="font-manrope font-bold text-xl sm:text-2xl lg:text-3xl leading-tight sm:leading-8 lg:leading-10 text-gray-900 dark:text-white transition-colors duration-300">
-              {{ 'cart.shoppingCart' | translate }}</h2>
+            <div class="flex flex-col">
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
+                {{ 'cart.title' | translate }}
+              </h1>
+              <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
+                {{ 'cart.shoppingCart' | translate }}
+              </p>
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{{ 'common.total' |
-              translate }} {{ 'common.items' | translate }}:</span>
-            <span class="font-semibold text-base sm:text-lg text-primary-600 dark:text-primary-400 transition-colors duration-300">
-              {{ (cartState$ | async)?.items?.length || 0 }}
-            </span>
+          <div class="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/30 dark:to-blue-900/20 rounded-xl border border-primary-200/50 dark:border-primary-700/50 shadow-sm">
+            <i class="pi pi-shopping-bag text-primary-600 dark:text-primary-400 text-lg"></i>
+            <div class="flex flex-col">
+              <span class="text-xs text-gray-500 dark:text-gray-400">{{ 'common.total' | translate }} {{ 'common.items' | translate }}</span>
+              <span class="font-bold text-lg sm:text-xl text-primary-600 dark:text-primary-400">
+                {{ (cartState$ | async)?.items?.length || 0 }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -54,146 +63,181 @@
 
         <!-- Scrollable Cart Items Container -->
         <div class="pe-2 space-y-4 sm:space-y-6">
-          <!-- Cart Items Header -->
+          <!-- Enhanced Cart Items Header -->
           <div
-            class="z-10 grid grid-cols-12 mt-4 sm:mt-6 lg:mt-8 max-md:hidden pb-4 sm:pb-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
+            class="z-10 grid grid-cols-12 mt-6 sm:mt-8 lg:mt-10 max-md:hidden pb-5 sm:pb-6 border-b-2 border-gray-200/80 dark:border-gray-700/80 bg-gradient-to-r from-gray-50 via-blue-50/50 to-purple-50/30 dark:from-gray-900/60 dark:via-blue-900/20 dark:to-purple-900/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm backdrop-blur-sm">
             <div class="col-span-12 md:col-span-4">
               <h6
-                class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 flex items-center gap-2 transition-colors duration-300">
-                <i class="pi pi-box text-primary-600 dark:text-primary-400 text-sm sm:text-base"></i>
+                class="font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-800 dark:text-gray-200 flex items-center gap-2.5 transition-colors duration-300">
+                <div class="p-1.5 bg-primary-500/10 dark:bg-primary-500/20 rounded-lg">
+                  <i class="pi pi-box text-primary-600 dark:text-primary-400 text-base sm:text-lg"></i>
+                </div>
                 {{ 'cart.cart_items' | translate }}
               </h6>
             </div>
             <div class="col-span-12 md:col-span-8">
-              <div class="grid grid-cols-8">
+              <div class="grid grid-cols-8 gap-2">
                 <div class="col-span-4">
                   <h6
-                    class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
-                    {{ 'common.quantity' | translate }}</h6>
+                    class="font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    <i class="pi pi-sort-numeric-up mr-1.5 text-primary-500"></i>
+                    {{ 'common.quantity' | translate }}
+                  </h6>
                 </div>
                 <div class="col-span-2">
                   <h6
-                    class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
-                    {{ 'common.total' | translate }}</h6>
+                    class="font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    <i class="pi pi-dollar mr-1.5 text-primary-500"></i>
+                    {{ 'common.total' | translate }}
+                  </h6>
                 </div>
                 <div class="col-span-2">
                   <h6
-                    class="font-manrope font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
-                    {{ 'common.action' | translate }}</h6>
+                    class="font-bold text-sm sm:text-base leading-6 sm:leading-7 text-gray-700 dark:text-gray-300 text-center transition-colors duration-300">
+                    <i class="pi pi-cog mr-1.5 text-primary-500"></i>
+                    {{ 'common.action' | translate }}
+                  </h6>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Cart Items List -->
+          <!-- Enhanced Cart Items List -->
           @if ((cartItems$ | async); as cartItems) {
             @for (item of cartItems; track trackByFn($index, item); let i = $index) {
             <div
-              class="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-3 sm:gap-4 md:gap-5 py-4 sm:py-5 md:py-6 border-b border-gray-200 dark:border-gray-700 group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300">
-              <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 md:max-w-[126px]">
+              class="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-4 sm:gap-5 md:gap-6 py-5 sm:py-6 md:py-7 border border-gray-200/60 dark:border-gray-700/60 group bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 dark:hover:shadow-primary-500/5 hover:border-primary-300/50 dark:hover:border-primary-600/50 hover:-translate-y-0.5">
+              <div class="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 md:max-w-[160px] flex-shrink-0">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary-100/50 to-blue-100/50 dark:from-primary-900/30 dark:to-blue-900/20 rounded-2xl blur-sm group-hover:blur-md transition-all duration-300"></div>
                 <img [src]="item.image || 'images/photo.png'" fallback [alt]="item.productName || 'Product'"
-                  class="mx-auto rounded-xl sm:rounded-2xl w-full h-full object-cover transition-all duration-300 group-hover:scale-105">
+                  class="relative rounded-2xl sm:rounded-3xl w-full h-full object-cover transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl border-2 border-white/50 dark:border-gray-700/50">
               </div>
               <div class="grid grid-cols-1 md:grid-cols-6 w-full gap-3 sm:gap-4">
                 <div class="w-full col-span-2">
-                  <div class="flex flex-col max-[500px]:items-start gap-1 sm:gap-1.5">
-                    <h6
-                      class="font-semibold text-sm sm:text-base leading-6 sm:leading-7 text-gray-900 dark:text-white transition-colors duration-300">
-                      {{ item.productName | multiLanguage }}
+                  <div class="flex flex-col max-[500px]:items-start gap-2 sm:gap-2.5">
+                    <div class="flex items-start gap-2 flex-wrap">
+                      <h6
+                        class="font-bold text-base sm:text-lg leading-6 sm:leading-7 text-gray-900 dark:text-white transition-colors duration-300 group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                        {{ item.productName | multiLanguage }}
+                      </h6>
                       @if (item.itemType === 'Package') {
                       <span
-                        class="ml-1.5 sm:ml-2 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
+                        class="px-2 sm:px-2.5 py-1 sm:py-1.5 text-xs font-bold bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 rounded-full border border-purple-200/50 dark:border-purple-700/50 shadow-sm">
+                        <i class="pi pi-box mr-1"></i>
                         {{ 'cart.package' | translate }}
                       </span>
                       }
                       @if (item.itemType === 'Product') {
                       <span
-                        class="ml-1.5 sm:ml-2 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs bg-primary-100 dark:bg-primary-100 text-primary-600 dark:text-primary-50 rounded-full">
+                        class="px-2 sm:px-2.5 py-1 sm:py-1.5 text-xs font-bold bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/40 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 shadow-sm">
+                        <i class="pi pi-shopping-bag mr-1"></i>
                         {{ 'cart.product' | translate }}
                       </span>
                       }
-                    </h6>
+                    </div>
 
-                    <!-- Show color and size only for products -->
+                    <!-- Enhanced Variants Display -->
                     @if (item.itemType === 'Product' || !item.itemType) {
                       @if(item.selectedVariants && item.selectedVariants.length > 0) {
-                        @for(variant of item.selectedVariants; track variant._id) {
-                        <p
-                          class="font-medium m-0 text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex gap-1 transition-colors duration-300">
-                          <span class="font-bold text-gray-600 dark:text-gray-300">{{ 'products.' + variant.variant |
-                            translate }}: </span>
-                          <span class="font-medium text-gray-600 dark:text-gray-300 flex flex-1 items-center gap-2">
-                            {{ variant.value | multiLanguage }}</span>
-                        </p>
-                        }
+                        <div class="flex flex-wrap gap-2 mt-1">
+                          @for(variant of item.selectedVariants; track variant._id) {
+                          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100/80 dark:bg-gray-700/50 rounded-lg border border-gray-200/50 dark:border-gray-600/50">
+                            <i class="pi pi-tag text-primary-500 text-xs"></i>
+                            <span class="font-semibold text-xs text-gray-700 dark:text-gray-300">{{ 'products.' + variant.variant |
+                              translate }}:</span>
+                            <span class="font-medium text-xs text-gray-600 dark:text-gray-400">
+                              {{ variant.value | multiLanguage }}
+                            </span>
+                          </div>
+                          }
+                        </div>
                       }
                     }
 
-                    <!-- Show package items for packages -->
+                    <!-- Enhanced Package Items Display -->
                     @if (item.itemType === 'Package' && item.packageItems && item.packageItems.length > 0) {
-                      <div class="mt-1.5 sm:mt-2">
-                        <p class="font-bold text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1">{{ 'cart.package_items' |
-                          translate }}:</p>
-                        <div class="space-y-0.5 sm:space-y-1">
+                      <div class="mt-2 sm:mt-2.5 p-2.5 bg-gray-50/80 dark:bg-gray-800/50 rounded-lg border border-gray-200/50 dark:border-gray-700/50">
+                        <p class="font-bold text-xs sm:text-sm text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+                          <i class="pi pi-list text-primary-500"></i>
+                          {{ 'cart.package_items' | translate }}:
+                        </p>
+                        <div class="space-y-1.5">
                           @for (packageItem of item.packageItems; track $index) {
-                          <div class="text-xs text-gray-500 dark:text-gray-400">
-                            • {{ packageItem.productName| multiLanguage }} ({{ 'common.quantity' | translate }}: {{
-                            packageItem.quantity }})
+                          <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                            <i class="pi pi-check-circle text-green-500 text-xs"></i>
+                            <span>{{ packageItem.productName| multiLanguage }}</span>
+                            <span class="text-gray-500 dark:text-gray-500">({{ 'common.quantity' | translate }}: {{
+                            packageItem.quantity }})</span>
                           </div>
                           }
                         </div>
                       </div>
                     }
 
-                    <h6
-                      class="font-medium text-sm sm:text-base leading-6 sm:leading-7 text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                      {{ (item.price - (item.discount || 0)) * item.quantity | currency }}
-                    </h6>
+                    <!-- Unit Price Display -->
+                    @if (item.discount && item.discount > 0) {
+                    <div class="mt-1.5 flex items-center gap-2">
+                      <span class="text-xs text-gray-500 dark:text-gray-400">Price:</span>
+                      <span class="text-xs text-gray-400 dark:text-gray-500 line-through">
+                        {{ item.price | currency }}
+                      </span>
+                      <span class="font-semibold text-sm text-primary-600 dark:text-primary-400">
+                        {{ (item.price - (item.discount || 0)) | currency }}
+                      </span>
+                    </div>
+                    }
                   </div>
                 </div>
 
-                <!-- Quantity Controls -->
-                <div class="flex items-center max-[500px]:justify-start h-full max-md:mt-2 sm:max-md:mt-3 col-span-2">
+                <!-- Enhanced Quantity Controls -->
+                <div class="flex items-center max-[500px]:justify-start h-full max-md:mt-3 sm:max-md:mt-4 col-span-2">
                   <div
-                    class="flex items-center h-10 sm:h-11 md:h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800">
+                    class="flex items-center h-11 sm:h-12 md:h-14 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md hover:border-primary-300 dark:hover:border-primary-600">
                     <button (click)="updateQuantity(item, item.quantity - 1)" [disabled]="loading || item.quantity <= 1"
-                      class="group rounded-l-full px-3 sm:px-4 py-1.5 sm:py-2 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600 focus-within:outline-purple-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                      class="group rounded-l-full px-4 sm:px-5 py-2 sm:py-2.5 border-e border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-br hover:from-red-50 hover:to-pink-50 dark:hover:from-red-900/30 dark:hover:to-pink-900/20 hover:border-red-300 dark:hover:border-red-600 focus-within:outline-red-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95">
                       <svg
-                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-purple-600 dark:group-hover:stroke-purple-400 w-4 h-4 sm:w-5 sm:h-5"
+                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-red-600 dark:group-hover:stroke-red-400 w-5 h-5 sm:w-5 sm:h-5"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" fill="none">
-                        <path d="M16.5 11H5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                        <path d="M16.5 11H5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                       </svg>
                     </button>
                     <input type="number" [(ngModel)]="item.quantity" (change)="updateQuantity(item, item.quantity)"
                       [disabled]="loading" min="1"
-                      class="w-12 sm:w-14 md:w-16 text-center border-0 focus:ring-0 font-semibold text-sm sm:text-base text-gray-900 dark:text-white bg-transparent">
+                      class="w-14 sm:w-16 md:w-18 text-center border-0 focus:ring-0 font-bold text-base sm:text-lg text-gray-900 dark:text-white bg-transparent focus:outline-none">
                     <button (click)="updateQuantity(item, item.quantity + 1)" [disabled]="loading"
-                      class="group rounded-r-full px-3 sm:px-4 py-1.5 sm:py-2 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                      class="group rounded-r-full px-4 sm:px-5 py-2 sm:py-2.5 border-s border-gray-200 dark:border-gray-600 flex items-center justify-center transition-all duration-300 hover:bg-gradient-to-br hover:from-primary-50 hover:to-blue-50 dark:hover:from-primary-900/30 dark:hover:to-blue-900/20 hover:border-primary-300 dark:hover:border-primary-600 focus-within:outline-primary-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95">
                       <svg
-                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-primary-600 dark:group-hover:stroke-primary-400 w-4 h-4 sm:w-5 sm:h-5"
+                        class="stroke-gray-600 dark:stroke-gray-400 transition-all duration-300 group-hover:stroke-primary-600 dark:group-hover:stroke-primary-400 w-5 h-5 sm:w-5 sm:h-5"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" fill="none">
-                        <path d="M11 5.5V16.5M16.5 11H5.5" stroke="currentColor" stroke-width="1.6"
+                        <path d="M11 5.5V16.5M16.5 11H5.5" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" />
                       </svg>
                     </button>
                   </div>
                 </div>
 
-                <!-- Item Total -->
-                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-2 sm:max-md:mt-3 h-full">
-                  <p class="font-bold text-base sm:text-lg leading-7 sm:leading-8 text-gray-900 dark:text-white transition-colors duration-300">
-                    {{ (item.price - (item.discount || 0)) * item.quantity | currency }}
-                  </p>
+                <!-- Enhanced Item Total -->
+                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-3 sm:max-md:mt-4 h-full">
+                  <div class="flex flex-col items-end">
+                    @if (item.discount && item.discount > 0) {
+                    <p class="text-xs text-gray-400 dark:text-gray-500 line-through mb-0.5">
+                      {{ item.price * item.quantity | currency }}
+                    </p>
+                    }
+                    <p class="font-extrabold text-lg sm:text-xl md:text-2xl leading-7 sm:leading-8 bg-gradient-to-r from-primary-600 to-blue-600 dark:from-primary-400 dark:to-blue-400 bg-clip-text text-transparent transition-colors duration-300">
+                      {{ (item.price - (item.discount || 0)) * item.quantity | currency }}
+                    </p>
+                  </div>
                 </div>
 
-                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-2 sm:max-md:mt-3 h-full">
-                  <!-- Remove Item Button -->
+                <div class="flex items-center max-[500px]:justify-start md:justify-end max-md:mt-3 sm:max-md:mt-4 h-full">
+                  <!-- Enhanced Remove Item Button -->
                   <button (click)="removeItem(item, i)" [disabled]="loading"
-                    class="p-2 sm:p-2.5 md:p-3 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group">
+                    class="p-3 sm:p-3.5 md:p-4 rounded-full bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/40 dark:to-pink-900/30 text-red-600 dark:text-red-400 hover:from-red-100 hover:to-pink-100 dark:hover:from-red-900/60 dark:hover:to-pink-900/50 hover:text-red-700 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group shadow-sm hover:shadow-md border border-red-200/50 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform duration-300" fill="none"
-                      viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      class="h-5 w-5 sm:h-6 sm:w-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
@@ -203,26 +247,32 @@
             }
           } @else {
 
-          <!-- Empty Cart State -->
+          <!-- Enhanced Empty Cart State -->
             <div
-              class="text-center py-12 sm:py-16 lg:py-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-gray-200/50 dark:border-gray-700/50">
-              <div
-                class="p-4 sm:p-5 md:p-6 bg-gradient-to-r from-gray-100 to-blue-100 dark:from-gray-700 dark:to-blue-900/30 rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-6 sm:mb-8 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-gray-400 dark:text-gray-500" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+              class="text-center py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-white/95 via-blue-50/50 to-purple-50/30 dark:from-gray-800/95 dark:via-blue-900/20 dark:to-purple-900/10 backdrop-blur-md rounded-3xl border-2 border-gray-200/60 dark:border-gray-700/60 shadow-xl">
+              <div class="relative inline-block mb-8 sm:mb-10">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary-400/20 to-blue-400/20 dark:from-primary-500/20 dark:to-blue-500/20 rounded-full blur-2xl animate-pulse"></div>
+                <div
+                  class="relative p-6 sm:p-8 md:p-10 bg-gradient-to-br from-primary-100 via-blue-100 to-purple-100 dark:from-primary-900/40 dark:via-blue-900/30 dark:to-purple-900/20 rounded-3xl w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto flex items-center justify-center shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-primary-600 dark:text-primary-400" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
               </div>
-              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 transition-colors duration-300">{{
-                'cart.yourCartIsEmpty' | translate }}</h3>
-              <p class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 transition-colors duration-300">{{
-                'cart.start_adding_items' | translate }}</p>
-              <div class="mt-6 sm:mt-8">
+              <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent mb-3 sm:mb-4 transition-colors duration-300">
+                {{ 'cart.yourCartIsEmpty' | translate }}
+              </h3>
+              <p class="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-400 mb-8 sm:mb-10 max-w-md mx-auto transition-colors duration-300">
+                {{ 'cart.start_adding_items' | translate }}
+              </p>
+              <div class="mt-8 sm:mt-10">
                 <a routerLink="/products"
-                  class="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 transform hover:scale-105">
+                  class="inline-flex items-center gap-3 sm:gap-4 px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 dark:from-primary-600 dark:via-primary-700 dark:to-primary-800 text-white rounded-2xl sm:rounded-3xl text-base sm:text-lg font-bold hover:from-primary-600 hover:via-primary-700 hover:to-primary-800 dark:hover:from-primary-700 dark:hover:via-primary-800 dark:hover:to-primary-900 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/50 active:scale-95">
+                  <i class="pi pi-shopping-bag text-xl"></i>
                   {{ 'cart.continue_shopping' | translate }}
-                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>  
                   </svg>
                 </a>
@@ -235,66 +285,77 @@
       <!-- Divider -->
       <div class="col-span-12 lg:hidden border-t border-gray-200 dark:border-gray-700 my-4 sm:my-6"></div>
 
-      <!-- Order Summary -->
+      <!-- Enhanced Order Summary -->
       <div
-        class="sticky top-20 sm:top-24 mt-4 sm:mt-6 z-40 col-span-12 lg:col-span-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm w-full max-xl:px-4 sm:max-xl:px-6 max-w-3xl xl:max-w-lg mx-auto lg:p-3 xl:p-4 py-6 sm:py-8 md:py-12 lg:py-24 max-h-[calc(100vh-5rem)] sm:max-h-[calc(100vh-6rem)] rounded-2xl sm:rounded-3xl border border-gray-200/50 dark:border-gray-700/50">
-        <h2
-          class="font-manrope font-bold text-xl sm:text-2xl lg:text-3xl leading-8 sm:leading-9 lg:leading-10 text-gray-900 dark:text-white pb-4 sm:pb-6 lg:pb-8 border-b border-gray-300 dark:border-gray-600 transition-colors duration-300">
-          {{ 'cart.order_summary' | translate }}
-        </h2>
-        <div class="mt-4 sm:mt-6 lg:mt-8">
-          <form>
-            <!-- Subtotal -->
-            <div class="flex items-center justify-between py-2 sm:py-3">
-              <p class="font-medium text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
-                'cart.sub_total' | translate }}</p>
+        class="sticky top-20 sm:top-24 mt-6 sm:mt-8 z-40 col-span-12 lg:col-span-4 bg-gradient-to-br from-white/95 via-blue-50/30 to-purple-50/20 dark:from-gray-800/95 dark:via-blue-900/20 dark:to-purple-900/10 backdrop-blur-md w-full max-xl:px-4 sm:max-xl:px-6 max-w-3xl xl:max-w-lg mx-auto lg:p-4 xl:p-5 py-6 sm:py-8 md:py-12 lg:py-24 max-h-[calc(100vh-5rem)] sm:max-h-[calc(100vh-6rem)] rounded-3xl border-2 border-gray-200/60 dark:border-gray-700/60 shadow-xl">
+        <div class="flex items-center gap-3 sm:gap-4 pb-5 sm:pb-6 lg:pb-8 border-b-2 border-gray-200/80 dark:border-gray-600/80">
+          <div class="p-2.5 sm:p-3 bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 rounded-xl shadow-lg">
+            <i class="pi pi-receipt text-white text-xl sm:text-2xl"></i>
+          </div>
+          <h2
+            class="font-extrabold text-xl sm:text-2xl lg:text-3xl leading-8 sm:leading-9 lg:leading-10 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent transition-colors duration-300">
+            {{ 'cart.order_summary' | translate }}
+          </h2>
+        </div>
+        <div class="mt-6 sm:mt-8 lg:mt-10">
+          <form class="space-y-4 sm:space-y-5">
+            <!-- Enhanced Subtotal -->
+            <div class="flex items-center justify-between py-3 sm:py-4 px-4 bg-gray-50/50 dark:bg-gray-900/30 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-shopping-cart text-primary-500 text-sm"></i>
+                <p class="font-semibold text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 text-gray-700 dark:text-gray-300 transition-colors duration-300">{{
+                  'cart.sub_total' | translate }}</p>
+              </div>
               <p
-                class="font-semibold text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
+                class="font-bold text-base sm:text-lg lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
                 {{ (cartSummary$ | async)?.subtotal | currency }}
               </p>
             </div>
 
-            <!-- Divider -->
-            <div class="border-t border-gray-200 dark:border-gray-700 my-3 sm:my-4"></div>
-
-            <!-- Delivery Charge -->
-            <div class="flex items-center justify-between py-2 sm:py-3">
-              <p class="font-medium text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">{{
-                'cart.delivery_charge' | translate }}</p>
+            <!-- Enhanced Delivery Charge -->
+            <div class="flex items-center justify-between py-3 sm:py-4 px-4 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200/50 dark:border-green-800/30">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-truck text-green-600 dark:text-green-400 text-sm"></i>
+                <p class="font-semibold text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 text-gray-700 dark:text-gray-300 transition-colors duration-300">{{
+                  'cart.delivery_charge' | translate }}</p>
+              </div>
               <p
                 class="font-semibold text-xs sm:text-sm leading-6 sm:leading-7 lg:leading-8 text-green-600 dark:text-green-400 transition-colors duration-300">
                 {{'cart.shipping_calculated' | translate}}
               </p>
             </div>
 
-            <!-- Divider -->
-            <div class="border-t border-gray-200 dark:border-gray-700 my-3 sm:my-4 lg:my-6"></div>
-
-            <!-- Total -->
-            <div class="flex items-center justify-between py-2 sm:py-3">
-              <p class="font-medium text-sm sm:text-base lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">
-                {{ (cartState$ | async)?.items?.length || 0 }} {{ 'common.items' | translate }}
-              </p>
+            <!-- Enhanced Total -->
+            <div class="flex items-center justify-between py-4 sm:py-5 px-5 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/30 dark:to-blue-900/20 rounded-xl border-2 border-primary-200/50 dark:border-primary-700/50">
+              <div class="flex items-center gap-2.5">
+                <i class="pi pi-wallet text-primary-600 dark:text-primary-400 text-base"></i>
+                <p class="font-bold text-base sm:text-lg lg:text-xl leading-6 sm:leading-7 lg:leading-8 text-gray-900 dark:text-white transition-colors duration-300">
+                  {{ (cartState$ | async)?.items?.length || 0 }} {{ 'common.items' | translate }}
+                </p>
+              </div>
               <p
-                class="font-semibold text-base sm:text-lg lg:text-xl leading-7 sm:leading-8 text-primary-600 dark:text-primary-400 transition-colors duration-300">
+                class="font-extrabold text-lg sm:text-xl lg:text-2xl leading-7 sm:leading-8 bg-gradient-to-r from-primary-600 to-blue-600 dark:from-primary-400 dark:to-blue-400 bg-clip-text text-transparent transition-colors duration-300">
                 {{ (cartSummary$ | async)?.total | currency }}
               </p>
             </div>
 
-            <!-- Divider -->
-            <div class="border-t border-gray-200 dark:border-gray-700 my-4 sm:my-6 lg:my-8"></div>
-
-            <!-- Checkout Button -->
+            <!-- Enhanced Checkout Button -->
             <button type="button" (click)="onCheckout()" [disabled]="loading || !(cartState$ | async)?.items?.length"
               [class.opacity-50]="loading || !(cartState$ | async)?.items?.length"
-              class="w-full py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105">
+              class="w-full py-4 sm:py-5 md:py-6 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 dark:from-primary-600 dark:via-primary-700 dark:to-primary-800 text-white rounded-2xl sm:rounded-3xl text-base sm:text-lg font-bold hover:from-primary-600 hover:via-primary-700 hover:to-primary-800 dark:hover:from-primary-700 dark:hover:via-primary-800 dark:hover:to-primary-900 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary-500/50 active:scale-[0.98] flex items-center justify-center gap-2">
+              @if (loading) {
+                <i class="pi pi-spin pi-spinner text-xl"></i>
+              } @else {
+                <i class="pi pi-credit-card text-xl"></i>
+              }
               {{ loading ? ('cart.processing' | translate) : ('cart.proceed_to_checkout' | translate) }}
             </button>
 
-            <!-- Continue Shopping Link -->
-            <div class="mt-4 sm:mt-6 text-center">
+            <!-- Enhanced Continue Shopping Link -->
+            <div class="mt-5 sm:mt-6 text-center">
               <a routerLink="/"
-                class="text-xs sm:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 font-medium transition-colors duration-300">
+                class="inline-flex items-center gap-2 text-sm sm:text-base text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold transition-all duration-300 hover:gap-3">
+                <i class="pi pi-arrow-left"></i>
                 {{ 'cart.or_continue_shopping' | translate }}
               </a>
             </div>

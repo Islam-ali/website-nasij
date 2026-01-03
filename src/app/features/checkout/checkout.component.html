@@ -244,6 +244,103 @@
               </label>
             </div>
             }
+            
+            <!-- Paymob Payment Method Selection (Card or Wallet) -->
+            @if(checkoutForm.get('paymentMethod')?.value === 'paymob') {
+            <div class="mt-4 sm:mt-6 space-y-3 sm:space-y-4 border-t-2 border-gray-200 dark:border-gray-600 pt-4 sm:pt-6">
+              <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 dark:text-gray-300">
+                {{'checkout.paymobPaymentType' | translate}} <span class="text-red-500">*</span>
+              </h3>
+              <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                <label class="flex items-center border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all"
+                  [class.border-primary-500]="checkoutForm.get('paymobPaymentMethod')?.value === PaymentMethodType.CARD"
+                  [class.bg-primary-50]="checkoutForm.get('paymobPaymentMethod')?.value === PaymentMethodType.CARD"
+                  [class.dark:bg-primary-900\20]="checkoutForm.get('paymobPaymentMethod')?.value === PaymentMethodType.CARD"
+                  [class.border-gray-200]="checkoutForm.get('paymobPaymentMethod')?.value !== PaymentMethodType.CARD"
+                  [class.dark:border-gray-600]="checkoutForm.get('paymobPaymentMethod')?.value !== PaymentMethodType.CARD">
+                  <input type="radio" [value]="PaymentMethodType.CARD" formControlName="paymobPaymentMethod"
+                    class="h-4 w-4 sm:h-5 sm:w-5 text-primary-600 dark:text-primary-400 focus:ring-primary-500">
+                  <span class="ms-2 sm:ms-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+                    {{'checkout.cardPayment' | translate}}
+                  </span>
+                </label>
+                <label class="flex items-center border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all"
+                  [class.border-primary-500]="checkoutForm.get('paymobPaymentMethod')?.value === PaymentMethodType.WALLET"
+                  [class.bg-primary-50]="checkoutForm.get('paymobPaymentMethod')?.value === PaymentMethodType.WALLET"
+                  [class.dark:bg-primary-900\20]="checkoutForm.get('paymobPaymentMethod')?.value === PaymentMethodType.WALLET"
+                  [class.border-gray-200]="checkoutForm.get('paymobPaymentMethod')?.value !== PaymentMethodType.WALLET"
+                  [class.dark:border-gray-600]="checkoutForm.get('paymobPaymentMethod')?.value !== PaymentMethodType.WALLET">
+                  <input type="radio" [value]="PaymentMethodType.WALLET" formControlName="paymobPaymentMethod"
+                    class="h-4 w-4 sm:h-5 sm:w-5 text-primary-600 dark:text-primary-400 focus:ring-primary-500">
+                  <span class="ms-2 sm:ms-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+                    {{'checkout.walletPayment' | translate}}
+                  </span>
+                </label>
+              </div>
+
+              <!-- Wallet Fields (shown only when wallet is selected) -->
+              @if(isPaymobWallet()) {
+              <div class="mt-4 sm:mt-6 space-y-4 sm:space-y-5 border-t-2 border-gray-200 dark:border-gray-600 pt-4 sm:pt-6">
+                <h4 class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">
+                  {{'checkout.walletDetails' | translate}}
+                </h4>
+                
+                <!-- Phone Number -->
+                <div>
+                  <label for="walletPhoneNumber" class="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
+                    {{'checkout.walletPhoneNumber' | translate}} <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="walletPhoneNumber"
+                    type="text"
+                    formControlName="walletPhoneNumber"
+                    class="w-full px-3 sm:px-4 py-2 sm:py-2.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                    placeholder="01234567890"
+                    maxlength="11"
+                    pattern="^01[0-9]{9}$"
+                    required
+                  />
+                  <p class="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                    {{'checkout.walletPhoneHint' | translate}}
+                  </p>
+                  @if(checkoutForm.get('walletPhoneNumber')?.invalid && checkoutForm.get('walletPhoneNumber')?.touched) {
+                  <p class="mt-1 text-xs sm:text-sm text-red-500">
+                    @if(checkoutForm.get('walletPhoneNumber')?.hasError('required')) {
+                      {{'checkout.walletPhoneRequired' | translate}}
+                    } @else {
+                      {{'checkout.walletPhoneInvalid' | translate}}
+                    }
+                  </p>
+                  }
+                </div>
+
+                <!-- Wallet Type -->
+                <div>
+                  <label for="walletType" class="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
+                    {{'checkout.walletProvider' | translate}} <span class="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="walletType"
+                    formControlName="walletType"
+                    class="w-full px-3 sm:px-4 py-2 sm:py-2.5 border-2 rounded-lg sm:rounded-xl text-sm sm:text-base bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                    required
+                  >
+                    <option [value]="null">{{'checkout.selectWalletProvider' | translate}}</option>
+                    @for (wallet of walletTypes; track wallet.value) {
+                      <option [value]="wallet.value">{{ wallet.label }}</option>
+                    }
+                  </select>
+                  @if(checkoutForm.get('walletType')?.invalid && checkoutForm.get('walletType')?.touched) {
+                  <p class="mt-1 text-xs sm:text-sm text-red-500">
+                    {{'checkout.walletTypeRequired' | translate}}
+                  </p>
+                  }
+                </div>
+              </div>
+              }
+            </div>
+            }
+
             @if(checkoutForm.get('paymentMethod')?.value !== 'cash') {
             <div
               class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border border-dashed border-primary-300 dark:border-primary-600 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 bg-primary-50/10 dark:bg-primary-900/20">

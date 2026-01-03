@@ -37,7 +37,7 @@
             "assets": [
               { "glob": "**/*", "input": "public" },
               { "glob": "**/*", "input": "src/assets" },
-              { "glob": ".htaccess", "input": "src", "output": "/" },
+              { "glob": "_redirects", "input": "src", "output": "/" },
               {
                 "glob": "**/*",
                 "input": "src/i18n",
