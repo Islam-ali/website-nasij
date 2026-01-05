@@ -43,6 +43,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   productStatus = ProductStatus;
   selectedVariantAttributes: ProductVariantAttribute[] = [];
   mappedVariants: {variant: string, attributes: ProductVariantAttribute[]}[] = [];
+  isInWishlist = false;
   
   get basePrice(): number {
     return this.getVariantBasePrice();
@@ -130,7 +131,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   get discountPercentage(): number {
     if (!this.isOnSale) return 0;
     const discount = this.product?.discountPrice || 0;
-    return Math.round((((this.price) - (this.price - discount)) / this.basePrice) * 100);
+    return Math.round((discount / this.basePrice) * 100);
   }
 
   constructor(
@@ -161,11 +162,31 @@ export class ProductCardComponent implements OnInit, OnChanges {
   navigateToProduct(product: any): void {
     this.clicked.emit(product);
   }
+
+  onViewClick(event: Event): void {
+    event.stopPropagation();
+    if (!this.product?._id) return;
+    
+    const productName = this.product.name ? 
+      (typeof this.product.name === 'string' ? this.product.name : 
+       (this.product.name[this.currentLanguage] || this.product.name.en || 'product')) : 
+      'product';
+    
+    // Navigate to product details page
+    this.router.navigate(['/shop', this.product._id, encodeURIComponent(productName)]);
+  }
   
   ngOnInit(): void {
     // Check if product is in wishlist
     if (this.product) {
       this.initializeVariants();
+      this.checkWishlistStatus();
+    }
+  }
+
+  private checkWishlistStatus(): void {
+    if (this.product?._id) {
+      this.isInWishlist = this.wishlistService.isInWishlist(this.product._id);
     }
   }
 
@@ -173,6 +194,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
     if (changes['product']) {
       this.extractColorsAndSizes();
       this.initializeVariants();
+      this.checkWishlistStatus();
     }
   }
 
@@ -287,24 +309,45 @@ export class ProductCardComponent implements OnInit, OnChanges {
     return `${productName} - ${variantType} ${variantValue}`;
   }
 
-  // add to wishlist
-  addToWishlist(product: any): void {
+  // toggle wishlist
+  toggleWishlist(event: Event): void {
+    event.stopPropagation();
+    if (!this.product?._id) return;
+    
     this.loading = true;
     const wishlistItem: IAddToWishlistRequest = {
-      productId: product._id || '',
+      productId: this.product._id,
       addedAt: new Date(),
-      product: product
+      product: this.product
     };
-    this.wishlistService.addToWishlist(wishlistItem).subscribe({
-      next: () => {
-        this.loading = false;
-        this.toastService.success(`${product.name} added to wishlist.`, 'Added to Wishlist');
-      },
-      error: (error) => {
-        this.loading = false;
-        this.toastService.error(error.message || 'Unable to add to wishlist.', 'Error');
-      }
-    });
+    
+    if (this.isInWishlist) {
+      // Remove from wishlist
+      this.wishlistService.removeFromWishlist(this.product._id).subscribe({
+        next: () => {
+          this.loading = false;
+          this.isInWishlist = false;
+          this.toastService.success(`${this.product.name} removed from wishlist.`, 'Removed from Wishlist');
+        },
+        error: (error) => {
+          this.loading = false;
+          this.toastService.error(error.message || 'Unable to remove from wishlist.', 'Error');
+        }
+      });
+    } else {
+      // Add to wishlist
+      this.wishlistService.addToWishlist(wishlistItem).subscribe({
+        next: () => {
+          this.loading = false;
+          this.isInWishlist = true;
+          this.toastService.success(`${this.product.name} added to wishlist.`, 'Added to Wishlist');
+        },
+        error: (error) => {
+          this.loading = false;
+          this.toastService.error(error.message || 'Unable to add to wishlist.', 'Error');
+        }
+      });
+    }
   }
 
   // extract colors and sizes from variants

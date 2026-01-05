@@ -8,6 +8,7 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
 import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../../environments/environment';
 import { SafePipe } from "../../../core/pipes/safe.pipe";
+import { IResponsiveGridConfig } from '../../../interfaces/featured-collection';
 
 @Component({
   selector: 'app-hero-section',
@@ -20,7 +21,8 @@ export class HeroSectionComponent implements OnInit {
   isLoading = true;
   loading = true;
   heroSection: any = null;
-
+  domain = environment.domain+'/';
+  videoPlayingStates: { [key: number]: boolean } = {};
   constructor(
     private heroSectionService: HeroSectionService,
     private router: Router
@@ -31,9 +33,6 @@ export class HeroSectionComponent implements OnInit {
       this.heroes = response.data;
       this.isLoading = false;
     });
-  }
-  getVideoUrl(filePath: string): string {
-    return `${environment.domain}/${filePath}`;
   }
 
   // Compute grid container classes based on total count
@@ -138,5 +137,47 @@ export class HeroSectionComponent implements OnInit {
     if (button && button.link) {
       this.router.navigate([button.link]);
     }
+  }
+
+  toggleVideoPlay(event: Event, videoElement: HTMLVideoElement, index: number): void {
+    event.stopPropagation();
+    
+    try {
+      if (videoElement.paused) {
+        const playPromise = videoElement.play();
+        
+        // play() returns a Promise in modern browsers
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              this.videoPlayingStates[index] = true;
+            })
+            .catch(err => {
+              // Ignore AbortError - it means play() was interrupted (user clicked pause quickly)
+              // This is not a real error, just a normal interruption
+              if (err?.name !== 'AbortError' && err?.constructor?.name !== 'AbortError') {
+                // Only log real errors
+                console.warn('Video play failed:', err);
+              }
+            });
+        }
+      } else {
+        videoElement.pause();
+        this.videoPlayingStates[index] = false;
+      }
+    } catch (err: any) {
+      // Ignore AbortError in catch block as well
+      if (err?.name !== 'AbortError' && err?.constructor?.name !== 'AbortError') {
+        console.warn('Video toggle failed:', err);
+      }
+    }
+  }
+
+  onVideoPlay(event: Event, index: number): void {
+    this.videoPlayingStates[index] = true;
+  }
+
+  onVideoPause(event: Event, index: number): void {
+    this.videoPlayingStates[index] = false;
   }
 }

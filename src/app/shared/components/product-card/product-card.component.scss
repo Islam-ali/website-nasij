@@ -1,0 +1,12 @@
+// Product Card Hover Effects
+:host {
+  .group {
+    &:hover {
+      .product-image-container {
+        img {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}

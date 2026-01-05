@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration development --port 4000",
-    "start:dev": "ng serve --configuration development --port 4000",
-    "start:prod": "ng serve --configuration production --port 4000",
+    "start": "ng serve --configuration development --port 4002",
+    "start:dev": "ng serve --configuration development --port 4002",
+    "start:prod": "ng serve --configuration production --port 4002",
     "build": "ng build --configuration=production",
     "postbuild": "npm run generate:sitemap",
     "generate:sitemap": "node tools/sitemap-builder.js",

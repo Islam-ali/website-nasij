@@ -1,12 +1,42 @@
-<div class="group relative flex flex-col"
+<div class="group relative flex flex-col overflow-hidden"
 (click)="navigateToProduct(product)"
 [attr.aria-label]="product.name | multiLanguage">
   <!-- Product Image -->
-  <div class="relative flex-shrink-0">
-    <!-- Sale Badge -->
+  <div class="relative flex-shrink-0 overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700">
+    <!-- Action Buttons - Top Left -->
+    <div class="absolute top-2 left-2 z-20 flex flex-col gap-2">
+      <!-- View Button -->
+      <button
+        (click)="onViewClick($event)"
+        type="button"
+        class="p-1.5 rounded-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200 hover:scale-110 hover:bg-white dark:hover:bg-gray-800"
+        [attr.aria-label]="'View product details'">
+        <i class="pi pi-eye text-base text-gray-600 dark:text-gray-300 transition-colors duration-200"></i>
+      </button>
+      
+      <!-- Wishlist Icon -->
+      <!-- <button
+        (click)="toggleWishlist($event)"
+        [disabled]="loading"
+        type="button"
+        class="p-1.5 rounded-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200 hover:scale-110 hover:bg-white dark:hover:bg-gray-800"
+        [attr.aria-label]="isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'">
+        <i 
+          [class.pi-heart-fill]="isInWishlist"
+          [class.pi-heart]="!isInWishlist"
+          [class.text-red-500]="isInWishlist"
+          [class.text-gray-400]="!isInWishlist"
+          [class.dark:text-red-400]="isInWishlist"
+          [class.dark:text-gray-400]="!isInWishlist"
+          class="text-base transition-colors duration-200">
+        </i>
+      </button> -->
+    </div>
+    
+    <!-- Sale Badge - Top Right -->
     @if (isOnSale) {
-    <div class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
-      {{ discountPercentage }}% {{ 'products.off' | translate }}
+    <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-md z-10 shadow-md">
+      {{ discountPercentage }}-%
     </div>
     }
     
@@ -19,7 +49,7 @@
       height="300"
       loading="lazy"
       decoding="async"
-      class=" w-full rounded-md bg-gray-200 dark:bg-gray-700 object-contain group-hover:opacity-75 transition-opacity max-h-[300px]"
+      class="w-full rounded-md bg-gray-200 dark:bg-gray-700 object-contain group-hover:scale-105 transition-transform duration-300 max-h-[300px]"
       [attr.itemprop]="'image'" />
   </div>
 
@@ -69,9 +99,9 @@
     </div>
   </div>
 
-  <!-- Product Variants Selection - Always Visible -->
+  <!-- Product Variants Selection - Visible on Hover with Slide Up -->
   @if (product.variants && product.variants.length > 0 && mappedVariants.length > 0) {
-  <div class="mt-3 border-t border-gray-200 dark:border-gray-700 space-y-2 p-2">
+  <div class="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 space-y-2 p-3 opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-all duration-300 ease-in-out shadow-lg rounded-xl z-10">
     @for (variant of mappedVariants; track $index) {
     <div class="flex flex-col gap-2">
       <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">

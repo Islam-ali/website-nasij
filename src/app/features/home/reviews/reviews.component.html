@@ -30,7 +30,7 @@
         
         <!-- Pinned Badge -->
         @if (review.isPinned) {
-        <div class="absolute top-4 right-4">
+        <div class="absolute top-4 ltr:right-4 rtl:left-4">
           <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary-500 text-white">
             <i class="pi pi-thumbtack me-1"></i>
             {{ 'reviews.featured' | translate }}
