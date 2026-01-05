@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
   <!-- Enhanced Footer -->
   <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
     <!-- Main Footer Content -->
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+    <div class="max-w-[1922px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
         
         <!-- Company Info -->
@@ -133,7 +133,7 @@ import { environment } from '../../../environments/environment';
     <div class="border-t border-gray-800"></div>
 
     <!-- Bottom Footer -->
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+    <div class="max-w-[1922px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
         <!-- Copyright -->
         <p class="text-xs sm:text-sm text-gray-400 text-center sm:text-left">

@@ -1,7 +1,7 @@
 @if (featuredCollections.length > 0) {
 @for (collection of featuredCollections; track collection._id) {
 <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4">
+    <div class="max-w-[1922px] mx-auto px-4">
         <div class="text-center mb-16 max-w-2xl mx-auto">
             @if (collection.sectionTitle) {
             <span
@@ -23,7 +23,7 @@
             }
         </div>
         <div class="flex justify-center">
-            <div class="grid gap-6 max-w-7xl mx-auto"
+            <div class="grid gap-6 max-w-[1922px] mx-auto"
                 [ngClass]="[
                     getGridClasses(collection.gridConfig?.gridCols || { sm: 1, md: 2, lg: 3, xl: 4 }),
                     getJustifyContentClass(collection.gridConfig?.justifyContent),

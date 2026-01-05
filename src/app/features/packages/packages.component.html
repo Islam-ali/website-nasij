@@ -2,7 +2,7 @@
 
   <!-- Header Section -->
   <div class="bg-white dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="max-w-[1922px] mx-auto px-4 py-10">
       <div class="text-center">
         <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-blue-600 dark:bg-blue-500/10 dark:text-blue-300 mb-4">
           <i class="pi pi-sparkles text-sm"></i>
@@ -16,7 +16,7 @@
 
   <!-- Loading State -->
   @if (loading()) {
-  <div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="max-w-[1922px] mx-auto px-4 py-8">
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       @for (item of [1,2,3,4,5,6,7,8]; track $index) {
       <div class="animate-pulse space-y-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
@@ -36,7 +36,7 @@
 
   <!-- Error State -->
   @if (error() && !loading()) {
-  <div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="max-w-[1922px] mx-auto px-4 py-12">
     <div class="flex flex-col items-center text-center">
       <i class="pi pi-exclamation-triangle mb-4 text-5xl text-rose-500"></i>
       <h3 class="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
@@ -57,7 +57,7 @@
 
   <!-- Packages Grid -->
   @if (!loading() && !error()) {
-  <div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="max-w-[1922px] mx-auto px-4 py-8">
     <!-- No Packages Found -->
     @if (packages().length === 0) {
     <div class="flex flex-col items-center py-16 text-center">

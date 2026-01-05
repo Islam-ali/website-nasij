@@ -21,7 +21,7 @@
   <!-- Loading Skeleton -->
   @if (loading) {
   <div
-    class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start w-full max-w-7xl px-4 mx-auto py-8 relative z-10 overflow-hidden">
+    class="grid md:grid-cols-2 gap-6 lg:gap-12 items-start w-full max-w-[1922px] px-4 mx-auto py-8 relative z-10 overflow-hidden">
     <div class="col-span-1 w-full">
       <div
         class="w-full h-[500px] bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-3xl animate-pulse shadow-lg">
@@ -105,7 +105,7 @@
   }
   <!-- Product Details Content -->
   @if (product && !loading) {
-  <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
+  <div class="max-w-[1922px] mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
     <!-- Breadcrumb Navigation -->
     <nav class="mb-8" aria-label="Breadcrumb">
       <ol class="flex items-center gap-2 text-sm">
@@ -440,7 +440,7 @@
 
     <!-- Related Products -->
     @if (relatedProducts.length > 0) {
-    <div class="mt-12 sm:mt-16 lg:mt-24 max-w-7xl mx-auto px-3 sm:px-4 relative z-10 overflow-hidden">
+    <div class="mt-12 sm:mt-16 lg:mt-24 max-w-[1922px] mx-auto px-3 sm:px-4 relative z-10 overflow-hidden">
       <div class="text-center mb-8 sm:mb-12 lg:mb-16">
         <h2
           class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
