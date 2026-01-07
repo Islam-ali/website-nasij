@@ -3,7 +3,7 @@ import { IFeaturedCollection, IResponsiveGridConfig } from '../../../interfaces/
 import { BaseResponse } from '../../../core/models/baseResponse';
 import { FeaturedCollectionsService } from './featured-collection.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
   
@@ -15,7 +15,7 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
 })
 export class FeaturedCollectionComponent {
   featuredCollections: IFeaturedCollection[] = [];
-  constructor(private featuredCollectionService: FeaturedCollectionsService) {
+  constructor(private featuredCollectionService: FeaturedCollectionsService, private router: Router) {
     this.featuredCollectionService.getFeaturedCollections().subscribe((featuredCollections: BaseResponse<IFeaturedCollection[]>) => {
       this.featuredCollections = featuredCollections.data;
     });
@@ -96,4 +96,102 @@ export class FeaturedCollectionComponent {
 
     return styles;
   }
+  onButtonClick(buttonLink: string) {
+    this.router.navigateByUrl(buttonLink);
+  }
+
+  getParentStyle(gridConfig: any): { [key: string]: string } {
+    const styles: { [key: string]: string } = {};
+    
+    // Backward compatibility: if parentCustomStyle is an object (old format), apply as inline styles
+    if (gridConfig?.parentCustomStyle && typeof gridConfig.parentCustomStyle === 'object') {
+      return gridConfig.parentCustomStyle;
+    }
+    
+    // Only apply inline width if parentCustomStyle doesn't contain width classes
+    const parentClass = this.getParentClass(gridConfig);
+    const hasWidthClass = parentClass && (
+      parentClass.includes('w-full') || 
+      parentClass.includes('w-[') || 
+      /\bw-\d+/.test(parentClass) ||
+      parentClass.includes('max-w-') ||
+      parentClass.includes('min-w-')
+    );
+    
+    // Apply inline width only if no width class exists in parentCustomStyle
+    if (gridConfig?.width && !hasWidthClass) {
+      styles['width'] = gridConfig.width;
+    }
+    
+    return styles;
+  }
+
+  getParentClass(gridConfig: any): string {
+    // Only return classes if parentCustomStyle is a string (Tailwind classes)
+    if (gridConfig?.parentCustomStyle && typeof gridConfig.parentCustomStyle === 'string') {
+      return gridConfig.parentCustomStyle.trim();
+    }
+    return '';
+  }
+
+  getGridContainerClasses(gridConfig: any): string {
+    const classes: string[] = [];
+    
+    if (!gridConfig?.width) {
+      classes.push('max-w-[1922px]');
+    }
+    classes.push('mx-auto');
+    
+    const gridCols = gridConfig?.gridCols || { sm: 1, md: 2, lg: 3, xl: 4 };
+    classes.push(this.getGridClasses(gridCols));
+    classes.push(this.getJustifyContentClass(gridConfig?.justifyContent));
+    classes.push(this.getAlignItemsClass(gridConfig?.alignItems));
+    
+    const parentClass = this.getParentClass(gridConfig);
+    if (parentClass) {
+      classes.push(parentClass);
+    }
+    
+    return classes.filter(c => c).join(' ');
+  }
+
+  getItemContainerClasses(gridConfig: any, index: number): string {
+    const classes: string[] = [];
+    
+    const colSpans = gridConfig?.colSpans?.[index] || { sm: 1, md: 2, lg: 2, xl: 2 };
+    classes.push(this.getColSpanClasses(colSpans));
+    
+    const itemClass = this.getItemClass(gridConfig, index);
+    if (itemClass) {
+      classes.push(itemClass);
+    }
+    
+    return classes.filter(c => c).join(' ');
+  }
+
+  getItemStyle(gridConfig: any, index: number): { [key: string]: string } {
+    const styles: { [key: string]: string } = {};
+    
+    // Apply height style
+    const heightStyle = this.getHeightStyle(gridConfig);
+    Object.assign(styles, heightStyle);
+    
+    return styles;
+  }
+
+  getItemClass(gridConfig: any, index: number): string {
+    if (gridConfig?.itemsCustomStyle && gridConfig.itemsCustomStyle[index]) {
+      const itemStyle = gridConfig.itemsCustomStyle[index];
+      if (typeof itemStyle === 'string') {
+        return itemStyle.trim();
+      } else if (typeof itemStyle === 'object') {
+        // Backward compatibility: if it's an object, convert to string
+        return Object.keys(itemStyle)
+          .map(key => `${key}: ${itemStyle[key]}`)
+          .join('; ');
+      }
+    }
+    return '';
+  }
+
 }

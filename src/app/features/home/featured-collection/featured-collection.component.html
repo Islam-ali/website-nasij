@@ -23,22 +23,20 @@
             }
         </div>
         <div class="flex justify-center">
-            <div class="grid gap-6 max-w-[1922px] mx-auto"
-                [ngClass]="[
-                    getGridClasses(collection.gridConfig?.gridCols || { sm: 1, md: 2, lg: 3, xl: 4 }),
-                    getJustifyContentClass(collection.gridConfig?.justifyContent),
-                    getAlignItemsClass(collection.gridConfig?.alignItems)
-                ].join(' ')">
+            @if (collection?.gridConfig) {
+            <div
+                [ngClass]="'grid gap-6 ' + getGridContainerClasses(collection?.gridConfig)"
+                [ngStyle]="getParentStyle(collection?.gridConfig)">
                 @for (item of collection.collections; track item.title; let i = $index) {
                 <div
-                    class="group relative overflow-hidden rounded-2xl shadow-xl dark:shadow-gray-900/50 hover:shadow-2xl dark:hover:shadow-gray-900/70 transition-all duration-500"
-                    [ngClass]="getColSpanClasses(collection.gridConfig?.colSpans?.[i] || { sm: 1, md: 2, lg: 2, xl: 2 })"
-                    [ngStyle]="getHeightStyle(collection.gridConfig)">
+                    class="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 transition-all duration-500"
+                    [ngClass]="getItemContainerClasses(collection?.gridConfig, i)"
+                    [ngStyle]="getItemStyle(collection?.gridConfig, i)">
                     <img [src]="item.image.filePath" [alt]="item.image.fileName" fallback
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        [ngStyle]="getHeightStyle(collection.gridConfig)">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                        [ngStyle]="getHeightStyle(collection?.gridConfig)">
+                    <!-- <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div> -->
+                    <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
                         @if (item.title) {
                         <h3
                             class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
@@ -52,7 +50,7 @@
                         </p>
                         }
                         @if (item.buttonText) {
-                        <button [routerLink]="item.buttonLink" [queryParams]="item.queryParams"
+                        <button (click)="onButtonClick(item.buttonLink)"
                            
                             class="bg-white dark:bg-gray-100 text-gray-900 dark:text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105">
                             <span class="block">{{item.buttonText | multiLanguage}}</span>
@@ -62,6 +60,7 @@
                 </div>
                 }
             </div>
+            }
         </div>
     </div>
 </section>

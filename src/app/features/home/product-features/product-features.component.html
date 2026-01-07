@@ -1,0 +1,36 @@
+<!-- Product Features Sections -->
+@for (feature of features; track feature._id) {
+  @if (getFeatureProducts(feature._id).length > 0) {
+    <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+      <div class="max-w-[1922px] mx-auto px-4">
+        <div class="text-center mb-16">
+          <span
+            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
+            <i class="pi pi-star-fill me-2"></i>
+            <span class="block">{{ feature.title | multiLanguage }}</span>
+          </span>
+          @if (feature.description) {
+            <h2
+              class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
+              <span
+                class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">
+                {{ feature.description | multiLanguage }}
+              </span>
+            </h2>
+          }
+        </div>
+
+        <app-carousel 
+          (onItemClick)="onProductClick($event)" 
+          [items]="getFeatureProducts(feature._id)"
+          [itemsPerView]="4"
+          [itemsPerScroll]="1"
+          [showArrows]="true"
+          [showIndicators]="true"
+          [autoPlay]="false">
+        </app-carousel>
+      </div>
+    </section>
+  }
+}
+

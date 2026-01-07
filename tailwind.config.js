@@ -129,6 +129,9 @@ module.exports = {
     },
   },
   safelist: [
+    {
+      pattern: /^(sm|md|lg|xl):(grid-cols|col-span|flex|items|justify|gap|w|h|min-w|max-w|min-h|max-h|text|p|px|py|m|mx|my|aspect|basis|grow|shrink)-/,
+    },
     // Grid columns (base)
     'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6',
     'grid-cols-7', 'grid-cols-8', 'grid-cols-9', 'grid-cols-10', 'grid-cols-11', 'grid-cols-12',
@@ -172,6 +175,15 @@ module.exports = {
     'md:basis-0', 'md:basis-auto', 'md:basis-full', 'md:basis-1/2', 'md:basis-1/3', 'md:basis-2/3', 'md:basis-1/4', 'md:basis-3/4',
     'lg:basis-0', 'lg:basis-auto', 'lg:basis-full', 'lg:basis-1/2', 'lg:basis-1/3', 'lg:basis-2/3', 'lg:basis-1/4', 'lg:basis-3/4',
     'xl:basis-0', 'xl:basis-auto', 'xl:basis-full', 'xl:basis-1/2', 'xl:basis-1/3', 'xl:basis-2/3', 'xl:basis-1/4', 'xl:basis-3/4',
+
+    // any sm , md , lg , xl class
+    'sm:*', 'md:*', 'lg:*', 'xl:*',
+    'sm:w-full', 'sm:w-auto', 'sm:w-max', 'sm:w-min', 'sm:w-fit', 'sm:w-screen', 'sm:w-1/2', 'sm:w-1/3', 'sm:w-2/3', 'sm:w-1/4', 'sm:w-3/4',
+    'md:w-full', 'md:w-auto', 'md:w-max', 'md:w-min', 'md:w-fit', 'md:w-screen', 'md:w-1/2', 'md:w-1/3', 'md:w-2/3', 'md:w-1/4', 'md:w-3/4',
+    'lg:w-full', 'lg:w-auto', 'lg:w-max', 'lg:w-min', 'lg:w-fit', 'lg:w-screen', 'lg:w-1/2', 'lg:w-1/3', 'lg:w-2/3', 'lg:w-1/4', 'lg:w-3/4',
+    'xl:w-full', 'xl:w-auto', 'xl:w-max', 'xl:w-min', 'xl:w-fit', 'xl:w-screen', 'xl:w-1/2', 'xl:w-1/3', 'xl:w-2/3', 'xl:w-1/4', 'xl:w-3/4',
+    // any sm , md , lg , xl class
+
   ],
   plugins: [],
 };
