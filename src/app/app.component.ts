@@ -3,6 +3,7 @@ import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core
 import { RouterOutlet } from '@angular/router';
 import { BusinessProfileService } from './services/business-profile.service';
 import { TranslationService } from './core/services/translate.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   standalone: true,
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
     private renderer: Renderer2,
     @Inject(PLATFORM_ID) private platformId: Object,
     private businessProfileService: BusinessProfileService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private themeService: ThemeService
   ) { }
   async ngOnInit(): Promise<void> {
     // Initialize language and direction immediately

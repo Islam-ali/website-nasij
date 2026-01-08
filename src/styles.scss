@@ -4,6 +4,46 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Scrollbar Styles */
+@layer utilities {
+  /* For Webkit browsers (Chrome, Safari, Edge) */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-primary-300 dark:bg-primary-700 rounded-full hover:bg-primary-400 dark:hover:bg-primary-600;
+  }
+
+  .scrollbar-thumb-primary-300::-webkit-scrollbar-thumb {
+    @apply bg-primary-300 dark:bg-primary-700;
+  }
+
+  .scrollbar-track-gray-100::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  /* For Firefox */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-300) var(--tw-bg-opacity);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 html[dir="ltr"] {
   font-family: 'Poppins', 'sans-serif' !important;
   .ql-editor {

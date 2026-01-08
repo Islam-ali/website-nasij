@@ -9,17 +9,17 @@ module.exports = {
       colors: {
         // Primary colors - Black
         primary: {
-          DEFAULT: '#976735', // Pure black
-          50: '#CEAE8CFF',
-          100: '#CBA8811F',
-          200: '#BD976F3F',
-          300: '#A9865F',
-          400: '#97754F',
-          500: '#85643F',
-          600: '#73532F',
-          700: '#61421F',
-          800: '#4F310F',
-          900: '#3D2000',
+          DEFAULT: 'var(--primary-DEFAULT, #976735)',
+          50: 'var(--primary-50, #CEAE8C)',
+          100: 'var(--primary-100, #CBA881)',
+          200: 'var(--primary-200, #BD976F)',
+          300: 'var(--primary-300, #A9865F)',
+          400: 'var(--primary-400, #97754F)',
+          500: 'var(--primary-500, #85643F)',
+          600: 'var(--primary-600, #73532F)',
+          700: 'var(--primary-700, #61421F)',
+          800: 'var(--primary-800, #4F310F)',
+          900: 'var(--primary-900, #3D2000)',
         },
         // Secondary colors
         secondary: {

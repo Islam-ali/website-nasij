@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { NgClass, NgStyle } from '@angular/common';
+import { ThemeService } from '../../../services/theme.service';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link' | 'danger' | 'warning';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -7,12 +8,13 @@ type ButtonSize = 'sm' | 'md' | 'lg';
 @Component({
   selector: 'ui-button',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, NgStyle],
   template: `
     <button
       [attr.type]="type"
       class="inline-flex items-center justify-center gap-2 rounded-lg font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 transition-colors duration-200"
       [ngClass]="computedClasses"
+      [ngStyle]="computedStyles"
       [disabled]="disabled || loading"
     >
       @if (loading) {
@@ -47,8 +49,10 @@ type ButtonSize = 'sm' | 'md' | 'lg';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiButtonComponent {
+  private themeService = inject(ThemeService);
+
   private static readonly VARIANT_CLASSES: Record<ButtonVariant, string> = {
-    primary: 'w-full py-4 bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-500 dark:to-primary-900 text-white rounded-2xl font-semibold hover:from-primary-700 hover:to-primary-700 dark:hover:from-primary-600 dark:hover:to-primary-600 transition-all duration-300 mt-8 disabled:opacity-50 disabled:cursor-not-allowed  transform hover:scale-105',
+    primary: 'w-full py-4 text-white rounded-2xl font-semibold transition-all duration-300 mt-8 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-lg hover:shadow-xl',
     secondary:
       'bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700',
     outline:
@@ -95,6 +99,16 @@ export class UiButtonComponent {
     }
 
     return classes;
+  }
+
+  get computedStyles(): Record<string, string> {
+    if (this.variant === 'primary') {
+      return {
+        'background': this.themeService.getGradientStyle('135deg'),
+        'border': 'none'
+      };
+    }
+    return {};
   }
 }
 

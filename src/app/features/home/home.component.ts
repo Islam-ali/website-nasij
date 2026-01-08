@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   ngAfterViewChecked(): void {
   }
   private loadCategories() {
-    this.categoryService.listCategories().subscribe({
+    this.categoryService.listCategories('active').subscribe({
       next: (response: BaseResponse<ICategory[]>) => {
         this.categories = response.data;
         this.loadingCategories = false;

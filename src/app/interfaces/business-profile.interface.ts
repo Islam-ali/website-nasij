@@ -31,6 +31,7 @@ export interface IBusinessProfile {
   contactInfo: IContactInfo;
   privacyPolicy: MultilingualText;
   termsOfService: MultilingualText;
+  primaryColor?: string;
   faq: IFAQ[];
   createdAt: Date;
   updatedAt: Date;

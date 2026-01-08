@@ -21,8 +21,8 @@ export class CategoryService {
   }
 
   // get list categories
-  listCategories(): Observable<BaseResponse<ICategory[]>> {
-    return this._genericApiService.Get(`${environment.apiUrl}/categories/list`);
+  listCategories(filter: 'all' | 'active' | 'inactive' = 'all'): Observable<BaseResponse<ICategory[]>> {
+    return this._genericApiService.Get(`${environment.apiUrl}/categories/list`, { filter });
   }
 
   // Create a new category
