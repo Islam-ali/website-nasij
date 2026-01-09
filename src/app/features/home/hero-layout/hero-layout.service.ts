@@ -14,9 +14,17 @@ export interface IHeroLayoutItem {
     fileSize: number;
     uploadDate: Date;
   };
+  video?: {
+    filePath: string;
+    fileName: string;
+    fileSize: number;
+    uploadDate: Date;
+  };
   buttonText?: MultilingualText;
   buttonLink?: string;
   queryParams?: any;
+  isActive?: boolean;
+  videoAutoplay?: boolean;
 }
 
 export interface IProfessionalGridConfig {

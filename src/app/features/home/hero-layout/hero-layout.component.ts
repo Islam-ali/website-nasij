@@ -5,6 +5,7 @@ import { HeroLayoutService, IHeroLayout, IProfessionalGridConfig } from './hero-
 import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-hero-layout',
@@ -16,7 +17,7 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
 export class HeroLayoutComponent implements OnInit {
   @Input() layoutName?: string; // Optional: load specific layout by name
   @Input() heroLayout?: IHeroLayout; // Optional: pass layout data directly
-
+  domain = environment.domain + '/';
   heroLayouts: IHeroLayout[] = [];
   loading = true;
 
@@ -69,6 +70,14 @@ export class HeroLayoutComponent implements OnInit {
   onButtonClick(link: string): void {
     if (link) {
       this.router.navigate([link]);
+    }
+  }
+
+  toggleVideoPlay(videoElement: HTMLVideoElement): void {
+    if (videoElement.paused) {
+      videoElement.play();
+    } else {
+      videoElement.pause();
     }
   }
 

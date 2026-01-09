@@ -351,45 +351,45 @@
 }
 
 // Dark mode enhancements
-@media (prefers-color-scheme: dark) {
-  .carousel-wrapper {
-    &::before {
-      background: linear-gradient(to right, rgba(17, 24, 39, 0.95), transparent);
-    }
+// @media (prefers-color-scheme: dark) {
+//   .carousel-wrapper {
+//     &::before {
+//       background: linear-gradient(to right, rgba(17, 24, 39, 0.95), transparent);
+//     }
     
-    &::after {
-      background: linear-gradient(to left, rgba(17, 24, 39, 0.95), transparent);
-    }
-  }
+//     &::after {
+//       background: linear-gradient(to left, rgba(17, 24, 39, 0.95), transparent);
+//     }
+//   }
   
-  .nav-button {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+//   .nav-button {
+//     background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
     
-    &:hover:not(:disabled) {
-      background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
-    }
+//     &:hover:not(:disabled) {
+//       background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+//     }
     
-    i {
-      color: #e5e7eb;
-    }
-  }
+//     i {
+//       color: #e5e7eb;
+//     }
+//   }
   
-  .indicators-wrapper {
-    background: rgba(31, 41, 55, 0.9);
-  }
+//   .indicators-wrapper {
+//     background: rgba(31, 41, 55, 0.9);
+//   }
   
-  .indicator {
-    background: #4b5563;
+//   .indicator {
+//     background: #4b5563;
     
-    &:not(.active):hover {
-      background: #6b7280;
+//     &:not(.active):hover {
+//       background: #6b7280;
       
-      .indicator-dot {
-        background: #6b7280;
-      }
-    }
-  }
-}
+//       .indicator-dot {
+//         background: #6b7280;
+//       }
+//     }
+//   }
+// }
 
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {
