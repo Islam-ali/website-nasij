@@ -1,6 +1,6 @@
 @if (!loading) {
   @for (layout of heroLayouts; track layout._id) {
-    <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <section class="pt-4 pb-10 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div class="max-w-[1922px] mx-auto px-4">
         <!-- Section Header -->
         @if (layout.sectionTitle || layout.sectionSubtitle || layout.description) {
@@ -36,17 +36,17 @@
                 (click)="item.buttonLink && onButtonClick(item.buttonLink)">
                 
                 <!-- Image -->
-                <img 
-                  [src]="item.image.filePath" 
-                  [alt]="item.image.fileName" 
-                  fallback
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                @if (item.image) {
+                  <img 
+                    [src]="item.image.filePath" 
+                    [alt]="item.image.fileName" 
+                    fallback
+                    class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700">
+                }
                 
                 <!-- Content -->
-                <div class="absolute bottom-0 left-0 right-0 p-8">
+                @if (item?.title?.en || item?.description?.en || item?.buttonText?.en) {
+                <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
                   @if (item.title) {
                     <h3 class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
                       <span class="block">{{ item.title | multiLanguage }}</span>
@@ -67,6 +67,7 @@
                     </button>
                   }
                 </div>
+                }
               </div>
             }
           </div>
@@ -81,4 +82,5 @@
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
   </div>
 }
+
 

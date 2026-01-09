@@ -73,7 +73,9 @@ export class HeroLayoutComponent implements OnInit {
   }
 
   // Grid utility methods
-  getGridContainerClasses(config: IProfessionalGridConfig): string {
+  getGridContainerClasses(config?: IProfessionalGridConfig): string {
+    if (!config) return '';
+    
     const classes: string[] = [];
     
     if (config.columns) {
@@ -117,7 +119,9 @@ export class HeroLayoutComponent implements OnInit {
     return classes.join(' ');
   }
 
-  getGridContainerStyles(config: IProfessionalGridConfig): any {
+  getGridContainerStyles(config?: IProfessionalGridConfig): any {
+    if (!config) return {};
+    
     const styles: any = {};
 
     if (config.rows) {
@@ -136,7 +140,9 @@ export class HeroLayoutComponent implements OnInit {
     return styles;
   }
 
-  getItemClasses(config: IProfessionalGridConfig, index: number): string {
+  getItemClasses(config: IProfessionalGridConfig | undefined, index: number): string {
+    if (!config) return '';
+    
     const classes: string[] = [];
     const item = config.items?.[index];
 
@@ -163,4 +169,5 @@ export class HeroLayoutComponent implements OnInit {
     return classes.join(' ');
   }
 }
+
 

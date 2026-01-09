@@ -3,18 +3,19 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { GenericApiService } from '../../../core/services/generic-api.service';
 import { BaseResponse } from '../../../core/models/baseResponse';
+import { MultilingualText } from '../../../core/models/multi-language';
 
 export interface IHeroLayoutItem {
-  title: { en: string; ar: string };
-  description: { en: string; ar: string };
-  image: {
+  title?: MultilingualText;
+  description?: MultilingualText;
+  image?: {
     filePath: string;
     fileName: string;
     fileSize: number;
     uploadDate: Date;
   };
-  buttonText: { en: string; ar: string };
-  buttonLink: string;
+  buttonText?: MultilingualText;
+  buttonLink?: string;
   queryParams?: any;
 }
 
@@ -60,14 +61,14 @@ export interface IProfessionalGridConfig {
 
 export interface IHeroLayout {
   _id?: string;
-  name: string;
+  name?: string;
   sectionTitle?: { en: string; ar: string };
   sectionSubtitle?: { en: string; ar: string };
   description?: { en: string; ar: string };
-  items: IHeroLayoutItem[];
-  gridConfig: IProfessionalGridConfig;
-  isActive: boolean;
-  displayOrder: number;
+  items?: IHeroLayoutItem[];
+  gridConfig?: IProfessionalGridConfig;
+  isActive?: boolean;
+  displayOrder?: number;
   tags?: string[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -95,4 +96,5 @@ export class HeroLayoutService {
     return this._genericApiService.Get(`${this.apiUrl}/by-name/${name}`);
   }
 }
+
 
