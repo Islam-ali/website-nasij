@@ -25,13 +25,13 @@
         <div class="flex justify-center">
             @if (collection?.gridConfig) {
             <div
-                [ngClass]="'grid gap-6 ' + getGridContainerClasses(collection?.gridConfig)"
-                [ngStyle]="getParentStyle(collection?.gridConfig)">
+                [ngClass]="'grid ' + (isProfessionalGrid(collection?.gridConfig) ? getProfessionalGridClasses(collection?.gridConfig) : getGridContainerClasses(collection?.gridConfig))"
+                [ngStyle]="isProfessionalGrid(collection?.gridConfig) ? getProfessionalGridStyles(collection?.gridConfig) : getParentStyle(collection?.gridConfig)">
                 @for (item of collection.collections; track item.title; let i = $index) {
                 <div
-                    class="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 transition-all duration-500"
-                    [ngClass]="getItemContainerClasses(collection?.gridConfig, i)"
-                    [ngStyle]="getItemStyle(collection?.gridConfig, i)">
+                    class="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 transition-all duration-500 hero-grid-item"
+                    [ngClass]="isProfessionalGrid(collection?.gridConfig) ? getProfessionalItemClasses(collection?.gridConfig, i) : getItemContainerClasses(collection?.gridConfig, i)"
+                    [ngStyle]="isProfessionalGrid(collection?.gridConfig) ? {} : getItemStyle(collection?.gridConfig, i)">
                     <img [src]="item.image.filePath" [alt]="item.image.fileName" fallback
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         [ngStyle]="getHeightStyle(collection?.gridConfig)">

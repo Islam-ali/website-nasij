@@ -1,0 +1,37 @@
+// .hero-grid-item {
+//   min-height: 300px;
+  
+//   @media (min-width: 768px) {
+//     min-height: 400px;
+//   }
+  
+//   @media (min-width: 1024px) {
+//     min-height: 500px;
+//   }
+// }
+
+// // Animation improvements
+// .hero-grid-item {
+//   &:hover {
+//     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+//     img {
+//       transform: scale(1.05);
+//     }
+    
+//     button {
+//       transform: translateY(-2px);
+//       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+//     }
+//   }
+// }
+
+// // Dark mode specific styles
+// :host-context(.dark) {
+//   .hero-grid-item {
+//     &:hover {
+//       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+//     }
+//   }
+// }
+

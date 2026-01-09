@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
+import { HeroGridRendererService } from '../../../services/hero-grid-renderer.service';
   
 @Component({
   selector: 'app-featured-collection',
@@ -15,10 +16,56 @@ import { FallbackImgDirective } from '../../../core/directives/fallback-img.dire
 })
 export class FeaturedCollectionComponent {
   featuredCollections: IFeaturedCollection[] = [];
-  constructor(private featuredCollectionService: FeaturedCollectionsService, private router: Router) {
+  constructor(
+    private featuredCollectionService: FeaturedCollectionsService,
+    private router: Router,
+    private heroGridRenderer: HeroGridRendererService
+  ) {
     this.featuredCollectionService.getFeaturedCollections().subscribe((featuredCollections: BaseResponse<IFeaturedCollection[]>) => {
       this.featuredCollections = featuredCollections.data;
     });
+  }
+
+  /**
+   * Check if Professional Hero Grid is enabled
+   */
+  isProfessionalGrid(gridConfig: any): boolean {
+    return this.heroGridRenderer.isProfessionalGridEnabled(gridConfig);
+  }
+
+  /**
+   * Get Professional Grid Container Classes
+   */
+  getProfessionalGridClasses(gridConfig: any): string {
+    const config = this.heroGridRenderer.getGridConfig(gridConfig);
+    if (config) {
+      const classes = this.heroGridRenderer.getGridContainerClasses(config);
+      return classes.join(' ');
+    }
+    return '';
+  }
+
+  /**
+   * Get Professional Grid Container Styles
+   */
+  getProfessionalGridStyles(gridConfig: any): { [key: string]: string } {
+    const config = this.heroGridRenderer.getGridConfig(gridConfig);
+    if (config) {
+      return this.heroGridRenderer.getGridContainerStyles(config);
+    }
+    return {};
+  }
+
+  /**
+   * Get Professional Grid Item Classes
+   */
+  getProfessionalItemClasses(gridConfig: any, index: number): string {
+    const config = this.heroGridRenderer.getGridConfig(gridConfig);
+    if (config) {
+      const classes = this.heroGridRenderer.getItemClasses(config, index);
+      return classes.join(' ');
+    }
+    return '';
   }
 
   getGridClasses(gridCols: IResponsiveGridConfig): string {
@@ -30,12 +77,30 @@ export class FeaturedCollectionComponent {
     return classes.join(' ');
   }
 
+  getRowClasses(gridRows: IResponsiveGridConfig): string {
+    const classes: string[] = [];
+    if (gridRows.sm && gridRows.sm > 1) classes.push(`grid-rows-${gridRows.sm}`);
+    if (gridRows.md && gridRows.md > 1) classes.push(`md:grid-rows-${gridRows.md}`);
+    if (gridRows.lg && gridRows.lg > 1) classes.push(`lg:grid-rows-${gridRows.lg}`);
+    if (gridRows.xl && gridRows.xl > 1) classes.push(`xl:grid-rows-${gridRows.xl}`);
+    return classes.join(' ');
+  }
+
   getColSpanClasses(colSpan: IResponsiveGridConfig): string {
     const classes: string[] = [];
     if (colSpan.sm) classes.push(`col-span-${colSpan.sm}`);
     if (colSpan.md) classes.push(`md:col-span-${colSpan.md}`);
     if (colSpan.lg) classes.push(`lg:col-span-${colSpan.lg}`);
     if (colSpan.xl) classes.push(`xl:col-span-${colSpan.xl}`);
+    return classes.join(' ');
+  }
+
+  getRowSpanClasses(rowSpan: IResponsiveGridConfig): string {
+    const classes: string[] = [];
+    if (rowSpan.sm && rowSpan.sm > 1) classes.push(`row-span-${rowSpan.sm}`);
+    if (rowSpan.md && rowSpan.md > 1) classes.push(`md:row-span-${rowSpan.md}`);
+    if (rowSpan.lg && rowSpan.lg > 1) classes.push(`lg:row-span-${rowSpan.lg}`);
+    if (rowSpan.xl && rowSpan.xl > 1) classes.push(`xl:row-span-${rowSpan.xl}`);
     return classes.join(' ');
   }
 
@@ -123,6 +188,11 @@ export class FeaturedCollectionComponent {
       styles['width'] = gridConfig.width;
     }
     
+    // Add row height (grid-auto-rows)
+    if (gridConfig?.rowHeight && gridConfig.rowHeight.trim() && gridConfig.rowHeight !== 'auto') {
+      styles['grid-auto-rows'] = gridConfig.rowHeight.trim();
+    }
+    
     return styles;
   }
 
@@ -144,6 +214,22 @@ export class FeaturedCollectionComponent {
     
     const gridCols = gridConfig?.gridCols || { sm: 1, md: 2, lg: 3, xl: 4 };
     classes.push(this.getGridClasses(gridCols));
+    
+    // Add grid rows if specified
+    if (gridConfig?.gridRows) {
+      const rowClasses = this.getRowClasses(gridConfig.gridRows);
+      if (rowClasses) {
+        classes.push(rowClasses);
+      }
+    }
+    
+    // Add gap (default to 6 if not specified for backward compatibility)
+    const gap = gridConfig?.gap !== undefined ? gridConfig.gap : 6;
+    const gapClass = this.getGapClass(gap);
+    if (gapClass) {
+      classes.push(gapClass);
+    }
+    
     classes.push(this.getJustifyContentClass(gridConfig?.justifyContent));
     classes.push(this.getAlignItemsClass(gridConfig?.alignItems));
     
@@ -155,11 +241,28 @@ export class FeaturedCollectionComponent {
     return classes.filter(c => c).join(' ');
   }
 
+  private getGapClass(gap: number): string {
+    // Support all Tailwind gap values (0-96)
+    if (gap >= 0 && gap <= 96) {
+      return `gap-${gap}`;
+    }
+    return 'gap-6'; // default fallback
+  }
+
   getItemContainerClasses(gridConfig: any, index: number): string {
     const classes: string[] = [];
     
+    // Add column span
     const colSpans = gridConfig?.colSpans?.[index] || { sm: 1, md: 2, lg: 2, xl: 2 };
     classes.push(this.getColSpanClasses(colSpans));
+    
+    // Add row span
+    if (gridConfig?.rowSpans?.[index]) {
+      const rowSpanClasses = this.getRowSpanClasses(gridConfig.rowSpans[index]);
+      if (rowSpanClasses) {
+        classes.push(rowSpanClasses);
+      }
+    }
     
     const itemClass = this.getItemClass(gridConfig, index);
     if (itemClass) {

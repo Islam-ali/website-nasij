@@ -1,5 +1,6 @@
 import { IArchived } from "./archive.interface";
 import { MultilingualText } from "../core/models/multi-language";
+import { IProfessionalGridConfig } from './professional-grid.interface';
 
 export interface IResponsiveGridConfig {
   sm: number;
@@ -25,8 +26,12 @@ export interface IResponsiveFlexConfig {
 
 export interface IGridConfig {
   gridCols: IResponsiveGridConfig;
+  gridRows?: IResponsiveGridConfig;
   colSpans?: IResponsiveGridConfig[];
+  rowSpans?: IResponsiveGridConfig[];
   flexConfigs?: IResponsiveFlexConfig[];
+  gap?: number;
+  rowHeight?: string;
   layoutType?: 'grid' | 'flex';
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
@@ -37,7 +42,8 @@ export interface IGridConfig {
   aspectRatio?: string;
   width?: string;
   parentCustomStyle?: string;
-  itemsCustomStyle?: Record<string, string>[];
+  itemsCustomStyle?: string[]; // Changed to string array for Tailwind classes
+  heroGrid?: IProfessionalGridConfig; // New Professional Grid Config
 }
 
 export interface ICollectionItem {

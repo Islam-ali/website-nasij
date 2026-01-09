@@ -12,6 +12,7 @@ import { CategoryService } from '../products/services/category.service';
 import { ICategory } from '../../interfaces/category.interface';
 import { environment } from '../../../environments/environment';
 import { HeroSectionComponent } from "./hero-section/hero-section.component";
+import { HeroLayoutComponent } from "./hero-layout/hero-layout.component";
 import { FeaturedCollectionComponent } from "./featured-collection/featured-collection.component";
 import { BannarComponent } from "./bannar/bannar.component";
 import { FeatureComponent } from "./feature/feature.component";
@@ -37,6 +38,7 @@ import { TranslationService } from '../../core/services/translate.service';
     RouterModule,
     CarouselComponent,
     HeroSectionComponent,
+    HeroLayoutComponent,
     FeaturedCollectionComponent,
     CategoriesComponent,
     ProductFeaturesComponent,

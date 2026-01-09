@@ -130,7 +130,7 @@ module.exports = {
   },
   safelist: [
     {
-      pattern: /^(sm|md|lg|xl):(grid-cols|col-span|flex|items|justify|gap|w|h|min-w|max-w|min-h|max-h|text|p|px|py|m|mx|my|aspect|basis|grow|shrink)-/,
+      pattern: /^(sm|md|lg|xl):(grid-cols|grid-rows|col-span|row-span|flex|items|justify|gap|w|h|min-w|max-w|min-h|max-h|text|p|px|py|m|mx|my|aspect|basis|grow|shrink)-/,
     },
     // Grid columns (base)
     'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6',
@@ -142,6 +142,16 @@ module.exports = {
     'lg:grid-cols-7', 'lg:grid-cols-8', 'lg:grid-cols-9', 'lg:grid-cols-10', 'lg:grid-cols-11', 'lg:grid-cols-12',
     'xl:grid-cols-1', 'xl:grid-cols-2', 'xl:grid-cols-3', 'xl:grid-cols-4', 'xl:grid-cols-5', 'xl:grid-cols-6',
     'xl:grid-cols-7', 'xl:grid-cols-8', 'xl:grid-cols-9', 'xl:grid-cols-10', 'xl:grid-cols-11', 'xl:grid-cols-12',
+    // Grid rows (base)
+    'grid-rows-1', 'grid-rows-2', 'grid-rows-3', 'grid-rows-4', 'grid-rows-5', 'grid-rows-6',
+    'grid-rows-7', 'grid-rows-8', 'grid-rows-9', 'grid-rows-10', 'grid-rows-11', 'grid-rows-12',
+    // Grid rows (responsive)
+    'md:grid-rows-1', 'md:grid-rows-2', 'md:grid-rows-3', 'md:grid-rows-4', 'md:grid-rows-5', 'md:grid-rows-6',
+    'md:grid-rows-7', 'md:grid-rows-8', 'md:grid-rows-9', 'md:grid-rows-10', 'md:grid-rows-11', 'md:grid-rows-12',
+    'lg:grid-rows-1', 'lg:grid-rows-2', 'lg:grid-rows-3', 'lg:grid-rows-4', 'lg:grid-rows-5', 'lg:grid-rows-6',
+    'lg:grid-rows-7', 'lg:grid-rows-8', 'lg:grid-rows-9', 'lg:grid-rows-10', 'lg:grid-rows-11', 'lg:grid-rows-12',
+    'xl:grid-rows-1', 'xl:grid-rows-2', 'xl:grid-rows-3', 'xl:grid-rows-4', 'xl:grid-rows-5', 'xl:grid-rows-6',
+    'xl:grid-rows-7', 'xl:grid-rows-8', 'xl:grid-rows-9', 'xl:grid-rows-10', 'xl:grid-rows-11', 'xl:grid-rows-12',
     // Column spans (base)
     'col-span-1', 'col-span-2', 'col-span-3', 'col-span-4', 'col-span-5', 'col-span-6',
     'col-span-7', 'col-span-8', 'col-span-9', 'col-span-10', 'col-span-11', 'col-span-12',
@@ -152,6 +162,16 @@ module.exports = {
     'lg:col-span-7', 'lg:col-span-8', 'lg:col-span-9', 'lg:col-span-10', 'lg:col-span-11', 'lg:col-span-12',
     'xl:col-span-1', 'xl:col-span-2', 'xl:col-span-3', 'xl:col-span-4', 'xl:col-span-5', 'xl:col-span-6',
     'xl:col-span-7', 'xl:col-span-8', 'xl:col-span-9', 'xl:col-span-10', 'xl:col-span-11', 'xl:col-span-12',
+    // Row spans (base)
+    'row-span-1', 'row-span-2', 'row-span-3', 'row-span-4', 'row-span-5', 'row-span-6',
+    'row-span-7', 'row-span-8', 'row-span-9', 'row-span-10', 'row-span-11', 'row-span-12',
+    // Row spans (responsive)
+    'md:row-span-1', 'md:row-span-2', 'md:row-span-3', 'md:row-span-4', 'md:row-span-5', 'md:row-span-6',
+    'md:row-span-7', 'md:row-span-8', 'md:row-span-9', 'md:row-span-10', 'md:row-span-11', 'md:row-span-12',
+    'lg:row-span-1', 'lg:row-span-2', 'lg:row-span-3', 'lg:row-span-4', 'lg:row-span-5', 'lg:row-span-6',
+    'lg:row-span-7', 'lg:row-span-8', 'lg:row-span-9', 'lg:row-span-10', 'lg:row-span-11', 'lg:row-span-12',
+    'xl:row-span-1', 'xl:row-span-2', 'xl:row-span-3', 'xl:row-span-4', 'xl:row-span-5', 'xl:row-span-6',
+    'xl:row-span-7', 'xl:row-span-8', 'xl:row-span-9', 'xl:row-span-10', 'xl:row-span-11', 'xl:row-span-12',
     // Justify Content (Horizontal Alignment)
     'justify-center', 'justify-start', 'justify-end', 'justify-between', 'justify-around', 'justify-evenly',
     // Align Items (Vertical Alignment)
