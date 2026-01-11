@@ -56,7 +56,6 @@ import { TranslationService } from '../../core/services/translate.service';
 })
 
 export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  featuredProducts: IProduct[] = [];
   newArrivals: IProduct[] = [];
   categories: ICategory[] = [];
   loading = true;
@@ -78,38 +77,48 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   ) {}
 
   ngOnInit() {
-    this.updateSeo();
-    this.loadFeaturedProducts();
+    // this.loadFeaturedProducts();
     this.loadNewArrivals();
     this.loadCategories();
     this.loadPackages();
     this.getBusinessProfile();
+    this.updateSeo();
   }
 
   private updateSeo(): void {
-    const currentLang = this.translationService.getCurrentLanguage();
-    const isArabic = currentLang === 'ar';
-    
-    const keywords = isArabic 
-      ? 'Pledge, منتجات طلابية, استيكرز, براويز, بوكسات, طلاب الأزهر, طلاب الجامعات, طلاب علمي, طلاب أدبي, طلاب طب, منتجات ملهمة, هدايا طلابية, منتجات تعليمية, بوكس القرآن, مفكرات, قرطاسية, مصر, القاهرة'
-      : 'Pledge, student products, stickers, frames, notebooks, Quran box, Al-Azhar students, university students, science students, literature students, medical students, inspirational products, study accessories, student gifts, educational products, Egypt, Cairo, student supplies, stationery';
-    
-    const title = isArabic
-      ? 'Pledge - منتجات ملهمة للطلاب | استيكرز، براويز، بوكسات | طلاب الأزهر والجامعات'
-      : 'Pledge - Inspiring Student Products | Stickers, Frames, Boxes | Al-Azhar & University Students';
-    
-    const description = isArabic
-      ? 'في Pledge بنحوّل كل لحظة في رحلتك الدراسية لذكرى تعيش معاك. من استيكرز ملهمة، لبراويز أنيقة، لبوكسات مخصوصة لطلبة الأزهر وطلاب الجامعات (علمي علوم – أدبي – طب)، هتلاقي كل اللي بيعبر عنك في مكان واحد. منتجات طلابية عالية الجودة، هدايا ملهمة، وقرطاسية مميزة.'
-      : 'At Pledge, we transform every moment of your academic journey into a lasting memory. From inspiring stickers, elegant frames, to special boxes for Al-Azhar students and university students (Science, Literature, Medicine), find everything that expresses you in one place. High-quality student products, inspiring gifts, and unique stationery.';
-
-    this.seoService.updateSeo({
-      title,
-      description,
-      keywords,
-      canonicalUrl: 'https://www.pledgestores.com',
-      ogType: 'website',
-      locale: isArabic ? 'ar_EG' : 'en_US',
-      alternateLocale: isArabic ? 'en_US' : 'ar_EG'
+    // Get business profile from service
+    this.businessProfileService.getBusinessProfile$().subscribe({
+      next: (profile) => {
+        if (profile) {
+          const currentLang = this.translationService.getCurrentLanguage();
+          const isArabic = currentLang === 'ar';
+          
+          // Get values from business profile
+          const title = profile.metaTitle 
+            ? (isArabic ? (profile.metaTitle.ar || profile.metaTitle.en) : (profile.metaTitle.en || profile.metaTitle.ar))
+            : (isArabic ? profile.name.ar : profile.name.en);
+          
+          const description = profile.metaDescription 
+            ? (isArabic ? (profile.metaDescription.ar || profile.metaDescription.en) : (profile.metaDescription.en || profile.metaDescription.ar))
+            : (isArabic ? profile.description.ar : profile.description.en);
+          
+          const keywords = profile.metaKeywords && profile.metaKeywords.length > 0
+            ? profile.metaKeywords.join(', ')
+            : '';
+          
+          const canonicalUrl = profile.canonicalUrl || profile.baseUrl || '';
+          
+          this.seoService.updateSeo({
+            title: title || '',
+            description: description || '',
+            keywords: keywords,
+            canonicalUrl: canonicalUrl,
+            ogType: 'website',
+            locale: isArabic ? 'ar_EG' : 'en_US',
+            alternateLocale: isArabic ? 'en_US' : 'ar_EG'
+          }, profile);
+        }
+      }
     });
   }
   ngAfterViewInit(): void {
@@ -163,18 +172,18 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.router.navigate(['/shop'], { queryParams: { category: categoryId } });
   }
 
-  private loadFeaturedProducts() {
-    this.productService.getFeaturedProducts().subscribe({
-      next: (response:BaseResponse<IProduct[]>) => {
-        this.featuredProducts = response.data;
-        this.checkLoading();
-      },
-      error: (error) => {
-        console.error('Error loading featured products:', error);
-        this.checkLoading();
-      }
-    });
-  }
+  // private loadFeaturedProducts() {
+  //   this.productService.getFeaturedProducts().subscribe({
+  //     next: (response:BaseResponse<IProduct[]>) => {
+  //       this.featuredProducts = response.data;
+  //       this.checkLoading();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error loading featured products:', error);
+  //       this.checkLoading();
+  //     }
+  //   });
+  // }
 
   private loadNewArrivals() {
     this.productService.getNewArrivals().subscribe({
@@ -190,7 +199,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   private checkLoading() {
-    if (this.featuredProducts.length > 0 || this.newArrivals.length > 0) {
+    if (this.newArrivals.length > 0) {
       this.loading = false;
     }
   }

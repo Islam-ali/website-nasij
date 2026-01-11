@@ -61,7 +61,7 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   wishlistCount = signal<number>(0);
   currentUser: IUser | null = null;
   private subscriptions = new Subscription();
-  businessProfile: IBusinessProfile | null = null;
+  businessProfile = signal<IBusinessProfile | null>(null);
   toggleNavbar(): void {
     this.navbarOpen.set(!this.navbarOpen());
     // Close dropdowns when closing navbar
@@ -92,12 +92,10 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
     public themeService: ThemeService
   ) {
     super();
-    this.getBusinessProfile();
   }
 
   private categoryService = inject(CategoryService);
 
-  // load categories  
   loadCategories(): void {
     this.categoryService.listCategories().pipe(
       takeUntil(this.destroy$),
@@ -109,6 +107,8 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     console.log('Topbar component initialized');
+    // Load business profile first
+    this.getBusinessProfile();
     this.loadCategories();
     this.loadMenuLinks();
     this.loadCart();
@@ -390,9 +390,56 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   getBusinessProfile() {
-    this.businessProfileService.getBusinessProfile$().subscribe({
+    // Check if business profile is already loaded (immediate check)
+    const currentProfile = this.businessProfileService.businessProfile.value;
+    if (currentProfile) {
+      this.businessProfile.set(currentProfile);
+      return;
+    }
+    
+    // Subscribe to business profile changes (reactive)
+    // This will receive updates when resolver loads the profile
+    this.businessProfileService.getBusinessProfile$().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
       next: (businessProfile) => {
-        this.businessProfile = businessProfile;
+        if (businessProfile) {
+          this.businessProfile.set(businessProfile);
+        }
+      }
+    });
+    
+    // Fallback: If not loaded after resolver runs, try to load manually
+    // Resolver should complete before component initializes, but add timeout as safety
+    setTimeout(() => {
+      const stillNull = !this.businessProfileService.businessProfile.value;
+      if (stillNull) {
+        // Resolver might not have run or profile doesn't exist - try manual load
+        this.loadBusinessProfileManually();
+      }
+    }, 1000);
+  }
+
+  private loadBusinessProfileManually() {
+    // Only load if still null (to avoid duplicate calls)
+    if (this.businessProfileService.businessProfile.value) {
+      return;
+    }
+    
+    this.businessProfileService.getLatestBusinessProfile().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        // Handle BaseResponse format from TransformInterceptor
+        if (response && typeof response === 'object' && 'success' in response && 'data' in response) {
+          if (response.success && response.data !== null && response.data !== undefined) {
+            this.businessProfileService.setBusinessProfile(response.data);
+            this.businessProfile.set(response.data);
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Topbar - Error loading business profile manually:', error);
       }
     });
   }

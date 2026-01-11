@@ -8,17 +8,17 @@
     <div class="max-w-[1922px] mx-auto px-4">
       <div class="flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm tracking-wide">
         <div class="flex flex-wrap items-center gap-4">
-          @if (businessProfile?.contactInfo?.phone) {
-          <a [href]="'https://wa.me/' + businessProfile?.contactInfo?.phone"
+          @if (businessProfile()?.contactInfo?.phone) {
+          <a [href]="'https://wa.me/' + businessProfile()?.contactInfo?.phone"
             target="_blank" class="flex items-center gap-2 hover:text-white transition-colors">
             <i class="pi pi-whatsapp text-white/80"></i>
-            <span dir="ltr">{{businessProfile?.contactInfo?.phone}}</span>
+            <span dir="ltr">{{businessProfile()?.contactInfo?.phone}}</span>
           </a>
           }
-          @if (businessProfile?.contactInfo?.email) {
+          @if (businessProfile()?.contactInfo?.email) {
           <span class="hidden sm:flex items-center gap-2 text-white/80">
             <i class="pi pi-envelope"></i>
-            {{businessProfile?.contactInfo?.email}}
+            {{businessProfile()?.contactInfo?.email}}
           </span>
           }
           <span class="hidden lg:flex items-center gap-2 text-white/70">
@@ -27,32 +27,32 @@
           </span>
         </div>
         <div class="flex items-center gap-3">
-          @if (businessProfile?.socialMedia?.facebook) {
-          <a [href]="businessProfile!.socialMedia!.facebook!"
+          @if (businessProfile()?.socialMedia?.facebook) {
+          <a [href]="businessProfile()?.socialMedia!.facebook!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-facebook"></i>
           </a>
           }
-          @if (businessProfile?.socialMedia?.twitter) {
-          <a [href]="businessProfile!.socialMedia!.twitter!"
+          @if (businessProfile()?.socialMedia?.twitter) {
+          <a [href]="businessProfile()?.socialMedia!.twitter!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-twitter"></i>
           </a>
           }
-          @if (businessProfile?.socialMedia?.instagram) {
-          <a [href]="businessProfile!.socialMedia!.instagram!"
+          @if (businessProfile()?.socialMedia?.instagram) {
+          <a [href]="businessProfile()?.socialMedia!.instagram!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-instagram"></i>
           </a>
           }
-          @if (businessProfile?.socialMedia?.linkedin) {
-          <a [href]="businessProfile!.socialMedia!.linkedin!"
+          @if (businessProfile()?.socialMedia?.linkedin) {
+          <a [href]="businessProfile()?.socialMedia!.linkedin!"
             target="_blank" class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-linkedin"></i>
           </a>
           }
-          @if (businessProfile?.socialMedia?.tiktok) {
-          <a [href]="businessProfile!.socialMedia!.tiktok!" target="_blank"
+          @if (businessProfile()?.socialMedia?.tiktok) {
+          <a [href]="businessProfile()?.socialMedia!.tiktok!" target="_blank"
             class="hover:text-white transition-transform duration-300 transform hover:-translate-y-0.5">
             <i class="pi pi-tiktok"></i>
           </a>
@@ -71,16 +71,16 @@
         <a routerLink="/" class="flex items-center gap-3 group">
           <div class="w-12 h-12 flex items-center justify-center rounded-2xl">
             @if(isDarkTheme()) {
-            <img [src]="getImageUrl(businessProfile?.logo_dark?.filePath || '')" alt="logo"
+            <img [src]="getImageUrl(businessProfile()?.logo_dark?.filePath || '')" alt="logo"
               class="w-full h-full object-contain">
             } @else {
-            <img [src]="getImageUrl(businessProfile?.logo_light?.filePath || '')" alt="logo"
+            <img [src]="getImageUrl(businessProfile()?.logo_light?.filePath || '')" alt="logo"
               class="w-full h-full object-contain">
             }
           </div>
           <div class="hidden sm:flex flex-col">
             <h1 class="text-base font-semibold text-gray-900 dark:text-dark-text tracking-wide">
-              {{businessProfile?.name | multiLanguage}}
+              {{businessProfile()?.name | multiLanguage}}
             </h1>
             <span class="text-xs text-gray-500 dark:text-dark-textSecondary">
               {{ 'navigation.tagline' | translate }}

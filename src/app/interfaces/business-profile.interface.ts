@@ -1,5 +1,6 @@
 import { IArchived } from './archive.interface';
 import { MultilingualText } from '../core/models/multi-language';
+import { HeaderAlignment } from './product-feature.interface';
 
 export interface ISocialMedia {
   facebook?: string;
@@ -21,6 +22,11 @@ export interface IFAQ {
   answer: MultilingualText;
 }
 
+export interface IScript {
+  position: 'head' | 'body';
+  script: string;
+}
+
 export interface IBusinessProfile {
   _id: string;
   logo_dark?: IArchived;
@@ -32,7 +38,16 @@ export interface IBusinessProfile {
   privacyPolicy: MultilingualText;
   termsOfService: MultilingualText;
   primaryColor?: string;
+  headerAlignment?: HeaderAlignment;
   faq: IFAQ[];
+  metaTitle?: MultilingualText;
+  metaDescription?: MultilingualText;
+  metaKeywords?: string[];
+  metaTags?: string;
+  scripts?: IScript[];
+  siteName?: MultilingualText;
+  baseUrl?: string;
+  canonicalUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 } 

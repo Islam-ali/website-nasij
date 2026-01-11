@@ -1,11 +1,13 @@
 import { Component, DestroyRef, Injector, OnDestroy, OnInit, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { TopbarComponent } from './topbar/topbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { LoadingService } from '../core/services/loading.service';
 import { UiToastContainerComponent, UiSpinnerComponent } from '../shared/ui';
+import { BusinessProfileService } from '../services/business-profile.service';
+import { IBusinessProfile } from '../interfaces/business-profile.interface';
 
 @Component({
   selector: 'app-layout',
@@ -71,6 +73,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     // private layoutService: LayoutService,
     private router: Router,
+    private route: ActivatedRoute,
+    private businessProfileService: BusinessProfileService
   ) {
     this.loading$ = this.loadingService.loading$;
     
@@ -82,6 +86,23 @@ export class LayoutComponent implements OnInit, OnDestroy {
   private injector = inject(Injector);
   
   ngOnInit() {
+    // Get business profile from resolver data
+    const resolvedBusinessProfile = this.route.snapshot.data['businessProfile'] as IBusinessProfile | null;
+    if (resolvedBusinessProfile) {
+      // Set it in the service so all components can access it
+      this.businessProfileService.setBusinessProfile(resolvedBusinessProfile);
+    }
+    
+    // Also subscribe to route data changes in case of navigation
+    this.route.data.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data) => {
+      const businessProfile = data['businessProfile'] as IBusinessProfile | null;
+      if (businessProfile) {
+        this.businessProfileService.setBusinessProfile(businessProfile);
+      }
+    });
+    
     // Use runInInjectionContext to ensure proper injection context for the effect
     Promise.resolve().then(() => {
       // Update layout config when it changes

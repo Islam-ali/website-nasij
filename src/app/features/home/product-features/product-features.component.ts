@@ -1,13 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductFeaturesService } from '../../../services/product-features.service';
-import { IProductFeature } from '../../../interfaces/product-feature.interface';
+import { BusinessProfileService } from '../../../services/business-profile.service';
+import { IProductFeature, HeaderAlignment } from '../../../interfaces/product-feature.interface';
+import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
 import { IProduct } from '../../products/models/product.interface';
 import { BaseResponse } from '../../../core/models/baseResponse';
 import { CarouselComponent } from '../../../shared/components/carousel/carousel.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-product-features',
@@ -22,16 +26,40 @@ import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
   templateUrl: './product-features.component.html',
   styleUrl: './product-features.component.scss',
 })
-export class ProductFeaturesComponent implements OnInit {
+export class ProductFeaturesComponent implements OnInit, OnDestroy {
   features: IProductFeature[] = [];
   featureProducts: Map<string, IProduct[]> = new Map();
+  businessProfile: IBusinessProfile | null = null;
+  private destroy$ = new Subject<void>();
 
   @Output() productClick = new EventEmitter<IProduct>();
 
-  constructor(private featuresService: ProductFeaturesService) {}
+  constructor(
+    private featuresService: ProductFeaturesService,
+    private businessProfileService: BusinessProfileService
+  ) {}
 
   ngOnInit(): void {
+    this.loadBusinessProfile();
     this.loadFeatures();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadBusinessProfile(): void {
+    this.businessProfileService.getBusinessProfile$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (profile) => {
+          this.businessProfile = profile;
+        },
+        error: (error) => {
+          console.error('Error loading business profile:', error);
+        }
+      });
   }
 
   loadFeatures(): void {
@@ -68,7 +96,21 @@ export class ProductFeaturesComponent implements OnInit {
   onProductClick(product: IProduct): void {
     this.productClick.emit(product);
   }
+
+  getHeaderAlignmentClass(): string {
+    const alignment = this.businessProfile?.headerAlignment || HeaderAlignment.CENTER;
+    switch (alignment) {
+      case HeaderAlignment.START:
+        return 'text-start';
+      case HeaderAlignment.END:
+        return 'text-end';
+      case HeaderAlignment.CENTER:
+      default:
+        return 'text-center';
+    }
+  }
 }
+
 
 
 

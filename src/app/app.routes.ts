@@ -11,6 +11,9 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    resolve: {
+      businessProfile: businessProfileResolver
+    },
     children: [
       // Public routes
       {

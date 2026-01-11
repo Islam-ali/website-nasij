@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewService } from '../../../services/review.service';
 import { IReview } from '../../../interfaces/review.interface';
@@ -7,7 +7,11 @@ import { environment } from '../../../../environments/environment';
 import { finalize } from 'rxjs';
 import { SafePipe } from '../../../core/pipes/safe.pipe';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { BusinessProfileService } from '../../../services/business-profile.service';
+import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { HeaderAlignment } from '../../../interfaces/product-feature.interface';
 @Component({
   selector: 'app-reviews',
   standalone: true,
@@ -15,17 +19,35 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.scss']
 })
-export class ReviewsComponent implements OnInit {
+export class ReviewsComponent implements OnInit, OnDestroy {
   reviews: IReview[] = [];
   loading = false;
   domain = environment.domain;
-
-  constructor(private reviewService: ReviewService) {}
+  businessProfile: IBusinessProfile | null = null;
+  private destroy$ = new Subject<void>();
+  constructor(private reviewService: ReviewService, private businessProfileService: BusinessProfileService) {}
 
   ngOnInit(): void {
     this.loadReviews();
+    this.loadBusinessProfile();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  loadBusinessProfile(): void {
+    this.businessProfileService.getBusinessProfile$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (profile) => {
+          this.businessProfile = profile;
+        },
+        error: (error) => {
+          console.error('Error loading business profile:', error);
+        }
+      });
+  }
   loadReviews(): void {
     this.loading = true;
     this.reviewService.getActiveReviews().pipe(
@@ -56,6 +78,17 @@ export class ReviewsComponent implements OnInit {
 
   getStarsArray(rating: number): boolean[] {
     return Array(5).fill(false).map((_, i) => i < rating);
+  }
+  getHeaderAlignmentClass(): string {
+    const alignment = this.businessProfile?.headerAlignment || HeaderAlignment.CENTER;
+    switch (alignment) {
+      case HeaderAlignment.START:
+        return 'text-start';
+      case HeaderAlignment.CENTER:
+        return 'text-center';
+      case HeaderAlignment.END:
+        return 'text-end';
+    }
   }
 }
 
