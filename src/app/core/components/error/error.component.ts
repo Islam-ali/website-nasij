@@ -14,7 +14,7 @@ import { UiButtonComponent } from '../../../shared/ui';
         <h2>Something went wrong</h2>
         <p>We're sorry, but we couldn't load the page you requested.</p>
         <ui-button variant="primary" routerLink="/">
-          <i class="pi pi-home mr-2"></i>
+          <i class="pi pi-home me-2"></i>
           Go to Home
         </ui-button>
       </div>

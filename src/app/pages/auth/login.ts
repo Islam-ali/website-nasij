@@ -57,7 +57,7 @@ import {
                                 <div class="flex items-center">
                                     <ui-checkbox [(ngModel)]="checked" id="rememberme1" label="Remember me" class="mr-2"></ui-checkbox>
                                 </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
+                                <span class="font-medium no-underline ms-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
                             <ui-button variant="primary" routerLink="/" class="w-full">Sign In</ui-button>
                         </div>

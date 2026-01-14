@@ -22,7 +22,7 @@
   <ol class="flex items-center space-x-2 text-sm">
     <li>
       <a routerLink="/" class="text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
-        <i class="pi pi-home mr-1"></i>Home
+        <i class="pi pi-home me-1"></i>Home
       </a>
     </li>
     <!-- ... more breadcrumb items ... -->
@@ -60,7 +60,7 @@
 #### شارة العلامة التجارية:
 ```html
 <span class="inline-flex items-center px-6 py-3 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-800 dark:text-blue-200 border-2 border-blue-200 dark:border-blue-800 transition-all duration-300 hover:scale-105 shadow-lg">
-  <i class="pi pi-tag mr-3 text-lg"></i>
+  <i class="pi pi-tag me-3  text-lg"></i>
   {{ product.brand.name }}
 </span>
 ```
@@ -70,7 +70,7 @@
 <div class="flex items-center justify-between mb-8 p-4 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20 rounded-2xl border border-gray-200 dark:border-gray-700">
   <div class="flex items-center space-x-4">
     <div class="flex items-center">
-      <i class="pi pi-star-fill text-yellow-400 mr-1"></i>
+      <i class="pi pi-star-fill text-yellow-400 me-1"></i>
       <!-- ... stars ... -->
       <span class="text-sm text-gray-600 dark:text-gray-400">(4.2)</span>
     </div>
@@ -82,7 +82,7 @@
     'text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30': getStockStatus(product.stock).severity === 'warning',
     'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30': getStockStatus(product.stock).severity === 'danger'
   }">
-    <i class="pi pi-circle-fill mr-2 text-xs"></i>
+    <i class="pi pi-circle-fill me-2 text-xs"></i>
     {{ getStockStatus(product.stock).text }}
   </span>
 </div>
@@ -104,7 +104,7 @@
 #### اختيار الألوان:
 ```html
 <label class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-  <i class="pi pi-palette mr-3 text-purple-600 dark:text-purple-400"></i>
+  <i class="pi pi-palette me-3  text-purple-600 dark:text-purple-400"></i>
   Color
 </label>
 <div class="flex flex-wrap gap-4">
@@ -125,7 +125,7 @@
 #### اختيار المقاسات:
 ```html
 <label class="text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300 flex items-center">
-  <i class="pi pi-th-large mr-3 text-purple-600 dark:text-purple-400"></i>
+  <i class="pi pi-th-large me-3  text-purple-600 dark:text-purple-400"></i>
   Size
 </label>
 <div class="flex flex-wrap gap-4">

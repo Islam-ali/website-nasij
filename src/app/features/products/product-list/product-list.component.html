@@ -195,13 +195,13 @@
         <div class="flex flex-wrap gap-2 sm:gap-3">
           @for (categoryId of filterForm.get('selectedCategories')?.value || []; track categoryId) {
           <ui-chip variant="primary" [removable]="true" (remove)="removeCategoryFilter(categoryId)" class="text-xs sm:text-sm">
-            <i class="pi pi-tag mr-1 sm:mr-2"></i>
+            <i class="pi pi-tag me-1 sm:mr-2"></i>
             {{ getCategoryName(categoryId) }}
           </ui-chip>
           }
           @for (brandId of filterForm.get('selectedBrands')?.value || []; track brandId) {
           <ui-chip variant="success" [removable]="true" (remove)="removeBrandFilter(brandId)" class="text-xs sm:text-sm">
-            <i class="pi pi-star mr-1 sm:mr-2"></i>
+            <i class="pi pi-star me-1 sm:mr-2"></i>
             {{ getBrandName(brandId) }}
           </ui-chip>
           }

@@ -244,7 +244,7 @@ removeItem(item: ICartItem): void {
 ```html
 <h6 class="font-semibold text-base leading-7 text-gray-900 dark:text-white transition-colors duration-300">
   {{ item.productName || 'Product' }}
-  <span *ngIf="item.itemType === 'package'" class="ml-2 px-2 py-1 text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
+  <span *ngIf="item.itemType === 'package'" class="ms-2 px-2 py-1 text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">
     Package
   </span>
 </h6>

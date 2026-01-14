@@ -65,7 +65,7 @@ interface Order {
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <ui-button variant="ghost" size="sm" [routerLink]="['/orders', order.id]">
-                          <i class="pi pi-eye mr-1"></i>
+                          <i class="pi pi-eye me-1"></i>
                           View
                         </ui-button>
                       </td>

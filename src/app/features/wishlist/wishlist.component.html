@@ -25,7 +25,7 @@
         <h2>Your wishlist is empty</h2>
         <p>You haven't added any items to your wishlist yet.</p>
         <ui-button variant="outline" size="lg" (click)="continueShopping()">
-          <i class="pi pi-arrow-right ml-2"></i>
+          <i class="pi pi-arrow-right ms-2"></i>
           Browse Products
         </ui-button>
       </div>
@@ -33,11 +33,11 @@
       <div>
         <div class="wishlist-actions mb-4">
           <ui-button variant="ghost" size="md" (click)="continueShopping()">
-            <i class="pi pi-arrow-left mr-2"></i>
+            <i class="pi pi-arrow-left me-2"></i>
             Continue Shopping
           </ui-button>
           <ui-button variant="destructive" size="md" (click)="clearWishlist()" [disabled]="loading">
-            <i class="pi pi-trash mr-2"></i>
+            <i class="pi pi-trash me-2"></i>
             Clear Wishlist
           </ui-button>
         </div>
@@ -99,7 +99,7 @@
 
                 <div class="item-actions">
                   <ui-button variant="outline" size="md" (click)="$event.stopPropagation(); moveToCart(item)" [disabled]="!item?.product?.stock || loading">
-                    <i class="pi pi-shopping-cart mr-2"></i>
+                    <i class="pi pi-shopping-cart me-2"></i>
                     Add to Cart
                   </ui-button>
                   <ui-button variant="destructive" size="md" [iconOnly]="true" (click)="$event.stopPropagation(); removeFromWishlist(item)" [disabled]="loading">
@@ -112,13 +112,13 @@
 
         <div class="wishlist-footer mt-5">
           <ui-button variant="ghost" size="md" (click)="continueShopping()">
-            <i class="pi pi-arrow-left mr-2"></i>
+            <i class="pi pi-arrow-left me-2"></i>
             Continue Shopping
           </ui-button>
 
           <ui-button variant="primary" size="md" [disabled]="loading" routerLink="/cart">
             View Cart
-            <i class="pi pi-shopping-cart ml-2"></i>
+            <i class="pi pi-shopping-cart ms-2"></i>
           </ui-button>
         </div>
       </div>

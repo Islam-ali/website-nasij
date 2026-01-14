@@ -45,7 +45,7 @@
         
         <!-- Package Item Image -->
         <img *ngIf="packageItem.image" [src]="packageItem.image" [alt]="packageItem.productName" 
-             class="w-12 h-12 object-cover rounded-lg shadow-sm ml-3">
+             class="w-12 h-12 object-cover rounded-lg shadow-sm ms-3">
       </div>
     </div>
   </div>
@@ -148,7 +148,7 @@ export interface ICartItem {
 
 #### **1. Package Badge:**
 ```html
-<span *ngIf="item.itemType === 'package'" class="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full">
+<span *ngIf="item.itemType === 'package'" class="ms-2 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full">
   Package
 </span>
 ```

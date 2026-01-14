@@ -246,7 +246,7 @@
 ```html
 <div class="mt-8 pt-6 border-t-2 border-gray-200 dark:border-gray-600">
   <div class="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400 mb-3">
-    <i class="pi pi-lock mr-2 text-green-500 dark:text-green-400"></i>
+    <i class="pi pi-lock me-2 text-green-500 dark:text-green-400"></i>
     <span class="font-semibold">Secure Checkout</span>
   </div>
   <p class="text-xs text-gray-500 dark:text-gray-400 text-center leading-relaxed">

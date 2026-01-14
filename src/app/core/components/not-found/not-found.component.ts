@@ -16,11 +16,11 @@ import { UiButtonComponent } from '../../../shared/ui';
         <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
         <div class="action-buttons">
           <ui-button variant="primary" routerLink="/">
-            <i class="pi pi-home mr-2"></i>
+            <i class="pi pi-home me-2"></i>
             Go to Home
           </ui-button>
           <ui-button variant="secondary" routerLink="/shop">
-            <i class="pi pi-shopping-bag mr-2"></i>
+            <i class="pi pi-shopping-bag me-2"></i>
             Browse Products
           </ui-button>
         </div>

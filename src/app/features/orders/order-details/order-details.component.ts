@@ -46,7 +46,7 @@ interface Order {
     <div class="p-4">
       <div class="mb-4">
         <ui-button variant="ghost" size="md" routerLink="/orders">
-          <i class="pi pi-arrow-left mr-2"></i>
+          <i class="pi pi-arrow-left me-2"></i>
           Back to Orders
         </ui-button>
       </div>

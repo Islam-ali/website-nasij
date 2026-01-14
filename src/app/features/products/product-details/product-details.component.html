@@ -92,11 +92,11 @@
       </div>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <ui-button variant="primary" size="lg" routerLink="/shop">
-          <i class="pi pi-arrow-left mr-2"></i>
+          <i class="pi pi-arrow-left me-2"></i>
           {{ 'products.continue_shopping' | translate }}
         </ui-button>
         <ui-button variant="secondary" size="lg" routerLink="/">
-          <i class="pi pi-home mr-2"></i>
+          <i class="pi pi-home me-2"></i>
           {{ 'products.go_home' | translate }}
         </ui-button>
       </div>
@@ -354,7 +354,7 @@
               <i class="pi pi-sort-numeric-up me-2 text-primary-600 dark:text-primary-400"></i>
               {{ 'products.quantity' | translate }}
             </label>
-            <div class="flex items-center space-x-3 sm:space-x-4 md:space-x-6">
+            <div class="flex items-center gap-3 sm:space-x-4 md:space-x-6">
               <div
                 class="flex items-center h-10 sm:h-11 md:h-12 border-2 border-gray-200 dark:border-gray-600 rounded-full transition-all duration-300 bg-white dark:bg-gray-800">
                 <button (click)="decreaseQuantity()" [disabled]="quantity <= 1"
