@@ -25,6 +25,14 @@ export class CheckoutService {
     return this.http.get(`${environment.apiUrl}/business-profile/vodafone-cash-account`);
   }
 
+  getEnabledPaymentMethods(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/business-profile/enabled-payment-methods`);
+  }
+
+  getPaymentMethodSettings(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/business-profile/payment-method-settings`);
+  }
+
   // Legacy method for backward compatibility
   createOrderLegacy(checkoutData: ICheckout): Observable<any> {
     return this.http.post(this.apiUrl, checkoutData);

@@ -112,15 +112,13 @@ export class CheckoutComponent implements OnInit {
   states = signal<IState[]>([]);
 
   vodafoneCashAccount = signal<string>('');
+  walletAccountNumber = signal<string>('');
   currentLanguage = signal<string>(this.translate.currentLang === 'ar' ? 'ar' : 'en');
-  paymentMethods = [
+  paymentMethods = signal<Array<{ label: string; value: PaymentMethod }>>([
     { label: 'Cash', value: PaymentMethod.CASH },
     { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
     { label: 'Paymob', value: PaymentMethod.PAYMOB },
-    // { label: 'Credit Card', value: PaymentMethod.CREDIT_CARD },
-    // { label: 'Bank Transfer', value: PaymentMethod.BANK_TRANSFER },
-    // { label: 'PayPal', value: PaymentMethod.PAYPAL }
-  ];
+  ]);
   isBuyNow = false;
   orderNumber:string = '';
   constructor(
@@ -143,6 +141,7 @@ export class CheckoutComponent implements OnInit {
     });
     this.checkoutForm = this.createCheckoutForm();
     this.getVodafoneCashAccount();
+    this.loadEnabledPaymentMethods();
     // Subscribe to payment method changes
     this.checkoutForm.get('paymentMethod')?.valueChanges.pipe(
       takeUntil(this.destroy$)
@@ -687,6 +686,52 @@ export class CheckoutComponent implements OnInit {
       this.vodafoneCashAccount.set(response.data);
     });
   }
+
+  loadEnabledPaymentMethods(): void {
+    this.checkoutService.getEnabledPaymentMethods().subscribe({
+      next: (response: any) => {
+        const enabledMethods: string[] = response.data || response || [];
+        const allPaymentMethods = [
+          { label: 'Cash', value: PaymentMethod.CASH },
+          { label: 'Vodafone Cash', value: PaymentMethod.VODAFONE_CASH },
+          { label: 'Paymob', value: PaymentMethod.PAYMOB },
+        ];
+        
+        // Filter payment methods based on enabled ones
+        const filteredMethods = allPaymentMethods.filter(method => 
+          enabledMethods.includes(method.value)
+        );
+        
+        this.paymentMethods.set(filteredMethods);
+        
+        // Set default payment method to first enabled method if current method is disabled
+        const currentMethod = this.checkoutForm.get('paymentMethod')?.value;
+        if (currentMethod && !enabledMethods.includes(currentMethod)) {
+          if (filteredMethods.length > 0) {
+            this.checkoutForm.patchValue({ paymentMethod: filteredMethods[0].value });
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Error loading enabled payment methods:', error);
+        // Keep default payment methods on error
+      }
+    });
+
+    // Also load payment method settings to get wallet account number
+    this.checkoutService.getPaymentMethodSettings().subscribe({
+      next: (response: any) => {
+        const settings = response.data || response || {};
+        if (settings.walletAccountNumber) {
+          this.walletAccountNumber.set(settings.walletAccountNumber);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading payment method settings:', error);
+      }
+    });
+  }
+
   setShippingCost(): void {
    const stateId = this.checkoutForm.value.shippingAddress.state;
    const countryId = this.checkoutForm.value.shippingAddress.country;

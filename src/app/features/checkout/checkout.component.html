@@ -221,7 +221,7 @@
               {{'checkout.paymentMethod' | translate}}</h2>
           </div>
           <div class="space-y-3 sm:space-y-4">
-            @for (method of paymentMethods; track method.value) {
+            @for (method of paymentMethods(); track method.value) {
             <div
               class="flex items-center border-2 border-primary-100 dark:border-primary-900/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 hover:border-primary-500 dark:hover:border-primary-400 cursor-pointer transition-all duration-300 bg-white dark:bg-gray-900"
               [class.border-primary-500]="checkoutForm.get('paymentMethod')?.value === method.value"
@@ -238,7 +238,7 @@
                 <span>{{'checkout.' + method.value.toLowerCase() | translate}}</span>
                 @if (method.value === 'vodafone_cash') {
                 <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 inline-block">
-                  {{vodafoneCashAccount()}}
+                  {{walletAccountNumber() || vodafoneCashAccount()}}
                 </span>
                 }
               </label>
