@@ -91,7 +91,6 @@ export class AuthService {
         updatedAt: new Date(decodedToken.updatedAt)
       };
     } catch (error) {
-      console.error('Error decoding token:', error);
       return null;
     }
   }

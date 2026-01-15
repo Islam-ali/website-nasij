@@ -79,7 +79,6 @@ export class CheckoutService {
         };
       } else {
         // Fallback - this shouldn't happen in normal flow
-        console.error('Invalid cart item:', item);
         throw new Error(`Cart item must have either productId or packageId. Item: ${JSON.stringify(item)}`);
       }
     });

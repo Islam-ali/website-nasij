@@ -38,7 +38,6 @@ export class ProductUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating with product data:', error);
       // Fallback to regular navigation
       this.router.navigate([route, productData.productId]);
     }
@@ -68,7 +67,6 @@ export class ProductUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating to checkout with product:', error);
       // Fallback to regular checkout
       this.router.navigate(['/checkout']);
     }
@@ -97,7 +95,6 @@ export class ProductUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating to cart with product:', error);
       // Fallback to regular cart
       this.router.navigate(['/cart']);
     }
@@ -120,13 +117,11 @@ export class ProductUrlService {
         if (this.queryParamsService.validateEncodedData(encodedProduct, 24 * 60 * 60 * 1000)) { // 24 hours
           return this.queryParamsService.decodeProduct(encodedProduct);
         } else {
-          console.warn('Invalid or expired product data in URL');
           return null;
         }
       }
       return null;
     } catch (error) {
-      console.error('Error getting product from URL:', error);
       return null;
     }
   }
@@ -154,7 +149,6 @@ export class ProductUrlService {
       const url = baseUrl || window.location.origin;
       return `${url}/products/details?product=${encodedProduct}&source=shared`;
     } catch (error) {
-      console.error('Error creating shareable product URL:', error);
       // Fallback to regular URL
       return `${baseUrl || window.location.origin}/products/details/${productData.productId}`;
     }
@@ -189,7 +183,6 @@ export class ProductUrlService {
         queryParamsHandling: 'merge'
       });
     } catch (error) {
-      console.error('Error clearing encoded product data from URL:', error);
     }
   }
 }

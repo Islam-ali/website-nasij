@@ -206,7 +206,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error loading product:', err);
           this.error = this.translate.instant('products.errors.load_failed');
           this.loading = false;
         }
@@ -273,7 +272,6 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
           this.relatedProducts = response.data.products;
         },
         error: (err) => {
-          console.error('Error loading related products:', err);
         }
       })
   }

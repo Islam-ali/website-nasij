@@ -93,17 +93,12 @@ function generateSitemap(products, packages) {
 // تنفيذ العملية
 (async () => {
   try {
-    console.log('Fetching products...');
     const response = await fetchJson(API_URL);
     const responsePackages = await fetchJson(API_URL_PACKAGES);
     const products = response.data?.products || [];
     const packages = responsePackages.data || [];
-    console.log(`Found ${products.length} products.`);
-    console.log(`Found ${packages.length} packages.`);
     const sitemapXml = generateSitemap(products, packages);
     writeFileSync('sitemap.xml', sitemapXml, 'utf-8');
-    console.log('sitemap.xml generated successfully!');
   } catch (error) {
-    console.error('Error generating sitemap:', error);
   }
 })();

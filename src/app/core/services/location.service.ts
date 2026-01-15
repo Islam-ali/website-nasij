@@ -17,7 +17,6 @@ export class LocationService {
   getCountries(): Observable<ICountry[]> {
     return this.http.get<ICountry[]>(`${this.apiUrl}/countries`).pipe(
       catchError(error => {
-        console.error('Error fetching countries:', error);
         return of(this.getDefaultCountries());
       })
     );
@@ -27,7 +26,6 @@ export class LocationService {
   getStatesByCountry(countryId: string): Observable<IState[]> {
     return this.http.get<IState[]>(`${this.apiUrl}/states/country/${countryId}`).pipe(
       catchError(error => {
-        console.error('Error fetching states:', error);
         // Fallback to default countries' states
         const defaultCountries = this.getDefaultCountries();
         const country = defaultCountries.find(c => c._id === countryId);
@@ -45,7 +43,6 @@ export class LocationService {
     return this.http.get<{ shippingCost: number }>(url).pipe(
       map(response => response.shippingCost),
       catchError(error => {
-        console.error('Error fetching shipping cost:', error);
         return of(0);
       })
     );

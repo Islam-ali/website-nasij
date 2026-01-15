@@ -181,7 +181,6 @@ export class CheckoutComponent implements OnInit {
       // Legacy product handling
       if (params['buyNow']) {
         const buyNow = secureDecodeUrl(params['buyNow']);
-        console.log(buyNow);
         this.isBuyNow = true;
         const productId = buyNow.productId;
         const quantity = buyNow.quantity;
@@ -238,7 +237,6 @@ export class CheckoutComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading countries:', error);
         this.shippingCost.set(0);
         this.toastService.error(
           this.translate.instant('checkout.validationErrors.fillAllFields'),
@@ -313,7 +311,6 @@ export class CheckoutComponent implements OnInit {
 
       return false;
     } catch (error) {
-      console.error('Error handling encoded data:', error);
       this.toastService.error('Failed to process checkout data from URL', 'Error');
       return false;
     }
@@ -454,7 +451,6 @@ export class CheckoutComponent implements OnInit {
           return;
         }
       } catch (error) {
-        console.error('Payment image upload failed:', error);
         this.toastService.error(
           this.translate.instant('checkout.validationErrors.uploadFailed'),
           this.translate.instant('common.error')
@@ -593,7 +589,6 @@ export class CheckoutComponent implements OnInit {
             this.router.navigate(['/payment/paymob'], { queryParams });
           },
           error: (error: any) => {
-            console.error('Paymob payment initiation error:', error);
             this.loading = false;
             this.toastService.error(
               error.error?.message || error.message || 'Failed to initiate payment. Please try again.',
@@ -603,7 +598,6 @@ export class CheckoutComponent implements OnInit {
         });
         return;
       } catch (error: any) {
-        console.error('Paymob payment initiation error:', error);
         this.loading = false;
         this.toastService.error(
           error.message || 'Failed to initiate payment. Please try again.',
@@ -637,14 +631,6 @@ export class CheckoutComponent implements OnInit {
         // this.router.navigate(['/order-confirmation', response.orderId]);
       },
       error: (error: any) => {
-        console.error('Order submission failed', error);
-        console.error('Error details:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          error: error.error
-        });
-        
         let errorMessage = 'Failed to place order. Please try again.';
         
         if (error.error && error.error.message) {
@@ -660,23 +646,44 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAmountPaid(): number {
+    const paymentMethod = this.checkoutForm.value.paymentMethod;
+    const orderTotal = Number(this.orderTotal());
+    
     if (this.checkoutForm.value.isDeposit) {
+      // For deposit, amount paid is the shipping cost
       return Number(this.shippingCost());
-    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
-      return Number(this.orderTotal());
-    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.CASH) {
-      return 0
+    } else if (paymentMethod === PaymentMethod.VODAFONE_CASH) {
+      // For Vodafone Cash, amount paid equals order total
+      return orderTotal;
+    } else if (paymentMethod === PaymentMethod.CASH) {
+      // For cash, amount paid equals order total (customer pays full amount)
+      return orderTotal;
+    } else if (paymentMethod === PaymentMethod.PAYMOB) {
+      // For Paymob, amount paid equals order total
+      return orderTotal;
     }
     return 0;
   }
 
   getChangeDue(): number {
+    const paymentMethod = this.checkoutForm.value.paymentMethod;
+    const orderTotal = Number(this.orderTotal());
+    const amountPaid = this.getAmountPaid();
+    
     if (this.checkoutForm.value.isDeposit) {
-      return Number(this.orderTotal()) - Number(this.shippingCost());
-    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.VODAFONE_CASH) {
+      // For deposit, change due is the remaining amount
+      return orderTotal - amountPaid;
+    } else if (paymentMethod === PaymentMethod.VODAFONE_CASH) {
+      // For Vodafone Cash, no change (exact payment)
       return 0;
-    } else if (this.checkoutForm.value.paymentMethod === PaymentMethod.CASH) {
-      return Number(this.orderTotal());
+    } else if (paymentMethod === PaymentMethod.CASH) {
+      // For cash, change due is 0 (customer pays exact amount, or we can calculate if they pay more)
+      // If amountPaid > orderTotal, change = amountPaid - orderTotal
+      // Otherwise, change = 0
+      return Math.max(0, amountPaid - orderTotal);
+    } else if (paymentMethod === PaymentMethod.PAYMOB) {
+      // For Paymob, no change (exact payment)
+      return 0;
     }
     return 0;
   }
@@ -713,7 +720,6 @@ export class CheckoutComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading enabled payment methods:', error);
         // Keep default payment methods on error
       }
     });
@@ -727,7 +733,6 @@ export class CheckoutComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading payment method settings:', error);
       }
     });
   }
@@ -833,7 +838,6 @@ export class CheckoutComponent implements OnInit {
       const result = await response.json();
       return result.data.filePath;
     } catch (error) {
-      console.error('Upload error:', error);
       this.toastService.error(
         this.translate.instant('checkout.validationErrors.uploadFailed'),
         this.translate.instant('common.error')

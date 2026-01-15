@@ -28,7 +28,6 @@ export class UniversalTranslateLoader implements TranslateLoader {
 
     return this.http.get(url).pipe(
       catchError(err => {
-        console.warn(`Could not load translation for '${lang}' from '${url}'. Using empty object.`);
         return of({});
       })
     );

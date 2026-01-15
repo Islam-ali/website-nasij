@@ -270,7 +270,6 @@ export class FooterComponent implements OnInit {
         this.businessProfile = businessProfile;
       },
       error: (error) => {
-        console.error('Error loading business profile:', error);
       }
     });
   }

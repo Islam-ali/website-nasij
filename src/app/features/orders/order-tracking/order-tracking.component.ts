@@ -87,7 +87,6 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.loading = false;
         this.error = this.translateService.instant('orderTracking.orderNotFound');
-        console.error('Error fetching order:', error);
       }
     });
   }

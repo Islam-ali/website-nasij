@@ -132,7 +132,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         this.loadingCategories = false;
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.loadingCategories = false;
       }
     });
@@ -192,7 +191,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         this.checkLoading();
       },
       error: (error) => {
-        console.error('Error loading new arrivals:', error);
         this.checkLoading();
       }
     });

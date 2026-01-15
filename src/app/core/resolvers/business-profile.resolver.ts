@@ -39,17 +39,14 @@ export const businessProfileResolver: ResolveFn<IBusinessProfile | null> = (): O
           return response.data;
         } else {
           // Response is successful but data is null - no business profile exists
-          console.warn('Business Profile Resolver - No business profile found in database (data is null)');
           return null;
         }
       }
       
       // Invalid response format
-      console.error('Business Profile Resolver - Invalid response format:', response);
       return null;
     }),
     catchError((error) => {
-      console.error('Business Profile Resolver - Error loading business profile:', error);
       // Return null on error to allow the route to continue
       return of(null);
     })

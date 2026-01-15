@@ -21,7 +21,6 @@ export class QueryParamsService {
       const base64String = btoa(unescape(encodeURIComponent(jsonString)));
       return base64String;
     } catch (error) {
-      console.error('Error encoding data:', error);
       throw new Error('Failed to encode data');
     }
   }
@@ -36,7 +35,6 @@ export class QueryParamsService {
       const jsonString = decodeURIComponent(escape(atob(encodedString)));
       return JSON.parse(jsonString);
     } catch (error) {
-      console.error('Error decoding data:', error);
       throw new Error('Failed to decode data');
     }
   }
@@ -217,7 +215,6 @@ export class QueryParamsService {
         try {
           decodedParams[key] = this.decode(encodedValue);
         } catch (error) {
-          console.error(`Error decoding parameter ${key}:`, error);
           decodedParams[key] = null;
         }
       }
@@ -245,14 +242,12 @@ export class QueryParamsService {
       if (maxAge) {
         const age = Date.now() - decoded.timestamp;
         if (age > maxAge) {
-          console.warn('Encoded data is too old:', age, 'ms');
           return false;
         }
       }
       
       return true;
     } catch (error) {
-      console.error('Invalid encoded data:', error);
       return false;
     }
   }
@@ -269,7 +264,6 @@ export class QueryParamsService {
       const compressed = jsonString.replace(/\s+/g, ' ').trim();
       return this.encode(compressed);
     } catch (error) {
-      console.error('Error compressing and encoding data:', error);
       throw new Error('Failed to compress and encode data');
     }
   }
@@ -284,7 +278,6 @@ export class QueryParamsService {
       const compressed = this.decode<string>(encodedString);
       return JSON.parse(compressed);
     } catch (error) {
-      console.error('Error decompressing and decoding data:', error);
       throw new Error('Failed to decompress and decode data');
     }
   }

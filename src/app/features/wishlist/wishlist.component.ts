@@ -63,7 +63,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error removing from wishlist:', error);
         this.toastService.error('Failed to remove item from wishlist. Please try again.', 'Error');
         this.loading = false;
       }
@@ -98,13 +97,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
             this.toastService.success('Item has been moved to your cart.', 'Moved to Cart');
           },
           error: (error) => {
-            console.error('Error removing from wishlist:', error);
             this.loading = false;
           }
         });
       },
       error: (error) => {
-        console.error('Error adding to cart:', error);
         this.toastService.error('Failed to add item to cart. Please try again.', 'Error');
         this.loading = false;
       }
@@ -163,7 +160,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: (error: any) => {
-        console.error('Error loading wishlist products:', error);
         this.loading = false;
       }
     });
@@ -180,7 +176,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.toastService.success('Wishlist has been cleared.', 'Success');
       },
       error: (error) => {
-        console.error('Error clearing wishlist:', error);
         this.toastService.error('Failed to clear wishlist. Please try again.', 'Error');
         this.loading = false;
       }

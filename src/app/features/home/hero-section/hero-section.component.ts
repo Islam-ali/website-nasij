@@ -157,7 +157,6 @@ export class HeroSectionComponent implements OnInit {
               // This is not a real error, just a normal interruption
               if (err?.name !== 'AbortError' && err?.constructor?.name !== 'AbortError') {
                 // Only log real errors
-                console.warn('Video play failed:', err);
               }
             });
         }
@@ -168,7 +167,6 @@ export class HeroSectionComponent implements OnInit {
     } catch (err: any) {
       // Ignore AbortError in catch block as well
       if (err?.name !== 'AbortError' && err?.constructor?.name !== 'AbortError') {
-        console.warn('Video toggle failed:', err);
       }
     }
   }

@@ -214,7 +214,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
           this.categories = response.data.categories;
         },
         error: (err) => {
-          console.error('Error loading categories:', err);
           this.toastService.error('Failed to load categories.', 'Error');
         },
       })
@@ -228,7 +227,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
           this.brands = response.data.brands;
         },
         error: (err) => {
-          console.error('Error loading brands:', err);
           this.toastService.error('Failed to load brands.', 'Error');
         },
       })
@@ -243,7 +241,6 @@ export class ProductListComponent implements OnInit, OnDestroy, AfterViewInit, A
           this.colors = [...new Set(response.data.products.flatMap((p) => p.variants?.flatMap((v) => v.attributes?.filter((a) => a.variant === 'color').map((a) => a.value.en) || [])) || [])];
         },
         error: (err) => {
-          console.error('Error loading sizes and colors:', err);
         },
       })
     );

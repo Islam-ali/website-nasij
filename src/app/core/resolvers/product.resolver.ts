@@ -11,7 +11,6 @@ export const productResolver: ResolveFn<IProduct | null> = (route: ActivatedRout
   const productId = route.paramMap.get('id');
 
   if (!productId) {
-    console.error('Product ID is missing from route parameters');
     return of(null);
   }
 
@@ -23,7 +22,6 @@ export const productResolver: ResolveFn<IProduct | null> = (route: ActivatedRout
       return null;
     }),
     catchError((error) => {
-      console.error('Error resolving product:', error);
       // Return null on error to allow the route to continue
       return of(null);
     })

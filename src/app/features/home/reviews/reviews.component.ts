@@ -44,7 +44,6 @@ export class ReviewsComponent implements OnInit, OnDestroy {
           this.businessProfile = profile;
         },
         error: (error) => {
-          console.error('Error loading business profile:', error);
         }
       });
   }
@@ -65,7 +64,6 @@ export class ReviewsComponent implements OnInit, OnDestroy {
         });
       },
       error: (error) => {
-        console.error('Error loading reviews:', error);
       }
     });
   }

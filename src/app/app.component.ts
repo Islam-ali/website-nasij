@@ -77,7 +77,6 @@ export class AppComponent implements OnInit {
         this.init();
       },
       error: (error) => {
-        console.error('Error loading business profile:', error);
         // Don't block rendering on error, especially during SSR
         if (isPlatformBrowser(this.platformId)) {
           this.isLoading = true;

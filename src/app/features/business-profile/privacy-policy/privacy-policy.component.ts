@@ -44,7 +44,6 @@ export class PrivacyPolicyComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading business profile:', error);
         this.toastService.error('Failed to load privacy policy', 'Error');
         this.loading = false;
       }

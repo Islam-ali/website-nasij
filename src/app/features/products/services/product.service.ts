@@ -17,14 +17,12 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProducts(params?: IProductQueryParams): Observable<BaseResponse<{products: IProduct[], pagination: pagination}>> {
-    console.log('ProductService.getProducts - params:', params);
     let httpParams = new HttpParams();
     if (params && typeof params === 'object') {
       Object.entries(params).forEach(([key, value]) => {
         if (value == undefined || value == null || value == '' || value.length == 0) {
           return;
         }
-        console.log('ProductService.getProducts - key:', key, 'value:', value);
         httpParams = httpParams.append(key, value);
       });
     }

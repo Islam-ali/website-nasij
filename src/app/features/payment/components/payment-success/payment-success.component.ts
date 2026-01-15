@@ -40,7 +40,6 @@ export class PaymentSuccessComponent implements OnInit {
         this.orderNumber.set(order.orderNumber || order._id || '');
       }
     } catch (error) {
-      console.error('Error loading order details:', error);
     } finally {
       this.loading.set(false);
     }

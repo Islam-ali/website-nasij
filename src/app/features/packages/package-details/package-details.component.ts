@@ -220,7 +220,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
         this.loading.set(false);
       }
     } catch (error) {
-      console.error('Error handling encoded package data:', error);
       this.error.set('Failed to process package data from URL.');
       this.loading.set(false);
     }
@@ -1173,7 +1172,6 @@ export class PackageDetailsComponent extends ComponentBase implements OnInit, On
           target.src = '/assets/images/photo.png';
         } catch (error) {
           // Silently fail to prevent console errors
-          console.warn('Failed to set fallback image:', error);
         }
       }
     }

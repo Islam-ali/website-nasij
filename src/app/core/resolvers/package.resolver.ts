@@ -11,7 +11,6 @@ export const packageResolver: ResolveFn<IPackage | null> = (route: ActivatedRout
   const packageId = route.paramMap.get('id');
 
   if (!packageId) {
-    console.error('Package ID is missing from route parameters');
     return of(null);
   }
 
@@ -23,7 +22,6 @@ export const packageResolver: ResolveFn<IPackage | null> = (route: ActivatedRout
       return null;
     }),
     catchError((error) => {
-      console.error('Error resolving package:', error);
       // Return null on error to allow the route to continue
       return of(null);
     })

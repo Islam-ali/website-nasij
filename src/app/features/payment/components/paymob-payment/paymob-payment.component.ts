@@ -135,7 +135,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
       const params = await firstValueFrom(this.route.queryParams);
       await this.handlePaymentParams(params as PaymentParams);
     } catch (error) {
-      console.error('Error reading query parameters:', error);
       this.setError('payment.missingParams');
       this.loading.set(false);
     }
@@ -206,7 +205,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
       }
       this.loading.set(false);
     } catch (error) {
-      console.error('Error setting iframe URL:', error);
       this.setError('payment.initiationFailed');
       this.loading.set(false);
     }
@@ -226,7 +224,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
       // Redirect to Paymob payment page
       window.location.href = redirectUrlParam;
     } catch (error) {
-      console.error('Error setting redirect URL:', error);
       this.setError('payment.initiationFailed');
       this.loading.set(false);
     }
@@ -388,7 +385,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
 
       this.loading.set(false);
     } catch (error: any) {
-      console.error('Payment initiation error:', error);
       const errorMessage = 
         error?.error?.message || 
         error?.message || 
@@ -421,7 +417,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
         };
       }
     } catch (error) {
-      console.warn('Could not fetch order details:', error);
     }
     return {};
   }
@@ -432,7 +427,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
   openInNewWindow(): void {
     const url = this.iframeUrl();
     if (!url) {
-      console.warn('No iframe URL available');
       return;
     }
 
@@ -450,7 +444,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
 
       this.startWindowCloseCheck();
     } catch (error) {
-      console.error('Error opening payment window:', error);
       this.setError('Failed to open payment window');
     }
   }
@@ -485,7 +478,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
   private async checkPaymentStatus(): Promise<void> {
     const orderId = this.orderId();
     if (!orderId) {
-      console.warn('No order ID available to check payment status');
       return;
     }
 
@@ -502,7 +494,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
         });
       }
     } catch (error) {
-      console.error('Error checking payment status:', error);
       this.router.navigate(['/payment/failure'], { 
         queryParams: { orderId } 
       });
@@ -582,7 +573,6 @@ export class PaymobPaymentComponent implements OnInit, OnDestroy {
       try {
         this.paymentWindow.close();
       } catch (error) {
-        console.warn('Error closing payment window:', error);
       }
       this.paymentWindow = null;
     }

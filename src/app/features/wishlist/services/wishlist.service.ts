@@ -141,7 +141,6 @@ export class WishlistService implements OnDestroy {
       }
       }
     } catch (error) {
-      console.error('Error loading wishlist from storage:', error);
       // Reset to initial state if there's an error
       this.wishlistState.next(this.getInitialWishlistState());
     }
@@ -153,7 +152,6 @@ export class WishlistService implements OnDestroy {
       try {
         localStorage.setItem(this.WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
       } catch (error) {
-        console.error('Error saving wishlist to storage:', error);
       }
     }
   }

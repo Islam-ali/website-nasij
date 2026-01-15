@@ -48,7 +48,6 @@ export class HeroLayoutComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading hero layouts:', error);
         this.loading = false;
       }
     });
@@ -61,7 +60,6 @@ export class HeroLayoutComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading hero layout:', error);
         this.loading = false;
       }
     });

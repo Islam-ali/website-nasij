@@ -15,7 +15,6 @@ export function secureEncode(data: any): string {
     // Base64 لتأمين النقل في الرابط
     return encodeURIComponent(encrypted);
   } catch (err) {
-    console.error('Encoding Error:', err);
     return '';
   }
 }
@@ -29,7 +28,6 @@ export function secureDecode(encoded: string): any {
     const decompressed = decompressFromEncodedURIComponent(decrypted);
     return JSON.parse(decompressed);
   } catch (err) {
-    console.error('Decoding Error:', err);
     return null;
   }
 }

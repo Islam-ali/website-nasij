@@ -97,7 +97,6 @@ export class FallbackImgDirective implements OnInit {
         this.renderer.setAttribute(element, 'src', fallbackUrl);
       } catch (error) {
         // Silently fail to prevent console errors
-        console.warn('Failed to set fallback image:', error);
       }
     }
   }

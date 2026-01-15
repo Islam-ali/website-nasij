@@ -39,7 +39,6 @@ export class PackageUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating with package data:', error);
       // Fallback to regular navigation
       this.router.navigate([route, packageData.packageId]);
     }
@@ -60,7 +59,6 @@ export class PackageUrlService {
     selectedVariants?: any[];
   }): void {
     try {
-      console.log(packageData);
       debugger;
 
       const secureQuery = secureEncodeUrl(packageData);
@@ -70,7 +68,6 @@ export class PackageUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating to checkout with package:', error);
       // Fallback to regular checkout
       this.router.navigate(['/checkout']);
     }
@@ -99,7 +96,6 @@ export class PackageUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating to cart with package:', error);
       // Fallback to regular cart
       this.router.navigate(['/cart']);
     }
@@ -120,7 +116,6 @@ export class PackageUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating to checkout with items:', error);
       // Fallback to regular checkout
       this.router.navigate(['/checkout']);
     }
@@ -149,7 +144,6 @@ export class PackageUrlService {
         }
       });
     } catch (error) {
-      console.error('Error navigating to checkout with cart:', error);
       // Fallback to regular checkout
       this.router.navigate(['/checkout']);
     }
@@ -172,13 +166,11 @@ export class PackageUrlService {
         if (this.queryParamsService.validateEncodedData(encodedPackage, 24 * 60 * 60 * 1000)) { // 24 hours
           return this.queryParamsService.decodePackage(encodedPackage);
         } else {
-          console.warn('Invalid or expired package data in URL');
           return null;
         }
       }
       return null;
     } catch (error) {
-      console.error('Error getting package from URL:', error);
       return null;
     }
   }
@@ -201,13 +193,11 @@ export class PackageUrlService {
         if (this.queryParamsService.validateEncodedData(encodedItems, 24 * 60 * 60 * 1000)) { // 24 hours
           return this.queryParamsService.decodeItems(encodedItems);
         } else {
-          console.warn('Invalid or expired items data in URL');
           return null;
         }
       }
       return null;
     } catch (error) {
-      console.error('Error getting items from URL:', error);
       return null;
     }
   }
@@ -229,13 +219,11 @@ export class PackageUrlService {
         if (this.queryParamsService.validateEncodedData(encodedCart, 24 * 60 * 60 * 1000)) { // 24 hours
           return this.queryParamsService.decodeCart(encodedCart);
         } else {
-          console.warn('Invalid or expired cart data in URL');
           return null;
         }
       }
       return null;
     } catch (error) {
-      console.error('Error getting cart from URL:', error);
       return null;
     }
   }
@@ -263,7 +251,6 @@ export class PackageUrlService {
       const url = baseUrl || window.location.origin;
       return `${url}/packages/details?package=${encodedPackage}&source=shared`;
     } catch (error) {
-      console.error('Error creating shareable package URL:', error);
       // Fallback to regular URL
       return `${baseUrl || window.location.origin}/packages/details/${packageData.packageId}`;
     }
@@ -285,7 +272,6 @@ export class PackageUrlService {
       const url = baseUrl || window.location.origin;
       return `${url}/checkout?items=${encodedItems}&source=shared`;
     } catch (error) {
-      console.error('Error creating shareable items URL:', error);
       // Fallback to regular checkout
       return `${baseUrl || window.location.origin}/checkout`;
     }
@@ -322,7 +308,6 @@ export class PackageUrlService {
         queryParamsHandling: 'merge'
       });
     } catch (error) {
-      console.error('Error clearing encoded data from URL:', error);
     }
   }
 
@@ -356,7 +341,6 @@ export class PackageUrlService {
         result.addPackage = this.getPackageFromUrl({ package: queryParams['addPackage'] });
       }
     } catch (error) {
-      console.error('Error getting all encoded data from URL:', error);
     }
     
     return result;

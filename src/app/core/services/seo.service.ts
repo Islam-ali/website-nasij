@@ -395,7 +395,6 @@ export class SeoService {
               try {
                 newMeta.setAttribute(attr.name, attr.value);
               } catch (attrError) {
-                console.warn('Failed to set attribute:', attr.name, attrError);
               }
             });
             
@@ -411,13 +410,11 @@ export class SeoService {
             this.parseMetaTagManually(trimmedLine, index);
           }
         } catch (error) {
-          console.warn('Failed to parse meta tag with DOMParser, trying manual parsing:', trimmedLine, error);
           // Fallback to manual parsing
           this.parseMetaTagManually(trimmedLine, index);
         }
       });
     } catch (error) {
-      console.error('Failed to inject custom meta tags:', error);
     }
   }
  
@@ -426,7 +423,6 @@ export class SeoService {
       // Extract attributes from <meta> tag using regex
       const metaMatch = metaTagHtml.match(/<meta\s+([^>]*)\/?>/i);
       if (!metaMatch || !metaMatch[1]) {
-        console.warn('Could not parse meta tag:', metaTagHtml);
         return;
       }
  
@@ -448,7 +444,6 @@ export class SeoService {
           }
           newMeta.setAttribute(attrName, attrValue);
         } catch (e) {
-          console.warn('Failed to set attribute manually:', attrName, e);
         }
       }
       
@@ -460,7 +455,6 @@ export class SeoService {
         this.doc.head.appendChild(newMeta);
       }
     } catch (error) {
-      console.error('Manual meta tag parsing failed:', error);
     }
   }
  
@@ -489,14 +483,12 @@ export class SeoService {
         // Check for parsing errors
         const parseError = doc.querySelector('parsererror');
         if (parseError) {
-          console.warn('Parse error detected in script content:', scriptContent);
           return;
         }
         
         // Get the container div
         const container = doc.querySelector('div');
         if (!container) {
-          console.warn('Could not parse script content:', scriptContent);
           return;
         }
         
@@ -521,7 +513,6 @@ export class SeoService {
                     }
                   }
                 } catch (attrError) {
-                  console.warn('Failed to set script attribute:', attr.name, attrError);
                 }
               });
               
@@ -532,7 +523,6 @@ export class SeoService {
               if (scriptText && !scriptElement.src) {
                 // Validate that content doesn't contain HTML tags (common error)
                 if (scriptText.includes('<') && scriptText.includes('>')) {
-                  console.warn('Script contains HTML tags, skipping:', scriptText.substring(0, 100));
                   return;
                 }
                 scriptElement.textContent = scriptText;
@@ -557,7 +547,6 @@ export class SeoService {
                 try {
                   linkElement.setAttribute(attr.name, attr.value);
                 } catch (attrError) {
-                  console.warn('Failed to set link attribute:', attr.name, attrError);
                 }
               });
               
@@ -576,7 +565,6 @@ export class SeoService {
                 try {
                   styleElement.setAttribute(attr.name, attr.value);
                 } catch (attrError) {
-                  console.warn('Failed to set style attribute:', attr.name, attrError);
                 }
               });
               
@@ -592,16 +580,12 @@ export class SeoService {
             }
             // Log warning for other tags
             else {
-              console.warn(`Unsupported tag type in scripts array: <${tagName}>. Only <script>, <link>, and <style> are supported.`);
             }
           } catch (elementError) {
-            console.error('Error processing element:', element, elementError);
           }
         });
         
       } catch (error) {
-        console.error('Failed to inject script at index', index, ':', error);
-        console.error('Script content was:', scriptData.script);
       }
     });
   }
@@ -647,7 +631,6 @@ export class SeoService {
               scriptElement.setAttribute(attrName, attrValue);
             }
           } catch (attrError) {
-            console.warn('Failed to parse script attribute:', attrMatch[0], attrError);
           }
         }
       }
@@ -663,7 +646,6 @@ export class SeoService {
         targetElement.appendChild(scriptElement);
       }
     } catch (error) {
-      console.error('Fallback script parsing also failed:', error);
       // Last resort: create empty script with just the content as text
       try {
         const scriptElement = this.doc.createElement('script');
@@ -677,7 +659,6 @@ export class SeoService {
           targetElement.appendChild(scriptElement);
         }
       } catch (finalError) {
-        console.error('Final fallback also failed:', finalError);
       }
     }
   }
@@ -754,7 +735,6 @@ export class SeoService {
       }, 0);
     }
     } catch (error) {
-      console.error('Error applying business profile SEO:', error);
     }
   }
 }

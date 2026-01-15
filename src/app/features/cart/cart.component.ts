@@ -154,7 +154,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.clearEncodedDataFromUrl();
       }
     } catch (error) {
-      console.error('Error handling encoded data:', error);
       this.toastService.error('Failed to process item data from URL', 'Error');
     }
   }
@@ -177,7 +176,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.toastService.success('Package added to cart successfully', 'Success');
       },
       error: (error) => {
-        console.error('Error adding package to cart:', error);
         this.toastService.error('Failed to add package to cart', 'Error');
       }
     });
@@ -200,7 +198,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.toastService.success('Product added to cart successfully', 'Success');
       },
       error: (error) => {
-        console.error('Error adding product to cart:', error);
         this.toastService.error('Failed to add product to cart', 'Error');
       }
     });
@@ -231,7 +228,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.loading = false
     ),
       catchError((error: any) => {
-        console.error('Error loading cart:', error);
         this.toastService.error('Failed to load cart. Please try again.', 'Error');
         this.loading = false;
         return of(null);
@@ -245,7 +241,6 @@ export class CartComponent implements OnInit, OnDestroy {
     this.loading = true;
     // In a real app, you would validate the cart and then navigate to checkout
     this.router.navigate(['/checkout']).catch(error => {
-      console.error('Navigation error:', error);
       this.toastService.error('Failed to proceed to checkout. Please try again.', 'Error');
     }).finally(() => {
       this.loading = false;
@@ -259,7 +254,6 @@ export class CartComponent implements OnInit, OnDestroy {
 
   // Handle location change
   onLocationChange(event: { country: ICountry | null; state: IState | null; shippingCost: number }): void {
-    console.log('🌍 Location changed:', event);
     
     if (event.country) {
       this.cartService.updateShippingLocation(event.country, event.state!).pipe(
@@ -268,7 +262,6 @@ export class CartComponent implements OnInit, OnDestroy {
           this.toastService.success('Shipping cost updated', 'Updated');
         }),
         catchError((error: any) => {
-          console.error('Error updating shipping location:', error);
           this.toastService.error('Failed to update shipping cost', 'Error');
           return of(null);
         })
@@ -291,7 +284,6 @@ export class CartComponent implements OnInit, OnDestroy {
           this.toastService.success('Package quantity updated successfully', 'Updated');
         }),
         catchError((error: any) => {
-          console.error('Error updating package quantity:', error);
           this.toastService.error('Failed to update package quantity. Please try again.', 'Error');
           return of(null);
         }),
@@ -307,7 +299,6 @@ export class CartComponent implements OnInit, OnDestroy {
           this.toastService.success('Product quantity updated successfully', 'Updated');
         }),
         catchError((error: any) => {
-          console.error('Error updating product quantity:', error);
           this.toastService.error('Failed to update product quantity. Please try again.', 'Error');
           return of(null);
         }),
@@ -316,21 +307,12 @@ export class CartComponent implements OnInit, OnDestroy {
         })
       ).subscribe();
     } else {
-      console.error('Invalid item type for quantity update:', item);
       this.loading = false;
     }
   }
 
   // Remove item from cart
   removeItem(item: ICartItem, index?: number): void {
-    console.log('🚨 CART COMPONENT removeItem CALLED!');
-    console.log('🗑️ Cart component - removing item:', item);
-    console.log('🗑️ Item has packageId:', !!item.packageId);
-    console.log('🗑️ Item has productId:', !!item.productId);
-    console.log('🗑️ Item type:', item.itemType);
-    console.log('🗑️ Index:', index);
-    console.log('🗑️ Item.packageId value:', item.packageId);
-    console.log('🗑️ Item.packageId type:', typeof item.packageId);
     
     if (!confirm('Are you sure you want to remove this item from your cart?')) {
       return;
@@ -340,9 +322,6 @@ export class CartComponent implements OnInit, OnDestroy {
     
     // Check if it's a package or product
     if (item.packageId) {
-      console.log('📦 Removing package with ID:', item.packageId);
-      console.log('📦 Item type:', item.itemType);
-      console.log('📦 Full item data:', item);
       // Handle package removal
       this.cartService.removeItem(item.productId, item.selectedVariants, item.packageId).pipe(
         takeUntil(this.destroy$),
@@ -350,7 +329,6 @@ export class CartComponent implements OnInit, OnDestroy {
           this.toastService.success('Package removed from cart', 'Removed');
         }),
         catchError((error: any) => {
-          console.error('Error removing package:', error);
           this.toastService.error('Failed to remove package. Please try again.', 'Error');
           return of(null);
         }),
@@ -359,7 +337,6 @@ export class CartComponent implements OnInit, OnDestroy {
         })
       ).subscribe();
     } else if (item.productId && (item.itemType === 'Product' || !item.itemType)) {
-      console.log('🛍️ Removing product with ID:', item.productId);
       // Handle product removal
       this.cartService.removeItem(item.productId, item.selectedVariants).pipe(
         takeUntil(this.destroy$),
@@ -367,7 +344,6 @@ export class CartComponent implements OnInit, OnDestroy {
           this.toastService.success('Product removed from cart', 'Removed');
         }),
         catchError((error: any) => {
-          console.error('Error removing product:', error);
           this.toastService.error('Failed to remove product. Please try again.', 'Error');
           return of(null);
         }),
@@ -378,14 +354,12 @@ export class CartComponent implements OnInit, OnDestroy {
     } else {
       // Fallback: remove by index if provided, otherwise find by matching properties
       if (index !== undefined && index >= 0) {
-        console.log('🔍 Removing by index:', index);
         this.cartService.removeItemByIndex(index).pipe(
           takeUntil(this.destroy$),
           tap(() => {
             this.toastService.success('Item removed from cart', 'Removed');
           }),
           catchError((error: any) => {
-            console.error('Error removing item by index:', error);
             this.toastService.error('Failed to remove item. Please try again.', 'Error');
             return of(null);
           }),
@@ -394,7 +368,6 @@ export class CartComponent implements OnInit, OnDestroy {
           })
         ).subscribe();
       } else {
-        console.log('⚠️ IDs missing, removing by finding item in array');
         this.cartItems$.pipe(take(1)).subscribe(items => {
           const itemIndex = items.findIndex(cartItem => 
             cartItem === item || 
@@ -403,14 +376,12 @@ export class CartComponent implements OnInit, OnDestroy {
              cartItem.quantity === item.quantity)
           );
           if (itemIndex !== -1) {
-            console.log('🔍 Found item at index:', itemIndex);
             this.cartService.removeItemByIndex(itemIndex).pipe(
               takeUntil(this.destroy$),
               tap(() => {
                 this.toastService.success('Item removed from cart', 'Removed');
               }),
               catchError((error: any) => {
-                console.error('Error removing item by index:', error);
                 this.toastService.error('Failed to remove item. Please try again.', 'Error');
                 return of(null);
               }),
@@ -419,7 +390,6 @@ export class CartComponent implements OnInit, OnDestroy {
               })
             ).subscribe();
           } else {
-            console.error('Could not find item to remove:', item);
             this.loading = false;
           }
         });
@@ -447,7 +417,6 @@ export class CartComponent implements OnInit, OnDestroy {
           this.toastService.success('Your cart has been cleared', 'Cleared');
         }),
         catchError((error: any) => {
-          console.error('Error clearing cart:', error);
           this.toastService.error('Failed to clear cart. Please try again.', 'Error');
           return of(null);
         }),
@@ -474,7 +443,6 @@ export class CartComponent implements OnInit, OnDestroy {
         }
       }),
       catchError((error: any) => {
-        console.error('Error applying voucher:', error);
         this.toastService.error('Failed to apply voucher. Please try again.', 'Error');
         return of(false);
       }),

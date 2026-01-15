@@ -171,7 +171,6 @@ export class CartService implements OnDestroy {
     const currentState = this.cartState.value;
     
     if (index < 0 || index >= currentState.items.length) {
-      console.error('Invalid index for removal:', index);
       return of(currentState);
     }
     
@@ -190,7 +189,6 @@ export class CartService implements OnDestroy {
     discount?: number;
     selectedVariants?: any;
   }): Observable<ICartState> {
-    console.log('Adding package to cart:', packageData);
     
     const packageItem: IAddToCartRequest = {
       packageId: packageData.packageId,
@@ -204,7 +202,6 @@ export class CartService implements OnDestroy {
       itemType: 'Package'
     };
     
-    console.log('Package item prepared for cart:', packageItem);
     
     return this.addToCart(packageItem);
   }
@@ -281,8 +278,6 @@ export class CartService implements OnDestroy {
     const summary = this.calculateSummary(items, selectedCountry, selectedState);
     const newState: ICartState = { items, summary };
     
-    console.log('Cart state being updated:', newState);
-    console.log('Total items in cart:', summary.itemsCount);
     
     // In a real app, you would make an API call here to sync with the server
     // For now, we'll just update the local state
@@ -353,7 +348,6 @@ export class CartService implements OnDestroy {
         localStorage.setItem(this.CART_STORAGE_KEY, JSON.stringify(cart));
       }
     } catch (error) {
-      console.error('Error saving cart to storage:', error);
     }
   }
 

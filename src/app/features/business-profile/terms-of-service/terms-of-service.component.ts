@@ -44,7 +44,6 @@ export class TermsOfServiceComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading business profile:', error);
         this.toastService.error('Failed to load terms of service', 'Error');
         this.loading = false;
       }

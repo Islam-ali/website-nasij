@@ -106,7 +106,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    console.log('Topbar component initialized');
     // Load business profile first
     this.getBusinessProfile();
     this.loadCategories();
@@ -119,7 +118,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           this.currentUser = user;
         },
         error: (error: Error) => {
-          console.error('Error in user subscription:', error);
         }
       })
     );
@@ -131,19 +129,16 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         takeUntil(this.destroy$)
       ).subscribe({
         next: (cartState: ICartState) => {
-          console.log('Cart state updated in topbar:', cartState);
           this.cartItems.set(cartState.items);
           // Calculate total quantity of all items
           const totalCount = cartState.items.reduce((total: number, item: ICartItem) => {
             return total + (item.quantity || 0);
           }, 0);
-          console.log('Cart item count updated:', totalCount);
           this.cartItemCount.set(totalCount);
           // Use summary total instead of recalculating
           this.cartTotal.set(cartState.summary.total);
         },
         error: (error: Error) => {
-          console.error('Error loading cart items:', error);
         }
       })
     );
@@ -159,7 +154,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           this.wishlistCount.set(state.summary.itemsCount);
         },
         error: (error: Error) => {
-          console.error('Error loading wishlist items:', error);
         }
       })
     );
@@ -186,7 +180,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           });
           }),
           catchError((error: any) => {
-            console.error('Error adding item:', error);
           this.toastService.add({
             severity: 'error',
             summary: 'Error',
@@ -215,7 +208,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           });
         }),
         catchError((error: any) => {
-          console.error('Error removing package:', error);
           this.toastService.add({
             severity: 'error',
             summary: 'Error',
@@ -238,7 +230,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
           });
         }),
         catchError((error: any) => {
-          console.error('Error removing product:', error);
           this.toastService.add({
             severity: 'error',
             summary: 'Error',
@@ -251,7 +242,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         })
       ).subscribe();
     } else {
-      console.error('Invalid item type for removal:', item);
     }
   }
 
@@ -268,7 +258,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         tap(() => {
         }),
         catchError((error: any) => {
-          console.error('Error updating package quantity in topbar:', error);
           return of(null);
         })
       ).subscribe();
@@ -279,12 +268,10 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         tap(() => {
         }),
         catchError((error: any) => {
-          console.error('Error updating product quantity in topbar:', error);
           return of(null);
         })
       ).subscribe();
     } else {
-      console.error('Invalid item type for quantity update in topbar:', item);
     }
   }
 
@@ -359,7 +346,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         menuLinks.forEach(menuLink => {
           if (menuLink.type === MenuLinkType.DROPDOWN && menuLink.dropdownConfig) {
             this.loadDropdownItems(menuLink.key, menuLink.dropdownConfig);
-            console.log('Dropdown items loaded for menu link:', menuLink, this.dropdownItems());
           }
         });
       })
@@ -373,10 +359,8 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         const currentMap = this.dropdownItems();
         currentMap.set(key, items);
         this.dropdownItems.set(new Map(currentMap));
-        console.log('Dropdown items loaded for menu link:', key, items, this.dropdownItems());
       }),
       catchError((error) => {
-        console.error(`Error loading dropdown items for ${key}:`, error);
         return of([]);
       })
     ).subscribe();
@@ -439,7 +423,6 @@ export class TopbarComponent extends ComponentBase implements OnInit, OnDestroy 
         }
       },
       error: (error) => {
-        console.error('Topbar - Error loading business profile manually:', error);
       }
     });
   }

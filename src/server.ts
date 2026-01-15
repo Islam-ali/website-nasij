@@ -15,9 +15,6 @@ const distFolder = join(process.cwd(), 'dist/store-website/browser');
 
 // Check if browser build exists
 if (!existsSync(distFolder)) {
-  console.error(`❌ Error: Browser build not found at ${distFolder}`);
-  console.error(`   Please run: ng build --configuration production`);
-  console.error(`   Or use: npm run build:ssr`);
   process.exit(1);
 }
 
@@ -27,9 +24,6 @@ const indexFile = existsSync(join(distFolder, 'index.original.html'))
 
 const indexFilePath = join(distFolder, indexFile);
 if (!existsSync(indexFilePath)) {
-  console.error(`❌ Error: index.html not found at ${indexFilePath}`);
-  console.error(`   Please run: ng build --configuration production`);
-  console.error(`   Or use: npm run build:ssr`);
   process.exit(1);
 }
 
@@ -203,7 +197,6 @@ function run(): void {
       while (hasMore) {
         try {
           const productsUrl = `${apiUrl}/products?page=${page}&limit=${limit}`;
-          console.log(`Sitemap: Fetching page ${page} from ${productsUrl}`);
           
           const data = await makeRequest(productsUrl, 15000); // 15 second timeout
           
@@ -225,29 +218,22 @@ function run(): void {
             
             // Safety check to prevent infinite loop
             if (page > 1000) {
-              console.warn('Sitemap generation: Too many pages, stopping to prevent infinite loop');
               hasMore = false;
             }
           } else {
-            console.log(`Sitemap: No more products or invalid response structure`);
             hasMore = false;
           }
         } catch (error: any) {
           const errorMsg = error.message || String(error);
-          console.error(`Sitemap: Error fetching page ${page}:`, errorMsg);
           fetchErrors.push(`Page ${page}: ${errorMsg}`);
           
           // If it's the first page and it fails, we should still return a sitemap with static pages
           if (page === 1) {
-            console.warn('Sitemap: Failed to fetch products from API, generating sitemap with static pages only');
           }
           
           hasMore = false;
         }
       }
-      
-      console.log(`Sitemap: Fetched ${allProducts.length} products${fetchErrors.length > 0 ? ` (with ${fetchErrors.length} errors)` : ''}`);
-      
       // Generate sitemap XML (even if products fetch failed, return static pages)
       const sitemapXml = generateSitemap(allProducts, baseUrl);
       
@@ -255,7 +241,6 @@ function run(): void {
       res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
       res.send(sitemapXml);
     } catch (error: any) {
-      console.error('Sitemap generation error:', error);
       // Return minimal sitemap even on error
       try {
         const baseUrl = process.env['BASE_URL'] || process.env['NX_BASE_URL'] || 
@@ -264,7 +249,6 @@ function run(): void {
         res.setHeader('Content-Type', 'application/xml; charset=utf-8');
         res.send(minimalSitemap);
       } catch (fallbackError: any) {
-        console.error('Sitemap fallback error:', fallbackError);
         res.status(500).setHeader('Content-Type', 'application/xml; charset=utf-8').send(
           `<?xml version="1.0" encoding="UTF-8"?><error>${escapeXml(String(error))}</error>`
         );
@@ -283,9 +267,7 @@ function run(): void {
       res.setHeader('Content-Type', 'text/html');
       res.send(html);
     } catch (error) {
-      console.error('SSR render error for', req.originalUrl, ':', error);
       if (error instanceof Error) {
-        console.error('Error stack:', error.stack);
       }
       // Send the index.html as fallback so the client can hydrate
       res.setHeader('Content-Type', 'text/html');
@@ -294,7 +276,6 @@ function run(): void {
   });
 
   app.listen(port, () => {
-    console.log(`Angular SSR server listening on http://localhost:${port}`);
   });
 }
 

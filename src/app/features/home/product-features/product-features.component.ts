@@ -57,7 +57,6 @@ export class ProductFeaturesComponent implements OnInit, OnDestroy {
           this.businessProfile = profile;
         },
         error: (error) => {
-          console.error('Error loading business profile:', error);
         }
       });
   }
@@ -72,7 +71,6 @@ export class ProductFeaturesComponent implements OnInit, OnDestroy {
         });
       },
       error: (error) => {
-        console.error('Error loading features:', error);
       },
     });
   }
@@ -83,7 +81,6 @@ export class ProductFeaturesComponent implements OnInit, OnDestroy {
         this.featureProducts.set(feature._id, response.data);
       },
       error: (error) => {
-        console.error(`Error loading products for feature ${feature._id}:`, error);
         this.featureProducts.set(feature._id, []);
       },
     });

@@ -53,7 +53,6 @@ export class ThemeService {
 
   private getSystemPrefersDark(): boolean {
     if (isPlatformBrowser(this.platformId)) {
-      console.log('getSystemPrefersDark', window.matchMedia('(prefers-color-scheme: dark)').matches);
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;

@@ -22,7 +22,6 @@ export class ThemeService {
         }
       },
       error: (error) => {
-        console.warn('Failed to load primary color from business profile:', error);
         // Keep default color
         this.setPrimaryColor('#976735');
       }
