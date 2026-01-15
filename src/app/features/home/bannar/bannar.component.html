@@ -1,13 +1,15 @@
 @if(bannar()) {
     @for(banner of bannar(); track banner._id; let i = $index) {
-        <section class="py-20 bg-gradient-to-r from-primary-400 to-primary-900 dark:from-primary-500 dark:to-primary-900 transition-colors duration-300">
+        <section class="py-20 transition-colors duration-300"
+                 [ngStyle]="{'background': banner.background || 'linear-gradient(to right, rgb(59 130 246), rgb(17 24 39))'}">
           <div class="max-w-[1922px] mx-auto px-4">
-            <div class="grid lg:grid-cols-2 gap-12 items-center"
-                 >
+            <div class="flex flex-col lg:flex-row gap-12"
+                 [style.align-items]="banner.alignItems || 'center'"
+                 [style.justify-content]="banner.justifyContent || 'center'">
                  
               <!-- النص -->
-              <div class="space-y-8"
-                   [ngClass]="{ 'md:order-2': i % 2 === 1 }">
+              <div class="space-y-8 flex-1"
+                   [ngClass]="{ 'lg:order-2': i % 2 === 1 }">
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/20 dark:bg-white/10 text-white transition-colors duration-300">
                   <i class="pi pi-tag me-2"></i>
                   {{banner.tag | multiLanguage}}
@@ -32,7 +34,7 @@
               </div>
         
               <!-- الصورة -->
-              <div class="relative">
+              <div class="relative flex-1">
                 <img [src]="banner?.image?.filePath" [alt]="banner?.image?.fileName" fallback="images/photo.png"
                      class="w-full h-auto rounded-2xl shadow-2xl dark:shadow-gray-900/50 transition-all duration-300">
               </div>
