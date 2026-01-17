@@ -478,7 +478,7 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
     // Scroll to top when navigating to new product
     this.scrollToTop();
     // Navigate to the new product
-    this.router.navigate(['/shop', product._id, product.name?.en || product.name || 'product']).then(() => {
+    this.router.navigate(['/shop', product._id, product.name?.[this.currentLanguage] || product.name?.en || 'product']).then(() => {
       // Force reload by navigating with onSameUrlNavigation
       // The paramMap subscription will handle the reload
     });
@@ -600,11 +600,11 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
 
   private updateSeo(product: IProduct): void {
     const localizedName = product.seoTitle?.[this.currentLanguage] || product.seoTitle?.en || '';
-    const localizedSummary = product.seoDescription?.[this.currentLanguage] || product.seoDescription?.en || '';
+    const localizedSummary = product.seoDescription?.[this.currentLanguage] || product.seoDescription?.en || product.seoDescription?.ar || '';
     const description = localizedSummary
       ? localizedSummary.replace(/<[^>]+>/g, '').substring(0, 160)
-      : `Discover ${localizedName} with premium quality on pledgestores.com.`;
-    const canonicalUrl = `${FRONTEND_DOMAIN}/shop/${product._id}`;
+      : `Discover ${localizedName} with premium quality on ${environment.domain}.`;
+    const canonicalUrl = `${FRONTEND_DOMAIN}/shop/${product._id}/${product.name?.[this.currentLanguage] || product.name?.en || 'product'}`;
     const ogImage = product.seoImage?.filePath ? `${FRONTEND_DOMAIN}/${product.seoImage.filePath}` : 
    `${FRONTEND_DOMAIN}/${product.images[0]?.filePath}`;
 
@@ -627,8 +627,8 @@ export class ProductDetailsComponent extends ComponentBase implements OnInit {
       ogImage,
       ogType: 'product',
       hreflangs: [
-        { lang: 'en', url: `${FRONTEND_DOMAIN}/shop/${product._id}` },
-        { lang: 'ar', url: `${FRONTEND_DOMAIN}/shop/${product._id}` },
+        { lang: 'en', url: `${FRONTEND_DOMAIN}/shop/${product._id}/${product.name?.[this.currentLanguage] || product.name?.en || 'product'}` },
+        { lang: 'ar', url: `${FRONTEND_DOMAIN}/shop/${product._id}/${product.name?.[this.currentLanguage] || product.name?.en || 'product'}` },
         { lang: 'x-default', url: canonicalUrl }
       ]
     });

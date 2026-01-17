@@ -1,16 +1,17 @@
 @if (reviews.length > 0) {
 <section class="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
-  <div class="max-w-[1922px] mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Section Header -->
     <div [class]="'mb-16 ' + getHeaderAlignmentClass()">
       <h2
-        class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
+        class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300"
+        id="reviews-heading">
         <span
-          class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">
+          class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-400 dark:to-primary-600 bg-clip-text text-transparent">
           {{ 'reviews.what_customers_say' | translate }}
         </span>
       </h2>
-      <p class="text-gray-600 dark:text-gray-300  text-lg transition-colors duration-300">
+      <p class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300 leading-relaxed">
         {{ 'reviews.real_feedback' | translate }}
       </p>
     </div>
@@ -97,10 +98,10 @@
         }
 
         <!-- Date -->
-        @if (review.createdAt) {
+        @if (review.reviewDate) {
         <div class="text-xs text-gray-400 dark:text-gray-500 mt-4">
           <i class="pi pi-calendar me-1"></i>
-          {{ review.createdAt | date:'mediumDate' }}
+          {{ review.reviewDate | date:'mediumDate' }}
         </div>
         }
       </div>

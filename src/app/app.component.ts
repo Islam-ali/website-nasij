@@ -29,20 +29,46 @@ export class AppComponent implements OnInit {
     // Initialize language and direction immediately
     if (isPlatformBrowser(this.platformId)) {
       this.translationService.initBrowserFeatures();
+
+      // Fix back/forward cache issues
+      this.setupBFCacheHandlers();
     }
-    
+
     // During SSR, don't block rendering
     if (!isPlatformBrowser(this.platformId)) {
       this.isLoading = false;
       this.loadBusinessProfile();
       return;
     }
-    
+
     // Wait for translations to be ready before showing the app
     await this.translationService.waitForTranslations();
-    
+
     // After translations are ready, load business profile
     this.loadBusinessProfile();
+  }
+
+  private setupBFCacheHandlers(): void {
+    // Handle back/forward cache restoration
+    // Listen for pageshow event to detect bfcache restoration
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        // Page was restored from bfcache
+        // Re-initialize any state that might have been lost
+        this.translationService.initBrowserFeatures();
+      }
+    });
+
+    // Listen for pagehide to prepare for bfcache
+    window.addEventListener('pagehide', (event) => {
+      // Clear any intervals or timeouts that might prevent bfcache
+      // Angular handles most cleanup automatically
+    });
+
+    // Handle beforeunload to ensure clean state
+    window.addEventListener('beforeunload', () => {
+      // Angular handles cleanup, but we can ensure no pending operations
+    });
   }
 
   init() {

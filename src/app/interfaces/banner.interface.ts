@@ -4,7 +4,6 @@ import { IArchived } from "./archive.interface";
 export interface BannerButton {
   label: MultilingualText;             // "Shop Sale"
   url: string;               // "/shop/sale"
-  params?: Record<string, string>; // { category: "men", sort: "new" }
 }
 
 export interface Banner {
@@ -20,6 +19,9 @@ export interface Banner {
   background?: string;       // Background color or gradient
   alignItems?: string;      // Vertical alignment (flex-start, center, flex-end)
   justifyContent?: string;   // Horizontal alignment (flex-start, center, flex-end, space-between, space-around)
+  noBackground?: boolean;    // Whether to hide the background (transparent)
+  textColor?: string;        // Text color (default: white)
+  flexDirection?: string;    // Flex direction (row, row-reverse)
   createdAt?: Date;
   updatedAt?: Date;
 } 

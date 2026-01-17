@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900/50 transition-all duration-500 pb-10">
   <!-- Loading State -->
   @if (loading()) {
-  <div class="max-w-[1922px] mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
+  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
         <div class="flex flex-col items-center">
           <div class="w-full max-w-xl sticky top-">
@@ -49,7 +49,7 @@
 
   <!-- Package Details Content -->
   @if (!loading() && !error() && package()) {
-  <div class="max-w-[1922px] mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
+  <div class="max-w-[1440px] mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 relative z-10 overflow-hidden">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start w-full overflow-hidden">
       <!-- Package Images -->
       <div class="col-span-1 w-full overflow-hidden">

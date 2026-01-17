@@ -1,42 +1,66 @@
 @if(bannar()) {
     @for(banner of bannar(); track banner._id; let i = $index) {
         <section class="py-20 transition-colors duration-300"
-                 [ngStyle]="{'background': banner.background || 'linear-gradient(to right, rgb(59 130 246), rgb(17 24 39))'}">
-          <div class="max-w-[1922px] mx-auto px-4">
+                 [ngStyle]="{
+                   'background': banner.noBackground ? 'transparent' : banner.background,
+                   'color': banner.textColor || '#ffffff'
+                 }">
+          <div class="max-w-[1440px] mx-auto px-4">
             <div class="flex flex-col lg:flex-row gap-12"
+                 [ngClass]="{
+                   'flex-row': banner.flexDirection === 'row' || !banner.flexDirection,
+                   'flex-row-reverse': banner.flexDirection === 'row-reverse'
+                 }"
                  [style.align-items]="banner.alignItems || 'center'"
                  [style.justify-content]="banner.justifyContent || 'center'">
                  
               <!-- النص -->
               <div class="space-y-8 flex-1"
-                   [ngClass]="{ 'lg:order-2': i % 2 === 1 }">
-                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/20 dark:bg-white/10 text-white transition-colors duration-300">
+                    [ngClass]="{ 'lg:order-2': i % 2 === 1 }">
+                  <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300"
+                      [style.color]="banner.textColor"
+                      [style.background-color]="banner.textColor+'20'"
+                      >
                   <i class="pi pi-tag me-2"></i>
                   {{banner.tag | multiLanguage}}
                 </span>
-                <h2 class="text-4xl lg:text-5xl font-bold text-white transition-colors duration-300
-                !leading-tight">
+                <h2 class="text-4xl lg:text-5xl font-bold text-white transition-colors duration-300 !leading-tight"
+                    [style.color]="banner.textColor || '#ffffff'">
                   {{banner.title | multiLanguage}}
                 </h2>
-                <p class="text-white/90 dark:text-white/80 text-lg leading-relaxed transition-colors duration-300">
+                <p class="text-white/90 dark:text-white/80 text-lg leading-relaxed transition-colors duration-300"
+                   [style.color]="banner.textColor || '#ffffff'"
+                   [style.opacity]="banner.textColor ? '1' : null">
                   {{banner.description | multiLanguage}}
                 </p>
         
                 <div class="flex flex-col sm:flex-row gap-4"
                 >
                   @for(button of banner?.buttons; track button.label) {
-                    <button [routerLink]="button.url" [queryParams]="button.params"
-                      class="bg-white dark:bg-gray-100 text-primary-400 dark:text-primary-400 px-8 py-2 rounded-xl font-semibold text-lg hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105">
+                    <button (click)="navigateTo(button.url)"
+                      class="bg-primary-400 dark:bg-gray-100 text-white dark:text-primary-400 px-8 py-2 rounded-xl font-semibold text-lg hover:opacity-80 transition-all duration-300 hover:scale-105">
                       {{button.label | multiLanguage}}
                     </button>
                   }
                 </div>
               </div>
         
-              <!-- الصورة -->
-              <div class="relative flex-1">
-                <img [src]="banner?.image?.filePath" [alt]="banner?.image?.fileName" fallback="images/photo.png"
-                     class="w-full h-auto rounded-2xl shadow-2xl dark:shadow-gray-900/50 transition-all duration-300">
+              <!-- الصورة أو الفيديو -->
+              <div class="relative flex justify-center items-center w-full flex-1">
+                @if (banner?.image?.mimeType?.startsWith('video/')) {
+                  <video [src]="(domain + banner?.image?.filePath || '') | safe:'url'" 
+                  [autoplay]="true"
+                  [muted]="true"
+                  [loop]="true"
+                  playsinline
+                         class="w-auto object-contain h-auto max-h-[500px] rounded-2xl shadow-md dark:shadow-gray-900/50 transition-all duration-300"
+                         preload="metadata">
+                    Your browser does not support the video tag.
+                  </video>
+                } @else {
+                  <img [src]="(domain + banner?.image?.filePath || '') | safe:'url'" [alt]="banner?.image?.fileName" fallback="images/photo.png"
+                       class="w-auto object-contain h-auto max-h-[500px] rounded-2xl shadow-md dark:shadow-gray-900/50 transition-all duration-300">
+                }
               </div>
             </div>
           </div>

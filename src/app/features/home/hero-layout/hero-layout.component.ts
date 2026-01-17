@@ -97,6 +97,12 @@ export class HeroLayoutComponent implements OnInit {
       classes.push(`gap-${gapClass}`);
     }
 
+    // Layout container classes
+    if (config.maxWidth && config.maxWidth !== 'none') {
+      // Remove default max-width and apply custom one via styles instead
+      // This will be handled in getGridContainerStyles
+    }
+
     if (config.justifyContent) {
       const justifyMap: { [key: string]: string } = {
         'center': 'justify-items-center',
@@ -128,7 +134,7 @@ export class HeroLayoutComponent implements OnInit {
 
   getGridContainerStyles(config?: IProfessionalGridConfig): any {
     if (!config) return {};
-    
+
     const styles: any = {};
 
     if (config.rows) {
@@ -142,6 +148,19 @@ export class HeroLayoutComponent implements OnInit {
       if (rowHeight) {
         styles['grid-auto-rows'] = rowHeight;
       }
+    }
+
+    // Layout options
+    if (config.maxWidth) {
+      styles['max-width'] = config.maxWidth;
+    }
+
+    if (config.justifyContent) {
+      styles['justify-content'] = config.justifyContent;
+    }
+
+    if (config.alignItems) {
+      styles['align-items'] = config.alignItems;
     }
 
     return styles;

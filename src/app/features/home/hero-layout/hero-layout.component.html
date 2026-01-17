@@ -1,7 +1,8 @@
 @if (!loading) {
   @for (layout of heroLayouts; track layout._id) {
     <section class="pt-4 pb-10 bg-white dark:bg-gray-900 transition-colors duration-300">
-      <div class="max-w-[1922px] mx-auto px-4">
+      <div class="mx-auto px-4"
+           [ngClass]="layout.gridConfig?.maxWidth && layout.gridConfig?.maxWidth !== 'none' ? 'max-w-[' + layout.gridConfig?.maxWidth + ']' : 'max-w-[1440px]'">
         <!-- Section Header -->
         @if (layout.sectionTitle?.en || layout.sectionSubtitle?.en || layout.description?.en) {
           <div class="text-center mb-16 max-w-2xl mx-auto">
@@ -32,7 +33,8 @@
             @for (item of layout.items; track $index; let i = $index) {
               @if (item.isActive !== false) {
               <div 
-                class="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 transition-all duration-500 w-full h-full {{ getItemClasses(layout.gridConfig, i) }}"
+                class="group relative overflow-hidden rounded-2xl 
+                transition-all duration-500 w-full h-full {{ getItemClasses(layout.gridConfig, i) }}"
                 [class.cursor-pointer]="item.buttonLink && !item.video"
                 (click)="item.buttonLink && !item.video && onButtonClick(item.buttonLink)">
                 
@@ -42,7 +44,7 @@
                     <video 
                       #videoPlayer
                       [src]="domain + item.video.filePath" 
-                      class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
+                      class="w-full h-full object-contain"
                       [autoplay]="item.videoAutoplay !== false"
                       [muted]="true"
                       [loop]="true"
@@ -65,7 +67,7 @@
                     [src]="item.image.filePath" 
                     [alt]="item.image.fileName" 
                     fallback
-                    class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700">
+                    class="w-full h-full object-contain">
                 }
                 
                 <!-- Content -->

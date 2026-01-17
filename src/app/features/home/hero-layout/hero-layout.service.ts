@@ -47,6 +47,9 @@ export interface IProfessionalGridConfig {
     xl?: string;
   };
   gap?: number;
+  maxWidth?: string; // مثل '1440px', '1200px', 'none'
+  justifyContent?: string; // flex justify values: 'center', 'start', 'end', 'between', 'around'
+  alignItems?: string; // flex align values: 'center', 'start', 'end', 'stretch'
   items?: Array<{
     colSpan?: {
       base?: number;
@@ -63,8 +66,6 @@ export interface IProfessionalGridConfig {
     customClass?: string;
   }>;
   wrapperClass?: string;
-  justifyContent?: string;
-  alignItems?: string;
 }
 
 export interface IHeroLayout {

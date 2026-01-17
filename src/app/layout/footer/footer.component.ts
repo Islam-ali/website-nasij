@@ -14,9 +14,9 @@ import { environment } from '../../../environments/environment';
   imports: [CommonModule, RouterModule, TranslateModule, MultiLanguagePipe],
   template: `
   <!-- Enhanced Footer -->
-  <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+  <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white" role="contentinfo" aria-label="معلومات الموقع والتواصل">
     <!-- Main Footer Content -->
-    <div class="max-w-[1922px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
         
         <!-- Company Info -->
@@ -38,7 +38,7 @@ import { environment } from '../../../environments/environment';
 
         <!-- Quick Links -->
         <div class="space-y-3 sm:space-y-4 md:space-y-6">
-          <h4 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.quick_links' | translate }}</h4>
+          <h3 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.quick_links' | translate }}</h3>
           <ul class="space-y-2 sm:space-y-3">
             <li>
               <a routerLink="/" class="text-xs sm:text-sm text-gray-300 hover:text-primary-400 transition-colors duration-300 flex items-center gap-2 group">
@@ -69,58 +69,62 @@ import { environment } from '../../../environments/environment';
 
         <!-- Contact Info -->
         <div class="space-y-3 sm:space-y-4 md:space-y-6">
-          <h4 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.contact_info' | translate }}</h4>
+          <h3 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.contact_info' | translate }}</h3>
           <div class="space-y-3 sm:space-y-4">
-            <div class="flex items-start sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors">
-              <i class="pi pi-envelope text-primary-400 text-sm sm:text-base flex-shrink-0 mt-0.5 sm:mt-0"></i>
-              <span class="break-words">{{ businessProfile?.contactInfo?.email }}</span>
+            <div class="flex items-start sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors" role="listitem">
+              <i class="pi pi-envelope text-primary-400 text-sm sm:text-base flex-shrink-0 mt-0.5 sm:mt-0" aria-hidden="true"></i>
+              <span class="break-words" aria-label="البريد الإلكتروني">{{ businessProfile?.contactInfo?.email }}</span>
             </div>
-            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors">
-              <i class="pi pi-phone text-primary-400 text-sm sm:text-base flex-shrink-0"></i>
-              <span>{{ businessProfile?.contactInfo?.phone}}</span>
+            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors" role="listitem">
+              <i class="pi pi-phone text-primary-400 text-sm sm:text-base flex-shrink-0" aria-hidden="true"></i>
+              <span aria-label="رقم الهاتف">{{ businessProfile?.contactInfo?.phone}}</span>
             </div>
-            <div class="flex items-start sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors">
-              <i class="pi pi-map-marker text-primary-400 text-sm sm:text-base flex-shrink-0 mt-0.5 sm:mt-0"></i>
-              <span class="break-words">{{ businessProfile?.contactInfo?.address  | multiLanguage}}</span>
+            <div class="flex items-start sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors" role="listitem">
+              <i class="pi pi-map-marker text-primary-400 text-sm sm:text-base flex-shrink-0 mt-0.5 sm:mt-0" aria-hidden="true"></i>
+              <span class="break-words" aria-label="العنوان">{{ businessProfile?.contactInfo?.address  | multiLanguage}}</span>
             </div>
           </div>
         </div>
 
         <!-- Social Media -->
         <div class="space-y-3 sm:space-y-4 md:space-y-6">
-          <h4 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.follow_us' | translate }}</h4>
+          <h3 class="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">{{ 'footer.follow_us' | translate }}</h3>
           <div class="space-y-3 sm:space-y-4">
             <div class="flex flex-wrap gap-3 sm:gap-4">
               @if (businessProfile?.socialMedia?.facebook) {
-              <a 
-                 [href]="businessProfile!.socialMedia!.facebook!" 
-                 target="_blank" rel="noopener noreferrer" 
-                 class="w-9 h-9 sm:w-10 sm:h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <i class="pi pi-facebook text-white text-sm sm:text-base"></i>
+              <a
+                 [href]="businessProfile!.socialMedia!.facebook!"
+                 target="_blank" rel="noopener noreferrer"
+                 class="w-9 h-9 sm:w-10 sm:h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                 aria-label="تابعنا على فيسبوك">
+                <i class="pi pi-facebook text-white text-sm sm:text-base" aria-hidden="true"></i>
               </a>
               }
               @if (businessProfile?.socialMedia?.twitter) {
-              <a 
-                 [href]="businessProfile!.socialMedia!.twitter!" 
-                 target="_blank" rel="noopener noreferrer" 
-                 class="w-9 h-9 sm:w-10 sm:h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <i class="pi pi-twitter text-white text-sm sm:text-base"></i>
+              <a
+                 [href]="businessProfile!.socialMedia!.twitter!"
+                 target="_blank" rel="noopener noreferrer"
+                 class="w-9 h-9 sm:w-10 sm:h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                 aria-label="تابعنا على تويتر">
+                <i class="pi pi-twitter text-white text-sm sm:text-base" aria-hidden="true"></i>
               </a>
               }
               @if (businessProfile?.socialMedia?.instagram) {
-              <a 
-                 [href]="businessProfile!.socialMedia!.instagram!" 
-                 target="_blank" rel="noopener noreferrer" 
-                 class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <i class="pi pi-instagram text-white text-sm sm:text-base"></i>
+              <a
+                 [href]="businessProfile!.socialMedia!.instagram!"
+                 target="_blank" rel="noopener noreferrer"
+                 class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                 aria-label="تابعنا على إنستغرام">
+                <i class="pi pi-instagram text-white text-sm sm:text-base" aria-hidden="true"></i>
               </a>
               }
               @if (businessProfile?.socialMedia?.tiktok) {
-              <a 
-                 [href]="businessProfile!.socialMedia!.tiktok!" 
-                 target="_blank" rel="noopener noreferrer" 
-                 class="w-9 h-9 sm:w-10 sm:h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <i class="pi pi-tiktok text-white text-sm sm:text-base"></i>
+              <a
+                 [href]="businessProfile!.socialMedia!.tiktok!"
+                 target="_blank" rel="noopener noreferrer"
+                 class="w-9 h-9 sm:w-10 sm:h-10 bg-black hover:bg-gray-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+                 aria-label="تابعنا على تيك توك">
+                <i class="pi pi-tiktok text-white text-sm sm:text-base" aria-hidden="true"></i>
               </a>
               }
             </div>
@@ -133,7 +137,7 @@ import { environment } from '../../../environments/environment';
     <div class="border-t border-gray-800"></div>
 
     <!-- Bottom Footer -->
-    <div class="max-w-[1922px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
         <!-- Copyright -->
         <p class="text-xs sm:text-sm text-gray-400 text-center sm:text-left">

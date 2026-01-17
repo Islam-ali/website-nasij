@@ -1,7 +1,7 @@
 <!-- Enhanced Hero Section - Full Image Grid with Tailwind Dark Mode -->
  @if (heroes.length > 0) {
 <section class="hero-section relative overflow-hidden transition-all duration-300 dark:from-gray-900 dark:to-gray-900">
-    <div class="w-full max-w-[1922px] mx-auto px-2 py-8">
+    <div class="w-full max-w-[1440px] mx-auto px-2 py-8">
         <!-- skeleton loader -->
          @if (isLoading) {
         <div class="grid gap-6 min-h-max max-h-[600px] animate-pulse" [ngClass]="getGridClasses(3)">
@@ -125,12 +125,12 @@
         </div> -->
 
         <!-- Fashion Badge -->
-        <div class="absolute top-4 left-4 rounded-full px-4 py-2 backdrop-blur-sm transition-all duration-300 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200">
+        <!-- <div class="absolute top-4 left-4 rounded-full px-4 py-2 backdrop-blur-sm transition-all duration-300 bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200">
             <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span class="text-sm font-medium">{{ 'home.trending_now' | translate }}</span>
             </div>
-        </div>
+        </div> -->
 
         <!-- Sale Badge -->
         <!-- <div

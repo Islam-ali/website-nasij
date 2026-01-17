@@ -1,23 +1,25 @@
 @if (featuredCollections.length > 0) {
 @for (collection of featuredCollections; track collection._id) {
 <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-    <div class="max-w-[1922px] mx-auto px-4">
+    <div class="max-w-[1440px] mx-auto px-4">
         <div class="text-center mb-16 max-w-2xl mx-auto">
             @if (collection.sectionTitle) {
             <span
-                class="text-primary-400 dark:text-primary-400 font-medium transition-colors duration-300">
+                class="text-primary-600 dark:text-primary-400 font-semibold transition-colors duration-300"
+                role="banner">
                 <span class="block">{{collection.sectionTitle | multiLanguage}}</span>
             </span>
             }
             @if (collection.sectionSubtitle) {
             <h2
-                class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
+                class="text-4xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300"
+                [id]="'collection-heading-' + collection._id">
                 <span class="block">{{collection.sectionSubtitle | multiLanguage}}</span>
             </h2>
             }
             @if (collection.description) {
             <p
-                class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
+                class="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300 leading-relaxed">
                 <span class="block">{{collection.description | multiLanguage}}</span>
             </p>
             }

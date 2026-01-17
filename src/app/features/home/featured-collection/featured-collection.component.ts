@@ -208,7 +208,7 @@ export class FeaturedCollectionComponent {
     const classes: string[] = [];
     
     if (!gridConfig?.width) {
-      classes.push('max-w-[1922px]');
+      classes.push('max-w-[1440px]');
     }
     classes.push('mx-auto');
     

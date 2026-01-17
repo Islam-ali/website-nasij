@@ -2,7 +2,7 @@
 @for (feature of features; track feature._id) {
   @if (getFeatureProducts(feature._id).length > 0) {
     <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-      <div class="max-w-[1922px] mx-auto px-4">
+      <div class="max-w-[1440px] mx-auto px-4">
         <div [class]="'mb-16 ' + getHeaderAlignmentClass()">
           @if (feature.title) {
             <h2
@@ -15,7 +15,7 @@
           }
           @if (feature.description) {
             <p
-              class="text-gray-600 dark:text-gray-300 max-w-2xl  transition-colors duration-300">
+              class="text-gray-600 dark:text-gray-300 transition-colors duration-300">
               {{ feature.description | multiLanguage }}
             </p>
           }

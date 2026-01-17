@@ -2,10 +2,10 @@
 <div
   class="fashion-home min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
   <!-- Hero Section -->
-  <!-- <app-hero-section></app-hero-section> -->
+  <app-hero-section></app-hero-section>
 
   <!-- Featured Collections -->
-  <!-- <app-featured-collection></app-featured-collection> -->
+  <app-featured-collection></app-featured-collection>
 
   <!-- Hero Layouts (Professional Grid) -->
   <app-hero-layout></app-hero-layout>
@@ -18,18 +18,19 @@
 
   <!-- packages -->
   @if (packages.length > 0) {
-  <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-    <div class="max-w-[1922px] mx-auto px-4">
+  <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300" aria-labelledby="packages-heading">
+    <div class="max-w-[1440px] mx-auto px-4">
       <div class="text-center mb-16">
           <span
-          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">
-          <i class="pi pi-star-fill me-2"></i>
+          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-500 text-white mb-4 transition-colors duration-300"
+          role="banner">
+          <i class="pi pi-star-fill me-2" aria-hidden="true"></i>
           {{ 'home.packages' | translate }}
         </span>
-        <h2
+        <h2 id="packages-heading"
         class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
         <span
-          class="bg-gradient-to-r from-primary-400 to-primary-800 dark:from-primary-400 dark:to-primary-800 bg-clip-text text-transparent">{{ 'home.our_packages' | translate }}</span>
+          class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-400 dark:to-primary-600 bg-clip-text text-transparent">{{ 'home.our_packages' | translate }}</span>
       </h2>
       </div>
       <app-carousel 
@@ -49,7 +50,7 @@
   <!-- Featured Products -->
   <!-- @if (featuredProducts && featuredProducts.length > 0) {
   <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-    <div class="max-w-[1922px] mx-auto px-4">
+    <div class="max-w-[1440px] mx-auto px-4">
       <div class="text-center mb-16">
         <span
           class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-400 dark:bg-primary-400/30 text-gray-100 dark:text-primary-500 mb-4 transition-colors duration-300">

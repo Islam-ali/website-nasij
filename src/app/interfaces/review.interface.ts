@@ -13,5 +13,6 @@ export interface IReview {
   order?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  reviewDate: string;
 }
 

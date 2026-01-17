@@ -1,7 +1,8 @@
 // tailwind.config.js
 module.exports = {
   content: [
-    "./src/**/*.{html,ts}",
+    "./src/**/*.{html,ts,scss}",
+    "./public/index.html"
   ],
   darkMode: 'class', // Enable class-based dark mode
   theme: {
@@ -129,81 +130,30 @@ module.exports = {
     },
   },
   safelist: [
-    {
-      pattern: /^(sm|md|lg|xl):(grid-cols|grid-rows|col-span|row-span|flex|items|justify|gap|w|h|min-w|max-w|min-h|max-h|text|p|px|py|m|mx|my|aspect|basis|grow|shrink)-/,
-    },
-    // Grid columns (base)
+    // Essential dynamic grid classes (only what's actually used)
     'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6',
-    'grid-cols-7', 'grid-cols-8', 'grid-cols-9', 'grid-cols-10', 'grid-cols-11', 'grid-cols-12',
-    // Grid columns (responsive)
-    'md:grid-cols-1', 'md:grid-cols-2', 'md:grid-cols-3', 'md:grid-cols-4', 'md:grid-cols-5', 'md:grid-cols-6',
-    'md:grid-cols-7', 'md:grid-cols-8', 'md:grid-cols-9', 'md:grid-cols-10', 'md:grid-cols-11', 'md:grid-cols-12',
-    'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4', 'lg:grid-cols-5', 'lg:grid-cols-6',
-    'lg:grid-cols-7', 'lg:grid-cols-8', 'lg:grid-cols-9', 'lg:grid-cols-10', 'lg:grid-cols-11', 'lg:grid-cols-12',
-    'xl:grid-cols-1', 'xl:grid-cols-2', 'xl:grid-cols-3', 'xl:grid-cols-4', 'xl:grid-cols-5', 'xl:grid-cols-6',
-    'xl:grid-cols-7', 'xl:grid-cols-8', 'xl:grid-cols-9', 'xl:grid-cols-10', 'xl:grid-cols-11', 'xl:grid-cols-12',
-    // Grid rows (base)
-    'grid-rows-1', 'grid-rows-2', 'grid-rows-3', 'grid-rows-4', 'grid-rows-5', 'grid-rows-6',
-    'grid-rows-7', 'grid-rows-8', 'grid-rows-9', 'grid-rows-10', 'grid-rows-11', 'grid-rows-12',
-    // Grid rows (responsive)
-    'md:grid-rows-1', 'md:grid-rows-2', 'md:grid-rows-3', 'md:grid-rows-4', 'md:grid-rows-5', 'md:grid-rows-6',
-    'md:grid-rows-7', 'md:grid-rows-8', 'md:grid-rows-9', 'md:grid-rows-10', 'md:grid-rows-11', 'md:grid-rows-12',
-    'lg:grid-rows-1', 'lg:grid-rows-2', 'lg:grid-rows-3', 'lg:grid-rows-4', 'lg:grid-rows-5', 'lg:grid-rows-6',
-    'lg:grid-rows-7', 'lg:grid-rows-8', 'lg:grid-rows-9', 'lg:grid-rows-10', 'lg:grid-rows-11', 'lg:grid-rows-12',
-    'xl:grid-rows-1', 'xl:grid-rows-2', 'xl:grid-rows-3', 'xl:grid-rows-4', 'xl:grid-rows-5', 'xl:grid-rows-6',
-    'xl:grid-rows-7', 'xl:grid-rows-8', 'xl:grid-rows-9', 'xl:grid-rows-10', 'xl:grid-rows-11', 'xl:grid-rows-12',
-    // Column spans (base)
-    'col-span-1', 'col-span-2', 'col-span-3', 'col-span-4', 'col-span-5', 'col-span-6',
-    'col-span-7', 'col-span-8', 'col-span-9', 'col-span-10', 'col-span-11', 'col-span-12',
-    // Column spans (responsive)
-    'md:col-span-1', 'md:col-span-2', 'md:col-span-3', 'md:col-span-4', 'md:col-span-5', 'md:col-span-6',
-    'md:col-span-7', 'md:col-span-8', 'md:col-span-9', 'md:col-span-10', 'md:col-span-11', 'md:col-span-12',
-    'lg:col-span-1', 'lg:col-span-2', 'lg:col-span-3', 'lg:col-span-4', 'lg:col-span-5', 'lg:col-span-6',
-    'lg:col-span-7', 'lg:col-span-8', 'lg:col-span-9', 'lg:col-span-10', 'lg:col-span-11', 'lg:col-span-12',
-    'xl:col-span-1', 'xl:col-span-2', 'xl:col-span-3', 'xl:col-span-4', 'xl:col-span-5', 'xl:col-span-6',
-    'xl:col-span-7', 'xl:col-span-8', 'xl:col-span-9', 'xl:col-span-10', 'xl:col-span-11', 'xl:col-span-12',
-    // Row spans (base)
-    'row-span-1', 'row-span-2', 'row-span-3', 'row-span-4', 'row-span-5', 'row-span-6',
-    'row-span-7', 'row-span-8', 'row-span-9', 'row-span-10', 'row-span-11', 'row-span-12',
-    // Row spans (responsive)
-    'md:row-span-1', 'md:row-span-2', 'md:row-span-3', 'md:row-span-4', 'md:row-span-5', 'md:row-span-6',
-    'md:row-span-7', 'md:row-span-8', 'md:row-span-9', 'md:row-span-10', 'md:row-span-11', 'md:row-span-12',
-    'lg:row-span-1', 'lg:row-span-2', 'lg:row-span-3', 'lg:row-span-4', 'lg:row-span-5', 'lg:row-span-6',
-    'lg:row-span-7', 'lg:row-span-8', 'lg:row-span-9', 'lg:row-span-10', 'lg:row-span-11', 'lg:row-span-12',
-    'xl:row-span-1', 'xl:row-span-2', 'xl:row-span-3', 'xl:row-span-4', 'xl:row-span-5', 'xl:row-span-6',
-    'xl:row-span-7', 'xl:row-span-8', 'xl:row-span-9', 'xl:row-span-10', 'xl:row-span-11', 'xl:row-span-12',
-    // Justify Content (Horizontal Alignment)
-    'justify-center', 'justify-start', 'justify-end', 'justify-between', 'justify-around', 'justify-evenly',
-    // Align Items (Vertical Alignment)
-    'items-center', 'items-start', 'items-end', 'items-stretch',
-    // Flex Direction
-    'flex-row', 'flex-col', 'flex-row-reverse', 'flex-col-reverse',
-    // Flex Wrap
-    'flex-wrap', 'flex-nowrap', 'flex-wrap-reverse',
-    // Flex Grow (0-12)
-    'grow-0', 'grow', 'grow-[2]', 'grow-[3]', 'grow-[4]', 'grow-[5]', 'grow-[6]',
-    'md:grow-0', 'md:grow', 'md:grow-[2]', 'md:grow-[3]', 'md:grow-[4]', 'md:grow-[5]', 'md:grow-[6]',
-    'lg:grow-0', 'lg:grow', 'lg:grow-[2]', 'lg:grow-[3]', 'lg:grow-[4]', 'lg:grow-[5]', 'lg:grow-[6]',
-    'xl:grow-0', 'xl:grow', 'xl:grow-[2]', 'xl:grow-[3]', 'xl:grow-[4]', 'xl:grow-[5]', 'xl:grow-[6]',
-    // Flex Shrink (0-12)
-    'shrink-0', 'shrink', 'shrink-[2]', 'shrink-[3]',
-    'md:shrink-0', 'md:shrink', 'md:shrink-[2]', 'md:shrink-[3]',
-    'lg:shrink-0', 'lg:shrink', 'lg:shrink-[2]', 'lg:shrink-[3]',
-    'xl:shrink-0', 'xl:shrink', 'xl:shrink-[2]', 'xl:shrink-[3]',
-    // Flex Basis
-    'basis-0', 'basis-auto', 'basis-full', 'basis-1/2', 'basis-1/3', 'basis-2/3', 'basis-1/4', 'basis-3/4',
-    'md:basis-0', 'md:basis-auto', 'md:basis-full', 'md:basis-1/2', 'md:basis-1/3', 'md:basis-2/3', 'md:basis-1/4', 'md:basis-3/4',
-    'lg:basis-0', 'lg:basis-auto', 'lg:basis-full', 'lg:basis-1/2', 'lg:basis-1/3', 'lg:basis-2/3', 'lg:basis-1/4', 'lg:basis-3/4',
-    'xl:basis-0', 'xl:basis-auto', 'xl:basis-full', 'xl:basis-1/2', 'xl:basis-1/3', 'xl:basis-2/3', 'xl:basis-1/4', 'xl:basis-3/4',
-
-    // any sm , md , lg , xl class
-    'sm:*', 'md:*', 'lg:*', 'xl:*',
-    'sm:w-full', 'sm:w-auto', 'sm:w-max', 'sm:w-min', 'sm:w-fit', 'sm:w-screen', 'sm:w-1/2', 'sm:w-1/3', 'sm:w-2/3', 'sm:w-1/4', 'sm:w-3/4',
-    'md:w-full', 'md:w-auto', 'md:w-max', 'md:w-min', 'md:w-fit', 'md:w-screen', 'md:w-1/2', 'md:w-1/3', 'md:w-2/3', 'md:w-1/4', 'md:w-3/4',
-    'lg:w-full', 'lg:w-auto', 'lg:w-max', 'lg:w-min', 'lg:w-fit', 'lg:w-screen', 'lg:w-1/2', 'lg:w-1/3', 'lg:w-2/3', 'lg:w-1/4', 'lg:w-3/4',
-    'xl:w-full', 'xl:w-auto', 'xl:w-max', 'xl:w-min', 'xl:w-fit', 'xl:w-screen', 'xl:w-1/2', 'xl:w-1/3', 'xl:w-2/3', 'xl:w-1/4', 'xl:w-3/4',
-    // any sm , md , lg , xl class
-
+    'md:grid-cols-1', 'md:grid-cols-2', 'md:grid-cols-3', 'md:grid-cols-4',
+    'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4',
+    'xl:grid-cols-1', 'xl:grid-cols-2', 'xl:grid-cols-3', 'xl:grid-cols-4',
+    // Essential responsive utilities
+    'hidden', 'md:hidden', 'lg:hidden', 'xl:hidden',
+    'block', 'md:block', 'lg:block', 'xl:block',
+    'flex', 'md:flex', 'lg:flex', 'xl:flex',
+    'grid', 'md:grid', 'lg:grid', 'xl:grid',
+    // Essential sizing
+    'w-full', 'h-full', 'text-center',
+    // Essential colors (dark mode)
+    'bg-white', 'bg-gray-50', 'bg-gray-900',
+    'text-white', 'text-gray-900', 'text-gray-600',
+    // Essential layout
+    'justify-center', 'justify-between', 'items-center',
+    'flex-row', 'flex-col', 'p-4', 'p-6', 'p-8',
+    // Essential styling
+    'border', 'rounded-lg', 'rounded-xl', 'shadow-lg',
+    'transition-all', 'duration-300',
+    // Dark mode essentials
+    'dark:bg-gray-800', 'dark:bg-gray-900', 'dark:text-white', 'dark:text-gray-300',
+    'dark:border-gray-700', 'dark:shadow-gray-900/50',
   ],
   plugins: [],
 };
