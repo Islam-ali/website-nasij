@@ -9,11 +9,12 @@
     "build": "ng build --configuration=production",
     "postbuild": "npm run generate:sitemap",
     "generate:sitemap": "node tools/sitemap-builder.js",
+    "generate:sitemap:api": "node src/server.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr": "ng build --configuration development && ng run store-website:server:development && node dist/store-website/server/main.js",
     "serve:ssr:store-website": "node dist/store-website/server/main.js",
-    "build:ssr": "ng build --configuration production && ng run store-website:server:production && npm run generate:sitemap",
+    "build:ssr": "ng build --configuration production && ng run store-website:server:production && npm run generate:sitemap:api",
     "prerender": "ng run store-website:prerender"
   },
   "private": true,
