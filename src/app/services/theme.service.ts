@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BusinessProfileService } from './business-profile.service';
 
 @Injectable({
@@ -10,7 +11,10 @@ export class ThemeService {
   primaryGradientEnd = signal<string>('#73532F');
   colorShades = signal<Record<number, string>>({});
 
-  constructor(private businessProfileService: BusinessProfileService) {
+  constructor(
+    private businessProfileService: BusinessProfileService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.loadPrimaryColor();
   }
 
@@ -44,6 +48,11 @@ export class ThemeService {
   }
 
   private applyCSSVariables(color: string, shades: Record<number, string>): void {
+    // Only apply CSS variables in browser environment (not during SSR)
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const root = document.documentElement;
     
     // Set base colors
