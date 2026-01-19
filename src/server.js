@@ -1,8 +1,8 @@
 // generate-sitemap.js
-import { writeFileSync } from 'node:fs';
-import * as https from 'node:https';
-import * as http from 'node:http';
-import { URL } from 'node:url';
+const { writeFileSync } = require('fs');
+const https = require('https');
+const http = require('http');
+const { URL } = require('url');
 
 // إعدادات الموقع
 const BASE_URL = 'https://pledgestores.com';
@@ -48,7 +48,7 @@ function generateSitemap(products, packages) {
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
   // الصفحات الثابتة
-  const staticPages = ['', '/shop', '/packages', '/about', '/track-order', '/privacy-policy', '/terms-of-service', '/faq'];
+  const staticPages = ['', '/shop', '/packages' , '/track-order', '/privacy-policy', '/terms-of-service', '/faq'];
   staticPages.forEach(url => {
     xml += '  <url>\n';
     xml += `    <loc>${escapeXml(BASE_URL + url)}</loc>\n`;
