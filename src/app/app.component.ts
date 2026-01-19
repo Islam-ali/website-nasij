@@ -26,20 +26,18 @@ export class AppComponent implements OnInit {
     private seoService: SeoService
   ) { }
   async ngOnInit(): Promise<void> {
-    // Initialize language and direction immediately
-    if (isPlatformBrowser(this.platformId)) {
-      this.translationService.initBrowserFeatures();
-
-      // Fix back/forward cache issues
-      this.setupBFCacheHandlers();
-    }
-
     // During SSR, don't block rendering
     if (!isPlatformBrowser(this.platformId)) {
       this.isLoading = false;
       this.loadBusinessProfile();
       return;
     }
+
+    // Initialize language and direction immediately
+    this.translationService.initBrowserFeatures();
+
+    // Fix back/forward cache issues
+    this.setupBFCacheHandlers();
 
     // Wait for translations to be ready before showing the app
     await this.translationService.waitForTranslations();

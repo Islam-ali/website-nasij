@@ -61,7 +61,6 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   
   // Constants
   private readonly GAP_PX = 16; // 1rem = 16px
-  private readonly DRAG_THRESHOLD_RATIO = 0.25; // 25% of item width
   private readonly MOMENTUM_THRESHOLD = 0.3; // Velocity threshold for momentum
   private readonly MIN_DRAG_DISTANCE = 10; // Minimum pixels for drag detection
   private readonly VERTICAL_SCROLL_THRESHOLD = 15; // Pixels to detect vertical scroll
@@ -415,19 +414,33 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
   // Drag functionality
   onDragStart(event: MouseEvent | TouchEvent): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    
-    // Check if the click is on a product card or its children (which should be clickable)
+
+    // Store the initial target element for later click handling
     const clickedElement = event.target as HTMLElement;
-    const productCard = clickedElement.closest('app-product-card') as HTMLElement | null;
-    const isClickableElement = productCard || 
-                               (clickedElement.closest('a') as HTMLElement | null) || 
-                               (clickedElement.closest('button') as HTMLElement | null) ||
-                               (clickedElement.closest('[role="button"]') as HTMLElement | null);
-    
-    // If clicking on a clickable element, don't start drag - let the click event pass through
-    if (isClickableElement) {
-      // Store reference for potential click handling
-      this.dragStartTarget = productCard || clickedElement;
+    this.dragStartTarget = clickedElement;
+
+    // For mouse events, start dragging immediately (allow dragging from anywhere)
+    if (event instanceof MouseEvent) {
+      this.isDragging = true;
+      this.hasActualDrag = false;
+      this.isHorizontalDrag = false;
+      this.startX = this.getEventX(event);
+      this.startY = this.getEventY(event);
+      this.currentX = this.startX;
+      this.currentY = this.startY;
+      this.dragOffset = 0;
+      this.dragStartTime = performance.now();
+
+      // Stop autoplay during drag
+      if (this.autoPlay) {
+        this.stopAutoPlay();
+      }
+
+      // Add event listeners to document to track drag even outside element
+      document.addEventListener('mousemove', this.onDocumentMouseMove);
+      document.addEventListener('mouseup', this.onDocumentMouseUp);
+
+      // Don't prevent default here - only prevent if user actually drags horizontally
       return;
     }
     
@@ -435,6 +448,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
     // This allows vertical scrolling to work normally
     if (event instanceof TouchEvent) {
       // Just store the initial position, don't set isDragging yet
+      // Allow dragging from anywhere, even on product cards
       this.startX = this.getEventX(event);
       this.startY = this.getEventY(event);
       this.currentX = this.startX;
@@ -442,7 +456,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       this.dragOffset = 0;
       this.hasActualDrag = false;
       this.isHorizontalDrag = false;
-      
+
       // Add passive listener to detect direction
       document.addEventListener('touchmove', this.onDocumentTouchMove, { passive: true });
       document.addEventListener('touchend', this.onDocumentTouchEnd);
@@ -556,7 +570,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onDragMove(event: MouseEvent | TouchEvent): void {
     if (!this.isDragging || !isPlatformBrowser(this.platformId)) return;
-    
+
     const newX = this.getEventX(event);
     const newY = this.getEventY(event);
     if (newX === 0 && this.startX === 0) return; // Invalid event
@@ -600,43 +614,55 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onDragEnd(): void {
     if (!this.isDragging || !isPlatformBrowser(this.platformId)) return;
+
+    // For small drags or clicks, let the natural click events from product-card component handle it
+    // Only prevent default carousel behavior for significant drags
+    if (!this.hasActualDrag) {
+      // Reset state and let product-card component handle the click naturally
+      this.resetDragState();
+      return;
+    }
     
     const itemWidth = this.calculateItemWidth();
-    // Improved threshold: smaller for better responsiveness
-    const threshold = itemWidth * this.DRAG_THRESHOLD_RATIO;
-    const hadSignificantDrag = Math.abs(this.dragOffset) > threshold;
-    
+    const maxIndex = this.getMaxIndex();
+
+    // Calculate how many items to move based on drag distance
+    const itemsToMove = Math.round(Math.abs(this.dragOffset) / itemWidth);
+
+    // Minimum threshold for any movement
+    const minThreshold = itemWidth * 0.1; // 10% of item width
+    const hadSignificantDrag = Math.abs(this.dragOffset) > minThreshold && itemsToMove > 0;
+
     // Calculate velocity for momentum scrolling
     const dragDuration = this.dragStartTime > 0 ? performance.now() - this.dragStartTime : 0;
     const velocity = dragDuration > 0 ? Math.abs(this.dragOffset) / dragDuration : 0;
     const hasMomentum = velocity > this.MOMENTUM_THRESHOLD;
-    const maxIndex = this.getMaxIndex();
-    
-    // Determine if we should move to next/previous slide
+
+    // Determine if we should move slides
     if (hadSignificantDrag) {
-      // Save the drag direction and current offset
+      // Save the drag direction
       const dragDirection = this.dragOffset > 0;
-      const currentOffset = this.dragOffset;
-      
-      // Calculate target index
+
+      // Calculate target index based on drag distance and direction
       let targetIndex = this.currentIndex;
+
       if (this.isRTL) {
         // In RTL: dragging right (positive) goes to next, dragging left (negative) goes to previous
         if (dragDirection) {
-          // Dragging right in RTL = next
-          targetIndex = Math.min(this.currentIndex + 1, maxIndex);
+          // Dragging right in RTL = next (increase index)
+          targetIndex = Math.min(this.currentIndex + itemsToMove, maxIndex);
         } else {
-          // Dragging left in RTL = previous
-          targetIndex = Math.max(0, this.currentIndex - 1);
+          // Dragging left in RTL = previous (decrease index)
+          targetIndex = Math.max(0, this.currentIndex - itemsToMove);
         }
       } else {
         // In LTR: dragging right (positive) goes to previous, dragging left (negative) goes to next
         if (dragDirection) {
-          // Dragging right in LTR = previous
-          targetIndex = Math.max(0, this.currentIndex - 1);
+          // Dragging right in LTR = previous (decrease index)
+          targetIndex = Math.max(0, this.currentIndex - itemsToMove);
         } else {
-          // Dragging left in LTR = next
-          targetIndex = Math.min(this.currentIndex + 1, maxIndex);
+          // Dragging left in LTR = next (increase index)
+          targetIndex = Math.min(this.currentIndex + itemsToMove, maxIndex);
         }
       }
       
@@ -656,8 +682,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
       
-      // If has momentum, move one more item in the drag direction
-      if (hasMomentum && targetIndex === this.currentIndex) {
+      // If has momentum, add one more item in the drag direction
+      if (hasMomentum) {
         if (this.dragOffset > 0) {
           if (this.isRTL) {
             targetIndex = Math.min(targetIndex + 1, maxIndex);
@@ -727,16 +753,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
-        this.dragOffset = 0;
-        this.isDragging = false;
-        this.startX = 0;
-        this.startY = 0;
-        this.currentX = 0;
-        this.currentY = 0;
-        this.hasActualDrag = false;
-        this.isHorizontalDrag = false;
-        this.dragStartTarget = null;
-        this.dragStartTime = 0;
+          this.resetDragState();
         }
       };
       
@@ -761,6 +778,21 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit {
       return event.touches[0].clientY;
     }
     return 0;
+  }
+
+  private resetDragState(): void {
+    this.isDragging = false;
+    this.hasActualDrag = false;
+    this.isHorizontalDrag = false;
+    this.dragOffset = 0;
+    this.startX = 0;
+    this.startY = 0;
+    this.currentX = 0;
+    this.currentY = 0;
+    this.dragStartTime = 0;
+    this.dragStartTarget = null;
+    this.transformString = this.getTransform();
+    this.cdr.detectChanges();
   }
 
   private calculateItemWidth(): number {

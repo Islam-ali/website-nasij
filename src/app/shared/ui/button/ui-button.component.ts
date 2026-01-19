@@ -52,17 +52,17 @@ export class UiButtonComponent {
   private themeService = inject(ThemeService);
 
   private static readonly VARIANT_CLASSES: Record<ButtonVariant, string> = {
-    primary: 'w-full py-4 text-white rounded-2xl font-semibold transition-all duration-300 mt-8 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-lg hover:shadow-xl',
+    primary: 'w-full py-2 px-4 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform shadow-lg hover:shadow-xl hover:opacity-90',
     secondary:
-      'bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700',
+      'bg-gray-100 py-2 px-4 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 hover:opacity-90',
     outline:
-      'border border-gray-300 text-gray-900 hover:bg-gray-50 focus-visible:ring-gray-300 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800',
+      'border border-gray-300 py-2 px-4 text-gray-900 hover:bg-gray-50 focus-visible:ring-gray-300 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800 hover:opacity-90',
     ghost:
-      'text-gray-900 hover:bg-gray-100 focus-visible:ring-gray-300 dark:text-gray-100 dark:hover:bg-gray-800',
+      'py-2 px-4 text-gray-900 hover:bg-gray-100 focus-visible:ring-gray-300 dark:text-gray-100 dark:hover:bg-gray-800 hover:opacity-90',
     destructive:
-      'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600',
-    warning: 'bg-orange-500 text-white hover:bg-orange-600 focus-visible:ring-orange-500 dark:bg-orange-600 dark:hover:bg-orange-700',
+      'bg-red-600 py-2 px-4 text-white hover:bg-red-700 focus-visible:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600',
+    danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600 hover:opacity-90',
+    warning: 'bg-orange-500 py-2 px-4 text-white hover:bg-orange-600 focus-visible:ring-orange-500 dark:bg-orange-600 dark:hover:bg-orange-700 hover:opacity-90',
     link: 'text-violet-600 hover:text-violet-700 underline-offset-4 hover:underline',
   };
 

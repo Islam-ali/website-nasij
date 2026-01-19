@@ -6,6 +6,9 @@ import { TranslationService } from '../../../core/services/translate.service';
 import { MultiLanguagePipe } from '../../../core/pipes/multi-language.pipe';
 import { FallbackImgDirective } from '../../../core/directives/fallback-img.directive';
 import { environment } from '../../../../environments/environment';
+import { IBusinessProfile } from '../../../interfaces/business-profile.interface';
+import { BusinessProfileService } from '../../../services/business-profile.service';
+import { HeaderAlignment } from '../../../interfaces/product-feature.interface';
 
 @Component({
   selector: 'app-hero-layout',
@@ -20,11 +23,11 @@ export class HeroLayoutComponent implements OnInit {
   domain = environment.domain + '/';
   heroLayouts: IHeroLayout[] = [];
   loading = true;
-
   constructor(
     private heroLayoutService: HeroLayoutService,
     private router: Router,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private businessProfileService: BusinessProfileService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +41,19 @@ export class HeroLayoutComponent implements OnInit {
     } else {
       // Load all active layouts
       this.loadActiveLayouts();
+    }
+  }
+
+  getHeaderAlignmentClass(): string {
+    const alignment = this.businessProfileService.businessProfile.value?.headerAlignment || HeaderAlignment.CENTER;
+    switch (alignment) {
+      case HeaderAlignment.START:
+        return 'text-start items-start justify-start';
+      case HeaderAlignment.END:
+        return 'text-end items-end justify-end';
+      case HeaderAlignment.CENTER:
+      default:
+        return 'text-center items-center justify-center';
     }
   }
 

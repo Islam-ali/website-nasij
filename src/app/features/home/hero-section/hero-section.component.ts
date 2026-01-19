@@ -178,4 +178,68 @@ export class HeroSectionComponent implements OnInit {
   onVideoPause(event: Event, index: number): void {
     this.videoPlayingStates[index] = false;
   }
+
+  onVideoLoaded(event: Event, videoElement: HTMLVideoElement, index: number): void {
+    // Try to start playing when video metadata is loaded
+    // This ensures autoplay works even if it was blocked initially
+    if (videoElement.paused) {
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            this.videoPlayingStates[index] = true;
+          })
+          .catch(() => {
+            // Autoplay was blocked (browser policy), keep paused state
+            this.videoPlayingStates[index] = false;
+          });
+      }
+    } else {
+      // Video is already playing
+      this.videoPlayingStates[index] = true;
+    }
+  }
+
+  onVideoCanPlay(event: Event, videoElement: HTMLVideoElement, index: number): void {
+    // Video is ready to play - ensure it starts playing if not already
+    if (videoElement.paused && !this.videoPlayingStates[index]) {
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            this.videoPlayingStates[index] = true;
+          })
+          .catch(() => {
+            // Autoplay was blocked, but poster will show
+            this.videoPlayingStates[index] = false;
+          });
+      }
+    } else if (!videoElement.paused) {
+      // Video is already playing
+      this.videoPlayingStates[index] = true;
+    }
+  }
+
+  onVideoCanPlayThrough(event: Event, videoElement: HTMLVideoElement, index: number): void {
+    // Video can play through without stopping - ensure it's playing
+    if (videoElement.paused && !this.videoPlayingStates[index]) {
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            this.videoPlayingStates[index] = true;
+          })
+          .catch(() => {
+            this.videoPlayingStates[index] = false;
+          });
+      }
+    } else if (!videoElement.paused) {
+      this.videoPlayingStates[index] = true;
+    }
+  }
+
+  onVideoWaiting(event: Event, videoElement: HTMLVideoElement, index: number): void {
+    // Video is buffering - poster will show automatically due to opacity classes
+    // The poster image will fade in while video is buffering
+  }
 }

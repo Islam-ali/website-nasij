@@ -1,13 +1,12 @@
 @if (!loading) {
   @for (layout of heroLayouts; track layout._id) {
-    <section class="pt-4 pb-10 bg-white dark:bg-gray-900 transition-colors duration-300">
-      <div class="mx-auto px-4"
-           [ngClass]="layout.gridConfig?.maxWidth && layout.gridConfig?.maxWidth !== 'none' ? 'max-w-[' + layout.gridConfig?.maxWidth + ']' : 'max-w-[1440px]'">
+    <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+      <div class="max-w-[1440px] mx-auto px-4">
         <!-- Section Header -->
         @if (layout.sectionTitle?.en || layout.sectionSubtitle?.en || layout.description?.en) {
-          <div class="text-center mb-16 max-w-2xl mx-auto">
+          <div [class]="'mb-16 flex flex-col ' + getHeaderAlignmentClass()">
             @if (layout.sectionTitle) {
-              <span class="text-primary-400 dark:text-primary-400 font-medium transition-colors duration-300">
+              <span class="text-primary-400 dark:text-primary-400 font-medium transition-colors duration-300 ">
                 <span class="block">{{ layout.sectionTitle | multiLanguage }}</span>
               </span>
             }
@@ -17,7 +16,7 @@
               </h2>
             }
             @if (layout.description) {
-              <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
+              <p class="text-gray-600 dark:text-gray-300 max-w-2xl transition-colors duration-300">
                 <span class="block">{{ layout.description | multiLanguage }}</span>
               </p>
             }
@@ -41,10 +40,11 @@
                 <!-- Video or Image -->
                 @if (item.video) {
                   <div class="relative w-full h-full video-container" [class.cursor-pointer]="item.videoAutoplay === false">
-                    <video 
+                    <video
                       #videoPlayer
-                      [src]="domain + item.video.filePath" 
-                      class="w-full h-full object-contain"
+                      [src]="domain + item.video.filePath"
+                      class="w-full h-full"
+                      [ngClass]="item.objectFit === 'cover' ? 'object-cover' : 'object-contain'"
                       [autoplay]="item.videoAutoplay !== false"
                       [muted]="true"
                       [loop]="true"
@@ -63,36 +63,92 @@
                     }
                   </div>
                 } @else if (item.image) {
-                  <img 
-                    [src]="item.image.filePath" 
-                    [alt]="item.image.fileName" 
+                  <img
+                    [src]="item.image.filePath"
+                    [alt]="item.image.fileName"
                     fallback
-                    class="w-full h-full object-contain">
+                    class="w-full h-full"
+                    [ngClass]="item.objectFit === 'cover' ? 'object-cover' : 'object-contain'">
                 }
                 
                 <!-- Content -->
                 @if (item?.title?.en || item?.description?.en || item?.buttonText?.en) {
-                <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                  @if (item.title) {
-                    <h3 class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
-                      <span class="block">{{ item.title | multiLanguage }}</span>
-                    </h3>
+                  <!-- Start Position (Top) -->
+                  @if (item.layoutSettingsInfo === 'start') {
+                    <div class="absolute top-0 left-0 right-0 p-8 bg-gradient-to-b from-black/70 backdrop-blur-sm via-black/20 to-transparent">
+                      @if (item.title) {
+                        <h3 class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
+                          <span class="block">{{ item.title | multiLanguage }}</span>
+                        </h3>
+                      }
+
+                      @if (item.description) {
+                        <p class="text-white/90 dark:text-white/80 mb-6 transition-colors duration-300">
+                          <span class="block">{{ item.description | multiLanguage }}</span>
+                        </p>
+                      }
+
+                      @if (item.buttonText && item.buttonLink) {
+                        <button
+                          (click)="onButtonClick(item.buttonLink); $event.stopPropagation()"
+                          class="bg-white dark:bg-gray-100 text-gray-900 dark:text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 z-30 relative">
+                          <span class="block">{{ item.buttonText | multiLanguage }}</span>
+                        </button>
+                      }
+                    </div>
                   }
-                  
-                  @if (item.description) {
-                    <p class="text-white/90 dark:text-white/80 mb-6 transition-colors duration-300">
-                      <span class="block">{{ item.description | multiLanguage }}</span>
-                    </p>
+
+                  <!-- Center Position (Middle) -->
+                  @if (!item.layoutSettingsInfo || item.layoutSettingsInfo === 'center') {
+                    <div class="absolute inset-0 flex items-center justify-center p-8">
+                      <div class="text-center bg-black/30 backdrop-blur-sm rounded-2xl p-8 max-w-md mx-auto">
+                        @if (item.title) {
+                          <h3 class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
+                            <span class="block">{{ item.title | multiLanguage }}</span>
+                          </h3>
+                        }
+
+                        @if (item.description) {
+                          <p class="text-white/90 dark:text-white/80 mb-6 transition-colors duration-300">
+                            <span class="block">{{ item.description | multiLanguage }}</span>
+                          </p>
+                        }
+
+                        @if (item.buttonText && item.buttonLink) {
+                          <button
+                            (click)="onButtonClick(item.buttonLink); $event.stopPropagation()"
+                            class="bg-white dark:bg-gray-100 text-gray-900 dark:text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 z-30 relative">
+                            <span class="block">{{ item.buttonText | multiLanguage }}</span>
+                          </button>
+                        }
+                      </div>
+                    </div>
                   }
-                  
-                  @if (item.buttonText && item.buttonLink) {
-                    <button 
-                      (click)="onButtonClick(item.buttonLink); $event.stopPropagation()"
-                      class="bg-white dark:bg-gray-100 text-gray-900 dark:text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 z-30 relative">
-                      <span class="block">{{ item.buttonText | multiLanguage }}</span>
-                    </button>
+
+                  <!-- End Position (Bottom) - Default -->
+                  @if (item.layoutSettingsInfo === 'end') {
+                    <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t  from-black/70 via-black/40 to-transparent">
+                      @if (item.title) {
+                        <h3 class="text-3xl font-bold text-white mb-4 transition-colors duration-300">
+                          <span class="block">{{ item.title | multiLanguage }}</span>
+                        </h3>
+                      }
+
+                      @if (item.description) {
+                        <p class="text-white/90 dark:text-white/80 mb-6 transition-colors duration-300">
+                          <span class="block">{{ item.description | multiLanguage }}</span>
+                        </p>
+                      }
+
+                      @if (item.buttonText && item.buttonLink) {
+                        <button
+                          (click)="onButtonClick(item.buttonLink); $event.stopPropagation()"
+                          class="bg-white dark:bg-gray-100 text-gray-900 dark:text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 z-30 relative">
+                          <span class="block">{{ item.buttonText | multiLanguage }}</span>
+                        </button>
+                      }
+                    </div>
                   }
-                </div>
                 }
               </div>
               }

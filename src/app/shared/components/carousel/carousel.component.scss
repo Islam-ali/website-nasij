@@ -321,10 +321,16 @@
   }
 }
 
-// Prevent text selection during drag
-.carousel-inner.dragging * {
-  pointer-events: none;
+// Prevent text selection during drag (only for non-interactive elements)
+.carousel-inner.dragging *:not(button):not(a):not([role="button"]) {
   user-select: none;
+}
+
+// Allow pointer events for interactive elements even during drag
+.carousel-inner.dragging button,
+.carousel-inner.dragging a,
+.carousel-inner.dragging [role="button"] {
+  pointer-events: auto;
 }
 
 // Performance optimizations

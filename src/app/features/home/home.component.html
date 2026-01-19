@@ -5,7 +5,7 @@
   <app-hero-section></app-hero-section>
 
   <!-- Featured Collections -->
-  <app-featured-collection></app-featured-collection>
+  <!-- <app-featured-collection></app-featured-collection> -->
 
   <!-- Hero Layouts (Professional Grid) -->
   <app-hero-layout></app-hero-layout>
@@ -20,7 +20,7 @@
   @if (packages.length > 0) {
   <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300" aria-labelledby="packages-heading">
     <div class="max-w-[1440px] mx-auto px-4">
-      <div class="text-center mb-16">
+      <div class="mb-16 flex flex-col" [class]="getHeaderAlignmentClass()">
           <span
           class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-500 text-white mb-4 transition-colors duration-300"
           role="banner">

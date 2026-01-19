@@ -31,25 +31,43 @@
                 <!-- Video or Image -->
                 @if (hero.video?.filePath) {
                 <div class="relative w-full h-full group/video">
+                    <!-- Poster Image as Background - Shows before video loads -->
+                    @if (hero.image?.filePath) {
+                    <img 
+                        [src]="(hero.image?.filePath || '') | safe:'url'" 
+                        [alt]="hero.title | multiLanguage" 
+                        fallback
+                        class="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500"
+                        [class.opacity-0]="videoPlayingStates[i]"
+                        [class.opacity-100]="!videoPlayingStates[i]"
+                    >
+                    }
                     <video 
                         #heroVideo
                         [src]="(domain + hero.video?.filePath || '') | safe:'url'" 
-                        class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                        class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                        autoplay
                         muted
                         loop
                         playsinline
+                        preload="auto"
                         [poster]="(domain + hero.image?.filePath || '') | safe:'url'"
                         [attr.aria-label]="(hero.title | multiLanguage)"
                         (play)="onVideoPlay($event, i)"
                         (pause)="onVideoPause($event, i)"
+                        (loadedmetadata)="onVideoLoaded($event, heroVideo, i)"
+                        (canplay)="onVideoCanPlay($event, heroVideo, i)"
+                        (canplaythrough)="onVideoCanPlayThrough($event, heroVideo, i)"
+                        (waiting)="onVideoWaiting($event, heroVideo, i)"
                     >
                         Your browser does not support the video tag.
                     </video>
                     <!-- Gradient Overlay -->
                     <!-- <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div> -->
-                    <!-- Play Icon Overlay -->
+                    <!-- Play Icon Overlay - Visible when paused, show on hover when playing -->
                     <div 
-                        class="absolute inset-0 flex items-center justify-center cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto"
+                        [ngClass]="videoPlayingStates[i] ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'"
+                        class="absolute inset-0 flex items-center justify-center cursor-pointer transition-all duration-300 pointer-events-auto"
                         (click)="toggleVideoPlay($event, heroVideo, i)"
                     >
                         <button
@@ -57,7 +75,11 @@
                             class="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 group/play"
                             [attr.aria-label]="'Play video'"
                         >
-                            <i class="pi pi-play text-2xl md:text-3xl text-gray-800 dark:text-gray-200 ms-1 group-hover/play:text-primary-600 dark:group-hover/play:text-primary-400 transition-colors duration-300"></i>
+                            <!-- Pulse ring animation -->
+                            <span class="absolute inset-0 rounded-full bg-white/30 dark:bg-gray-200/30 animate-ping"></span>
+                            <span class="absolute inset-0 rounded-full bg-white/20 dark:bg-gray-200/20 animate-ping" style="animation-delay: 0.5s;"></span>
+                            <!-- Icon -->
+                            <i class="pi pi-play text-2xl md:text-3xl text-gray-800 dark:text-gray-200 group-hover/play:text-primary-600 dark:group-hover/play:text-primary-400 transition-colors duration-300 relative z-10"></i>
                         </button>
                     </div>
                 </div>

@@ -15,9 +15,17 @@ export class TranslationService {
   ) {
     // Set default language immediately for SSR compatibility
     this.translate.setDefaultLang(this.defaultLanguage);
-    
-    // Subscribe to language changes to update direction
+
+    // For browser platform, initialize immediately if possible
     if (isPlatformBrowser(this.platformId)) {
+      // Try to initialize from localStorage immediately
+      const savedLanguage = localStorage.getItem('lang-store');
+      if (savedLanguage && this.supportedLanguages.includes(savedLanguage)) {
+        this.translate.use(savedLanguage);
+        this.updateDocumentDirection(savedLanguage);
+      }
+
+      // Subscribe to language changes to update direction
       this.translate.onLangChange.subscribe((event) => {
         this.updateDocumentDirection(event.lang);
       });
@@ -28,13 +36,23 @@ export class TranslationService {
     // Only run on browser platform
     if (!isPlatformBrowser(this.platformId)) return;
 
-    // Get saved language from localStorage or use browser language
+    // Get saved language from localStorage
     const savedLanguage = localStorage.getItem('lang-store');
-    // const browserLanguage = this.getBrowserLanguage();
 
+    // If no saved language, use default
     const languageToUse = savedLanguage || this.defaultLanguage;
 
-    this.setLanguage(languageToUse);
+    // Ensure the language is valid
+    const validLanguage = this.supportedLanguages.includes(languageToUse) ? languageToUse : this.defaultLanguage;
+
+    // Set the language without triggering unnecessary updates if it's already correct
+    const currentLang = this.translate.currentLang;
+    if (currentLang !== validLanguage) {
+      this.setLanguage(validLanguage);
+    } else {
+      // Even if the language is already set, ensure the DOM direction is correct
+      this.updateDocumentDirection(validLanguage);
+    }
   }
 
   // private getBrowserLanguage(): string | null {

@@ -3,7 +3,7 @@
   @if (getFeatureProducts(feature._id).length > 0) {
     <section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div class="max-w-[1440px] mx-auto px-4">
-        <div [class]="'mb-16 ' + getHeaderAlignmentClass()">
+        <div [class]="'mb-16 flex flex-col ' + getHeaderAlignmentClass()">
           @if (feature.title) {
             <h2
               class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-2 mb-4 transition-colors duration-300">
@@ -15,7 +15,7 @@
           }
           @if (feature.description) {
             <p
-              class="text-gray-600 dark:text-gray-300 transition-colors duration-300">
+              class="text-gray-600 dark:text-gray-300 transition-colors duration-300 max-w-2xl">
               {{ feature.description | multiLanguage }}
             </p>
           }

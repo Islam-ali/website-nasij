@@ -98,12 +98,12 @@ export class ProductFeaturesComponent implements OnInit, OnDestroy {
     const alignment = this.businessProfile?.headerAlignment || HeaderAlignment.CENTER;
     switch (alignment) {
       case HeaderAlignment.START:
-        return 'text-start';
+        return 'text-start items-start justify-start';
       case HeaderAlignment.END:
-        return 'text-end';
+        return 'text-end items-end justify-end';
       case HeaderAlignment.CENTER:
       default:
-        return 'text-center';
+        return 'text-center items-center justify-center';
     }
   }
 }

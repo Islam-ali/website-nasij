@@ -28,6 +28,7 @@ import { BusinessProfileService } from '../../services/business-profile.service'
 import { IBusinessProfile } from '../../interfaces/business-profile.interface';
 import { SeoService } from '../../core/services/seo.service';
 import { TranslationService } from '../../core/services/translate.service';
+import { HeaderAlignment } from '../../interfaces/product-feature.interface';
 
 @Component({
   selector: 'app-home',
@@ -85,6 +86,19 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.updateSeo();
   }
 
+  getHeaderAlignmentClass(): string {
+    const alignment = this.businessProfileService.businessProfile.value?.headerAlignment || HeaderAlignment.CENTER;
+    switch (alignment) {
+      case HeaderAlignment.START:
+        return 'text-start items-start justify-start';
+      case HeaderAlignment.END:
+      return 'flex flex-col ' + alignment;
+      case HeaderAlignment.CENTER:
+      default:
+        return 'text-center items-center justify-center';
+    }
+  } 
+  
   private updateSeo(): void {
     // Get business profile from service
     this.businessProfileService.getBusinessProfile$().subscribe({

@@ -7,7 +7,7 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
+  <link rel="icon" type="image/x-icon" href="pledge.ico">
 
   <!-- Additional Meta Tags -->
   <meta name="theme-color" content="#976735">
@@ -27,44 +27,64 @@
 
   <!-- Initialize Language and Direction from localStorage before Angular loads -->
   <script>
-    (function () {
-      try {
-        if (typeof localStorage !== 'undefined') {
-          var savedLanguage = localStorage.getItem('store-language') || 'ar';
-        } else {
-          var savedLanguage = 'ar';
-        }
-        var html = document.documentElement;
-        var body = document.body;
+        (function () {
+          try {
+            var savedLanguage = 'ar'; // Default language
 
-        if (savedLanguage === 'ar') {
-          html.setAttribute('dir', 'rtl');
-          html.setAttribute('lang', 'ar');
-          html.classList.add('rtl');
-          html.classList.remove('ltr');
-          if (body) {
-            body.classList.add('rtl');
-            body.classList.remove('ltr');
+            // Only access localStorage if available
+            if (typeof localStorage !== 'undefined' && typeof Storage !== 'undefined') {
+              savedLanguage = localStorage.getItem('lang-store') || 'ar';
+            }
+
+            // Ensure we have valid language
+            if (savedLanguage !== 'ar' && savedLanguage !== 'en') {
+              savedLanguage = 'ar';
+            }
+
+            var html = document.documentElement;
+            var body = document.body;
+
+            if (savedLanguage === 'ar') {
+              html.setAttribute('dir', 'rtl');
+              html.setAttribute('lang', 'ar');
+              html.classList.add('rtl');
+              html.classList.remove('ltr');
+              if (body) {
+                body.classList.add('rtl');
+                body.classList.remove('ltr');
+              }
+            } else {
+              html.setAttribute('dir', 'ltr');
+              html.setAttribute('lang', 'en');
+              html.classList.add('ltr');
+              html.classList.remove('rtl');
+              if (body) {
+                body.classList.add('ltr');
+                body.classList.remove('ltr');
+              }
+            }
+
+            // Store the applied language for Angular to use
+            if (typeof localStorage !== 'undefined' && typeof Storage !== 'undefined') {
+              localStorage.setItem('lang-store', savedLanguage);
+            }
+
+          } catch (e) {
+            // Fallback to Arabic if localStorage fails
+            if (typeof document !== 'undefined') {
+              var html = document.documentElement;
+              var body = document.body;
+              html.setAttribute('dir', 'rtl');
+              html.setAttribute('lang', 'ar');
+              html.classList.add('rtl');
+              html.classList.remove('ltr');
+              if (body) {
+                body.classList.add('rtl');
+                body.classList.remove('ltr');
+              }
+            }
           }
-        } else {
-          html.setAttribute('dir', 'ltr');
-          html.setAttribute('lang', 'en');
-          html.classList.add('ltr');
-          html.classList.remove('rtl');
-          if (body) {
-            body.classList.add('ltr');
-            body.classList.remove('rtl');
-          }
-        }
-      } catch (e) {
-        // Fallback to default if localStorage is not available
-        if(typeof document !== 'undefined') {
-          var html = document.documentElement;
-          html.setAttribute('dir', savedLanguage === 'ar' ? 'rtl' : 'ltr');
-          html.setAttribute('lang', savedLanguage);
-        }
-      }
-    })();
+        })();
   </script>
   
   <!-- Preload critical resources -->
