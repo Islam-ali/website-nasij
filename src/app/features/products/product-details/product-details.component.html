@@ -170,7 +170,7 @@
             </div>
             <!-- Thumbnails -->
             @if (images.length > 1) {
-            <div class="flex gap-2 sm:gap-3 overflow-x-auto pb-2">
+            <div class="flex gap-2 sm:gap-3 scrollbar-hide overflow-x-auto pb-2">
               @for (img of images; track $index) {
               <div
                 class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center bg-white dark:bg-gray-800 border-2 rounded-xl sm:rounded-2xl overflow-hidden hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300 group cursor-pointer"
