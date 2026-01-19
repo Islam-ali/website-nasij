@@ -31,14 +31,6 @@ export const routes: Routes = [
         data: { breadcrumb: 'shop' }
       },
       {
-        path: 'about',
-        loadComponent: () => import('./features/about/about.component')
-          .then(m => m.AboutComponent)
-          .catch(() => ErrorComponent),
-        title: 'About',
-        data: { breadcrumb: 'About' }
-      },
-      {
         path: 'shop/:id/:slug',
         loadComponent: () => import('./features/products/product-details/product-details.component')
           .then(m => m.ProductDetailsComponent)
@@ -82,14 +74,14 @@ export const routes: Routes = [
         title: 'Shopping Cart',
         data: { breadcrumb: 'Cart' }
       },
-      {
-        path: 'wishlist',
-        loadComponent: () => import('./features/wishlist/wishlist.component')
-          .then(m => m.WishlistComponent)
-          .catch(() => ErrorComponent),
-        title: 'Wishlist',
-        data: { breadcrumb: 'Wishlist' }
-      },
+      // {
+      //   path: 'wishlist',
+      //   loadComponent: () => import('./features/wishlist/wishlist.component')
+      //     .then(m => m.WishlistComponent)
+      //     .catch(() => ErrorComponent),
+      //   title: 'Wishlist',
+      //   data: { breadcrumb: 'Wishlist' }
+      // },
       {
         path: 'privacy-policy',
         loadComponent: () => import('./features/business-profile/privacy-policy/privacy-policy.component')
