@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  domain: 'https://api.pledgestores.com',
-  apiUrl: 'https://api.pledgestores.com/api/v1', // Development API URL
+  domain: 'https://api.nasijstore.com',
+  apiUrl: 'https://api.nasijstore.com/api/v1', // Development API URL
   appName: 'Online Store',
   appVersion: '1.0.0',
   stripePublishableKey: 'your-test-stripe-key',
